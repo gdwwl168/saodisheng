@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1818"/><stop offset="100%" stop-color="#0a0808"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">49=石狗</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">4条腿儿稳稳站，9是卷尾弯弯翘</text>
+  <ellipse cx="512" cy="700" rx="200" ry="18" fill="#0a0806" opacity="0.4"/>
+  <ellipse cx="480" cy="540" rx="60" ry="45" fill="#686878"/>
+  <ellipse cx="480" cy="535" rx="50" ry="36" fill="#787888" opacity="0.5"/>
+  <circle cx="430" cy="480" r="28" fill="#686878"/>
+  <circle cx="428" cy="476" r="22" fill="#787888" opacity="0.4"/>
+  <path d="M406 470 Q400 460 408 452 Q416 448 420 458" fill="none" stroke="#585868" stroke-width="3"/>
+  <circle cx="420" cy="472" r="3.5" fill="#FFD540" opacity="0.3"/>
+  <path d="M410 488 Q418 492 425 488" fill="none" stroke="#585868" stroke-width="1.5"/>
+  <path d="M406 465 L400 455" stroke="#585868" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="525" cy="515" rx="12" ry="8" fill="#585868"/>
+  <rect x="450" y="578" width="10" height="30" rx="3" fill="#585868"/>
+  <rect x="470" y="578" width="10" height="30" rx="3" fill="#585868"/>
+  <rect x="500" y="578" width="10" height="30" rx="3" fill="#585868"/>
+  <rect x="520" y="578" width="10" height="30" rx="3" fill="#585868"/>
+  <path d="M530 540 Q555 520 560 500 Q565 480 555 465" fill="none" stroke="#686878" stroke-width="8" stroke-linecap="round"/>
+  <path d="M555 470 Q550 460 555 450" fill="none" stroke="#686878" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="560" cy="520" r="10" fill="#686878"/>
+</svg>

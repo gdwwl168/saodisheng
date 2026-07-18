@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">52=木耳</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">5像木耳弯弯卷，2是耳片软软叠</text>
+  <!-- 树干 -->
+  <rect x="250" y="300" width="30" height="600" rx="8" fill="#5D4037"/>
+  <rect x="260" y="300" width="8" height="600" fill="#795548" opacity="0.5"/>
+  <!-- 木耳1 - 5形弯卷 -->
+  <path d="M280 420 Q340 400 360 440 Q380 480 340 510 Q300 540 270 500 Q250 470 280 420Z" fill="#5D4037"/>
+  <path d="M290 430 Q335 412 350 445 Q365 475 335 500 Q305 525 278 492 Q262 462 290 430Z" fill="#795548" opacity="0.5"/>
+  <!-- 木耳2 - 2形 -->
+  <path d="M280 520 Q330 490 355 530 Q380 570 340 600 Q300 630 275 590 Q255 555 280 520Z" fill="#4E342E"/>
+  <path d="M288 528 Q325 502 345 535 Q362 565 332 588 Q305 612 282 582 Q268 558 288 528Z" fill="#6D4C41" opacity="0.5"/>
+  <!-- 木耳3 -->
+  <path d="M280 620 Q310 600 330 630 Q345 660 320 680 Q295 695 278 665 Q265 640 280 620Z" fill="#5D4037"/>
+  <!-- 耳纹 -->
+  <path d="M300 460 Q320 450 330 470" fill="none" stroke="#3E2723" stroke-width="1.5" opacity="0.5"/>
+  <path d="M300 550 Q320 540 325 560" fill="none" stroke="#3E2723" stroke-width="1.5" opacity="0.5"/>
+</svg>

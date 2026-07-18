@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">94=教师</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">9像教鞭弯弯指，4是讲台三角立</text>
+  <!-- 黑板 -->
+  <rect x="150" y="250" width="400" height="250" rx="8" fill="#37474F"/>
+  <rect x="160" y="260" width="380" height="230" rx="6" fill="#2E7D32"/>
+  <!-- 粉笔字 -->
+  <text x="350" y="360" text-anchor="middle" font-size="40" fill="#FFD54F" font-family="sans-serif">9+4=?</text>
+  <line x1="250" y1="410" x2="450" y2="410" stroke="#FFD54F" stroke-width="3"/>
+  <!-- 讲台 - 4形三角 -->
+  <rect x="600" y="550" width="250" height="200" rx="10" fill="#8D6E63"/>
+  <rect x="610" y="560" width="230" height="180" rx="8" fill="#A1887F"/>
+  <!-- 书本 -->
+  <rect x="630" y="580" width="100" height="15" rx="3" fill="#E91E63"/>
+  <rect x="640" y="565" width="100" height="15" rx="3" fill="#2196F3"/>
+  <rect x="635" y="595" width="90" height="12" rx="3" fill="#4CAF50"/>
+  <!-- 教鞭 - 9形弯 -->
+  <line x1="350" y1="380" x2="650" y2="280" stroke="#8D6E63" stroke-width="6" stroke-linecap="round"/>
+  <!-- 人物 -->
+  <circle cx="680" cy="390" r="35" fill="#FFCCBC"/>
+  <rect x="660" y="425" width="40" height="70" rx="8" fill="#1565C0"/>
+  <!-- 眼镜 -->
+  <circle cx="672" cy="388" r="12" fill="none" stroke="#37474F" stroke-width="2.5"/>
+  <circle cx="695" cy="388" r="12" fill="none" stroke="#37474F" stroke-width="2.5"/>
+  <line x1="684" y1="388" x2="683" y2="388" stroke="#37474F" stroke-width="2.5"/>
+</svg>

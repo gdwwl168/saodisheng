@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient>
+    <linearGradient id="woodGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8D6E63"/><stop offset="50%" stop-color="#A1887F"/><stop offset="100%" stop-color="#6D4C41"/></linearGradient>
+  </defs>
+  <!-- 卡片背景 -->
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">25=二胡</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">2像琴弓弯弯拉，5是琴身弯弯奏</text>
+
+  <!-- 琴杆 - 直直 -->
+  <rect x="500" y="200" width="24" height="550" rx="6" fill="url(#woodGrad)"/>
+
+  <!-- 琴轴 -->
+  <rect x="460" y="240" width="30" height="16" rx="4" fill="#5D4037"/>
+  <rect x="534" y="250" width="30" height="16" rx="4" fill="#5D4037"/>
+
+  <!-- 琴筒 - 5形（弯曲的共鸣箱） -->
+  <path d="M370 600 Q340 640 350 700 Q360 760 420 780 Q480 795 530 785 Q580 775 600 740 Q620 700 600 660 Q580 620 530 600 Q480 590 420 600Z" fill="#8D6E63" stroke="#5D4037" stroke-width="4"/>
+  <!-- 琴皮 -->
+  <ellipse cx="475" cy="680" rx="60" ry="75" fill="#FFF8E1" stroke="#D7CCC8" stroke-width="3"/>
+  <!-- 琴码 -->
+  <rect x="460" y="700" width="30" height="10" rx="3" fill="#5D4037"/>
+  <!-- 琴皮花纹 -->
+  <ellipse cx="475" cy="680" rx="40" ry="55" fill="none" stroke="#BCAAA4" stroke-width="1" opacity="0.5"/>
+  <ellipse cx="475" cy="680" rx="20" ry="30" fill="none" stroke="#BCAAA4" stroke-width="1" opacity="0.5"/>
+
+  <!-- 琴弦 -->
+  <line x1="506" y1="210" x2="470" y2="720" stroke="#CFD8DC" stroke-width="2"/>
+  <line x1="518" y1="210" x2="490" y2="720" stroke="#CFD8DC" stroke-width="1.5"/>
+
+  <!-- 琴弓 - 2形弯曲 -->
+  <path d="M550 280 Q680 250 720 350 Q760 450 720 550 Q680 650 600 680" fill="none" stroke="#795548" stroke-width="12" stroke-linecap="round"/>
+  <!-- 弓毛 -->
+  <path d="M550 280 Q640 420 600 680" fill="none" stroke="#ECEFF1" stroke-width="3" opacity="0.7"/>
+
+  <!-- 音乐音符流动 -->
+  <text x="150" y="300" font-size="42" fill="#E85D3A" opacity="0.45">♫</text>
+  <text x="130" y="400" font-size="36" fill="#E85D3A" opacity="0.35">♪</text>
+  <text x="170" y="500" font-size="44" fill="#E85D3A" opacity="0.4">♫</text>
+  <text x="140" y="600" font-size="38" fill="#E85D3A" opacity="0.3">♪</text>
+
+  <!-- 中国风装饰 -->
+  <text x="790" y="300" font-size="40" opacity="0.15">🎵</text>
+</svg>

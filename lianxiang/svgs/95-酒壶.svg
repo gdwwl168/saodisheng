@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">95=酒壶</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">9像壶嘴弯弯翘，5是壶身圆圆鼓</text>
+  <!-- 壶身 - 5形圆 -->
+  <ellipse cx="480" cy="600" rx="110" ry="130" fill="#8D6E63"/>
+  <ellipse cx="480" cy="600" rx="95" ry="115" fill="#A1887F"/>
+  <ellipse cx="460" cy="570" rx="40" ry="30" fill="#BCAAA4" opacity="0.3"/>
+  <!-- 壶底 -->
+  <path d="M380 730 Q480 760 580 730" fill="none" stroke="#6D4C41" stroke-width="4"/>
+  <!-- 壶嘴 - 9形弯 -->
+  <path d="M370 550 Q340 510 335 460 Q330 420 355 400 Q370 395 375 410" fill="none" stroke="#6D4C41" stroke-width="10" stroke-linecap="round"/>
+  <!-- 壶把 -->
+  <path d="M590 550 Q660 560 650 640 Q640 720 580 680" fill="none" stroke="#6D4C41" stroke-width="12" stroke-linecap="round"/>
+  <!-- 壶盖 -->
+  <ellipse cx="485" cy="470" rx="60" ry="12" fill="#6D4C41"/>
+  <circle cx="485" cy="458" r="10" fill="#5D4037"/>
+  <!-- 装饰纹 -->
+  <path d="M420 620 Q480 640 540 620" fill="none" stroke="#FFD54F" stroke-width="2" opacity="0.4"/>
+  <path d="M400 650 Q480 670 560 650" fill="none" stroke="#FFD54F" stroke-width="2" opacity="0.4"/>
+  <!-- 蒸汽 -->
+  <path d="M480 450 Q470 420 485 390" fill="none" stroke="#D7CCC8" stroke-width="2" opacity="0.3"/>
+  <path d="M500 450 Q510 415 495 380" fill="none" stroke="#D7CCC8" stroke-width="2" opacity="0.25"/>
+  <!-- 小酒杯 -->
+  <ellipse cx="680" cy="700" rx="20" ry="6" fill="#D7CCC8"/>
+  <rect x="672" y="650" width="16" height="50" rx="4" fill="none" stroke="#D7CCC8" stroke-width="2"/>
+  <ellipse cx="680" cy="650" rx="12" ry="15" fill="#D7CCC8" opacity="0.3"/>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">48=丝瓜</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">4像藤叶三角架，8是瓜身长长挂</text>
+  <!-- 架子 -->
+  <line x1="200" y1="250" x2="200" y2="800" stroke="#795548" stroke-width="8"/>
+  <line x1="824" y1="250" x2="824" y2="800" stroke="#795548" stroke-width="8"/>
+  <line x1="200" y1="300" x2="824" y2="300" stroke="#795548" stroke-width="6"/>
+  <!-- 藤蔓 -->
+  <path d="M200 350 Q300 340 400 380 Q500 420 600 370 Q700 320 824 380" fill="none" stroke="#66BB6A" stroke-width="5"/>
+  <path d="M300 340 Q320 400 350 420" fill="none" stroke="#81C784" stroke-width="3"/>
+  <path d="M600 370 Q580 420 550 440" fill="none" stroke="#81C784" stroke-width="3"/>
+  <!-- 叶子 - 4形三角 -->
+  <path d="M250 320 L270 290 L290 320Z" fill="#66BB6A"/>
+  <path d="M700 310 L720 280 L740 310Z" fill="#66BB6A"/>
+  <path d="M350 380 L370 350 L390 380Z" fill="#81C784"/>
+  <path d="M550 400 L570 370 L590 400Z" fill="#81C784"/>
+  <!-- 丝瓜 - 8形长条 -->
+  <ellipse cx="400" cy="520" rx="22" ry="90" fill="#8BC34A" transform="rotate(-5 400 520)"/>
+  <ellipse cx="400" cy="520" rx="16" ry="80" fill="#9CCC65" transform="rotate(-5 400 520)"/>
+  <!-- 丝瓜纹理 -->
+  <line x1="390" y1="440" x2="396" y2="600" stroke="#7CB342" stroke-width="1.5"/>
+  <line x1="410" y1="440" x2="404" y2="600" stroke="#7CB342" stroke-width="1.5"/>
+  <!-- 丝瓜 - 第二条 -->
+  <ellipse cx="620" cy="490" rx="20" ry="85" fill="#8BC34A" transform="rotate(5 620 490)"/>
+  <ellipse cx="620" cy="490" rx="14" ry="75" fill="#9CCC65" transform="rotate(5 620 490)"/>
+  <!-- 花 -->
+  <circle cx="400" cy="430" r="8" fill="#FFEB3B"/>
+  <circle cx="620" cy="405" r="7" fill="#FFEB3B"/>
+</svg>

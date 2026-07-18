@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="30%"><stop offset="0%" stop-color="#1a1a28"/><stop offset="100%" stop-color="#080814"/></radialGradient>
+    <radialGradient id="sun" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFE8B0" stop-opacity="0.3"/><stop offset="100%" stop-color="#FFD540" stop-opacity="0"/></radialGradient>
+    <linearGradient id="uniform" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5a6a5a"/><stop offset="100%" stop-color="#7a8a7a"/></linearGradient>
+    <linearGradient id="horn" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#F0C040"/><stop offset="100%" stop-color="#C89820"/></linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 朝阳 -->
+  <circle cx="512" cy="380" r="200" fill="url(#sun)"/>
+  <circle cx="512" cy="400" r="120" fill="#FFD540" opacity="0.06"/>
+
+  <!-- 远山背景 -->
+  <path d="M0 580 Q150 480 280 540 Q400 500 512 520 Q624 500 744 540 Q874 480 1024 580 L1024 1024 L0 1024Z" fill="#1a2820" opacity="0.4"/>
+  <path d="M0 620 Q200 560 380 600 Q500 570 640 590 Q780 550 1024 610 L1024 1024 L0 1024Z" fill="#0f1a10" opacity="0.5"/>
+
+  <!-- 地面 -->
+  <ellipse cx="512" cy="720" rx="350" ry="25" fill="#0a1008" opacity="0.5"/>
+
+  <!-- 军旗 -->
+  <line x1="512" y1="360" x2="512" y2="720" stroke="#808880" stroke-width="8" stroke-linecap="round"/>
+  <line x1="512" y1="360" x2="512" y2="720" stroke="#A0A8A0" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="512" cy="355" r="8" fill="#D0A030"/>
+  <!-- 旗面飘飘 -->
+  <path d="M516 380 Q600 360 630 420 Q660 480 610 520 Q570 550 540 530" fill="#C84040" opacity="0.8"/>
+  <path d="M516 380 Q600 365 626 420 Q650 470 608 510 Q574 538 548 520" fill="#D06050" opacity="0.4"/>
+
+  <!-- 人物身体 -->
+  <rect x="440" y="420" width="144" height="160" rx="14" fill="url(#uniform)"/>
+  <rect x="450" y="430" width="124" height="140" rx="10" fill="#8a9a8a" opacity="0.3"/>
+
+  <!-- 腰带 -->
+  <rect x="435" y="545" width="154" height="14" rx="5" fill="#4a3a20"/>
+  <rect x="500" y="538" width="28" height="26" rx="4" fill="#D0A830"/>
+  <rect x="502" y="541" width="24" height="20" rx="3" fill="#E8C048" opacity="0.6"/>
+
+  <!-- 子弹带 -->
+  <path d="M440 460 L584 460" stroke="#4a3a20" stroke-width="8" stroke-linecap="round"/>
+  <g fill="#C89830" opacity="0.6">
+    <rect x="448" y="454" width="8" height="14" rx="2"/>
+    <rect x="464" y="454" width="8" height="14" rx="2"/>
+    <rect x="480" y="454" width="8" height="14" rx="2"/>
+    <rect x="496" y="454" width="8" height="14" rx="2"/>
+    <rect x="520" y="454" width="8" height="14" rx="2"/>
+    <rect x="536" y="454" width="8" height="14" rx="2"/>
+    <rect x="552" y="454" width="8" height="14" rx="2"/>
+    <rect x="568" y="454" width="8" height="14" rx="2"/>
+  </g>
+
+  <!-- 纽扣 -->
+  <circle cx="512" cy="480" r="5" fill="#D0A030"/>
+  <circle cx="512" cy="510" r="5" fill="#D0A030"/>
+  <circle cx="512" cy="538" r="5" fill="#D0A030"/>
+
+  <!-- 头部 -->
+  <circle cx="512" cy="360" r="35" fill="#F0C8A0"/>
+  <circle cx="512" cy="356" r="28" fill="#FDE0C8" opacity="0.6"/>
+
+  <!-- 军帽 6形圆 -->
+  <ellipse cx="512" cy="335" rx="45" ry="18" fill="#4a4020"/>
+  <ellipse cx="512" cy="330" rx="42" ry="15" fill="#5a5030" opacity="0.7"/>
+  <path d="M470 330 Q512 315 554 330" fill="none" stroke="#3a3018" stroke-width="3"/>
+  <!-- 帽徽 ★ -->
+  <path d="M512 318 L516 328 L526 328 L518 334 L521 344 L512 338 L503 344 L506 334 L498 328 L508 328Z" fill="#E85D3A" opacity="0.9"/>
+  <circle cx="512" cy="332" r="2" fill="#FFD540"/>
+
+  <!-- 五官 -->
+  <circle cx="500" cy="358" r="3" fill="#2a1010"/>
+  <circle cx="524" cy="358" r="3" fill="#2a1010"/>
+  <path d="M506 372 Q512 378 518 372" fill="none" stroke="#C08080" stroke-width="1.8"/>
+  <!-- 坚毅眉毛 -->
+  <line x1="494" y1="352" x2="506" y2="353" stroke="#2a1010" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="530" y1="352" x2="518" y2="353" stroke="#2a1010" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- 军号 8形弯 -->
+  <path d="M360 500 Q340 430 390 390 Q430 360 455 390 Q475 420 445 460 Q420 495 380 510" fill="none" stroke="url(#horn)" stroke-width="16" stroke-linecap="round"/>
+  <path d="M360 500 Q340 430 390 390 Q430 360 455 390 Q475 420 445 460 Q420 495 380 510" fill="none" stroke="#F8D870" stroke-width="5" stroke-linecap="round" opacity="0.3"/>
+  <!-- 号口 -->
+  <ellipse cx="372" cy="506" rx="18" ry="30" fill="#F0C040" transform="rotate(-15 372 506)"/>
+  <ellipse cx="372" cy="506" rx="12" ry="22" fill="#F8D870" opacity="0.4"/>
+  <!-- 号穗 -->
+  <path d="M378 500 Q370 530 380 550" fill="none" stroke="#E85D3A" stroke-width="4" stroke-linecap="round"/>
+  <path d="M372 498 Q360 525 368 545" fill="none" stroke="#E85D3A" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- 手臂 -->
+  <path d="M440 440 Q400 460 380 500" fill="none" stroke="#6a7a6a" stroke-width="18" stroke-linecap="round"/>
+  <path d="M440 440 Q400 460 380 500" fill="none" stroke="#8a9a8a" stroke-width="8" stroke-linecap="round" opacity="0.3"/>
+  <!-- 握号手 -->
+  <circle cx="382" cy="500" r="10" fill="#F0C8A0"/>
+
+  <!-- 绑腿 -->
+  <rect x="445" y="580" width="28" height="50" rx="6" fill="#4a4020"/>
+  <rect x="551" y="580" width="28" height="50" rx="6" fill="#4a4020"/>
+  <!-- 布鞋 -->
+  <ellipse cx="459" cy="635" rx="22" ry="10" fill="#3a3020"/>
+  <ellipse cx="565" cy="635" rx="22" ry="10" fill="#3a3020"/>
+
+  <!-- 驳壳枪套 -->
+  <rect x="565" y="555" width="20" height="35" rx="4" fill="#4a3010"/>
+  <rect x="568" y="558" width="14" height="28" rx="3" fill="#5a4020" opacity="0.6"/>
+  <!-- 枪穗 -->
+  <path d="M585 560 Q600 555 605 575" fill="none" stroke="#E85D3A" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- 远路 6路通达 -->
+  <g stroke="#5a7050" stroke-width="2" opacity="0.25" fill="none" stroke-linecap="round">
+    <path d="M512 650 Q400 680 250 700"/>
+    <path d="M512 660 Q550 690 600 720"/>
+    <path d="M512 645 Q480 670 420 710"/>
+    <path d="M512 655 Q580 680 700 700"/>
+    <path d="M512 650 Q380 640 200 660"/>
+    <path d="M512 660 Q650 650 800 670"/>
+  </g>
+
+  <!-- 路标石 -->
+  <rect x="250" y="688" width="40" height="25" rx="3" fill="#6a5a40" opacity="0.4"/>
+  <rect x="600" y="710" width="35" height="22" rx="3" fill="#6a5a40" opacity="0.35"/>
+
+  <!-- 收音机天线？不，是远处的电线杆示意 -->
+  <line x1="800" y1="400" x2="800" y2="600" stroke="#5a6040" stroke-width="2" opacity="0.15"/>
+  <line x1="780" y1="430" x2="820" y2="430" stroke="#5a6040" stroke-width="1.5" opacity="0.12"/>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">81=白蚁</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">8像蚁身弯弯爬，1是蚂蚁直线行</text>
+  <!-- 树枝 -->
+  <line x1="180" y1="550" x2="844" y2="500" stroke="#6D4C41" stroke-width="10" stroke-linecap="round"/>
+  <!-- 蚂蚁 - 8形身体 -->
+  <ellipse cx="320" cy="540" rx="20" ry="18" fill="#5D4037"/>
+  <ellipse cx="360" cy="535" rx="16" ry="15" fill="#5D4037"/>
+  <ellipse cx="395" cy="532" rx="14" ry="13" fill="#5D4037"/>
+  <!-- 蚂蚁2 -->
+  <ellipse cx="530" cy="520" rx="20" ry="18" fill="#5D4037"/>
+  <ellipse cx="570" cy="517" rx="16" ry="15" fill="#5D4037"/>
+  <ellipse cx="605" cy="515" rx="14" ry="13" fill="#5D4037"/>
+  <!-- 蚂蚁3 -->
+  <ellipse cx="700" cy="508" rx="16" ry="15" fill="#5D4037"/>
+  <ellipse cx="730" cy="506" rx="13" ry="12" fill="#5D4037"/>
+  <!-- 触角 -->
+  <path d="M310 525 Q300 510 305 500" fill="none" stroke="#5D4037" stroke-width="2"/>
+  <path d="M315 528 Q310 515 315 505" fill="none" stroke="#5D4037" stroke-width="2"/>
+  <!-- 腿 -->
+  <line x1="310" y1="545" x2="300" y2="560" stroke="#5D4037" stroke-width="2"/>
+  <line x1="320" y1="550" x2="315" y2="565" stroke="#5D4037" stroke-width="2"/>
+  <line x1="350" y1="540" x2="345" y2="555" stroke="#5D4037" stroke-width="2"/>
+  <line x1="365" y1="540" x2="360" y2="558" stroke="#5D4037" stroke-width="2"/>
+  <line x1="385" y1="535" x2="380" y2="552" stroke="#5D4037" stroke-width="2"/>
+  <line x1="400" y1="535" x2="395" y2="555" stroke="#5D4037" stroke-width="2"/>
+  <!-- 蚁路 - 1形直 -->
+  <path d="M180 580 Q512 620 844 550" fill="none" stroke="#D7CCC8" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
+  <!-- 木屑 -->
+  <circle cx="280" cy="560" r="3" fill="#D7CCC8" opacity="0.5"/>
+  <circle cx="450" cy="540" r="2" fill="#D7CCC8" opacity="0.4"/>
+</svg>

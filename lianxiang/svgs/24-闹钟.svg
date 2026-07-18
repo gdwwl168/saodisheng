@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient>
+    <radialGradient id="clockFace" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#ECEFF1"/></radialGradient>
+  </defs>
+  <!-- 卡片背景 -->
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">24=闹钟</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">2像铃锤弯弯敲，4是闹钟三角顶</text>
+
+  <!-- 闹钟腿 -->
+  <rect x="380" y="700" width="30" height="50" rx="6" fill="#546E7A"/>
+  <rect x="614" y="700" width="30" height="50" rx="6" fill="#546E7A"/>
+
+  <!-- 钟身 -->
+  <circle cx="512" cy="520" r="200" fill="url(#clockFace)" stroke="#37474F" stroke-width="6"/>
+  <circle cx="512" cy="520" r="185" fill="none" stroke="#CFD8DC" stroke-width="2"/>
+
+  <!-- 钟顶 - 4形三角 -->
+  <path d="M410 330 L512 240 L614 330" fill="#F44336" stroke="#C62828" stroke-width="3"/>
+
+  <!-- 铃铛 - 左 -->
+  <circle cx="430" cy="310" r="25" fill="#FFD54F" stroke="#F9A825" stroke-width="3"/>
+  <circle cx="430" cy="320" r="5" fill="#F9A825"/>
+  <!-- 铃铛 - 右 -->
+  <circle cx="594" cy="310" r="25" fill="#FFD54F" stroke="#F9A825" stroke-width="3"/>
+  <circle cx="594" cy="320" r="5" fill="#F9A825"/>
+
+  <!-- 铃锤 - 2形弯曲 -->
+  <path d="M445 310 Q460 340 465 360" fill="none" stroke="#F9A825" stroke-width="4" stroke-linecap="round"/>
+  <path d="M579 310 Q564 340 559 360" fill="none" stroke="#F9A825" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- 表盘数字 -->
+  <text x="512" y="450" text-anchor="middle" font-size="36" font-weight="bold" fill="#37474F">12</text>
+  <text x="670" y="530" text-anchor="middle" font-size="30" fill="#37474F">3</text>
+  <text x="512" y="620" text-anchor="middle" font-size="30" fill="#37474F">6</text>
+  <text x="355" y="530" text-anchor="middle" font-size="30" fill="#37474F">9</text>
+
+  <!-- 刻度 -->
+  <line x1="512" y1="340" x2="512" y2="365" stroke="#37474F" stroke-width="3"/>
+  <line x1="512" y1="675" x2="512" y2="700" stroke="#37474F" stroke-width="3"/>
+  <line x1="322" y1="520" x2="347" y2="520" stroke="#37474F" stroke-width="3"/>
+  <line x1="677" y1="520" x2="702" y2="520" stroke="#37474F" stroke-width="3"/>
+
+  <!-- 时针 -->
+  <line x1="512" y1="520" x2="450" y2="470" stroke="#37474F" stroke-width="6" stroke-linecap="round"/>
+  <!-- 分针 -->
+  <line x1="512" y1="520" x2="580" y2="430" stroke="#37474F" stroke-width="4" stroke-linecap="round"/>
+  <!-- 中心点 -->
+  <circle cx="512" cy="520" r="8" fill="#F44336"/>
+
+  <!-- 震动线 -->
+  <path d="M360 380 Q340 360 350 340" fill="none" stroke="#546E7A" stroke-width="2" opacity="0.4"/>
+  <path d="M345 400 Q320 375 335 350" fill="none" stroke="#546E7A" stroke-width="2" opacity="0.3"/>
+  <path d="M664 380 Q684 360 674 340" fill="none" stroke="#546E7A" stroke-width="2" opacity="0.4"/>
+  <path d="M679 400 Q704 375 689 350" fill="none" stroke="#546E7A" stroke-width="2" opacity="0.3"/>
+
+  <!-- 铃声 -->
+  <text x="480" y="250" font-size="28" fill="#F44336" opacity="0.5">🔔</text>
+</svg>

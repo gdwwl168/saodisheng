@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">31=鲨鱼</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">3像鱼鳍弯弯翘，1是鱼尾直直摆</text>
+  <ellipse cx="512" cy="800" rx="320" ry="60" fill="#5BA4C7" opacity="0.3"/>
+  <ellipse cx="512" cy="790" rx="280" ry="45" fill="#7EC8E3" opacity="0.2"/>
+  <!-- 鲨鱼身体 -->
+  <path d="M250 520 Q220 460 300 420 Q400 370 550 390 Q650 400 720 440 Q760 470 780 530 Q780 570 720 590 Q620 620 500 610 Q380 600 280 560Z" fill="#607D8B" stroke="#455A64" stroke-width="3"/>
+  <path d="M280 530 Q350 570 500 590 Q620 600 720 580 Q760 570 770 540 Q720 570 600 575 Q450 580 280 530Z" fill="#CFD8DC" opacity="0.5"/>
+  <!-- 背鳍 - 3形 -->
+  <path d="M420 390 Q440 330 470 350 Q500 310 520 350 Q540 340 550 390" fill="#455A64" stroke="#37474F" stroke-width="2"/>
+  <!-- 尾鳍 - 1形直直 -->
+  <path d="M250 520 L170 490 L170 530Z" fill="#546E7A"/>
+  <!-- 眼睛 -->
+  <circle cx="700" cy="470" r="16" fill="white"/>
+  <circle cx="706" cy="470" r="7" fill="#2C1810"/>
+  <!-- 嘴 -->
+  <path d="M760 520 Q790 510 770 540" fill="none" stroke="#37474F" stroke-width="3"/>
+  <!-- 牙齿 -->
+  <path d="M755 525 L760 535 L765 525 L770 535 L775 525" fill="none" stroke="white" stroke-width="2"/>
+  <!-- 鳃 -->
+  <path d="M730 480 Q740 500 730 520" fill="none" stroke="#455A64" stroke-width="3"/>
+  <text x="200" y="300" font-size="24" fill="#7EC8E3" opacity="0.4">~</text>
+  <text x="800" y="280" font-size="20" fill="#7EC8E3" opacity="0.3">~</text>
+</svg>

@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="ddj86_theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>五笔86 · 编码练习</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+:root { --bg:#f5f0e8; --text:#3d3226; --accent:#8b4513; --gold:#c9a96e; --card-bg:#faf7f2; --sidebar-bg:#ede4d3; --border:#d4c5a9; --success:#6b8e5a; --danger:#b85450; --highlight:#e8d5b0; --shadow:0 2px 12px rgba(0,0,0,0.08); --code-bg:#fffaf0; }
+[data-theme="dark"] { --bg:#1a1a2e; --text:#d4c5a9; --accent:#c9a96e; --gold:#c9a96e; --card-bg:#252540; --sidebar-bg:#1f1f35; --border:#3a3a55; --highlight:#3a3040; --shadow:0 2px 12px rgba(0,0,0,0.3); --code-bg:#2a2a3a; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Noto Serif SC","SimSun","KaiTi",serif;background:var(--bg);color:var(--text);height:100vh;display:flex;overflow:hidden;transition:background 0.3s,color 0.3s}
+.sidebar{width:300px;min-width:300px;background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:10}
+.sidebar-header{padding:20px;border-bottom:1px solid var(--border);text-align:center}
+.sidebar-header h1{font-size:1.5em;color:var(--accent);letter-spacing:.15em;font-weight:700}
+.sidebar-header .subtitle{font-size:.75em;opacity:.6;margin-top:4px}
+.sidebar-controls{padding:12px 16px;display:flex;gap:8px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.sidebar-controls select{flex:1;min-width:80px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:.8em;cursor:pointer}
+.chapter-list{flex:1;overflow-y:auto;padding:8px}
+.chapter-list::-webkit-scrollbar{width:4px}
+.chapter-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.chapter-item{display:flex;align-items:center;padding:9px 12px;border-radius:8px;cursor:pointer;transition:.2s;margin-bottom:2px;gap:8px;flex-wrap:nowrap;min-width:0}
+.chapter-item:hover{background:var(--highlight)}
+.chapter-item.active{background:var(--accent);color:#fff}
+.chapter-item.active .ch-num,.chapter-item.active .ch-preview{color:#fff;opacity:.95}
+.ch-num{font-size:.9em;font-weight:700;color:var(--accent);min-width:22px;text-align:center;flex-shrink:0}
+.ch-hint{font-size:1.0em;font-weight:600;color:var(--gold);background:rgba(201,169,110,.15);padding:3px 8px;border-radius:12px;white-space:nowrap;flex-shrink:0;line-height:1.25;letter-spacing:.02em}
+.chapter-item.active .ch-hint{background:rgba(255,255,255,.25);color:#fff}
+.ch-preview{flex:1;min-width:0;font-size:1.05em;font-weight:700;color:var(--text);opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.ch-best{font-size:.72em;color:var(--gold);white-space:nowrap;flex-shrink:0;margin-left:4px}
+.chapter-item.active .ch-best{color:#fff;opacity:.85}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{display:flex;align-items:center;padding:10px 20px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;background:var(--bg)}
+.topbar button{padding:7px 14px;border:1px solid var(--border);border-radius:18px;background:var(--card-bg);color:var(--text);cursor:pointer;font-family:inherit;font-size:.78em;transition:.2s;white-space:nowrap}
+.topbar button:hover{background:var(--highlight)}
+.topbar button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.topbar .spacer{flex:1}
+.topbar .icon-btn{width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.1em}
+.mode-switch{display:flex;gap:0;border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.mode-switch button{border-radius:0;border:none;margin:0}
+.mode-switch button:first-child{border-radius:18px 0 0 18px}
+.mode-switch button:last-child{border-radius:0 18px 18px 0}
+.content{flex:1;overflow-y:auto;padding:24px 36px;display:flex;justify-content:center}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.chapter-container{max-width:820px;width:100%}
+.chapter-header{text-align:center;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid rgba(180,160,130,.25)}
+.chapter-header .ch-title{font-size:2em;color:var(--accent);font-weight:700;letter-spacing:.2em}
+.chapter-header .ch-subtitle{font-size:.85em;opacity:.5;margin-top:8px}
+.char-grid{display:flex;flex-wrap:wrap;gap:3px;line-height:1;justify-content:flex-start}
+.char-block{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:58px;min-height:82px;border-radius:6px;padding:4px 2px 2px;cursor:pointer;transition:.15s;border:1px solid transparent;position:relative}
+.char-block:hover{border-color:var(--gold);background:rgba(201,169,110,.08)}
+.char-block .wb-code{font-size:.82em;font-family:"Courier New",monospace;color:var(--accent);font-weight:700;letter-spacing:1px;background:var(--code-bg);padding:2px 5px;border-radius:3px;margin-bottom:3px;min-height:18px;line-height:1.35;white-space:nowrap;transition:all .2s}
+.char-block .wb-char{font-size:var(--char-size, 28px);font-weight:700;line-height:1.3;transition:color .15s}
+.char-block.punct .wb-char{color:#999;font-size:calc(var(--char-size, 28px)*.85)}
+.char-block.punct .wb-code{opacity:.4}
+.char-block.space-block{min-width:16px;border:none;cursor:default}
+.char-block.space-block:hover{border-color:transparent;background:transparent}
+.char-block.hide-code .wb-code{visibility:hidden}
+.char-block.show-code .wb-code{visibility:visible}
+.char-block.current-char{border-color:var(--accent)!important;background:rgba(139,69,19,.1)}
+.char-block.correct-char{border-color:var(--success)!important;background:rgba(107,142,90,.1)}
+.char-block.wrong-char{border-color:var(--danger)!important;background:rgba(184,84,80,.1)}
+.type-input-area{display:flex;gap:8px;align-items:center;justify-content:center;padding:12px 8px;flex-wrap:wrap}
+.type-input-area input{padding:8px 12px;border:2px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text);font-family:"Courier New",monospace;font-size:1.1em;letter-spacing:3px;width:140px;text-align:center;outline:none;text-transform:uppercase}
+.type-input-area input:focus{border-color:var(--accent)}
+.type-input-area input.correct-flash{border-color:var(--success);background:rgba(107,142,90,.1)}
+.type-input-area input.wrong-flash{border-color:var(--danger);background:rgba(184,84,80,.1)}
+.type-feedback{font-size:.85em;font-weight:600;min-width:80px;text-align:center}
+.stats-bar{display:flex;gap:16px;padding:10px 24px;border-top:1px solid var(--border);font-size:.8em;opacity:.7;justify-content:center;flex-wrap:wrap}
+/* 练习模式 - 行分段 */
+.practice-section{margin-bottom:28px;padding:16px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);transition:.2s}
+.practice-section.completed{border-color:var(--success)}
+.practice-section .ref-line{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed rgba(180,160,130,.2)}
+.practice-input-row{display:flex;align-items:center;gap:8px}
+.practice-input-row input{flex:1;padding:10px 14px;border:2px solid var(--border);border-radius:8px;background:var(--code-bg);color:var(--text);font-family:"Noto Serif SC","SimSun",sans-serif;font-size:var(--char-size, 22px);letter-spacing:4px;outline:none;transition:.2s}
+.practice-input-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,69,19,.1)}
+.practice-input-row input.correct{border-color:var(--success);background:rgba(107,142,90,.08)}
+.practice-input-row input.wrong{border-color:var(--danger);background:rgba(184,84,80,.08)}
+.practice-input-row .line-status{font-size:.8em;min-width:50px;text-align:right}
+.practice-char-block{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:52px;min-height:76px;border-radius:5px;padding:3px 2px;transition:.15s}
+.practice-char-block .pwb-code{font-size:.78em;font-family:"Courier New",monospace;color:var(--accent);font-weight:700;background:var(--code-bg);padding:1px 4px;border-radius:3px;margin-bottom:2px;line-height:1.3;white-space:nowrap}
+.practice-char-block .pwb-char{font-size:var(--char-size, 24px);font-weight:700;line-height:1.3}
+.practice-char-block.punct-char .pwb-char{color:#999;font-size:calc(var(--char-size, 24px)*.75)}
+.practice-char-block.matched .pwb-char{color:var(--success)}
+.practice-char-block.unmatched .pwb-char{color:var(--danger);text-decoration:underline wavy var(--danger)}
+.practice-char-block.pending .pwb-char{opacity:.5}
+.char-display-area{flex:1;overflow:hidden}
+/* 全局工具栏 */
+.practice-global-toolbar{display:flex;gap:8px;align-items:center;justify-content:center;padding:10px 0;flex-wrap:wrap}
+.practice-global-toolbar button{padding:7px 16px;border:1px solid var(--border);border-radius:18px;background:var(--card-bg);color:var(--text);cursor:pointer;font-family:inherit;font-size:.8em;transition:.2s}
+.practice-global-toolbar button:hover{background:var(--highlight)}
+
+@media (max-width:768px){
+  .sidebar{position:fixed;left:0;top:0;height:100%;transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .content{padding:12px}
+  .char-block{min-width:44px;min-height:64px}
+  .char-block .wb-char{font-size:calc(var(--char-size, 24px)*.85)}
+  .chapter-header .ch-title{font-size:1.4em}
+  .practice-section{padding:10px}
+  .practice-char-block{min-width:38px;min-height:56px}
+}
+@media (max-width:480px){
+  .char-block{min-width:36px;min-height:56px}
+  .char-block .wb-char{font-size:calc(var(--char-size, 20px)*.8)}
+  .char-block .wb-code{font-size:.7em}
+  .practice-char-block .pwb-code{font-size:.68em}
+  .practice-char-block{min-width:32px;min-height:48px}
+  .practice-char-block .pwb-char{font-size:calc(var(--char-size, 20px)*.75)}
+}
+
+.corpus-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 12px 6px}
+.corpus-bar button{padding:5px 10px;border:1px solid var(--border);border-radius:14px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:.78em;cursor:pointer;transition:.2s}
+.corpus-bar button:hover{background:var(--highlight)}
+.corpus-bar button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sidebar" id="sidebar">
+<div class="sidebar-header"><h1 id="corpusTitleH1">道德经</h1><div class="subtitle" id="corpusSubtitle">五笔86版 · 编码练习</div></div>
+<div class="corpus-bar" id="corpusBar" aria-label="学习内容"></div>
+<div class="sidebar-controls"><select id="sortSelect" onchange="sortChapters()"><option value="num">按章节排序</option><option value="len">按字数排序</option></select></div>
+<div class="chapter-list" id="chapterList"></div>
+</div>
+<div class="main">
+	<div class="topbar">
+	<a href="daodejing.html" id="btnStudy" style="padding:7px 14px;border:1px solid var(--border);border-radius:18px;background:var(--card-bg);color:var(--text);cursor:pointer;font-family:inherit;font-size:.78em;transition:.2s;text-decoration:none;">📖 正文</a>
+	<button onclick="setViewMode('practice')" class="active" id="btnPractice" style="padding:7px 14px;border:1px solid var(--border);border-radius:18px;background:var(--card-bg);color:var(--text);cursor:pointer;font-family:inherit;font-size:.78em;transition:.2s">⌨️ 打字练习</button>
+	<span class="spacer"></span>
+	<select id="fontSizeSelect" onchange="changeFontSize(this.value)" style="padding:5px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:.78em;cursor:pointer"><option value="22">小字</option><option value="28" selected>中字</option><option value="36">大字</option><option value="48">特大</option></select>
+	<button onclick="goPrev()" class="icon-btn" title="上一章">◀</button>
+	<button onclick="goNext()" class="icon-btn" title="下一章">▶</button>
+	<button onclick="toggleTheme()" class="icon-btn" title="主题">🌓</button>
+	<span style="flex-basis:100%;height:4px;"></span>
+	<a href="memory-game.html" title="翻牌修心" style="text-decoration:none;font-size:1.05em;">🀄</a>
+	<a href="poetry-chain.html" title="诗词接龙" style="text-decoration:none;font-size:1.05em;">🐉</a>
+	<a href="xiao-game.html" title="禅意消消乐" style="text-decoration:none;font-size:1.05em;">🧘</a>
+	<a href="emoji-match.html" title="Emoji连连看" style="text-decoration:none;font-size:1.05em;">🔗</a>
+	<a href="emoji-study.html" title="Emoji记忆卡" style="text-decoration:none;font-size:1.05em;">📇</a>
+	</div>
+<div class="content" id="contentArea"><div class="chapter-container" id="chapterContainer"></div></div>
+<div class="stats-bar" id="statsBar">
+<span>📊 本章字数：<strong id="charCount">0</strong></span>
+<span>⚡ 最佳 <strong id="bestTime">--</strong> 字/分</span>
+<span>🔤 独特编码：<strong id="uniqueCount">0</strong></span>
+<span id="practiceStats" style="display:none">⏱️ <strong id="practiceTimer">00:00</strong> &nbsp;|&nbsp; ✅ <strong id="correctNum">0</strong> ❌ <strong id="wrongNum">0</strong> 进度：<strong id="progressNum">0</strong>/<strong id="totalNum">0</strong></span>
+</div>
+</div>
+<script>
+
+
+// ===== 道德经全文 =====
+const daodejing = [
+{ch:1,text:'道可道，非常道；名可名，非常名。无名，天地之始；有名，万物之母。故常无欲，以观其妙；常有欲，以观其徼。此两者同出而异名，同谓之玄。玄之又玄，众妙之门。'},
+{ch:2,text:'天下皆知美之为美，斯恶已；皆知善之为善，斯不善已。故有无相生，难易相成，长短相形，高下相倾，音声相和，前后相随。是以圣人处无为之事，行不言之教；万物作焉而不辞，生而不有，为而不恃，功成而弗居。夫唯弗居，是以不去。'},
+{ch:3,text:'不尚贤，使民不争；不贵难得之货，使民不为盗；不见可欲，使民心不乱。是以圣人之治，虚其心，实其腹，弱其志，强其骨。常使民无知无欲，使夫智者不敢为也。为无为，则无不治。'},
+{ch:4,text:'道冲，而用之或不盈。渊兮，似万物之宗。挫其锐，解其纷，和其光，同其尘。湛兮，似或存。吾不知谁之子，象帝之先。'},
+{ch:5,text:'天地不仁，以万物为刍狗；圣人不仁，以百姓为刍狗。天地之间，其犹橐龠乎？虚而不屈，动而愈出。多言数穷，不如守中。'},
+{ch:6,text:'谷神不死，是谓玄牝。玄牝之门，是谓天地根。绵绵若存，用之不勤。'},
+{ch:7,text:'天长地久。天地所以能长且久者，以其不自生，故能长生。是以圣人后其身而身先，外其身而身存。非以其无私邪？故能成其私。'},
+{ch:8,text:'上善若水。水善利万物而不争，处众人之所恶，故几于道。居善地，心善渊，与善仁，言善信，政善治，事善能，动善时。夫唯不争，故无尤。'},
+{ch:9,text:'持而盈之，不如其已。揣而锐之，不可长保。金玉满堂，莫之能守。富贵而骄，自遗其咎。功遂身退，天之道也。'},
+{ch:10,text:'载营魄抱一，能无离乎？专气致柔，能如婴儿乎？涤除玄鉴，能无疵乎？爱民治国，能无为乎？天门开阖，能为雌乎？明白四达，能无知乎。生之，畜之。生而不有，为而不恃，长而不宰，是谓玄德。'},
+{ch:11,text:'三十辐共一毂，当其无，有车之用。埏埴以为器，当其无，有器之用。凿户牖以为室，当其无，有室之用。故有之以为利，无之以为用。'},
+{ch:12,text:'五色令人目盲，五音令人耳聋，五味令人口爽，驰骋畋猎令人心发狂，难得之货令人行妨。是以圣人为腹不为目，故去彼取此。'},
+{ch:13,text:'宠辱若惊，贵大患若身。何谓宠辱若惊？宠为下，得之若惊，失之若惊，是谓宠辱若惊。何谓贵大患若身？吾所以有大患者，为吾有身，及吾无身，吾有何患？故贵以身为天下，若可寄天下；爱以身为天下，若可托天下。'},
+{ch:14,text:'视之不见名曰夷，听之不闻名曰希，搏之不得名曰微。此三者不可致诘，故混而为一。其上不皦，其下不昧，绳绳不可名，复归于无物。是谓无状之状，无物之象，是谓惚恍。迎之不见其首，随之不见其后。执古之道，以御今之有。能知古始，是谓道纪。'},
+{ch:15,text:'古之善为士者，微妙玄通，深不可识。夫唯不可识，故强为之容：豫兮，若冬涉川；犹兮，若畏四邻；俨兮，其若客；涣兮，若冰之将释；敦兮，其若朴；旷兮，其若谷；混兮，其若浊。孰能浊以止，静之徐清？孰能安以久，动之徐生？保此道者不欲盈。夫唯不盈，故能蔽而新成。'},
+{ch:16,text:'致虚极，守静笃。万物并作，吾以观复。夫物芸芸，各复归其根。归根曰静，是谓复命。复命曰常，知常曰明。不知常，妄作凶。知常容，容乃公，公乃王，王乃天，天乃道，道乃久，没身不殆。'},
+{ch:17,text:'太上，下知有之；其次，亲而誉之；其次，畏之；其次，侮之。信不足焉，有不信焉。悠兮，其贵言。功成事遂，百姓皆谓我自然。'},
+{ch:18,text:'大道废，有仁义；智慧出，有大伪；六亲不和，有孝慈；国家昏乱，有忠臣。'},
+{ch:19,text:'绝圣弃智，民利百倍；绝仁弃义，民复孝慈；绝巧弃利，盗贼无有。此三者以为文不足，故令有所属：见素抱朴，少私寡欲，绝学无忧。'},
+{ch:20,text:'唯之与阿，相去几何？善之与恶，相去若何？人之所畏，不可不畏。荒兮，其未央哉。众人熙熙，如享太牢，如春登台。我独泊兮，其未兆，如婴儿之未孩；傫傫兮，若无所归。众人皆有余，而我独若遗。我愚人之心也哉！沌沌兮！俗人昭昭，我独昏昏。俗人察察，我独闷闷。澹兮，其若海；飂兮，若无止。众人皆有以，而我独顽且鄙。我独异于人，而贵食母。'},
+{ch:21,text:'孔德之容，惟道是从。道之为物，惟恍惟惚。惚兮恍兮，其中有象；恍兮惚兮，其中有物。窈兮冥兮，其中有精。其精甚真，其中有信。自古及今，其名不去，以阅众甫。吾何以知众甫之状哉？以此。'},
+{ch:22,text:'曲则全，枉则直，洼则盈，敝则新，少则得，多则惑。是以圣人抱一为天下式。不自见故明，不自是故彰，不自伐故有功，不自矜故长。夫唯不争，故天下莫能与之争。古之所谓曲则全者，岂虚言哉！诚全而归之。'},
+{ch:23,text:'希言自然。故飘风不终朝，骤雨不终日。孰为此者？天地。天地尚不能久，而况于人乎。故从事于道者，道者同于道，德者同于德，失者同于失。同于道者，道亦乐得之；同于德者，德亦乐得之；同于失者，失亦乐得之。信不足焉，有不信焉。'},
+{ch:24,text:'企者不立，跨者不行。自见者不明，自是者不彰，自伐者无功，自矜者不长。其在道也，曰余食赘行。物或恶之，故有道者不处。'},
+{ch:25,text:'有物混成，先天地生。寂兮寥兮，独立而不改，周行而不殆，可以为天下母。吾不知其名，字之曰道，强为之名曰大。大曰逝，逝曰远，远曰反。故道大，天大，地大，王亦大。域中有四大，而王居其一焉。人法地，地法天，天法道，道法自然。'},
+{ch:26,text:'重为轻根，静为躁君。是以圣人终日行不离辎重。虽有荣观，燕处超然。奈何万乘之主，而以身轻天下？轻则失本，躁则失君。'},
+{ch:27,text:'善行无辙迹，善言无瑕谪，善数不用筹策，善闭无关楗而不可开，善结无绳约而不可解。是以圣人常善救人，故无弃人；常善救物，故无弃物。是谓袭明。故善人者，不善人之师；不善人者，善人之资。不贵其师，不爱其资，虽智大迷，是谓要妙。'},
+{ch:28,text:'知其雄，守其雌，为天下谿。为天下谿，常德不离，复归于婴儿。知其白，守其黑，为天下式。为天下式，常德不忒，复归于无极。知其荣，守其辱，为天下谷。为天下谷，常德乃足，复归于朴。朴散则为器，圣人用之则为官长。故大制不割。'},
+{ch:29,text:'将欲取天下而为之，吾见其不得已。天下神器，不可为也。为者败之，执者失之。是以圣人无为，故无败；无执，故无失。故物或行或随，或嘘或吹，或强或羸，或挫或隳。是以圣人去甚，去奢，去泰。'},
+{ch:30,text:'以道佐人主者，不以兵强天下，其事好还。师之所处，荆棘生焉。大军之后，必有凶年。善有果而已，不敢以取强。果而勿矜，果而勿伐，果而勿骄，果而不得已，果而勿强。物壮则老，是谓不道，不道早已。'},
+{ch:31,text:'夫佳兵者，不祥之器，物或恶之，故有道者不处。君子居则贵左，用兵则贵右。兵者不祥之器，非君子之器，不得已而用之，恬淡为上。胜而不美，而美之者，是乐杀人。夫乐杀人者，则不可以得志于天下矣。吉事尚左，凶事尚右。偏将军居左，上将军居右，言以丧礼处之。杀人之众，以哀悲泣之，战胜以丧礼处之。'},
+{ch:32,text:'道常无名，朴虽小，天下莫能臣。侯王若能守之，万物将自宾。天地相合，以降甘露，民莫之令而自均。始制有名，名亦既有，夫亦将知止。知止可以不殆。譬道之在天下，犹川谷之于江海。'},
+{ch:33,text:'知人者智，自知者明。胜人者有力，自胜者强。知足者富，强行者有志。不失其所者久，死而不亡者寿。'},
+{ch:34,text:'大道泛兮，其可左右。万物恃之而生而不辞，功成而不有。衣养万物而不为主，常无欲，可名于小；万物归焉而不为主，可名为大。以其终不自为大，故能成其大。'},
+{ch:35,text:'执大象，天下往。往而不害，安平太。乐与饵，过客止。道之出口，淡乎其无味，视之不足见，听之不足闻，用之不足既。'},
+{ch:36,text:'将欲歙之，必固张之；将欲弱之，必固强之；将欲废之，必固兴之；将欲夺之，必固与之。是谓微明。柔弱胜刚强。鱼不可脱于渊，国之利器不可以示人。'},
+{ch:37,text:'道常无为而无不为。侯王若能守之，万物将自化。化而欲作，吾将镇之以无名之朴。无名之朴，夫亦将不欲。不欲以静，天下将自定。'},
+{ch:38,text:'上德不德，是以有德；下德不失德，是以无德。上德无为而无以为；下德为之而有以为。上仁为之而无以为；上义为之而有以为。上礼为之而莫之应，则攘臂而扔之。故失道而后德，失德而后仁，失仁而后义，失义而后礼。夫礼者，忠信之薄，而乱之首。前识者，道之华，而愚之始。是以大丈夫处其厚，不居其薄；处其实，不居其华。故去彼取此。'},
+{ch:39,text:'昔之得一者：天得一以清，地得一以宁，神得一以灵，谷得一以盈，万物得一以生，侯王得一以为天下贞。其致之也：天无以清，将恐裂；地无以宁，将恐废；神无以灵，将恐歇；谷无以盈，将恐竭；万物无以生，将恐灭；侯王无以贵高，将恐蹶。故贵以贱为本，高以下为基。是以侯王自称孤、寡、不穀。此非以贱为本邪？非乎？故致数誉无誉。不欲琭琭如玉，珞珞如石。'},
+{ch:40,text:'反者道之动，弱者道之用。天下万物生于有，有生于无。'},
+{ch:41,text:'上士闻道，勤而行之；中士闻道，若存若亡；下士闻道，大笑之。不笑不足以为道。故建言有之：明道若昧，进道若退，夷道若颣，上德若谷，大白若辱，广德若不足，建德若偷，质真若渝，大方无隅，大器晚成，大音希声，大象无形，道隐无名。夫唯道，善贷且成。'},
+{ch:42,text:'道生一，一生二，二生三，三生万物。万物负阴而抱阳，冲气以为和。人之所恶，唯孤、寡、不穀，而王公以为称。故物或损之而益，或益之而损。人之所教，我亦教之。强梁者不得其死，吾将以为教父。'},
+{ch:43,text:'天下之至柔，驰骋天下之至坚。无有入无间，吾是以知无为之有益。不言之教，无为之益，天下希及之。'},
+{ch:44,text:'名与身孰亲？身与货孰多？得与亡孰病？是故甚爱必大费，多藏必厚亡。知足不辱，知止不殆，可以长久。'},
+{ch:45,text:'大成若缺，其用不弊。大盈若冲，其用不穷。大直若屈，大巧若拙，大辩若讷。躁胜寒，静胜热。清静为天下正。'},
+{ch:46,text:'天下有道，却走马以粪。天下无道，戎马生于郊。祸莫大于不知足，咎莫大于欲得。故知足之足，常足矣。'},
+{ch:47,text:'不出户，知天下；不窥牖，见天道。其出弥远，其知弥少。是以圣人不行而知，不见而名，不为而成。'},
+{ch:48,text:'为学日益，为道日损。损之又损，以至于无为。无为而无不为。取天下常以无事，及其有事，不足以取天下。'},
+{ch:49,text:'圣人无常心，以百姓心为心。善者吾善之，不善者吾亦善之，德善。信者吾信之，不信者吾亦信之，德信。圣人在天下，歙歙为天下浑其心。百姓皆注其耳目，圣人皆孩之。'},
+{ch:50,text:'出生入死。生之徒十有三，死之徒十有三，人之生，动之死地，亦十有三。夫何故？以其生生之厚。盖闻善摄生者，陆行不遇兕虎，入军不被甲兵。兕无所投其角，虎无所措其爪，兵无所容其刃。夫何故？以其无死地。'},
+{ch:51,text:'道生之，德畜之，物形之，势成之。是以万物莫不尊道而贵德。道之尊，德之贵，夫莫之命而常自然。故道生之，德畜之，长之育之，亭之毒之，养之覆之。生而不有，为而不恃，长而不宰，是谓玄德。'},
+{ch:52,text:'天下有始，以为天下母。既得其母，以知其子；既知其子，复守其母，没身不殆。塞其兑，闭其门，终身不勤。开其兑，济其事，终身不救。见小曰明，守柔曰强。用其光，复归其明，无遗身殃，是为习常。'},
+{ch:53,text:'使我介然有知，行于大道，唯施是畏。大道甚夷，而民好径。朝甚除，田甚芜，仓甚虚，服文彩，带利剑，厌饮食，财货有余，是谓盗夸。非道也哉！'},
+{ch:54,text:'善建者不拔，善抱者不脱，子孙以祭祀不辍。修之于身，其德乃真；修之于家，其德乃余；修之于乡，其德乃长；修之于国，其德乃丰；修之于天下，其德乃普。故以身观身，以家观家，以乡观乡，以国观国，以天下观天下。吾何以知天下然哉？以此。'},
+{ch:55,text:'含德之厚，比于赤子。毒虫不螫，猛兽不据，攫鸟不搏。骨弱筋柔而握固。未知牝牡之合而朘作，精之至也。终日号而不嗄，和之至也。知和曰常，知常曰明。益生曰祥，心使气曰强。物壮则老，谓之不道，不道早已。'},
+{ch:56,text:'知者不言，言者不知。塞其兑，闭其门，挫其锐，解其纷，和其光，同其尘，是谓玄同。故不可得而亲，不可得而疏；不可得而利，不可得而害；不可得而贵，不可得而贱。故为天下贵。'},
+{ch:57,text:'以正治国，以奇用兵，以无事取天下。吾何以知其然哉？以此：天下多忌讳，而民弥贫；民多利器，国家滋昏；人多伎巧，奇物滋起；法令滋彰，盗贼多有。故圣人云：我无为而民自化，我好静而民自正，我无事而民自富，我无欲而民自朴。'},
+{ch:58,text:'其政闷闷，其民淳淳；其政察察，其民缺缺。祸兮福之所倚，福兮祸之所伏。孰知其极？其无正。正复为奇，善复为妖。人之迷，其日固久。是以圣人方而不割，廉而不刿，直而不肆，光而不耀。'},
+{ch:59,text:'治人事天，莫若啬。夫唯啬，是谓早服。早服谓之重积德，重积德则无不克，无不克则莫知其极，莫知其极，可以有国；有国之母，可以长久。是谓深根固柢，长生久视之道。'},
+{ch:60,text:'治大国若烹小鲜。以道莅天下，其鬼不神。非其鬼不神，其神不伤人。非其神不伤人，圣人亦不伤人。夫两不相伤，故德交归焉。'},
+{ch:61,text:'大国者下流，天下之交，天下之牝。牝常以静胜牡，以静为下。故大国以下小国，则取小国；小国以下大国，则取大国。故或下以取，或下而取。大国不过欲兼畜人，小国不过欲入事人。夫两者各得其所欲，大者宜为下。'},
+{ch:62,text:'道者万物之奥，善人之宝，不善人之所保。美言可以市尊，美行可以加人。人之不善，何弃之有？故立天子，置三公，虽有拱璧以先驷马，不如坐进此道。古之所以贵此道者何？不曰：求以得，有罪以免邪？故为天下贵。'},
+{ch:63,text:'为无为，事无事，味无味。大小多少，报怨以德。图难于其易，为大于其细。天下难事必作于易，天下大事必作于细。是以圣人终不为大，故能成其大。夫轻诺必寡信，多易必多难。是以圣人犹难之，故终无难矣。'},
+{ch:64,text:'其安易持，其未兆易谋，其脆易泮，其微易散。为之于未有，治之于未乱。合抱之木，生于毫末；九层之台，起于累土；千里之行，始于足下。为者败之，执者失之。是以圣人无为故无败，无执故无失。民之从事，常于几成而败之。慎终如始，则无败事。是以圣人欲不欲，不贵难得之货；学不学，复众人之所过。以辅万物之自然而不敢为。'},
+{ch:65,text:'古之善为道者，非以明民，将以愚之。民之难治，以其智多。故以智治国，国之贼；不以智治国，国之福。知此两者亦稽式。常知稽式，是谓玄德。玄德深矣远矣，与物反矣，然后乃至大顺。'},
+{ch:66,text:'江海所以能为百谷王者，以其善下之，故能为百谷王。是以欲上民，必以言下之；欲先民，必以身后之。是以圣人处上而民不重，处前而民不害。是以天下乐推而不厌。以其不争，故天下莫能与之争。'},
+{ch:67,text:'天下皆谓我道大，似不肖。夫唯大，故似不肖。若肖，久矣其细也夫！我有三宝，持而保之：一曰慈，二曰俭，三曰不敢为天下先。慈故能勇，俭故能广，不敢为天下先故能成器长。今舍慈且勇，舍俭且广，舍后且先，死矣！夫慈，以战则胜，以守则固。天将救之，以慈卫之。'},
+{ch:68,text:'善为士者不武，善战者不怒，善胜敌者不与，善用人者为之下。是谓不争之德，是谓用人之力，是谓配天古之极。'},
+{ch:69,text:'用兵有言：吾不敢为主而为客，不敢进寸而退尺。是谓行无行，攘无臂，扔无敌，执无兵。祸莫大于轻敌，轻敌几丧吾宝。故抗兵相加，哀者胜矣。'},
+{ch:70,text:'吾言甚易知，甚易行。天下莫能知，莫能行。言有宗，事有君。夫唯无知，是以不我知。知我者希，则我者贵。是以圣人被褐怀玉。'},
+{ch:71,text:'知不知，上；不知知，病。夫唯病病，是以不病。圣人不病，以其病病，是以不病。'},
+{ch:72,text:'民不畏威，则大威至。无狎其所居，无厌其所生。夫唯不厌，是以不厌。是以圣人自知不自见，自爱不自贵。故去彼取此。'},
+{ch:73,text:'勇于敢则杀，勇于不敢则活。此两者或利或害。天之所恶，孰知其故？是以圣人犹难之。天之道，不争而善胜，不言而善应，不召而自来，繟然而善谋。天网恢恢，疏而不失。'},
+{ch:74,text:'民不畏死，奈何以死惧之？若使民常畏死，而为奇者，吾得执而杀之，孰敢？常有司杀者杀。夫代司杀者杀，是谓代大匠斫。夫代大匠斫者，希有不伤其手矣。'},
+{ch:75,text:'民之饥，以其上食税之多，是以饥。民之难治，以其上之有为，是以难治。民之轻死，以其上求生之厚，是以轻死。夫唯无以生为者，是贤于贵生。'},
+{ch:76,text:'人之生也柔弱，其死也坚强。万物草木之生也柔脆，其死也枯槁。故坚强者死之徒，柔弱者生之徒。是以兵强则灭，木强则折。强大处下，柔弱处上。'},
+{ch:77,text:'天之道，其犹张弓与？高者抑之，下者举之；有余者损之，不足者补之。天之道，损有余而补不足。人之道则不然，损不足以奉有余。孰能有余以奉天下？唯有道者。是以圣人为而不恃，功成而不处，其不欲见贤。'},
+{ch:78,text:'天下莫柔弱于水，而攻坚强者莫之能胜，以其无以易之。弱之胜强，柔之胜刚，天下莫不知，莫能行。是以圣人云：受国之垢，是谓社稷主；受国不祥，是为天下王。正言若反。'},
+{ch:79,text:'和大怨，必有余怨，安可以为善？是以圣人执左契而不责于人。有德司契，无德司彻。天道无亲，常与善人。'},
+{ch:80,text:'小国寡民。使有什伯之器而不用，使民重死而不远徙。虽有舟舆，无所乘之；虽有甲兵，无所陈之。使民复结绳而用之。甘其食，美其服，安其居，乐其俗。邻国相望，鸡犬之声相闻，民至老死不相往来。'},
+{ch:81,text:'信言不美，美言不信。善者不辩，辩者不善。知者不博，博者不知。圣人不积，既以为人己愈有，既以与人己愈多。天之道，利而不害；圣人之道，为而不争。'}
+];
+
+// ===== 可选语料（与贪吃蛇同源：小学/初中/高中/苏轼）=====
+const CORPUS_EXTRA = {"xiaoxue":{"name":"小学","items":[{"title":"咏鹅","text":"鹅，鹅，鹅，曲项向天歌。白毛浮绿水，红掌拨清波。","dynasty":"唐","author":"骆宾王"},{"title":"春晓","text":"春眠不觉晓，处处闻啼鸟。夜来风雨声，花落知多少。","dynasty":"唐","author":"孟浩然"},{"title":"静夜思","text":"床前明月光，疑是地上霜。举头望明月，低头思故乡。","dynasty":"唐","author":"李白"},{"title":"登鹳雀楼","text":"白日依山尽，黄河入海流。欲穷千里目，更上一层楼。","dynasty":"唐","author":"王之涣"},{"title":"悯农·其二","text":"锄禾日当午，汗滴禾下土。谁知盘中餐，粒粒皆辛苦。","dynasty":"唐","author":"李绅"},{"title":"赋得古原草送别","text":"离离原上草，一岁一枯荣。野火烧不尽，春风吹又生。远芳侵古道，晴翠接荒城。又送王孙去，萋萋满别情。","dynasty":"唐","author":"白居易"},{"title":"望庐山瀑布","text":"日照香炉生紫烟，遥看瀑布挂前川。飞流直下三千尺，疑是银河落九天。","dynasty":"唐","author":"李白"},{"title":"绝句","text":"两个黄鹂鸣翠柳，一行白鹭上青天。窗含西岭千秋雪，门泊东吴万里船。","dynasty":"唐","author":"杜甫"},{"title":"江雪","text":"千山鸟飞绝，万径人踪灭。孤舟蓑笠翁，独钓寒江雪。","dynasty":"唐","author":"柳宗元"},{"title":"游子吟","text":"慈母手中线，游子身上衣。临行密密缝，意恐迟迟归。谁言寸草心，报得三春晖。","dynasty":"唐","author":"孟郊"},{"title":"山行","text":"远上寒山石径斜，白云深处有人家。停车坐爱枫林晚，霜叶红于二月花。","dynasty":"唐","author":"杜牧"},{"title":"清明","text":"清明时节雨纷纷，路上行人欲断魂。借问酒家何处有？牧童遥指杏花村。","dynasty":"唐","author":"杜牧"},{"title":"江南春","text":"千里莺啼绿映红，水村山郭酒旗风。南朝四百八十寺，多少楼台烟雨中。","dynasty":"唐","author":"杜牧"},{"title":"元日","text":"爆竹声中一岁除，春风送暖入屠苏。千门万户曈曈日，总把新桃换旧符。","dynasty":"宋","author":"王安石"},{"title":"泊船瓜洲","text":"京口瓜洲一水间，钟山只隔数重山。春风又绿江南岸，明月何时照我还？","dynasty":"宋","author":"王安石"},{"title":"饮湖上初晴后雨","text":"水光潋滟晴方好，山色空蒙雨亦奇。欲把西湖比西子，淡妆浓抹总相宜。","dynasty":"宋","author":"苏轼"},{"title":"题西林壁","text":"横看成岭侧成峰，远近高低各不同。不识庐山真面目，只缘身在此山中。","dynasty":"宋","author":"苏轼"},{"title":"夏日绝句","text":"生当作人杰，死亦为鬼雄。至今思项羽，不肯过江东。","dynasty":"宋","author":"李清照"},{"title":"示儿","text":"死去元知万事空，但悲不见九州同。王师北定中原日，家祭无忘告乃翁。","dynasty":"宋","author":"陆游"},{"title":"小池","text":"泉眼无声惜细流，树阴照水爱晴柔。小荷才露尖尖角，早有蜻蜓立上头。","dynasty":"宋","author":"杨万里"},{"title":"晓出净慈寺送林子方","text":"毕竟西湖六月中，风光不与四时同。接天莲叶无穷碧，映日荷花别样红。","dynasty":"宋","author":"杨万里"},{"title":"春日","text":"胜日寻芳泗水滨，无边光景一时新。等闲识得东风面，万紫千红总是春。","dynasty":"宋","author":"朱熹"},{"title":"观书有感","text":"半亩方塘一鉴开，天光云影共徘徊。问渠那得清如许？为有源头活水来。","dynasty":"宋","author":"朱熹"},{"title":"游园不值","text":"应怜屐齿印苍苔，小扣柴扉久不开。春色满园关不住，一枝红杏出墙来。","dynasty":"宋","author":"叶绍翁"},{"title":"墨梅","text":"吾家洗砚池头树，朵朵花开淡墨痕。不要人夸好颜色，只留清气满乾坤。","dynasty":"元","author":"王冕"},{"title":"石灰吟","text":"千锤万凿出深山，烈火焚烧若等闲。粉骨碎身浑不怕，要留清白在人间。","dynasty":"明","author":"于谦"},{"title":"竹石","text":"咬定青山不放松，立根原在破岩中。千磨万击还坚劲，任尔东西南北风。","dynasty":"清","author":"郑燮"},{"title":"村居","text":"草长莺飞二月天，拂堤杨柳醉春烟。儿童散学归来早，忙趁东风放纸鸢。","dynasty":"清","author":"高鼎"},{"title":"所见","text":"牧童骑黄牛，歌声振林樾。意欲捕鸣蝉，忽然闭口立。","dynasty":"清","author":"袁枚"},{"title":"己亥杂诗","text":"九州生气恃风雷，万马齐喑究可哀。我劝天公重抖擞，不拘一格降人才。","dynasty":"清","author":"龚自珍"},{"title":"望天门山","text":"天门中断楚江开，碧水东流至此回。两岸青山相对出，孤帆一片日边来。","dynasty":"唐","author":"李白"},{"title":"早发白帝城","text":"朝辞白帝彩云间，千里江陵一日还。两岸猿声啼不住，轻舟已过万重山。","dynasty":"唐","author":"李白"},{"title":"绝句","text":"迟日江山丽，春风花草香。泥融飞燕子，沙暖睡鸳鸯。","dynasty":"唐","author":"杜甫"},{"title":"江畔独步寻花","text":"黄四娘家花满蹊，千朵万朵压枝低。留连戏蝶时时舞，自在娇莺恰恰啼。","dynasty":"唐","author":"杜甫"},{"title":"枫桥夜泊","text":"月落乌啼霜满天，江枫渔火对愁眠。姑苏城外寒山寺，夜半钟声到客船。","dynasty":"唐","author":"张继"},{"title":"渔歌子","text":"西塞山前白鹭飞，桃花流水鳜鱼肥。青箬笠，绿蓑衣，斜风细雨不须归。","dynasty":"唐","author":"张志和"},{"title":"望洞庭","text":"湖光秋月两相和，潭面无风镜未磨。遥望洞庭山水色，白银盘里一青螺。","dynasty":"唐","author":"刘禹锡"},{"title":"浪淘沙","text":"九曲黄河万里沙，浪淘风簸自天涯。如今直上银河去，同到牵牛织女家。","dynasty":"唐","author":"刘禹锡"},{"title":"江南春","text":"江南可采莲，莲叶何田田。鱼戏莲叶间。鱼戏莲叶东，鱼戏莲叶西，鱼戏莲叶南，鱼戏莲叶北。","dynasty":"汉","author":"汉乐府"},{"title":"敕勒歌","text":"敕勒川，阴山下。天似穹庐，笼盖四野。天苍苍，野茫茫，风吹草低见牛羊。","dynasty":"北朝","author":"北朝民歌"},{"title":"出塞","text":"秦时明月汉时关，万里长征人未还。但使龙城飞将在，不教胡马度阴山。","dynasty":"唐","author":"王昌龄"},{"title":"鹿柴","text":"空山不见人，但闻人语响。返景入深林，复照青苔上。","dynasty":"唐","author":"王维"},{"title":"送元二使安西","text":"渭城朝雨浥轻尘，客舍青青柳色新。劝君更尽一杯酒，西出阳关无故人。","dynasty":"唐","author":"王维"},{"title":"九月九日忆山东兄弟","text":"独在异乡为异客，每逢佳节倍思亲。遥知兄弟登高处，遍插茱萸少一人。","dynasty":"唐","author":"王维"},{"title":"黄鹤楼送孟浩然之广陵","text":"故人西辞黄鹤楼，烟花三月下扬州。孤帆远影碧空尽，唯见长江天际流。","dynasty":"唐","author":"李白"},{"title":"赠汪伦","text":"李白乘舟将欲行，忽闻岸上踏歌声。桃花潭水深千尺，不及汪伦送我情。","dynasty":"唐","author":"李白"},{"title":"别董大","text":"千里黄云白日曛，北风吹雁雪纷纷。莫愁前路无知己，天下谁人不识君？","dynasty":"唐","author":"高适"},{"title":"滁州西涧","text":"独怜幽草涧边生，上有黄鹂深树鸣。春潮带雨晚来急，野渡无人舟自横。","dynasty":"唐","author":"韦应物"},{"title":"早春呈水部张十八员外","text":"天街小雨润如酥，草色遥看近却无。最是一年春好处，绝胜烟柳满皇都。","dynasty":"唐","author":"韩愈"},{"title":"三衢道中","text":"梅子黄时日日晴，小溪泛尽却山行。绿阴不减来时路，添得黄鹂四五声。","dynasty":"宋","author":"曾几"},{"title":"四时田园杂兴","text":"昼出耘田夜绩麻，村庄儿女各当家。童孙未解供耕织，也傍桑阴学种瓜。","dynasty":"宋","author":"范成大"},{"title":"清平乐·村居","text":"茅檐低小，溪上青青草。醉里吴音相媚好，白发谁家翁媪？大儿锄豆溪东，中儿正织鸡笼。最喜小儿亡赖，溪头卧剥莲蓬。","dynasty":"宋","author":"辛弃疾"},{"title":"乡村四月","text":"绿遍山原白满川，子规声里雨如烟。乡村四月闲人少，才了蚕桑又插田。","dynasty":"宋","author":"翁卷"},{"title":"村晚","text":"草满池塘水满陂，山衔落日浸寒漪。牧童归去横牛背，短笛无腔信口吹。","dynasty":"宋","author":"雷震"},{"title":"书湖阴先生壁","text":"茅檐长扫净无苔，花木成畦手自栽。一水护田将绿绕，两山排闼送青来。","dynasty":"宋","author":"王安石"},{"title":"六月二十七日望湖楼醉书","text":"黑云翻墨未遮山，白雨跳珠乱入船。卷地风来忽吹散，望湖楼下水如天。","dynasty":"宋","author":"苏轼"},{"title":"惠崇春江晚景","text":"竹外桃花三两枝，春江水暖鸭先知。蒌蒿满地芦芽短，正是河豚欲上时。","dynasty":"宋","author":"苏轼"},{"title":"过故人庄","text":"故人具鸡黍，邀我至田家。绿树村边合，青山郭外斜。开轩面场圃，把酒话桑麻。待到重阳日，还来就菊花。","dynasty":"唐","author":"孟浩然"},{"title":"独坐敬亭山","text":"众鸟高飞尽，孤云独去闲。相看两不厌，只有敬亭山。","dynasty":"唐","author":"李白"},{"title":"宿新市徐公店","text":"篱落疏疏一径深，树头花落未成阴。儿童急走追黄蝶，飞入菜花无处寻。","dynasty":"宋","author":"杨万里"},{"title":"舟夜书所见","text":"月黑见渔灯，孤光一点萤。微微风簇浪，散作满河星。","dynasty":"清","author":"查慎行"},{"title":"回乡偶书","text":"少小离家老大回，乡音无改鬓毛衰。儿童相见不相识，笑问客从何处来。","dynasty":"唐","author":"贺知章"},{"title":"咏柳","text":"碧玉妆成一树高，万条垂下绿丝绦。不知细叶谁裁出，二月春风似剪刀。","dynasty":"唐","author":"贺知章"},{"title":"凉州词","text":"黄河远上白云间，一片孤城万仞山。羌笛何须怨杨柳，春风不度玉门关。","dynasty":"唐","author":"王之涣"},{"title":"芙蓉楼送辛渐","text":"寒雨连江夜入吴，平明送客楚山孤。洛阳亲友如相问，一片冰心在玉壶。","dynasty":"唐","author":"王昌龄"},{"title":"闻官军收河南河北","text":"剑外忽传收蓟北，初闻涕泪满衣裳。却看妻子愁何在，漫卷诗书喜欲狂。白日放歌须纵酒，青春作伴好还乡。即从巴峡穿巫峡，便下襄阳向洛阳。","dynasty":"唐","author":"杜甫"},{"title":"长相思","text":"山一程，水一程，身向榆关那畔行，夜深千帐灯。风一更，雪一更，聒碎乡心梦不成，故园无此声。","dynasty":"清","author":"纳兰性德"},{"title":"秋思","text":"洛阳城里见秋风，欲作家书意万重。复恐匆匆说不尽，行人临发又开封。","dynasty":"唐","author":"张籍"},{"title":"采薇（节选）","text":"昔我往矣，杨柳依依。今我来思，雨雪霏霏。行道迟迟，载渴载饥。我心伤悲，莫知我哀！","dynasty":"先秦","author":"《诗经》"},{"title":"春夜喜雨","text":"好雨知时节，当春乃发生。随风潜入夜，润物细无声。野径云俱黑，江船火独明。晓看红湿处，花重锦官城。","dynasty":"唐","author":"杜甫"},{"title":"天净沙·秋思","text":"枯藤老树昏鸦，小桥流水人家，古道西风瘦马。夕阳西下，断肠人在天涯。","dynasty":"元","author":"马致远"},{"title":"七步诗","text":"煮豆燃豆萁，豆在釜中泣。本是同根生，相煎何太急？","dynasty":"三国","author":"曹植"},{"title":"鸟鸣涧","text":"人闲桂花落，夜静春山空。月出惊山鸟，时鸣春涧中。","dynasty":"唐","author":"王维"},{"title":"竹里馆","text":"独坐幽篁里，弹琴复长啸。深林人不知，明月来相照。","dynasty":"唐","author":"王维"},{"title":"池上","text":"小娃撑小艇，偷采白莲回。不解藏踪迹，浮萍一道开。","dynasty":"唐","author":"白居易"}]},"junior":{"name":"初中","items":[{"title":"关雎","text":"关关雎鸠，在河之洲。窈窕淑女，君子好逑。参差荇菜，左右流之。窈窕淑女，寤寐求之。求之不得，寤寐思服。悠哉悠哉，辗转反侧。参差荇菜，左右采之。窈窕淑女，琴瑟友之。参差荇菜，左右芼之。窈窕淑女，钟鼓乐之。","dynasty":"先秦","author":"《诗经》"},{"title":"蒹葭","text":"蒹葭苍苍，白露为霜。所谓伊人，在水一方。溯洄从之，道阻且长。溯游从之，宛在水中央。蒹葭萋萋，白露未晞。所谓伊人，在水之湄。溯洄从之，道阻且跻。溯游从之，宛在水中坻。蒹葭采采，白露未已。所谓伊人，在水之涘。溯洄从之，道阻且右。溯游从之，宛在水中沚。","dynasty":"先秦","author":"《诗经》"},{"title":"十五从军征","text":"十五从军征，八十始得归。道逢乡里人：\"家中有阿谁？\"\"遥看是君家，松柏冢累累。\"兔从狗窦入，雉从梁上飞。中庭生旅谷，井上生旅葵。舂谷持作饭，采葵持作羹。羹饭一时熟，不知饴阿谁。出门东向看，泪落沾我衣。","dynasty":"汉","author":"汉乐府"},{"title":"观沧海","text":"东临碣石，以观沧海。水何澹澹，山岛竦峙。树木丛生，百草丰茂。秋风萧瑟，洪波涌起。日月之行，若出其中；星汉灿烂，若出其里。幸甚至哉，歌以咏志。","dynasty":"东汉","author":"曹操"},{"title":"饮酒·其五","text":"结庐在人境，而无车马喧。问君何能尔？心远地自偏。采菊东篱下，悠然见南山。山气日夕佳，飞鸟相与还。此中有真意，欲辨已忘言。","dynasty":"东晋","author":"陶渊明"},{"title":"木兰诗","text":"唧唧复唧唧，木兰当户织。不闻机杼声，唯闻女叹息。问女何所思，问女何所忆。女亦无所思，女亦无所忆。昨夜见军帖，可汗大点兵。军书十二卷，卷卷有爷名。阿爷无大儿，木兰无长兄。愿为市鞍马，从此替爷征。东市买骏马，西市买鞍鞯。南市买辔头，北市买长鞭。旦辞爷娘去，暮宿黄河边。不闻爷娘唤女声，但闻黄河流水鸣溅溅。旦辞黄河去，暮至黑山头。不闻爷娘唤女声，但闻燕山胡骑鸣啾啾。万里赴戎机，关山度若飞。朔气传金柝，寒光照铁衣。将军百战死，壮士十年归。归来见天子，天子坐明堂。策勋十二转，赏赐百千强。可汗问所欲，木兰不用尚书郎。愿驰千里足，送儿还故乡。爷娘闻女来，出郭相扶将。阿姊闻妹来，当户理红妆。小弟闻姊来，磨刀霍霍向猪羊。开我东阁门，坐我西阁床。脱我战时袍，著我旧时裳。当窗理云鬓，对镜帖花黄。出门看火伴，火伴皆惊忙。同行十二年，不知木兰是女郎。雄兔脚扑朔，雌兔眼迷离。双兔傍地走，安能辨我是雄雌？","dynasty":"北朝","author":"北朝民歌"},{"title":"送杜少府之任蜀州","text":"城阙辅三秦，风烟望五津。与君离别意，同是宦游人。海内存知己，天涯若比邻。无为在歧路，儿女共沾巾。","dynasty":"唐","author":"王勃"},{"title":"登幽州台歌","text":"前不见古人，后不见来者。念天地之悠悠，独怆然而涕下！","dynasty":"唐","author":"陈子昂"},{"title":"次北固山下","text":"客路青山外，行舟绿水前。潮平两岸阔，风正一帆悬。海日生残夜，江春入旧年。乡书何处达？归雁洛阳边。","dynasty":"唐","author":"王湾"},{"title":"使至塞上","text":"单车欲问边，属国过居延。征蓬出汉塞，归雁入胡天。大漠孤烟直，长河落日圆。萧关逢候骑，都护在燕然。","dynasty":"唐","author":"王维"},{"title":"闻王昌龄左迁龙标遥有此寄","text":"杨花落尽子规啼，闻道龙标过五溪。我寄愁心与明月，随君直到夜郎西。","dynasty":"唐","author":"李白"},{"title":"行路难·其一","text":"金樽清酒斗十千，玉盘珍羞直万钱。停杯投箸不能食，拔剑四顾心茫然。欲渡黄河冰塞川，将登太行雪满山。闲来垂钓碧溪上，忽复乘舟梦日边。行路难！行路难！多歧路，今安在？长风破浪会有时，直挂云帆济沧海。","dynasty":"唐","author":"李白"},{"title":"黄鹤楼","text":"昔人已乘黄鹤去，此地空余黄鹤楼。黄鹤一去不复返，白云千载空悠悠。晴川历历汉阳树，芳草萋萋鹦鹉洲。日暮乡关何处是？烟波江上使人愁。","dynasty":"唐","author":"崔颢"},{"title":"望岳","text":"岱宗夫如何？齐鲁青未了。造化钟神秀，阴阳割昏晓。荡胸生曾云，决眦入归鸟。会当凌绝顶，一览众山小。","dynasty":"唐","author":"杜甫"},{"title":"春望","text":"国破山河在，城春草木深。感时花溅泪，恨别鸟惊心。烽火连三月，家书抵万金。白头搔更短，浑欲不胜簪。","dynasty":"唐","author":"杜甫"},{"title":"茅屋为秋风所破歌","text":"八月秋高风怒号，卷我屋上三重茅。茅飞渡江洒江郊，高者挂罥长林梢，下者飘转沉塘坳。南村群童欺我老无力，忍能对面为盗贼。公然抱茅入竹去，唇焦口燥呼不得，归来倚杖自叹息。俄顷风定云墨色，秋天漠漠向昏黑。布衾多年冷似铁，娇儿恶卧踏里裂。床头屋漏无干处，雨脚如麻未断绝。自经丧乱少睡眠，长夜沾湿何由彻！安得广厦千万间，大庇天下寒士俱欢颜！风雨不动安如山。呜呼！何时眼前突兀见此屋，吾庐独破受冻死亦足！","dynasty":"唐","author":"杜甫"},{"title":"白雪歌送武判官归京","text":"北风卷地白草折，胡天八月即飞雪。忽如一夜春风来，千树万树梨花开。散入珠帘湿罗幕，狐裘不暖锦衾薄。将军角弓不得控，都护铁衣冷难着。瀚海阑干百丈冰，愁云惨淡万里凝。中军置酒饮归客，胡琴琵琶与羌笛。纷纷暮雪下辕门，风掣红旗冻不翻。轮台东门送君去，去时雪满天山路。山回路转不见君，雪上空留马行处。","dynasty":"唐","author":"岑参"},{"title":"酬乐天扬州初逢席上见赠","text":"巴山楚水凄凉地，二十三年弃置身。怀旧空吟闻笛赋，到乡翻似烂柯人。沉舟侧畔千帆过，病树前头万木春。今日听君歌一曲，暂凭杯酒长精神。","dynasty":"唐","author":"刘禹锡"},{"title":"卖炭翁","text":"卖炭翁，伐薪烧炭南山中。满面尘灰烟火色，两鬓苍苍十指黑。卖炭得钱何所营？身上衣裳口中食。可怜身上衣正单，心忧炭贱愿天寒。夜来城外一尺雪，晓驾炭车辗冰辙。牛困人饥日已高，市南门外泥中歇。翩翩两骑来是谁？黄衣使者白衫儿。手把文书口称敕，回车叱牛牵向北。一车炭，千余斤，宫使驱将惜不得。半匹红纱一丈绫，系向牛头充炭直。","dynasty":"唐","author":"白居易"},{"title":"钱塘湖春行","text":"孤山寺北贾亭西，水面初平云脚低。几处早莺争暖树，谁家新燕啄春泥。乱花渐欲迷人眼，浅草才能没马蹄。最爱湖东行不足，绿杨阴里白沙堤。","dynasty":"唐","author":"白居易"},{"title":"雁门太守行","text":"黑云压城城欲摧，甲光向日金鳞开。角声满天秋色里，塞上燕脂凝夜紫。半卷红旗临易水，霜重鼓寒声不起。报君黄金台上意，提携玉龙为君死。","dynasty":"唐","author":"李贺"},{"title":"赤壁","text":"折戟沉沙铁未销，自将磨洗认前朝。东风不与周郎便，铜雀春深锁二乔。","dynasty":"唐","author":"杜牧"},{"title":"泊秦淮","text":"烟笼寒水月笼沙，夜泊秦淮近酒家。商女不知亡国恨，隔江犹唱后庭花。","dynasty":"唐","author":"杜牧"},{"title":"夜雨寄北","text":"君问归期未有期，巴山夜雨涨秋池。何当共剪西窗烛，却话巴山夜雨时。","dynasty":"唐","author":"李商隐"},{"title":"无题","text":"相见时难别亦难，东风无力百花残。春蚕到死丝方尽，蜡炬成灰泪始干。晓镜但愁云鬓改，夜吟应觉月光寒。蓬山此去无多路，青鸟殷勤为探看。","dynasty":"唐","author":"李商隐"},{"title":"相见欢","text":"无言独上西楼，月如钩。寂寞梧桐深院锁清秋。剪不断，理还乱，是离愁。别是一般滋味在心头。","dynasty":"五代","author":"李煜"},{"title":"渔家傲·秋思","text":"塞下秋来风景异，衡阳雁去无留意。四面边声连角起。千嶂里，长烟落日孤城闭。浊酒一杯家万里，燕然未勒归无计。羌管悠悠霜满地。人不寐，将军白发征夫泪。","dynasty":"宋","author":"范仲淹"},{"title":"浣溪沙","text":"一曲新词酒一杯，去年天气旧亭台。夕阳西下几时回？无可奈何花落去，似曾相识燕归来。小园香径独徘徊。","dynasty":"宋","author":"晏殊"},{"title":"登飞来峰","text":"飞来山上千寻塔，闻说鸡鸣见日升。不畏浮云遮望眼，自缘身在最高层。","dynasty":"宋","author":"王安石"},{"title":"江城子·密州出猎","text":"老夫聊发少年狂，左牵黄，右擎苍，锦帽貂裘，千骑卷平冈。为报倾城随太守，亲射虎，看孙郎。酒酣胸胆尚开张，鬓微霜，又何妨！持节云中，何日遣冯唐？会挽雕弓如满月，西北望，射天狼。","dynasty":"宋","author":"苏轼"},{"title":"水调歌头","text":"明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间。转朱阁，低绮户，照无眠。不应有恨，何事长向别时圆？人有悲欢离合，月有阴晴圆缺，此事古难全。但愿人长久，千里共婵娟。","dynasty":"宋","author":"苏轼"},{"title":"渔家傲","text":"天接云涛连晓雾，星河欲转千帆舞。仿佛梦魂归帝所。闻天语，殷勤问我归何处。我报路长嗟日暮，学诗谩有惊人句。九万里风鹏正举。风休住，蓬舟吹取三山去！","dynasty":"宋","author":"李清照"},{"title":"游山西村","text":"莫笑农家腊酒浑，丰年留客足鸡豚。山重水复疑无路，柳暗花明又一村。箫鼓追随春社近，衣冠简朴古风存。从今若许闲乘月，拄杖无时夜叩门。","dynasty":"宋","author":"陆游"},{"title":"南乡子·登京口北固亭有怀","text":"何处望神州？满眼风光北固楼。千古兴亡多少事？悠悠。不尽长江滚滚流。年少万兜鍪，坐断东南战未休。天下英雄谁敌手？曹刘。生子当如孙仲谋。","dynasty":"宋","author":"辛弃疾"},{"title":"破阵子","text":"醉里挑灯看剑，梦回吹角连营。八百里分麾下炙，五十弦翻塞外声，沙场秋点兵。马作的卢飞快，弓如霹雳弦惊。了却君王天下事，赢得生前身后名。可怜白发生！","dynasty":"宋","author":"辛弃疾"},{"title":"过零丁洋","text":"辛苦遭逢起一经，干戈寥落四周星。山河破碎风飘絮，身世浮沉雨打萍。惶恐滩头说惶恐，零丁洋里叹零丁。人生自古谁无死？留取丹心照汗青。","dynasty":"宋","author":"文天祥"},{"title":"天净沙·秋思","text":"枯藤老树昏鸦，小桥流水人家，古道西风瘦马。夕阳西下，断肠人在天涯。","dynasty":"元","author":"马致远"},{"title":"山坡羊·潼关怀古","text":"峰峦如聚，波涛如怒，山河表里潼关路。望西都，意踌躇。伤心秦汉经行处，宫阙万间都做了土。兴，百姓苦；亡，百姓苦。","dynasty":"元","author":"张养浩"},{"title":"己亥杂诗·其五","text":"浩荡离愁白日斜，吟鞭东指即天涯。落红不是无情物，化作春泥更护花。","dynasty":"清","author":"龚自珍"},{"title":"满江红","text":"小住京华，早又是中秋佳节。为篱下黄花开遍，秋容如拭。四面歌残终破楚，八年风味徒思浙。苦将侬强派作蛾眉，殊未屑！身不得，男儿列；心却比，男儿烈！算平生肝胆，因人常热。俗子胸襟谁识我？英雄末路当磨折。莽红尘何处觅知音？青衫湿！","dynasty":"近代","author":"秋瑾"},{"title":"《论语》十二章","text":"子曰：\"学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知而不愠，不亦君子乎？\"曾子曰：\"吾日三省吾身：为人谋而不忠乎？与朋友交而不信乎？传不习乎？\"子曰：\"吾十有五而志于学，三十而立，四十而不惑，五十而知天命，六十而耳顺，七十而从心所欲，不逾矩。\"子曰：\"温故而知新，可以为师矣。\"子曰：\"学而不思则罔，思而不学则殆。\"子曰：\"贤哉，回也！一箪食，一瓢饮，在陋巷，人不堪其忧，回也不改其乐。贤哉，回也！\"子曰：\"知之者不如好之者，好之者不如乐之者。\"子曰：\"饭疏食，饮水，曲肱而枕之，乐亦在其中矣。不义而富且贵，于我如浮云。\"子曰：\"三人行，必有我师焉。择其善者而从之，其不善者而改之。\"子在川上曰：\"逝者如斯夫，不舍昼夜。\"子曰：\"三军可夺帅也，匹夫不可夺志也。\"子夏曰：\"博学而笃志，切问而近思，仁在其中矣。\"","dynasty":"先秦","author":"《论语》"},{"title":"曹刿论战","text":"十年春，齐师伐我。公将战，曹刿请见。其乡人曰：\"肉食者谋之，又何间焉？\"刿曰：\"肉食者鄙，未能远谋。\"乃入见。问：\"何以战？\"公曰：\"衣食所安，弗敢专也，必以分人。\"对曰：\"小惠未遍，民弗从也。\"公曰：\"牺牲玉帛，弗敢加也，必以信。\"对曰：\"小信未孚，神弗福也。\"公曰：\"小大之狱，虽不能察，必以情。\"对曰：\"忠之属也。可以一战。战则请从。\"公与之乘，战于长勺。公将鼓之。刿曰：\"未可。\"齐人三鼓。刿曰：\"可矣。\"齐师败绩。公将驰之。刿曰：\"未可。\"下视其辙，登轼而望之，曰：\"可矣。\"遂逐齐师。既克，公问其故。对曰：\"夫战，勇气也。一鼓作气，再而衰，三而竭。彼竭我盈，故克之。夫大国，难测也，惧有伏焉。吾视其辙乱，望其旗靡，故逐之。\"","dynasty":"先秦","author":"《左传》"},{"title":"鱼我所欲也","text":"鱼，我所欲也；熊掌，亦我所欲也。二者不可得兼，舍鱼而取熊掌者也。生，亦我所欲也；义，亦我所欲也。二者不可得兼，舍生而取义者也。生亦我所欲，所欲有甚于生者，故不为苟得也；死亦我所恶，所恶有甚于死者，故患有所不辟也。如使人之所欲莫甚于生，则凡可以得生者何不用也？使人之所恶莫甚于死者，则凡可以辟患者何不为也？由是则生而有不用也，由是则可以辟患而有不为也。是故所欲有甚于生者，所恶有甚于死者。非独贤者有是心也，人皆有之，贤者能勿丧耳。一箪食，一豆羹，得之则生，弗得则死。呼尔而与之，行道之人弗受；蹴尔而与之，乞人不屑也。万钟则不辩礼义而受之，万钟于我何加焉！为宫室之美、妻妾之奉、所识穷乏者得我与？乡为身死而不受，今为宫室之美为之；乡为身死而不受，今为妻妾之奉为之；乡为身死而不受，今为所识穷乏者得我而为之：是亦不可以已乎？此之谓失其本心。","dynasty":"先秦","author":"《孟子》"},{"title":"得道多助，失道寡助","text":"天时不如地利，地利不如人和。三里之城，七里之郭，环而攻之而不胜。夫环而攻之，必有得天时者矣，然而不胜者，是天时不如地利也。城非不高也，池非不深也，兵革非不坚利也，米粟非不多也，委而去之，是地利不如人和也。故曰：域民不以封疆之界，固国不以山溪之险，威天下不以兵革之利。得道者多助，失道者寡助。寡助之至，亲戚畔之。多助之至，天下顺之。以天下之所顺，攻亲戚之所畔，故君子有不战，战必胜矣。","dynasty":"先秦","author":"《孟子》"},{"title":"生于忧患，死于安乐","text":"舜发于畎亩之中，傅说举于版筑之间，胶鬲举于鱼盐之中，管夷吾举于士，孙叔敖举于海，百里奚举于市。故天将降大任于是人也，必先苦其心志，劳其筋骨，饿其体肤，空乏其身，行拂乱其所为，所以动心忍性，曾益其所不能。人恒过，然后能改；困于心，衡于虑，而后作；征于色，发于声，而后喻。入则无法家拂士，出则无敌国外患者，国恒亡。然后知生于忧患而死于安乐也。","dynasty":"先秦","author":"《孟子》"},{"title":"北冥有鱼","text":"北冥有鱼，其名为鲲。鲲之大，不知其几千里也；化而为鸟，其名为鹏。鹏之背，不知其几千里也；怒而飞，其翼若垂天之云。是鸟也，海运则将徙于南冥。南冥者，天池也。《齐谐》者，志怪者也。《谐》之言曰：\"鹏之徙于南冥也，水击三千里，抟扶摇而上者九万里，去以六月息者也。\"野马也，尘埃也，生物之以息相吹也。天之苍苍，其正色邪？其远而无所至极邪？其视下也，亦若是则已矣。","dynasty":"先秦","author":"《庄子》"},{"title":"虽有嘉肴","text":"虽有嘉肴，弗食，不知其旨也。虽有至道，弗学，不知其善也。是故学然后知不足，教然后知困。知不足，然后能自反也；知困，然后能自强也。故曰：教学相长也。《兑命》曰：\"学学半。\"其此之谓乎！","dynasty":"先秦","author":"《礼记》"},{"title":"伯牙鼓琴","text":"伯牙鼓琴，锺子期听之。方鼓琴而志在太山，锺子期曰：\"善哉乎鼓琴！巍巍乎若太山。\"少选之间而志在流水，锺子期又曰：\"善哉乎鼓琴！汤汤乎若流水。\"锺子期死，伯牙破琴绝弦，终身不复鼓琴，以为世无足复为鼓琴者。","dynasty":"先秦","author":"《吕氏春秋》"},{"title":"邹忌讽齐王纳谏","text":"邹忌修八尺有余，而形貌昳丽。朝服衣冠，窥镜，谓其妻曰：\"我孰与城北徐公美？\"其妻曰：\"君美甚，徐公何能及君也？\"城北徐公，齐国之美丽者也。忌不自信，而复问其妾曰：\"吾孰与徐公美？\"妾曰：\"徐公何能及君也？\"旦日，客从外来，与坐谈，问之客曰：\"吾与徐公孰美？\"客曰：\"徐公不若君之美也。\"明日，徐公来，孰视之，自以为不如；窥镜而自视，又弗如远甚。暮寝而思之，曰：\"吾妻之美我者，私我也；妾之美我者，畏我也；客之美我者，欲有求于我也。\"于是入朝见威王，曰：\"臣诚知不如徐公美。臣之妻私臣，臣之妾畏臣，臣之客欲有求于臣，皆以美于徐公。今齐地方千里，百二十城。宫妇左右莫不私王，朝廷之臣莫不畏王，四境之内莫不有求于王。由此观之，王之蔽甚矣。\"王曰：\"善。\"乃下令：\"群臣吏民能面刺寡人之过者，受上赏；上书谏寡人者，受中赏；能谤讥于市朝，闻寡人之耳者，受下赏。\"令初下，群臣进谏，门庭若市；数月之后，时时而间进；期年之后，虽欲言，无可进者。燕、赵、韩、魏闻之，皆朝于齐。此所谓战胜于朝廷。","dynasty":"先秦","author":"《战国策》"},{"title":"出师表","text":"先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。愿陛下托臣以讨贼兴复之效，不效，则治臣之罪，以告先帝之灵。若无兴德之言，则责攸之、祎、允等之慢，以彰其咎。陛下亦宜自谋，以咨诹善道，察纳雅言，深追先帝遗诏。臣不胜受恩感激。今当远离，临表涕零，不知所言。","dynasty":"三国","author":"诸葛亮"},{"title":"桃花源记","text":"晋太元中，武陵人捕鱼为业。缘溪行，忘路之远近。忽逢桃花林，夹岸数百步，中无杂树，芳草鲜美，落英缤纷。渔人甚异之，复前行，欲穷其林。林尽水源，便得一山，山有小口，仿佛若有光。便舍船，从口入。初极狭，才通人。复行数十步，豁然开朗。土地平旷，屋舍俨然，有良田、美池、桑竹之属。阡陌交通，鸡犬相闻。其中往来种作，男女衣着，悉如外人。黄发垂髫，并怡然自乐。见渔人，乃大惊，问所从来。具答之。便要还家，设酒杀鸡作食。村中闻有此人，咸来问讯。自云先世避秦时乱，率妻子邑人来此绝境，不复出焉，遂与外人间隔。问今是何世，乃不知有汉，无论魏晋。此人一一为具言所闻，皆叹惋。余人各复延至其家，皆出酒食。停数日，辞去。此中人语云：\"不足为外人道也。\"既出，得其船，便扶向路，处处志之。及郡下，诣太守，说如此。太守即遣人随其往，寻向所志，遂迷，不复得路。南阳刘子骥，高尚士也，闻之，欣然规往。未果，寻病终。后遂无问津者。","dynasty":"东晋","author":"陶渊明"},{"title":"答谢中书书","text":"山川之美，古来共谈。高峰入云，清流见底。两岸石壁，五色交辉。青林翠竹，四时俱备。晓雾将歇，猿鸟乱鸣；夕日欲颓，沉鳞竞跃。实是欲界之仙都。自康乐以来，未复有能与其奇者。","dynasty":"南朝","author":"陶弘景"},{"title":"三峡","text":"自三峡七百里中，两岸连山，略无阙处。重岩叠嶂，隐天蔽日，自非亭午夜分，不见曦月。至于夏水襄陵，沿溯阻绝。或王命急宣，有时朝发白帝，暮到江陵，其间千二百里，虽乘奔御风，不以疾也。春冬之时，则素湍绿潭，回清倒影，绝巘多生怪柏，悬泉瀑布，飞漱其间，清荣峻茂，良多趣味。每至晴初霜旦，林寒涧肃，常有高猿长啸，属引凄异，空谷传响，哀转久绝。故渔者歌曰：\"巴东三峡巫峡长，猿鸣三声泪沾裳。\"","dynasty":"北魏","author":"郦道元"},{"title":"马说","text":"世有伯乐，然后有千里马。千里马常有，而伯乐不常有。故虽有名马，祗辱于奴隶人之手，骈死于槽枥之间，不以千里称也。马之千里者，一食或尽粟一石。食马者不知其能千里而食也。是马也，虽有千里之能，食不饱，力不足，才美不外见，且欲与常马等不可得，安求其能千里也？策之不以其道，食之不能尽其材，鸣之而不能通其意，执策而临之，曰：\"天下无马！\"呜呼！其真无马邪？其真不知马也！","dynasty":"唐","author":"韩愈"},{"title":"陋室铭","text":"山不在高，有仙则名。水不在深，有龙则灵。斯是陋室，惟吾德馨。苔痕上阶绿，草色入帘青。谈笑有鸿儒，往来无白丁。可以调素琴，阅金经。无丝竹之乱耳，无案牍之劳形。南阳诸葛庐，西蜀子云亭。孔子云：何陋之有？","dynasty":"唐","author":"刘禹锡"},{"title":"小石潭记","text":"从小丘西行百二十步，隔篁竹，闻水声，如鸣珮环，心乐之。伐竹取道，下见小潭，水尤清冽。全石以为底，近岸，卷石底以出，为坻，为屿，为嵁，为岩。青树翠蔓，蒙络摇缀，参差披拂。潭中鱼可百许头，皆若空游无所依，日光下澈，影布石上。佁然不动，俶尔远逝，往来翕忽，似与游者相乐。潭西南而望，斗折蛇行，明灭可见。其岸势犬牙差互，不可知其源。坐潭上，四面竹树环合，寂寥无人，凄神寒骨，悄怆幽邃。以其境过清，不可久居，乃记之而去。","dynasty":"唐","author":"柳宗元"},{"title":"岳阳楼记","text":"庆历四年春，滕子京谪守巴陵郡。越明年，政通人和，百废具兴，乃重修岳阳楼，增其旧制，刻唐贤今人诗赋于其上，属予作文以记之。予观夫巴陵胜状，在洞庭一湖。衔远山，吞长江，浩浩汤汤，横无际涯，朝晖夕阴，气象万千，此则岳阳楼之大观也，前人之述备矣。然则北通巫峡，南极潇湘，迁客骚人，多会于此，览物之情，得无异乎？若夫淫雨霏霏，连月不开，阴风怒号，浊浪排空；日星隐曜，山岳潜形；商旅不行，樯倾楫摧；薄暮冥冥，虎啸猿啼。登斯楼也，则有去国怀乡，忧谗畏讥，满目萧然，感极而悲者矣。至若春和景明，波澜不惊，上下天光，一碧万顷；沙鸥翔集，锦鳞游泳；岸芷汀兰，郁郁青青。而或长烟一空，皓月千里，浮光跃金，静影沉璧，渔歌互答，此乐何极！登斯楼也，则有心旷神怡，宠辱偕忘，把酒临风，其喜洋洋者矣。嗟夫！予尝求古仁人之心，或异二者之为，何哉？不以物喜，不以己悲，居庙堂之高则忧其民，处江湖之远则忧其君。是进亦忧，退亦忧。然则何时而乐耶？其必曰\"先天下之忧而忧，后天下之乐而乐\"乎！噫！微斯人，吾谁与归？时六年九月十五日。","dynasty":"宋","author":"范仲淹"},{"title":"醉翁亭记","text":"环滁皆山也。其西南诸峰，林壑尤美，望之蔚然而深秀者，琅琊也。山行六七里，渐闻水声潺潺，而泻出于两峰之间者，酿泉也。峰回路转，有亭翼然临于泉上者，醉翁亭也。作亭者谁？山之僧智仙也。名之者谁？太守自谓也。太守与客来饮于此，饮少辄醉，而年又最高，故自号曰醉翁也。醉翁之意不在酒，在乎山水之间也。山水之乐，得之心而寓之酒也。若夫日出而林霏开，云归而岩穴暝，晦明变化者，山间之朝暮也。野芳发而幽香，佳木秀而繁阴，风霜高洁，水落而石出者，山间之四时也。朝而往，暮而归，四时之景不同，而乐亦无穷也。至于负者歌于途，行者休于树，前者呼，后者应，伛偻提携，往来而不绝者，滁人游也。临溪而渔，溪深而鱼肥；酿泉为酒，泉香而酒洌；山肴野蔌，杂然而前陈者，太守宴也。宴酣之乐，非丝非竹，射者中，弈者胜，觥筹交错，起坐而喧哗者，众宾欢也。苍颜白发，颓然乎其间者，太守醉也。已而夕阳在山，人影散乱，太守归而宾客从也。树林阴翳，鸣声上下，游人去而禽鸟乐也。然而禽鸟知山林之乐，而不知人之乐；人知从太守游而乐，而不知太守之乐其乐也。醉能同其乐，醒能述以文者，太守也。太守谓谁？庐陵欧阳修也。","dynasty":"宋","author":"欧阳修"},{"title":"爱莲说","text":"水陆草木之花，可爱者甚蕃。晋陶渊明独爱菊。自李唐来，世人甚爱牡丹。予独爱莲之出淤泥而不染，濯清涟而不妖，中通外直，不蔓不枝，香远益清，亭亭净植，可远观而不可亵玩焉。予谓菊，花之隐逸者也；牡丹，花之富贵者也；莲，花之君子者也。噫！菊之爱，陶后鲜有闻。莲之爱，同予者何人？牡丹之爱，宜乎众矣！","dynasty":"宋","author":"周敦颐"},{"title":"送东阳马生序","text":"余幼时即嗜学。家贫，无从致书以观，每假借于藏书之家，手自笔录，计日以还。天大寒，砚冰坚，手指不可屈伸，弗之怠。录毕，走送之，不敢稍逾约。以是人多以书假余，余因得遍观群书。既加冠，益慕圣贤之道。又患无硕师名人与游，尝趋百里外，从乡之先达执经叩问。先达德隆望尊，门人弟子填其室，未尝稍降辞色。余立侍左右，援疑质理，俯身倾耳以请；或遇其叱咄，色愈恭，礼愈至，不敢出一言以复；俟其欣悦，则又请焉。故余虽愚，卒获有所闻。当余之从师也，负箧曳屣，行深山巨谷中，穷冬烈风，大雪深数尺，足肤皲裂而不知。至舍，四支僵劲不能动，媵人持汤沃灌，以衾拥覆，久而乃和。寓逆旅，主人日再食，无鲜肥滋味之享。同舍生皆被绮绣，戴朱缨宝饰之帽，腰白玉之环，左佩刀，右备容臭，烨然若神人；余则缊袍敝衣处其间，略无慕艳意，以中有足乐者，不知口体之奉不若人也。盖余之勤且艰若此。今虽耄老，未有所成，犹幸预君子之列，而承天子之宠光，缀公卿之后，日侍坐备顾问，四海亦谬称其氏名，况才之过于余者乎？今诸生学于太学，县官日有廪稍之供，父母岁有裘葛之遗，无冻馁之患矣；坐大厦之下而诵诗书，无奔走之劳矣；有司业、博士为之师，未有问而不告、求而不得者也；凡所宜有之书，皆集于此，不必若余之手录，假诸人而后见也。其业有不精、德有不成者，非天质之卑，则心不若余之专耳，岂他人之过哉！东阳马生君则，在太学已二年，流辈甚称其贤。余朝京师，生以乡人子谒余，撰长书以为贽，辞甚畅达。与之论辨，言和而色夷。自谓少时用心于学甚劳，是可谓善学者矣。其将归见其亲也，余故道为学之难以告之。谓余勉乡人以学者，余之志也；诋我夸际遇之盛而骄乡人者，岂知余者哉！","dynasty":"明","author":"宋濂"}]},"gaokao":{"name":"高中","items":[{"title":"《论语》十二章","text":"子曰：\"学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知而不愠，不亦君子乎？\"曾子曰：\"吾日三省吾身：为人谋而不忠乎？与朋友交而不信乎？传不习乎？\"子曰：\"吾十有五而志于学，三十而立，四十而不惑，五十而知天命，六十而耳顺，七十而从心所欲，不逾矩。\"子曰：\"温故而知新，可以为师矣。\"子曰：\"学而不思则罔，思而不学则殆。\"子曰：\"贤哉，回也！一箪食，一瓢饮，在陋巷，人不堪其忧，回也不改其乐。贤哉，回也！\"子曰：\"知之者不如好之者，好之者不如乐之者。\"子曰：\"饭疏食，饮水，曲肱而枕之，乐亦在其中矣。不义而富且贵，于我如浮云。\"子曰：\"三人行，必有我师焉。择其善者而从之，其不善者而改之。\"子在川上曰：\"逝者如斯夫，不舍昼夜。\"子曰：\"三军可夺帅也，匹夫不可夺志也。\"子夏曰：\"博学而笃志，切问而近思，仁在其中矣。\"","dynasty":"先秦","author":"《论语》"},{"title":"劝学","text":"君子曰：学不可以已。青，取之于蓝，而青于蓝；冰，水为之，而寒于水。木直中绳，𫐓以为轮，其曲中规。虽有槁暴，不复挺者，𫐓使之然也。故木受绳则直，金就砺则利，君子博学而日参省乎己，则知明而行无过矣。吾尝终日而思矣，不如须臾之所学也；吾尝跂而望矣，不如登高之博见也。登高而招，臂非加长也，而见者远；顺风而呼，声非加疾也，而闻者彰。假舆马者，非利足也，而致千里；假舟楫者，非能水也，而绝江河。君子生非异也，善假于物也。积土成山，风雨兴焉；积水成渊，蛟龙生焉；积善成德，而神明自得，圣心备焉。故不积跬步，无以至千里；不积小流，无以成江海。骐骥一跃，不能十步；驽马十驾，功在不舍。锲而舍之，朽木不折；锲而不舍，金石可镂。","dynasty":"先秦","author":"荀子"},{"title":"屈原列传（节选）","text":"屈原者，名平，楚之同姓也。为楚怀王左徒。博闻强志，明于治乱，娴于辞令。入则与王图议国事，以出号令；出则接遇宾客，应对诸侯。王甚任之。上官大夫与之同列，争宠而心害其能。怀王使屈原造为宪令，屈平属草稿未定。上官大夫见而欲夺之，屈平不与，因谗之曰：\"王使屈平为令，众莫不知，每一令出，平伐其功，以为'非我莫能为'也。\"王怒而疏屈平。屈平疾王听之不聪也，谗谄之蔽明也，邪曲之害公也，方正之不容也，故忧愁幽思而作《离骚》。\"离骚\"者，犹离忧也。夫天者，人之始也；父母者，人之本也。人穷则反本，故劳苦倦极，未尝不呼天也；疾痛惨怛，未尝不呼父母也。屈平正道直行，竭忠尽智以事其君，谗人间之，可谓穷矣。信而见疑，忠而被谤，能无怨乎？屈平之作《离骚》，盖自怨生也。","dynasty":"汉","author":"司马迁"},{"title":"谏太宗十思疏","text":"臣闻求木之长者，必固其根本；欲流之远者，必浚其泉源；思国之安者，必积其德义。源不深而望流之远，根不固而求木之长，德不厚而思国之安，臣虽下愚，知其不可，而况于明哲乎？人君当神器之重，居域中之大，不念居安思危，戒奢以俭，斯亦伐根以求木茂，塞源而欲流长也。凡百元首，承天景命，善始者实繁，克终者盖寡。岂取之易守之难乎？盖在殷忧必竭诚以待下，既得志则纵情以傲物；竭诚则吴越为一体，傲物则骨肉为行路。虽董之以严刑，震之以威怒，终苟免而不怀仁，貌恭而不心服。怨不在大，可畏惟人；载舟覆舟，所宜深慎。诚能见可欲则思知足以自戒，将有作则思知止以安人，念高危则思谦冲而自牧，惧满溢则思江海下百川，乐盘游则思三驱以为度，忧懈怠则思慎始而敬终，虑壅蔽则思虚心以纳下，惧谗邪则思正身以黜恶，恩所加则思无因喜以谬赏，罚所及则思无以怒而滥刑。总此十思，宏兹九德，简能而任之，择善而从之，则智者尽其谋，勇者竭其力，仁者播其惠，信者效其忠；文武并用，垂拱而治。","dynasty":"唐","author":"魏征"},{"title":"师说","text":"古之学者必有师。师者，所以传道受业解惑也。人非生而知之者，孰能无惑？惑而不从师，其为惑也，终不解矣。生乎吾前，其闻道也固先乎吾，吾从而师之；生乎吾后，其闻道也亦先乎吾，吾从而师之。吾师道也，夫庸知其年之先后生于吾乎？是故无贵无贱，无长无少，道之所存，师之所存也。嗟乎！师道之不传也久矣！欲人之无惑也难矣！古之圣人，其出人也远矣，犹且从师而问焉；今之众人，其下圣人也亦远矣，而耻学于师。是故圣益圣，愚益愚。圣人之所以为圣，愚人之所以为愚，其皆出于此乎？孔子曰：三人行，则必有我师。是故弟子不必不如师，师不必贤于弟子，闻道有先后，术业有专攻，如是而已。","dynasty":"唐","author":"韩愈"},{"title":"阿房宫赋","text":"六王毕，四海一，蜀山兀，阿房出。覆压三百余里，隔离天日。骊山北构而西折，直走咸阳。二川溶溶，流入宫墙。五步一楼，十步一阁；廊腰缦回，檐牙高啄；各抱地势，钩心斗角。盘盘焉，囷囷焉，蜂房水涡，矗不知其几千万落。长桥卧波，未云何龙？复道行空，不霁何虹？高低冥迷，不知西东。歌台暖响，春光融融；舞殿冷袖，风雨凄凄。一日之内，一宫之间，而气候不齐。嗟乎！一人之心，千万人之心也。秦爱纷奢，人亦念其家。奈何取之尽锱铢，用之如泥沙？使负栋之柱，多于南亩之农夫；架梁之椽，多于机上之工女；钉头磷磷，多于在庾之粟粒；瓦缝参差，多于周身之帛缕；直栏横槛，多于九土之城郭；管弦呕哑，多于市人之言语。使天下之人，不敢言而敢怒。独夫之心，日益骄固。戍卒叫，函谷举，楚人一炬，可怜焦土！呜呼！灭六国者六国也，非秦也；族秦者秦也，非天下也。嗟夫！使六国各爱其人，则足以拒秦；使秦复爱六国之人，则递三世可至万世而为君，谁得而族灭也？秦人不暇自哀，而后人哀之；后人哀之而不鉴之，亦使后人而复哀后人也。","dynasty":"唐","author":"杜牧"},{"title":"六国论","text":"六国破灭，非兵不利，战不善，弊在赂秦。赂秦而力亏，破灭之道也。或曰：六国互丧，率赂秦耶？曰：不赂者以赂者丧，盖失强援，不能独完。故曰弊在赂秦也。秦以攻取之外，小则获邑，大则得城。较秦之所得，与战胜而得者，其实百倍；诸侯之所亡，与战败而亡者，其实亦百倍。则秦之所大欲，诸侯之所大患，固不在战矣。思厥先祖父，暴霜露，斩荆棘，以有尺寸之地。子孙视之不甚惜，举以予人，如弃草芥。今日割五城，明日割十城，然后得一夕安寝。起视四境，而秦兵又至矣。然则诸侯之地有限，暴秦之欲无厌，奉之弥繁，侵之愈急。故不战而强弱胜负已判矣。至于颠覆，理固宜然。古人云：\"以地事秦，犹抱薪救火，薪不尽，火不灭。\"此言得之。呜呼！以赂秦之地封天下之谋臣，以事秦之心礼天下之奇才，并力西向，则吾恐秦人食之不得下咽也。悲夫！有如此之势，而为秦人积威之所劫，日削月割，以趋于亡。为国者无使为积威之所劫哉！夫六国与秦皆诸侯，其势弱于秦，而犹有可以不赂而胜之之势。苟以天下之大，下而从六国破亡之故事，是又在六国下矣。","dynasty":"宋","author":"苏洵"},{"title":"答司马谏议书","text":"某启：昨日蒙教，窃以为与君实游处相好之日久，而议事每不合，所操之术多异故也。虽欲强聒，终必不蒙见察，故略上报，不复一一自辨。重念蒙君实视遇厚，于反复不宜卤莽，故今具道所以，冀君实或见恕也。盖儒者所争，尤在名实，名实已明，而天下之理得矣。今君实所以见教者，以为侵官、生事、征利、拒谏，以致天下怨谤也。某则以为受命于人主，议法度而修之于朝廷，以授之于有司，不为侵官；举先王之政，以兴利除弊，不为生事；为天下理财，不为征利；辟邪说，难壬人，不为拒谏。至于怨诽之多，则固前知其如此也。人习于苟且非一日，士大夫多以不恤国事、同俗自媚于众为善。上乃欲变此，而某不量敌之众寡，欲出力助上以抗之，则众何为而不汹汹然？盘庚之迁，胥怨者民也，非特朝廷士大夫而已。盘庚不为怨者故改其度，度义而后动，是而不见可悔故也。如君实责我以在位久，未能助上大有为，以膏泽斯民，则某知罪矣；如曰今日当一切不事事，守前所为而已，则非某之所敢知。","dynasty":"宋","author":"王安石"},{"title":"赤壁赋","text":"壬戌之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，诵明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。白露横江，水光接天。纵一苇之所如，凌万顷之茫然。浩浩乎如冯虚御风，而不知其所止；飘飘乎如遗世独立，羽化而登仙。于是饮酒乐甚，扣舷而歌之。歌曰：\"桂棹兮兰桨，击空明兮溯流光。渺渺兮予怀，望美人兮天一方。\"客有吹洞箫者，倚歌而和之。其声呜呜然，如怨如慕，如泣如诉，余音袅袅，不绝如缕。舞幽壑之潜蛟，泣孤舟之嫠妇。苏子愀然，正襟危坐而问客曰：\"何为其然也？\"客曰：\"'月明星稀，乌鹊南飞'，此非曹孟德之诗乎？西望夏口，东望武昌，山川相缪，郁乎苍苍，此非孟德之困于周郎者乎？方其破荆州，下江陵，顺流而东也，舳舻千里，旌旗蔽空，酾酒临江，横槊赋诗，固一世之雄也，而今安在哉？况吾与子渔樵于江渚之上，侣鱼虾而友麋鹿，驾一叶之扁舟，举匏樽以相属。寄蜉蝣于天地，渺沧海之一粟。哀吾生之须臾，羡长江之无穷。挟飞仙以遨游，抱明月而长终。知不可乎骤得，托遗响于悲风。\"苏子曰：\"客亦知夫水与月乎？逝者如斯，而未尝往也；盈虚者如彼，而卒莫消长也。盖将自其变者而观之，则天地曾不能以一瞬；自其不变者而观之，则物与我皆无尽也，而又何羡乎！且夫天地之间，物各有主，苟非吾之所有，虽一毫而莫取。惟江上之清风，与山间之明月，耳得之而为声，目遇之而成色，取之无禁，用之不竭。是造物者之无尽藏也，而吾与子之所共适。\"","dynasty":"宋","author":"苏轼"},{"title":"项脊轩志","text":"项脊轩，旧南阁子也。室仅方丈，可容一人居。百年老屋，尘泥渗漉，雨泽下注；每移案，顾视无可置者。又北向，不能得日，日过午已昏。余稍为修葺，使不上漏。前辟四窗，垣墙周庭，以当南日，日影反照，室始洞然。又杂植兰桂竹木于庭，旧时栏楯，亦遂增胜。借书满架，偃仰啸歌，冥然兀坐，万籁有声；而庭阶寂寂，小鸟时来啄食，人至不去。三五之夜，明月半墙，桂影斑驳，风移影动，珊珊可爱。然余居于此，多可喜，亦多可悲。先是，庭中通南北为一。迨诸父异爨，内外多置小门墙，往往而是。东犬西吠，客逾庖而宴，鸡栖于厅。庭中始为篱，已为墙，凡再变矣。家有老妪，尝居于此。妪，先大母婢也，乳二世，先妣抚之甚厚。室西连于中闺，先妣尝一至。妪每谓余曰：\"某所，而母立于兹。\"妪又曰：\"汝姊在吾怀，呱呱而泣；娘以指叩门扉曰：'儿寒乎？欲食乎？'吾从板外相为应答。\"语未毕，余泣，妪亦泣。","dynasty":"明","author":"归有光"},{"title":"子路曾皙冉有公西华侍坐","text":"子路、曾皙、冉有、公西华侍坐。子曰：\"以吾一日长乎尔，毋吾以也。居则曰：'不吾知也！'如或知尔，则何以哉？\"子路率尔而对曰：\"千乘之国，摄乎大国之间，加之以师旅，因之以饥馑；由也为之，比及三年，可使有勇，且知方也。\"夫子哂之。\"求！尔何如？\"对曰：\"方六七十，如五六十，求也为之，比及三年，可使足民。如其礼乐，以俟君子。\"\"赤！尔何如？\"对曰：\"非曰能之，愿学焉。宗庙之事，如会同，端章甫，愿为小相焉。\"\"点！尔何如？\"鼓瑟希，铿尔，舍瑟而作，对曰：\"异乎三子者之撰。\"子曰：\"何伤乎？亦各言其志也。\"曰：\"莫春者，春服既成，冠者五六人，童子六七人，浴乎沂，风乎舞雩，咏而归。\"夫子喟然叹曰：\"吾与点也！\"","dynasty":"先秦","author":"《论语》"},{"title":"烛之武退秦师","text":"晋侯、秦伯围郑，以其无礼于晋，且贰于楚也。晋军函陵，秦军氾南。佚之狐言于郑伯曰：\"国危矣，若使烛之武见秦君，师必退。\"公从之。辞曰：\"臣之壮也，犹不如人；今老矣，无能为也已。\"公曰：\"吾不能早用子，今急而求子，是寡人之过也。然郑亡，子亦有不利焉。\"许之。夜缒而出，见秦伯，曰：\"秦、晋围郑，郑既知亡矣。若亡郑而有益于君，敢以烦执事。越国以鄙远，君知其难也，焉用亡郑以陪邻？邻之厚，君之薄也。若舍郑以为东道主，行李之往来，共其乏困，君亦无所害。且君尝为晋君赐矣，许君焦、瑕，朝济而夕设版焉，君之所知也。夫晋，何厌之有？既东封郑，又欲肆其西封，若不阙秦，将焉取之？阙秦以利晋，唯君图之。\"秦伯说，与郑人盟。使杞子、逢孙、杨孙戍之，乃还。","dynasty":"先秦","author":"《左传》"},{"title":"鸿门宴（节选）","text":"沛公军霸上，未得与项羽相见。沛公左司马曹无伤使人言于项羽曰：\"沛公欲王关中，使子婴为相，珍宝尽有之。\"项羽大怒曰：\"旦日飨士卒，为击破沛公军！\"当是时，项羽兵四十万，在新丰鸿门；沛公兵十万，在霸上。范增说项羽曰：\"沛公居山东时，贪于财货，好美姬。今入关，财物无所取，妇女无所幸，此其志不在小。吾令人望其气，皆为龙虎，成五采，此天子气也。急击勿失！\"楚左尹项伯者，项羽季父也，素善留侯张良。张良是时从沛公，项伯乃夜驰之沛公军，私见张良，具告以事，欲呼张良与俱去，曰：\"毋从俱死也。\"张良曰：\"臣为韩王送沛公，沛公今事有急，亡去不义，不可不语。\"良乃入，具告沛公。沛公大惊，曰：\"为之奈何？\"张良曰：\"谁为大王为此计者？\"曰：\"鲰生说我曰：'距关，毋内诸侯，秦地可尽王也。'故听之。\"良曰：\"料大王士卒足以当项王乎？\"沛公默然，曰：\"固不如也。且为之奈何？\"张良曰：\"请往谓项伯，言沛公不敢背项王也。\"","dynasty":"汉","author":"司马迁"},{"title":"谏逐客书","text":"臣闻吏议逐客，窃以为过矣。昔穆公求士，西取由余于戎，东得百里奚于宛，迎蹇叔于宋，来邳豹、公孙支于晋。此五子者，不产于秦，而穆公用之，并国二十，遂霸西戎。孝公用商鞅之法，移风易俗，民以殷盛，国以富强，百姓乐用，诸侯亲服，获楚、魏之师，举地千里，至今治强。惠王用张仪之计，拔三川之地，西并巴、蜀，北收上郡，南取汉中，包九夷，制鄢、郢，东据成皋之险，割膏腴之壤，遂散六国之从，使之西面事秦，功施到今。昭王得范雎，废穰侯，逐华阳，强公室，杜私门，蚕食诸侯，使秦成帝业。此四君者，皆以客之功。由此观之，客何负于秦哉！臣闻地广者粟多，国大者人众，兵强则士勇。是以太山不让土壤，故能成其大；河海不择细流，故能就其深；王者不却众庶，故能明其德。是以地无四方，民无异国，四时充美，鬼神降福，此五帝三王之所以无敌也。今乃弃黔首以资敌国，却宾客以业诸侯，使天下之士退而不敢西向，裹足不入秦，此所谓\"藉寇兵而赍盗粮\"者也。","dynasty":"秦","author":"李斯"},{"title":"陈情表","text":"臣密言：臣以险衅，夙遭闵凶。生孩六月，慈父见背；行年四岁，舅夺母志。祖母刘悯臣孤弱，躬亲抚养。臣少多疾病，九岁不行，零丁孤苦，至于成立。既无伯叔，终鲜兄弟，门衰祚薄，晚有儿息。外无期功强近之亲，内无应门五尺之僮，茕茕孑立，形影相吊。而刘夙婴疾病，常在床蓐，臣侍汤药，未曾废离。逮奉圣朝，沐浴清化。前太守臣逵察臣孝廉，后刺史臣荣举臣秀才。臣以供养无主，辞不赴命。诏书特下，拜臣郎中，寻蒙国恩，除臣洗马。猥以微贱，当侍东宫，非臣陨首所能上报。臣具以表闻，辞不就职。诏书切峻，责臣逋慢。郡县逼迫，催臣上道；州司临门，急于星火。臣欲奉诏奔驰，则刘病日笃；欲苟顺私情，则告诉不许：臣之进退，实为狼狈。伏惟圣朝以孝治天下，凡在故老，犹蒙矜育，况臣孤苦，特为尤甚。且臣少仕伪朝，历职郎署，本图宦达，不矜名节。今臣亡国贱俘，至微至陋，过蒙拔擢，宠命优渥，岂敢盘桓，有所希冀。但以刘日薄西山，气息奄奄，人命危浅，朝不虑夕。臣无祖母，无以至今日；祖母无臣，无以终余年。母孙二人，更相为命，是以区区不能废远。臣密今年四十有四，祖母今年九十有六，是臣尽节于陛下之日长，报养刘之日短也。乌鸟私情，愿乞终养。臣之辛苦，非独蜀之人士及二州牧伯所见明知，皇天后土实所共鉴。愿陛下矜悯愚诚，听臣微志，庶刘侥幸，保卒余年。臣生当陨首，死当结草。臣不胜犬马怖惧之情，谨拜表以闻。","dynasty":"晋","author":"李密"},{"title":"归去来兮辞","text":"归去来兮，田园将芜胡不归？既自以心为形役，奚惆怅而独悲？悟已往之不谏，知来者之可追。实迷途其未远，觉今是而昨非。舟遥遥以轻飏，风飘飘而吹衣。问征夫以前路，恨晨光之熹微。乃瞻衡宇，载欣载奔。僮仆欢迎，稚子候门。三径就荒，松菊犹存。携幼入室，有酒盈樽。引壶觞以自酌，眄庭柯以怡颜。倚南窗以寄傲，审容膝之易安。园日涉以成趣，门虽设而常关。策扶老以流憩，时矫首而遐观。云无心以出岫，鸟倦飞而知还。景翳翳以将入，抚孤松而盘桓。归去来兮，请息交以绝游。世与我而相违，复驾言兮焉求？悦亲戚之情话，乐琴书以消忧。农人告余以春及，将有事于西畴。或命巾车，或棹孤舟。既窈窕以寻壑，亦崎岖而经丘。木欣欣以向荣，泉涓涓而始流。善万物之得时，感吾生之行休。已矣乎！寓形宇内复几时？曷不委心任去留？胡为乎遑遑欲何之？富贵非吾愿，帝乡不可期。怀良辰以孤往，或植杖而耘耔。登东皋以舒啸，临清流而赋诗。聊乘化以归尽，乐夫天命复奚疑！","dynasty":"晋","author":"陶渊明"},{"title":"兰亭集序","text":"永和九年，岁在癸丑，暮春之初，会于会稽山阴之兰亭，修禊事也。群贤毕至，少长咸集。此地有崇山峻岭，茂林修竹，又有清流激湍，映带左右，引以为流觞曲水，列坐其次。虽无丝竹管弦之盛，一觞一咏，亦足以畅叙幽情。是日也，天朗气清，惠风和畅。仰观宇宙之大，俯察品类之盛，所以游目骋怀，足以极视听之娱，信可乐也。夫人之相与，俯仰一世。或取诸怀抱，悟言一室之内；或因寄所托，放浪形骸之外。虽趣舍万殊，静躁不同，当其欣于所遇，暂得于己，快然自足，不知老之将至。及其所之既倦，情随事迁，感慨系之矣。向之所欣，俯仰之间，已为陈迹，犹不能不以之兴怀。况修短随化，终期于尽。古人云：\"死生亦大矣。\"岂不痛哉！每览昔人兴感之由，若合一契，未尝不临文嗟悼，不能喻之于怀。固知一死生为虚诞，齐彭殇为妄作。后之视今，亦犹今之视昔。悲夫！故列叙时人，录其所述，虽世殊事异，所以兴怀，其致一也。后之览者，亦将有感于斯文。","dynasty":"晋","author":"王羲之"},{"title":"滕王阁序","text":"豫章故郡，洪都新府。星分翼轸，地接衡庐。襟三江而带五湖，控蛮荆而引瓯越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃之榻。雄州雾列，俊采星驰。台隍枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨戟遥临；宇文新州之懿范，襜帷暂驻。十旬休假，胜友如云；千里逢迎，高朋满座。腾蛟起凤，孟学士之词宗；紫电青霜，王将军之武库。家君作宰，路出名区；童子何知，躬逢胜饯。时维九月，序属三秋。潦水尽而寒潭清，烟光凝而暮山紫。俨骖騑于上路，访风景于崇阿。临帝子之长洲，得天人之旧馆。层峦耸翠，上出重霄；飞阁流丹，下临无地。鹤汀凫渚，穷岛屿之萦回；桂殿兰宫，即冈峦之体势。披绣闼，俯雕甍，山原旷其盈视，川泽纡其骇瞩。闾阎扑地，钟鸣鼎食之家；舸舰弥津，青雀黄龙之舳。云销雨霁，彩彻区明。落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨；雁阵惊寒，声断衡阳之浦。","dynasty":"唐","author":"王勃"},{"title":"种树郭橐驼传","text":"郭橐驼，不知始何名。病偻，隆然伏行，有类橐驼者，故乡人号之\"驼\"。驼闻之曰：\"甚善。名我固当。\"因舍其名，亦自谓橐驼云。其乡曰丰乐乡，在长安西。驼业种树，凡长安豪富人为观游及卖果者，皆争迎取养。视驼所种树，或移徙，无不活，且硕茂，早实以蕃。他植者虽窥伺效慕，莫能如也。有问之，对曰：\"橐驼非能使木寿且孳也，能顺木之天，以致其性焉尔。凡植木之性，其本欲舒，其培欲平，其土欲故，其筑欲密。既然已，勿动勿虑，去不复顾。其莳也若子，其置也若弃，则其天者全而其性得矣。故吾不害其长而已，非有能硕茂之也；不抑耗其实而已，非有能早而蕃之也。他植者则不然，根拳而土易，其培之也，若不过焉则不及。苟有能反是者，则又爱之太恩，忧之太勤，旦视而暮抚，已去而复顾，甚者爪其肤以验其生枯，摇其本以观其疏密，而木之性日以离矣。虽曰爱之，其实害之；虽曰忧之，其实仇之，故不我若也。吾又何能为哉！\"问者曰：\"以子之道，移之官理，可乎？\"驼曰：\"我知种树而已，官理非吾业也。然吾居乡，见长人者好烦其令，若甚怜焉，而卒以祸。旦暮吏来而呼曰：'官命促尔耕，勖尔植，督尔获，早缫而绪，早织而缕，字而幼孩，遂而鸡豚。'鸣鼓而聚之，击木而召之。吾小人辍飧饔以劳吏者，且不得暇，又何以蕃吾生而安吾性耶？故病且怠。若是，则与吾业者其亦有类乎？\"问者曰：\"嘻，不亦善夫！吾问养树，得养人术。\"传其事以为官戒。","dynasty":"唐","author":"柳宗元"},{"title":"石钟山记","text":"《水经》云：\"彭蠡之口有石钟山焉。\"郦元以为下临深潭，微风鼓浪，水石相搏，声如洪钟。是说也，人常疑之。今以钟磬置水中，虽大风浪不能鸣也，而况石乎！至唐李渤始访其遗踪，得双石于潭上，扣而聆之，南声函胡，北音清越，桴止响腾，余韵徐歇。自以为得之矣。然是说也，余尤疑之。石之铿然有声者，所在皆是也，而此独以钟名，何哉？元丰七年六月丁丑，余自齐安舟行适临汝，而长子迈将赴饶之德兴尉，送之至湖口，因得观所谓石钟者。寺僧使小童持斧，于乱石间择其一二扣之，硿硿焉。余固笑而不信也。至莫夜月明，独与迈乘小舟，至绝壁下。大石侧立千尺，如猛兽奇鬼，森然欲搏人；而山上栖鹘，闻人声亦惊起，磔磔云霄间；又有若老人咳且笑于山谷中者，或曰此鹳鹤也。余方心动欲还，而大声发于水上，噌吰如钟鼓不绝。舟人大恐。徐而察之，则山下皆石穴罅，不知其浅深，微波入焉，涵澹澎湃而为此也。舟回至两山间，将入港口，有大石当中流，可坐百人，空中而多窍，与风水相吞吐，有窾坎镗鞳之声，与向之噌吰者相应，如乐作焉。因笑谓迈曰：\"汝识之乎？噌吰者，周景王之无射也；窾坎镗鞳者，魏庄子之歌钟也。古之人不余欺也！\"事不目见耳闻，而臆断其有无，可乎？郦元之所见闻，殆与余同，而言之不详；士大夫终不肯以小舟夜泊绝壁之下，故莫能知；而渔工水师虽知而不能言。此世所以不传也。而陋者乃以斧斤考击而求之，自以为得其实。余是以记之，盖叹郦元之简，而笑李渤之陋也。","dynasty":"宋","author":"苏轼"},{"title":"短歌行","text":"对酒当歌，人生几何！譬如朝露，去日苦多。慨当以慷，忧思难忘。何以解忧？唯有杜康。青青子衿，悠悠我心。但为君故，沉吟至今。呦呦鹿鸣，食野之苹。我有嘉宾，鼓瑟吹笙。明明如月，何时可掇？忧从中来，不可断绝。越陌度阡，枉用相存。契阔谈宴，心念旧恩。月明星稀，乌鹊南飞。绕树三匝，何枝可依？山不厌高，海不厌深。周公吐哺，天下归心。","dynasty":"汉","author":"曹操"},{"title":"归园田居·其一","text":"少无适俗韵，性本爱丘山。误落尘网中，一去三十年。羁鸟恋旧林，池鱼思故渊。开荒南野际，守拙归园田。方宅十余亩，草屋八九间。榆柳荫后檐，桃李罗堂前。暧暧远人村，依依墟里烟。狗吠深巷中，鸡鸣桑树颠。户庭无尘杂，虚室有余闲。久在樊笼里，复得返自然。","dynasty":"晋","author":"陶渊明"},{"title":"山居秋暝","text":"空山新雨后，天气晚来秋。明月松间照，清泉石上流。竹喧归浣女，莲动下渔舟。随意春芳歇，王孙自可留。","dynasty":"唐","author":"王维"},{"title":"蜀道难","text":"噫吁嚱，危乎高哉！蜀道之难，难于上青天！蚕丛及鱼凫，开国何茫然！尔来四万八千岁，不与秦塞通人烟。西当太白有鸟道，可以横绝峨眉巅。地崩山摧壮士死，然后天梯石栈相钩连。上有六龙回日之高标，下有冲波逆折之回川。黄鹤之飞尚不得过，猿猱欲度愁攀援。青泥何盘盘，百步九折萦岩峦。扪参历井仰胁息，以手抚膺坐长叹。问君西游何时还？畏途巉岩不可攀。但见悲鸟号古木，雄飞雌从绕林间。又闻子规啼夜月，愁空山。蜀道之难，难于上青天，使人听此凋朱颜！连峰去天不盈尺，枯松倒挂倚绝壁。飞湍瀑流争喧豗，砯崖转石万壑雷。其险也如此，嗟尔远道之人胡为乎来哉！剑阁峥嵘而崔嵬，一夫当关，万夫莫开。所守或匪亲，化为狼与豺。朝避猛虎，夕避长蛇；磨牙吮血，杀人如麻。锦城虽云乐，不如早还家。蜀道之难，难于上青天，侧身西望长咨嗟！","dynasty":"唐","author":"李白"},{"title":"梦游天姥吟留别","text":"海客谈瀛洲，烟涛微茫信难求；越人语天姥，云霞明灭或可睹。天姥连天向天横，势拔五岳掩赤城。天台四万八千丈，对此欲倒东南倾。我欲因之梦吴越，一夜飞度镜湖月。湖月照我影，送我至剡溪。谢公宿处今尚在，渌水荡漾清猿啼。脚著谢公屐，身登青云梯。半壁见海日，空中闻天鸡。千岩万转路不定，迷花倚石忽已暝。熊咆龙吟殷岩泉，栗深林兮惊层巅。云青青兮欲雨，水澹澹兮生烟。列缺霹雳，丘峦崩摧。洞天石扉，訇然中开。青冥浩荡不见底，日月照耀金银台。霓为衣兮风为马，云之君兮纷纷而来下。虎鼓瑟兮鸾回车，仙之人兮列如麻。忽魂悸以魄动，恍惊起而长嗟。惟觉时之枕席，失向来之烟霞。世间行乐亦如此，古来万事东流水。别君去兮何时还？且放白鹿青崖间，须行即骑访名山。安能摧眉折腰事权贵，使我不得开心颜！","dynasty":"唐","author":"李白"},{"title":"将进酒","text":"君不见，黄河之水天上来，奔流到海不复回。君不见，高堂明镜悲白发，朝如青丝暮成雪。人生得意须尽欢，莫使金樽空对月。天生我材必有用，千金散尽还复来。烹羊宰牛且为乐，会须一饮三百杯。岑夫子，丹丘生，将进酒，杯莫停。与君歌一曲，请君为我倾耳听。钟鼓馔玉不足贵，但愿长醉不复醒。古来圣贤皆寂寞，惟有饮者留其名。陈王昔时宴平乐，斗酒十千恣欢谑。主人何为言少钱，径须沽取对君酌。五花马，千金裘，呼儿将出换美酒，与尔同销万古愁！","dynasty":"唐","author":"李白"},{"title":"登高","text":"风急天高猿啸哀，渚清沙白鸟飞回。无边落木萧萧下，不尽长江滚滚来。万里悲秋常作客，百年多病独登台。艰难苦恨繁霜鬓，潦倒新停浊酒杯。","dynasty":"唐","author":"杜甫"},{"title":"蜀相","text":"丞相祠堂何处寻？锦官城外柏森森。映阶碧草自春色，隔叶黄鹂空好音。三顾频烦天下计，两朝开济老臣心。出师未捷身先死，长使英雄泪满襟。","dynasty":"唐","author":"杜甫"},{"title":"客至","text":"舍南舍北皆春水，但见群鸥日日来。花径不曾缘客扫，蓬门今始为君开。盘飧市远无兼味，樽酒家贫只旧醅。肯与邻翁相对饮，隔篱呼取尽余杯。","dynasty":"唐","author":"杜甫"},{"title":"登岳阳楼","text":"昔闻洞庭水，今上岳阳楼。吴楚东南坼，乾坤日夜浮。亲朋无一字，老病有孤舟。戎马关山北，凭轩涕泗流。","dynasty":"唐","author":"杜甫"},{"title":"琵琶行","text":"浔阳江头夜送客，枫叶荻花秋瑟瑟。主人下马客在船，举酒欲饮无管弦。醉不成欢惨将别，别时茫茫江浸月。忽闻水上琵琶声，主人忘归客不发。寻声暗问弹者谁？琵琶声停欲语迟。移船相近邀相见，添酒回灯重开宴。千呼万唤始出来，犹抱琵琶半遮面。转轴拨弦三两声，未成曲调先有情。弦弦掩抑声声思，似诉平生不得志。低眉信手续续弹，说尽心中无限事。轻拢慢捻抹复挑，初为《霓裳》后《六幺》。大弦嘈嘈如急雨，小弦切切如私语。嘈嘈切切错杂弹，大珠小珠落玉盘。间关莺语花底滑，幽咽泉流冰下难。冰泉冷涩弦凝绝，凝绝不通声暂歇。别有幽愁暗恨生，此时无声胜有声。银瓶乍破水浆迸，铁骑突出刀枪鸣。曲终收拨当心画，四弦一声如裂帛。东船西舫悄无言，唯见江心秋月白。","dynasty":"唐","author":"白居易"},{"title":"锦瑟","text":"锦瑟无端五十弦，一弦一柱思华年。庄生晓梦迷蝴蝶，望帝春心托杜鹃。沧海月明珠有泪，蓝田日暖玉生烟。此情可待成追忆？只是当时已惘然。","dynasty":"唐","author":"李商隐"},{"title":"虞美人","text":"春花秋月何时了？往事知多少。小楼昨夜又东风，故国不堪回首月明中。雕栏玉砌应犹在，只是朱颜改。问君能有几多愁？恰似一江春水向东流。","dynasty":"五代","author":"李煜"},{"title":"念奴娇·赤壁怀古","text":"大江东去，浪淘尽，千古风流人物。故垒西边，人道是，三国周郎赤壁。乱石穿空，惊涛拍岸，卷起千堆雪。江山如画，一时多少豪杰。遥想公瑾当年，小乔初嫁了，雄姿英发。羽扇纶巾，谈笑间，樯橹灰飞烟灭。故国神游，多情应笑我，早生华发。人生如梦，一尊还酹江月。","dynasty":"宋","author":"苏轼"},{"title":"永遇乐·京口北固亭怀古","text":"千古江山，英雄无觅，孙仲谋处。舞榭歌台，风流总被，雨打风吹去。斜阳草树，寻常巷陌，人道寄奴曾住。想当年，金戈铁马，气吞万里如虎。元嘉草草，封狼居胥，赢得仓皇北顾。四十三年，望中犹记，烽火扬州路。可堪回首，佛狸祠下，一片神鸦社鼓。凭谁问：廉颇老矣，尚能饭否？","dynasty":"宋","author":"辛弃疾"},{"title":"声声慢","text":"寻寻觅觅，冷冷清清，凄凄惨惨戚戚。乍暖还寒时候，最难将息。三杯两盏淡酒，怎敌他、晚来风急？雁过也，正伤心，却是旧时相识。满地黄花堆积，憔悴损，如今有谁堪摘？守着窗儿，独自怎生得黑？梧桐更兼细雨，到黄昏、点点滴滴。这次第，怎一个愁字了得！","dynasty":"宋","author":"李清照"},{"title":"书愤","text":"早岁那知世事艰，中原北望气如山。楼船夜雪瓜洲渡，铁马秋风大散关。塞上长城空自许，镜中衰鬓已先斑。出师一表真名世，千载谁堪伯仲间！","dynasty":"宋","author":"陆游"},{"title":"临安春雨初霁","text":"世味年来薄似纱，谁令骑马客京华？小楼一夜听春雨，深巷明朝卖杏花。矮纸斜行闲作草，晴窗细乳戏分茶。素衣莫起风尘叹，犹及清明可到家。","dynasty":"宋","author":"陆游"},{"title":"鹊桥仙","text":"纤云弄巧，飞星传恨，银汉迢迢暗度。金风玉露一相逢，便胜却人间无数。柔情似水，佳期如梦，忍顾鹊桥归路。两情若是久长时，又岂在朝朝暮暮。","dynasty":"宋","author":"秦观"},{"title":"扬州慢","text":"淮左名都，竹西佳处，解鞍少驻初程。过春风十里，尽荠麦青青。自胡马窥江去后，废池乔木，犹厌言兵。渐黄昏，清角吹寒，都在空城。杜郎俊赏，算而今重到须惊。纵豆蔻词工，青楼梦好，难赋深情。二十四桥仍在，波心荡冷月无声。念桥边红药，年年知为谁生？","dynasty":"宋","author":"姜夔"},{"title":"苏幕遮","text":"碧云天，黄叶地，秋色连波，波上寒烟翠。山映斜阳天接水，芳草无情，更在斜阳外。黯乡魂，追旅思，夜夜除非，好梦留人睡。明月楼高休独倚，酒入愁肠，化作相思泪。","dynasty":"宋","author":"范仲淹"},{"title":"菩萨蛮","text":"小山重叠金明灭，鬓云欲度香腮雪。懒起画蛾眉，弄妆梳洗迟。照花前后镜，花面交相映。新帖绣罗襦，双双金鹧鸪。","dynasty":"唐","author":"温庭筠"},{"title":"桂枝香·金陵怀古","text":"登临送目，正故国晚秋，天气初肃。千里澄江似练，翠峰如簇。归帆去棹残阳里，背西风，酒旗斜矗。彩舟云淡，星河鹭起，画图难足。念往昔，繁华竞逐，叹门外楼头，悲恨相续。千古凭高对此，谩嗟荣辱。六朝旧事随流水，但寒烟衰草凝绿。至今商女，时时犹唱，后庭遗曲。","dynasty":"宋","author":"王安石"},{"title":"江城子·乙卯正月二十日夜记梦","text":"十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。纵使相逢应不识，尘满面，鬓如霜。夜来幽梦忽还乡，小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。","dynasty":"宋","author":"苏轼"},{"title":"定风波","text":"莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。料峭春风吹酒醒，微冷，山头斜照却相迎。回首向来萧瑟处，归去，也无风雨也无晴。","dynasty":"宋","author":"苏轼"},{"title":"登快阁","text":"痴儿了却公家事，快阁东西倚晚晴。落木千山天远大，澄江一道月分明。朱弦已为佳人绝，青眼聊因美酒横。万里归船弄长笛，此心吾与白鸥盟。","dynasty":"宋","author":"黄庭坚"},{"title":"菩萨蛮·书江西造口壁","text":"郁孤台下清江水，中间多少行人泪！西北望长安，可怜无数山。青山遮不住，毕竟东流去。江晚正愁余，山深闻鹧鸪。","dynasty":"宋","author":"辛弃疾"},{"title":"青玉案·元夕","text":"东风夜放花千树，更吹落、星如雨。宝马雕车香满路。凤箫声动，玉壶光转，一夜鱼龙舞。蛾儿雪柳黄金缕，笑语盈盈暗香去。众里寻他千百度，蓦然回首，那人却在，灯火阑珊处。","dynasty":"宋","author":"辛弃疾"},{"title":"雨霖铃","text":"寒蝉凄切，对长亭晚，骤雨初歇。都门帐饮无绪，留恋处，兰舟催发。执手相看泪眼，竟无语凝噎。念去去，千里烟波，暮霭沉沉楚天阔。多情自古伤离别，更那堪，冷落清秋节！今宵酒醒何处？杨柳岸，晓风残月。此去经年，应是良辰好景虚设。便纵有千种风情，更与何人说？","dynasty":"宋","author":"柳永"},{"title":"望海潮","text":"东南形胜，三吴都会，钱塘自古繁华。烟柳画桥，风帘翠幕，参差十万人家。云树绕堤沙，怒涛卷霜雪，天堑无涯。市列珠玑，户盈罗绮，竞豪奢。重湖叠巘清嘉，有三秋桂子，十里荷花。羌管弄晴，菱歌泛夜，嬉嬉钓叟莲娃。千骑拥高牙，乘醉听箫鼓，吟赏烟霞。异日图将好景，归去凤池夸。","dynasty":"宋","author":"柳永"},{"title":"一剪梅","text":"红藕香残玉簟秋。轻解罗裳，独上兰舟。云中谁寄锦书来，雁字回时，月满西楼。花自飘零水自流。一种相思，两处闲愁。此情无计可消除，才下眉头，却上心头。","dynasty":"宋","author":"李清照"},{"title":"醉花阴","text":"薄雾浓云愁永昼，瑞脑消金兽。佳节又重阳，玉枕纱橱，半夜凉初透。东篱把酒黄昏后，有暗香盈袖。莫道不销魂，帘卷西风，人比黄花瘦。","dynasty":"宋","author":"李清照"},{"title":"窦娥冤·滚绣球","text":"有日月朝暮悬，有鬼神掌着生死权。天地也！只合把清浊分辨，可怎生糊突了盗跖、颜渊？为善的受贫穷更命短，造恶的享富贵又寿延。天地也！做得个怕硬欺软，却原来也这般顺水推船！地也，你不分好歹何为地！天也，你错勘贤愚枉做天！哎，只落得两泪涟涟。","dynasty":"元","author":"关汉卿"},{"title":"长亭送别·端正好","text":"碧云天，黄花地，西风紧，北雁南飞。晓来谁染霜林醉？总是离人泪。","dynasty":"元","author":"王实甫"},{"title":"逍遥游（节选）","text":"北冥有鱼，其名为鲲。鲲之大，不知其几千里也；化而为鸟，其名为鹏。鹏之背，不知其几千里也；怒而飞，其翼若垂天之云。是鸟也，海运则将徙于南冥。南冥者，天池也。《齐谐》者，志怪者也。《谐》之言曰：\"鹏之徙于南冥也，水击三千里，抟扶摇而上者九万里，去以六月息者也。\"野马也，尘埃也，生物之以息相吹也。天之苍苍，其正色邪？其远而无所至极邪？其视下也，亦若是则已矣。且夫水之积也不厚，则其负大舟也无力。覆杯水于坳堂之上，则芥为之舟；置杯焉则胶，水浅而舟大也。风之积也不厚，则其负大翼也无力。故九万里，则风斯在下矣，而后乃今培风；背负青天而莫之夭阏者，而后乃今将图南。","dynasty":"先秦","author":"庄子"},{"title":"过秦论","text":"秦孝公据崤函之固，拥雍州之地，君臣固守以窥周室，有席卷天下，包举宇内，囊括四海之意，并吞八荒之心。当是时也，商君佐之，内立法度，务耕织，修守战之具，外连衡而斗诸侯。于是秦人拱手而取西河之外。孝公既没，惠文、武、昭襄蒙故业，因遗策，南取汉中，西举巴、蜀，东割膏腴之地，北收要害之郡。诸侯恐惧，会盟而谋弱秦，不爱珍器重宝肥饶之地，以致天下之士，合从缔交，相与为一。然秦以区区之地，致万乘之势，序八州而朝同列，百有余年矣；然后以六合为家，崤函为宫；一夫作难而七庙隳，身死人手，为天下笑者，何也？仁义不施而攻守之势异也。","dynasty":"汉","author":"贾谊"},{"title":"五代史伶官传序","text":"呜呼！盛衰之理，虽曰天命，岂非人事哉！原庄宗之所以得天下，与其所以失之者，可以知之矣。世言晋王之将终也，以三矢赐庄宗而告之曰：\"梁，吾仇也；燕王，吾所立，契丹与吾约为兄弟，而皆背晋以归梁。此三者，吾遗恨也。与尔三矢，尔其无忘乃父之志！\"庄宗受而藏之于庙。其后用兵，则遣从事以一少牢告庙，请其矢，盛以锦囊，负而前驱，及凯旋而纳之。方其系燕父子以组，函梁君臣之首，入于太庙，还矢先王，而告以成功，其意气之盛，可谓壮哉！及仇雠已灭，天下已定，一夫夜呼，乱者四应，仓皇东出，未及见贼而士卒离散，君臣相顾，不知所归。至于誓天断发，泣下沾襟，何其衰也！岂得之难而失之易欤？抑本其成败之迹，而皆自于人欤？《书》曰：\"满招损，谦得益。\"忧劳可以兴国，逸豫可以亡身，自然之理也。故方其盛也，举天下之豪杰，莫能与之争；及其衰也，数十伶人困之，而身死国灭，为天下笑。夫祸患常积于忽微，而智勇多困于所溺，岂独伶人也哉！","dynasty":"宋","author":"欧阳修"},{"title":"促织","text":"宣德间，宫中尚促织之戏，岁征民间。此物故非西产；有华阴令欲媚上官，以一头进，试使斗而才，因责常供。令以责之里正。市中游侠儿得佳者笼养之，昂其直，居为奇货。里胥猾黠，假此科敛丁口，每责一头，辄倾数家之产。邑有成名者，操童子业，久不售。为人迂讷，遂为猾胥报充里正役，百计营谋不能脱。不终岁，薄产累尽。会征促织，成不敢敛户口，而又无所赔偿，忧闷欲死。妻曰：死何裨益？不如自行搜觅，冀有万一之得。成然之。早出暮归，提竹筒丝笼，于败堵丛草处，探石发穴，靡计不施，迄无济。","dynasty":"清","author":"蒲松龄"},{"title":"登泰山记","text":"泰山之阳，汶水西流；其阴，济水东流。阳谷皆入汶，阴谷皆入济。当其南北分者，古长城也。最高日观峰，在长城南十五里。余以乾隆三十九年十二月，自京师乘风雪，历齐河、长清，穿泰山之谷，越长城之限，至于泰安。是月丁未，与知府朱孝纯子颍由南麓登。四十五里，道皆砌石为磴，其级七千有余。戊申晦，五鼓，与子颍坐日观亭，待日出。大风扬积雪击面。亭东自足下皆云漫。稍见云中白若摴蒱数十立者，山也。极天云一线异色，须臾成五采。日上，正赤如丹，下有红光，动摇承之。或曰，此东海也。回视日观以西峰，或得日或否，绛皓驳色，而皆若偻。","dynasty":"清","author":"姚鼐"},{"title":"黄冈竹楼记","text":"黄冈之地多竹，大者如椽。竹工破之，刳去其节，用代陶瓦。比屋皆然，以其价廉而工省也。子城西北隅，雉堞圮毁，蓁莽荒秽，因作小楼二间，与月波楼通。远吞山光，平挹江濑，幽阒辽夐，不可具状。夏宜急雨，有瀑布声；冬宜密雪，有碎玉声。宜鼓琴，琴调和畅；宜咏诗，诗韵清绝；宜围棋，子声丁丁然；宜投壶，矢声铮铮然：皆竹楼之所助也。","dynasty":"宋","author":"王禹偁"},{"title":"李凭箜篌引","text":"吴丝蜀桐张高秋，空山凝云颓不流。江娥啼竹素女愁，李凭中国弹箜篌。昆山玉碎凤凰叫，芙蓉泣露香兰笑。十二门前融冷光，二十三丝动紫皇。女娲炼石补天处，石破天惊逗秋雨。梦入神山教神妪，老鱼跳波瘦蛟舞。吴质不眠倚桂树，露脚斜飞湿寒兔。","dynasty":"唐","author":"李贺"},{"title":"燕歌行","text":"汉家烟尘在东北，汉将辞家破残贼。男儿本自重横行，天子非常赐颜色。摐金伐鼓下榆关，旌旆逶迤碣石间。校尉羽书飞瀚海，单于猎火照狼山。山川萧条极边土，胡骑凭陵杂风雨。战士军前半死生，美人帐下犹歌舞。大漠穷秋塞草腓，孤城落日斗兵稀。身当恩遇常轻敌，力尽关山未解围。铁衣远戍辛勤久，玉箸应啼别离后。少妇城南欲断肠，征人蓟北空回首。边庭飘飖那可度，绝域苍茫更何有。杀气三时作阵云，寒声一夜传刁斗。相看白刃血纷纷，死节从来岂顾勋？君不见沙场征战苦，至今犹忆李将军。","dynasty":"唐","author":"高适"},{"title":"氓","text":"氓之蚩蚩，抱布贸丝。匪来贸丝，来即我谋。送子涉淇，至于顿丘。匪我愆期，子无良媒。将子无怒，秋以为期。乘彼垝垣，以望复关。不见复关，泣涕涟涟。既见复关，载笑载言。尔卜尔筮，体无咎言。以尔车来，以我贿迁。桑之未落，其叶沃若。于嗟鸠兮，无食桑葚！于嗟女兮，无与士耽！士之耽兮，犹可说也。女之耽兮，不可说也。桑之落矣，其黄而陨。自我徂尔，三岁食贫。淇水汤汤，渐车帷裳。女也不爽，士贰其行。士也罔极，二三其德。三岁为妇，靡室劳矣。夙兴夜寐，靡有朝矣。言既遂矣，至于暴矣。兄弟不知，咥其笑矣。静言思之，躬自悼矣。及尔偕老，老使我怨。淇则有岸，隰则有泮。总角之宴，言笑晏晏。信誓旦旦，不思其反。反是不思，亦已焉哉！","dynasty":"先秦","author":"《诗经》"},{"title":"离骚（节选）","text":"帝高阳之苗裔兮，朕皇考曰伯庸。摄提贞于孟陬兮，惟庚寅吾以降。皇览揆余初度兮，肇锡余以嘉名：名余曰正则兮，字余曰灵均。纷吾既有此内美兮，又重之以修能。扈江离与辟芷兮，纫秋兰以为佩。汩余若将不及兮，恐年岁之不吾与。朝搴阰之木兰兮，夕揽洲之宿莽。日月忽其不淹兮，春与秋其代序。惟草木之零落兮，恐美人之迟暮。不抚壮而弃秽兮，何不改乎此度？乘骐骥以驰骋兮，来吾道夫先路！长太息以掩涕兮，哀民生之多艰。余虽好修姱以鞿羁兮，謇朝谇而夕替。既替余以蕙纕兮，又申之以揽茝。亦余心之所善兮，虽九死其犹未悔。","dynasty":"先秦","author":"屈原"},{"title":"孔雀东南飞（节选）","text":"孔雀东南飞，五里一徘徊。十三能织素，十四学裁衣。十五弹箜篌，十六诵诗书。十七为君妇，心中常苦悲。君既为府吏，守节情不移。贱妾留空房，相见常日稀。鸡鸣入机织，夜夜不得息。三日断五匹，大人故嫌迟。非为织作迟，君家妇难为！妾不堪驱使，徒留无所施。便可白公姥，及时相遣归。","dynasty":"汉","author":"汉乐府"},{"title":"涉江采芙蓉","text":"涉江采芙蓉，兰泽多芳草。采之欲遗谁？所思在远道。还顾望旧乡，长路漫浩浩。同心而离居，忧伤以终老。","dynasty":"汉","author":"《古诗十九首》"},{"title":"拟行路难","text":"泻水置平地，各自东西南北流。人生亦有命，安能行叹复坐愁？酌酒以自宽，举杯断绝歌路难。心非木石岂无感？吞声踯躅不敢言。","dynasty":"南朝","author":"鲍照"},{"title":"西塞山怀古","text":"王濬楼船下益州，金陵王气黯然收。千寻铁锁沉江底，一片降幡出石头。人世几回伤往事，山形依旧枕寒流。今逢四海为家日，故垒萧萧芦荻秋。","dynasty":"唐","author":"刘禹锡"},{"title":"望洞庭","text":"湖光秋月两相和，潭面无风镜未磨。遥望洞庭山水色，白银盘里一青螺。","dynasty":"唐","author":"刘禹锡"},{"title":"咸阳城东楼","text":"一上高城万里愁，蒹葭杨柳似汀洲。溪云初起日沉阁，山雨欲来风满楼。鸟下绿芜秦苑夕，蝉鸣黄叶汉宫秋。行人莫问当年事，故国东来渭水流。","dynasty":"唐","author":"许浑"},{"title":"渔翁","text":"渔翁夜傍西岩宿，晓汲清湘燃楚竹。烟销日出不见人，欸乃一声山水绿。回看天际下中流，岩上无心云相逐。","dynasty":"唐","author":"柳宗元"},{"title":"山坡羊·骊山怀古","text":"骊山四顾，阿房一炬，当时奢侈今何处？只见草萧疏，水萦纡。至今遗恨迷烟树。列国周齐秦汉楚，赢，都变做了土；输，都变做了土。","dynasty":"元","author":"张养浩"}]},"sushi":{"name":"苏轼","items":[{"title":"水调歌头","text":"明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间。转朱阁，低绮户，照无眠。不应有恨，何事长向别时圆？人有悲欢离合，月有阴晴圆缺，此事古难全。但愿人长久，千里共婵娟。","dynasty":"宋","author":"苏轼"},{"title":"念奴娇","text":"大江东去，浪淘尽，千古风流人物。故垒西边，人道是，三国周郎赤壁。乱石穿空，惊涛拍岸，卷起千堆雪。江山如画，一时多少豪杰。遥想公瑾当年，小乔初嫁了，雄姿英发。羽扇纶巾，谈笑间，樯橹灰飞烟灭。故国神游，多情应笑我，早生华发。人生如梦，一尊还酹江月。","dynasty":"宋","author":"苏轼"},{"title":"江城子","text":"十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。纵使相逢应不识，尘满面，鬓如霜。夜来幽梦忽还乡，小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。","dynasty":"宋","author":"苏轼"},{"title":"江城子","text":"老夫聊发少年狂，左牵黄，右擎苍，锦帽貂裘，千骑卷平冈。为报倾城随太守，亲射虎，看孙郎。酒酣胸胆尚开张，鬓微霜，又何妨！持节云中，何日遣冯唐？会挽雕弓如满月，西北望，射天狼。","dynasty":"宋","author":"苏轼"},{"title":"定风波","text":"莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。料峭春风吹酒醒，微冷，山头斜照却相迎。回首向来萧瑟处，归去，也无风雨也无晴。","dynasty":"宋","author":"苏轼"},{"title":"蝶恋花","text":"花褪残红青杏小，燕子飞时，绿水人家绕。枝上柳绵吹又少，天涯何处无芳草。墙里秋千墙外道，墙外行人，墙里佳人笑。笑渐不闻声渐悄，多情却被无情恼。","dynasty":"宋","author":"苏轼"},{"title":"卜算子","text":"缺月挂疏桐，漏断人初静。谁见幽人独往来，缥缈孤鸿影。惊起却回头，有恨无人省。拣尽寒枝不肯栖，寂寞沙洲冷。","dynasty":"宋","author":"苏轼"},{"title":"临江仙","text":"夜饮东坡醒复醉，归来仿佛三更。家童鼻息已雷鸣，敲门都不应，倚杖听江声。长恨此身非我有，何时忘却营营。夜阑风静縠纹平，小舟从此逝，江海寄余生。","dynasty":"宋","author":"苏轼"},{"title":"水龙吟","text":"似花还似非花，也无人惜从教坠。抛家傍路，思量却是，无情有思。萦损柔肠，困酣娇眼，欲开还闭。梦随风万里，寻郎去处，又还被、莺呼起。不恨此花飞尽，恨西园、落红难缀。晓来雨过，遗踪何在？一池萍碎。春色三分，二分尘土，一分流水。细看来，不是杨花，点点是离人泪。","dynasty":"宋","author":"苏轼"},{"title":"浣溪沙","text":"山下兰芽短浸溪，松间沙路净无泥，萧萧暮雨子规啼。谁道人生无再少？门前流水尚能西，休将白发唱黄鸡。","dynasty":"宋","author":"苏轼"},{"title":"浣溪沙","text":"细雨斜风作晓寒，淡烟疏柳媚晴滩，入淮清洛渐漫漫。雪沫乳花浮午盏，蓼茸蒿笋试春盘，人间有味是清欢。","dynasty":"宋","author":"苏轼"},{"title":"望江南","text":"春未老，风细柳斜斜。试上超然台上看，半壕春水一城花，烟雨暗千家。寒食后，酒醒却咨嗟。休对故人思故国，且将新火试新茶，诗酒趁年华。","dynasty":"宋","author":"苏轼"},{"title":"临江仙","text":"一别都门三改火，天涯踏尽红尘。依然一笑作春温。无波真古井，有节是秋筠。惆怅孤帆连夜发，送行淡月微云。尊前不用翠眉颦。人生如逆旅，我亦是行人。","dynasty":"宋","author":"苏轼"},{"title":"西江月","text":"世事一场大梦，人生几度秋凉。夜来风叶已鸣廊，看取眉头鬓上。酒贱常愁客少，月明多被云妨。中秋谁与共孤光，把盏凄然北望。","dynasty":"宋","author":"苏轼"},{"title":"行香子","text":"清夜无尘，月色如银。酒斟时、须满十分。浮名浮利，虚苦劳神。叹隙中驹，石中火，梦中身。虽抱文章，开口谁亲。且陶陶、乐尽天真。几时归去，作个闲人。对一张琴，一壶酒，一溪云。","dynasty":"宋","author":"苏轼"},{"title":"永遇乐","text":"明月如霜，好风如水，清景无限。曲港跳鱼，圆荷泻露，寂寞无人见。紞如三鼓，铿然一叶，黯黯梦云惊断。夜茫茫，重寻无处，觉来小园行遍。天涯倦客，山中归路，望断故园心眼。燕子楼空，佳人何在，空锁楼中燕。古今如梦，何曾梦觉，但有旧欢新怨。异时对、黄楼夜景，为余浩叹。","dynasty":"宋","author":"苏轼"},{"title":"八声甘州","text":"有情风万里卷潮来，无情送潮归。问钱塘江上，西兴浦口，几度斜晖。不用思量今古，俯仰昔人非。谁似东坡老，白首忘机。记取西湖西畔，正春山好处，空翠烟霏。算诗人相得，如我与君稀。约他年、东还海道，愿谢公、雅志莫相违。西州路，不应回首，为我沾衣。","dynasty":"宋","author":"苏轼"},{"title":"满庭芳","text":"蜗角虚名，蝇头微利，算来着甚干忙。事皆前定，谁弱又谁强。且趁闲身未老，尽放我、些子疏狂。百年里，浑教是醉，三万六千场。思量，能几许，忧愁风雨，一半相妨。又何须，抵死说短论长。幸对清风皓月，苔茵展、云幕高张。江南好，千钟美酒，一曲满庭芳。","dynasty":"宋","author":"苏轼"},{"title":"洞仙歌","text":"冰肌玉骨，自清凉无汗。水殿风来暗香满。绣帘开，一点明月窥人，人未寝，欹枕钗横鬓乱。起来携素手，庭户无声，时见疏星渡河汉。试问夜如何，夜已三更，金波淡、玉绳低转。但屈指、西风几时来，又不道、流年暗中偷换。","dynasty":"宋","author":"苏轼"},{"title":"贺新郎","text":"乳燕飞华屋。悄无人、桐阴转午，晚凉新浴。手弄生绡白团扇，扇手一时似玉。渐困倚、孤眠清熟。帘外谁来推绣户，枉教人、梦断瑶台曲。又却是，风敲竹。石榴半吐红巾蹙。待浮花浪蕊都尽，伴君幽独。秾艳一枝细看取，芳心千重似束。又恐被、秋风惊绿。若待得君来向此，花前对酒不忍触。共粉泪，两簌簌。","dynasty":"宋","author":"苏轼"},{"title":"水调歌头","text":"落日绣帘卷，亭下水连空。知君为我新作，窗户湿青红。长记平山堂上，欹枕江南烟雨，杳杳没孤鸿。认得醉翁语，山色有无中。一千顷，都镜净，倒碧峰。忽然浪起，掀舞一叶白头翁。堪笑兰台公子，未解庄生天籁，刚道有雌雄。一点浩然气，千里快哉风。","dynasty":"宋","author":"苏轼"},{"title":"鹧鸪天","text":"林断山明竹隐墙，乱蝉衰草小池塘。翻空白鸟时时见，照水红蕖细细香。村舍外，古城旁，杖藜徐步转斜阳。殷勤昨夜三更雨，又得浮生一日凉。","dynasty":"宋","author":"苏轼"},{"title":"浣溪沙","text":"簌簌衣巾落枣花，村南村北响缲车，牛衣古柳卖黄瓜。酒困路长惟欲睡，日高人渴漫思茶，敲门试问野人家。","dynasty":"宋","author":"苏轼"},{"title":"满江红","text":"江汉西来，高楼下、蒲萄深碧。犹自带、岷峨雪浪，锦江春色。君是南山遗爱守，我为剑外思归客。对此间、风物岂无情，殷勤说。江表传，君休读；狂处士，真堪惜。空洲对鹦鹉，苇花萧瑟。不独笑书生争底事，曹公黄祖俱飘忽。愿使君、还赋谪仙诗，追黄鹤。","dynasty":"宋","author":"苏轼"},{"title":"蝶恋花","text":"昨夜秋风来万里。月上屏帏，冷透人衣袂。有客抱衾愁不寐，那堪玉漏长如岁。羁舍留连归计未。梦断魂销，一枕相思泪。衣带渐宽无别意，新书报我添憔悴。","dynasty":"宋","author":"苏轼"},{"title":"西江月","text":"三过平山堂下，半生弹指声中。十年不见老仙翁，壁上龙蛇飞动。欲吊文章太守，仍歌杨柳春风。休言万事转头空，未转头时皆梦。","dynasty":"宋","author":"苏轼"},{"title":"南乡子","text":"霜降水痕收，浅碧鳞鳞露远洲。酒力渐消风力软，飕飕，破帽多情却恋头。佳节若为酬，但把清尊断送秋。万事到头都是梦，休休，明日黄花蝶也愁。","dynasty":"宋","author":"苏轼"},{"title":"行香子","text":"一叶舟轻，双桨鸿惊。水天清、影湛波平。鱼翻藻鉴，鹭点烟汀。过沙溪急，霜溪冷，月溪明。重重似画，曲曲如屏。算当年、虚老严陵。君臣一梦，今古空名。但远山长，云山乱，晓山青。","dynasty":"宋","author":"苏轼"},{"title":"江城子","text":"凤凰山下雨初晴，水风清，晚霞明。一朵芙蕖，开过尚盈盈。何处飞来双白鹭，如有意，慕娉婷。忽闻江上弄哀筝，苦含情，遣谁听。烟敛云收，依约是湘灵。欲待曲终寻问取，人不见，数峰青。","dynasty":"宋","author":"苏轼"},{"title":"西江月","text":"玉骨那愁瘴雾，冰姿自有仙风。海仙时遣探芳丛，倒挂绿毛幺凤。素面翻嫌粉涴，洗妆不褪唇红。高情已逐晓云空，不与梨花同梦。","dynasty":"宋","author":"苏轼"},{"title":"少年游","text":"去年相送，余杭门外，飞雪似杨花。今年春尽，杨花似雪，犹不见还家。对酒卷帘邀明月，风露透窗纱。恰似姮娥怜双燕，分明照、画梁斜。","dynasty":"宋","author":"苏轼"},{"title":"阮郎归","text":"绿槐高柳咽新蝉，薰风初入弦。碧纱窗下水沉烟，棋声惊昼眠。微雨过，小荷翻，榴花开欲然。玉盆纤手弄清泉，琼珠碎却圆。","dynasty":"宋","author":"苏轼"},{"title":"虞美人","text":"湖山信是东南美，一望弥千里。使君能得几回来？便使尊前醉倒更徘徊。沙河塘里灯初上，水调谁家唱。夜阑风静欲归时，惟有一江明月碧琉璃。","dynasty":"宋","author":"苏轼"},{"title":"醉落魄","text":"轻云微月，二更酒醒船初发。孤城回望苍烟合。记得歌时，不记归时节。巾偏扇坠藤床滑，觉来幽梦无人说。此生飘荡何时歇。家在西南，常作东南别。","dynasty":"宋","author":"苏轼"},{"title":"南歌子","text":"苒苒中秋过，萧萧两鬓华。寓身化世一尘沙，笑看潮来潮去了生涯。方士三山路，渔人一叶家。早知身世两聱牙，好伴骑鲸公子赋雄夸。","dynasty":"宋","author":"苏轼"},{"title":"减字木兰花","text":"春庭月午，摇荡香醪光欲舞。步转回廊，半落梅花婉娩香。轻云薄雾，总是少年行乐处。不似秋光，只与离人照断肠。","dynasty":"宋","author":"苏轼"},{"title":"满庭芳","text":"归去来兮，吾归何处，万里家在岷峨。百年强半，来日苦无多。坐见黄州再闰，儿童尽、楚语吴歌。山中友，鸡豚社酒，相劝老东坡。云何，当此去，人生底事，来往如梭。待闲看秋风，洛水清波。好在堂前细柳，应念我、莫剪柔柯。仍传语，江南父老，时与晒渔蓑。","dynasty":"宋","author":"苏轼"},{"title":"行香子","text":"昨夜霜风，先入梧桐。浑无处、回避衰容。问公何事，不语书空。但一回醉，一回病，一回慵。朝来庭下，光阴如箭。似无言、有意伤侬。都将万事，付与千钟。任酒花白，眼花乱，烛花红。","dynasty":"宋","author":"苏轼"},{"title":"题西林壁","text":"横看成岭侧成峰，远近高低各不同。不识庐山真面目，只缘身在此山中。","dynasty":"宋","author":"苏轼"},{"title":"饮湖上初晴后雨","text":"水光潋滟晴方好，山色空蒙雨亦奇。欲把西湖比西子，淡妆浓抹总相宜。","dynasty":"宋","author":"苏轼"},{"title":"惠崇春江晚景","text":"竹外桃花三两枝，春江水暖鸭先知。蒌蒿满地芦芽短，正是河豚欲上时。","dynasty":"宋","author":"苏轼"},{"title":"和子由渑池怀旧","text":"人生到处知何似，应似飞鸿踏雪泥。泥上偶然留指爪，鸿飞那复计东西。老僧已死成新塔，坏壁无由见旧题。往日崎岖还记否，路长人困蹇驴嘶。","dynasty":"宋","author":"苏轼"},{"title":"赠刘景文","text":"荷尽已无擎雨盖，菊残犹有傲霜枝。一年好景君须记，最是橙黄橘绿时。","dynasty":"宋","author":"苏轼"},{"title":"春宵","text":"春宵一刻值千金，花有清香月有阴。歌管楼台声细细，秋千院落夜沉沉。","dynasty":"宋","author":"苏轼"},{"title":"海棠","text":"东风袅袅泛崇光，香雾空蒙月转廊。只恐夜深花睡去，故烧高烛照红妆。","dynasty":"宋","author":"苏轼"},{"title":"六月二十七日望湖楼醉书","text":"黑云翻墨未遮山，白雨跳珠乱入船。卷地风来忽吹散，望湖楼下水如天。","dynasty":"宋","author":"苏轼"},{"title":"东栏梨花","text":"梨花淡白柳深青，柳絮飞时花满城。惆怅东栏一株雪，人生看得几清明。","dynasty":"宋","author":"苏轼"},{"title":"琴诗","text":"若言琴上有琴声，放在匣中何不鸣？若言声在指头上，何不于君指上听？","dynasty":"宋","author":"苏轼"},{"title":"惠州一绝","text":"罗浮山下四时春，卢橘杨梅次第新。日啖荔枝三百颗，不辞长作岭南人。","dynasty":"宋","author":"苏轼"},{"title":"自题金山画像","text":"心似已灰之木，身如不系之舟。问汝平生功业，黄州惠州儋州。","dynasty":"宋","author":"苏轼"},{"title":"於潜僧绿筠轩","text":"可使食无肉，不可居无竹。无肉令人瘦，无竹令人俗。人瘦尚可肥，士俗不可医。旁人笑此言，似高还似痴。","dynasty":"宋","author":"苏轼"},{"title":"和董传留别","text":"粗缯大布裹生涯，腹有诗书气自华。厌伴老儒烹瓠叶，强随举子踏槐花。囊空不办寻春马，眼乱行看择婿车。得意犹堪夸世俗，诏黄新湿字如鸦。","dynasty":"宋","author":"苏轼"},{"title":"东坡","text":"雨洗东坡月色清，市人行尽野人行。莫嫌荦确坡头路，自爱铿然曳杖声。","dynasty":"宋","author":"苏轼"},{"title":"初到黄州","text":"自笑平生为口忙，老来事业转荒唐。长江绕郭知鱼美，好竹连山觉笋香。逐客不妨员外置，诗人例作水曹郎。只惭无补丝毫事，尚费官家压酒囊。","dynasty":"宋","author":"苏轼"},{"title":"有美堂暴雨","text":"游人脚底一声雷，满座顽云拨不开。天外黑风吹海立，浙东飞雨过江来。十分潋滟金尊凸，千杖敲铿羯鼓催。唤起谪仙泉洒面，倒倾鲛室泻琼瑰。","dynasty":"宋","author":"苏轼"},{"title":"中秋月","text":"暮云收尽溢清寒，银汉无声转玉盘。此生此夜不长好，明月明年何处看。","dynasty":"宋","author":"苏轼"},{"title":"新城道中","text":"东风知我欲山行，吹断檐间积雨声。岭上晴云披絮帽，树头初日挂铜钲。野桃含笑竹篱短，溪柳自摇沙水清。西崦人家应最乐，煮芹烧笋饷春耕。","dynasty":"宋","author":"苏轼"},{"title":"正月二十日与潘郭二生出郊寻春","text":"东风未肯入东门，走马还寻去岁村。人似秋鸿来有信，事如春梦了无痕。江城白酒三杯酽，野老苍颜一笑温。已约年年为此会，故人不用赋招魂。","dynasty":"宋","author":"苏轼"},{"title":"游金山寺","text":"我家江水初发源，宦游直送江入海。闻道潮头一丈高，天寒尚有沙痕在。中泠南畔石盘陀，古来出没随涛波。试登绝顶望乡国，江南江北青山多。","dynasty":"宋","author":"苏轼"},{"title":"荔支叹","text":"十里一置飞尘灰，五里一堠兵火催。颠坑仆谷相枕藉，知是荔枝龙眼来。飞车跨山鹘横海，风枝露叶如新采。宫中美人一破颜，惊尘溅血流千载。","dynasty":"宋","author":"苏轼"},{"title":"百步洪","text":"长洪斗落生跳波，轻舟南下如投梭。水师绝叫凫雁起，乱石一线争磋磨。有如兔走鹰隼落，骏马下注千丈坡。断弦离柱箭脱手，飞电过隙珠翻荷。","dynasty":"宋","author":"苏轼"},{"title":"洗儿戏作","text":"人皆养子望聪明，我被聪明误一生。惟愿孩儿愚且鲁，无灾无难到公卿。","dynasty":"宋","author":"苏轼"},{"title":"纵笔","text":"寂寂东坡一病翁，白须萧散满霜风。小儿误喜朱颜在，一笑那知是酒红。","dynasty":"宋","author":"苏轼"},{"title":"庐山烟雨","text":"庐山烟雨浙江潮，未到千般恨不消。到得还来无别事，庐山烟雨浙江潮。","dynasty":"宋","author":"苏轼"},{"title":"书李世南所画秋景","text":"野水参差落涨痕，疏林欹倒出霜根。扁舟一棹归何处，家在江南黄叶村。","dynasty":"宋","author":"苏轼"},{"title":"前赤壁赋","text":"壬戌之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，诵明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。白露横江，水光接天。纵一苇之所如，凌万顷之茫然。浩浩乎如冯虚御风，而不知其所止；飘飘乎如遗世独立，羽化而登仙。于是饮酒乐甚，扣舷而歌之。歌曰：\"桂棹兮兰桨，击空明兮溯流光。渺渺兮予怀，望美人兮天一方。\"客有吹洞箫者，倚歌而和之。其声呜呜然，如怨如慕，如泣如诉，余音袅袅，不绝如缕。舞幽壑之潜蛟，泣孤舟之嫠妇。苏子愀然，正襟危坐而问客曰：\"何为其然也？\"客曰：\"月明星稀，乌鹊南飞，此非曹孟德之诗乎？西望夏口，东望武昌，山川相缪，郁乎苍苍，此非孟德之困于周郎者乎？方其破荆州，下江陵，顺流而东也，舳舻千里，旌旗蔽空，酾酒临江，横槊赋诗，固一世之雄也，而今安在哉？况吾与子渔樵于江渚之上，侣鱼虾而友麋鹿，驾一叶之扁舟，举匏樽以相属。寄蜉蝣于天地，渺沧海之一粟。哀吾生之须臾，羡长江之无穷。挟飞仙以遨游，抱明月而长终。知不可乎骤得，托遗响于悲风。\"苏子曰：\"客亦知夫水与月乎？逝者如斯，而未尝往也；盈虚者如彼，而卒莫消长也。盖将自其变者而观之，则天地曾不能以一瞬；自其不变者而观之，则物与我皆无尽也，而又何羡乎？且夫天地之间，物各有主，苟非吾之所有，虽一毫而莫取。惟江上之清风，与山间之明月，耳得之而为声，目遇之而成色，取之无禁，用之不竭。是造物者之无尽藏也，而吾与子之所共适。\"客喜而笑，洗盏更酌。肴核既尽，杯盘狼藉。相与枕藉乎舟中，不知东方之既白。","dynasty":"宋","author":"苏轼"},{"title":"后赤壁赋","text":"是岁十月之望，步自雪堂，将归于临皋。二客从予过黄泥之坂。霜露既降，木叶尽脱。人影在地，仰见明月，顾而乐之，行歌相答。已而叹曰：\"有客无酒，有酒无肴，月白风清，如此良夜何！\"客曰：\"今者薄暮，举网得鱼，巨口细鳞，状如松江之鲈。顾安所得酒乎？\"归而谋诸妇。妇曰：\"我有斗酒，藏之久矣，以待子不时之需。\"于是携酒与鱼，复游于赤壁之下。江流有声，断岸千尺；山高月小，水落石出。曾日月之几何，而江山不可复识矣。予乃摄衣而上，履巉岩，披蒙茸，踞虎豹，登虬龙，攀栖鹘之危巢，俯冯夷之幽宫。盖二客不能从焉。划然长啸，草木震动，山鸣谷应，风起水涌。予亦悄然而悲，肃然而恐，凛乎其不可留也。反而登舟，放乎中流，听其所止而休焉。时夜将半，四顾寂寥。适有孤鹤，横江东来。翅如车轮，玄裳缟衣，戛然长鸣，掠予舟而西也。须臾客去，予亦就睡。梦一道士，羽衣蹁跹，过临皋之下，揖予而言曰：\"赤壁之游乐乎？\"问其姓名，俯而不答。\"呜呼！噫嘻！我知之矣。畴昔之夜，飞鸣而过我者，非子也邪？\"道士顾笑，予亦惊寤。开户视之，不见其处。","dynasty":"宋","author":"苏轼"},{"title":"记承天寺夜游","text":"元丰六年十月十二日夜，解衣欲睡，月色入户，欣然起行。念无与为乐者，遂至承天寺寻张怀民。怀民亦未寝，相与步于中庭。庭下如积水空明，水中藻荇交横，盖竹柏影也。何夜无月？何处无竹柏？但少闲人如吾两人者耳。","dynasty":"宋","author":"苏轼"},{"title":"石钟山记","text":"《水经》云：\"彭蠡之口有石钟山焉。\"郦元以为下临深潭，微风鼓浪，水石相搏，声如洪钟。是说也，人常疑之。今以钟磬置水中，虽大风浪不能鸣也，而况石乎！至唐李渤始访其遗踪，得双石于潭上，扣而聆之，南声函胡，北音清越，桴止响腾，余韵徐歇。自以为得之矣。然是说也，余尤疑之。石之铿然有声者，所在皆是也，而此独以钟名，何哉？元丰七年六月丁丑，余自齐安舟行适临汝，而长子迈将赴饶之德兴尉，送之至湖口，因得观所谓石钟者。寺僧使小童持斧，于乱石间择其一二扣之，硿硿焉。余固笑而不信也。至莫夜月明，独与迈乘小舟，至绝壁下。大石侧立千尺，如猛兽奇鬼，森然欲搏人；而山上栖鹘，闻人声亦惊起，磔磔云霄间；又有若老人咳且笑于山谷中者，或曰此鹳鹤也。余方心动欲还，而大声发于水上，噌吰如钟鼓不绝。舟人大恐。徐而察之，则山下皆石穴罅，不知其浅深，微波入焉，涵淡澎湃而为此也。舟回至两山间，将入港口，有大石当中流，可坐百人，空中而多窍，与风水相吞吐，有窾坎镗鞳之声，与向之噌吰者相应，如乐作焉。因笑谓迈曰：\"汝识之乎？噌吰者，周景王之无射也；窾坎镗鞳者，魏庄子之歌钟也。古之人不余欺也！\"事不目见耳闻，而臆断其有无，可乎？郦元之所见闻，殆与余同，而言之不详；士大夫终不肯以小舟夜泊绝壁之下，故莫能知；而渔工水师虽知而不能言。此世所以不传也。而陋者乃以斧斤考击而求之，自以为得其实。余是以记之，盖叹郦元之简，而笑李渤之陋也。","dynasty":"宋","author":"苏轼"},{"title":"超然台记","text":"凡物皆有可观。苟有可观，皆有可乐，非必怪奇伟丽者也。餔糟啜醨皆可以醉，果蔬草木皆可以饱。推此类也，吾安往而不乐？夫所为求福而辞祸者，以福可喜而祸可悲也。人之所欲无穷，而物之可以足吾欲者有尽。美恶之辨战乎中，而去取之择交乎前，则可乐者常少，而可悲者常多。是谓求祸而辞福。夫求祸而辞福，岂人之情也哉？物有以盖之矣。彼游于物之内，而不游于物之外。物非有大小也，自其内而观之，未有不高且大者也。彼挟其高大以临我，则我常眩乱反复，如隙中之观斗，又乌知胜负之所在？是以美恶横生，而忧乐出焉，可不大哀乎！予自钱塘移守胶西，释舟楫之安，而服车马之劳；去雕墙之美，而庇采椽之居；背湖山之观，而行桑麻之野。始至之日，岁比不登，盗贼满野，狱讼充斥，而斋厨索然，日食杞菊。人固疑余之不乐也。处之期年，而貌加丰，发之白者，日以反黑。余既乐其风俗之淳，而其吏民亦安予之拙也。于是治其园圃，洁其庭宇，伐安丘、高密之木以修补破败，为苟完之计。而园之北，因城以为台者旧矣，稍葺而新之。时相与登览，放意肆志焉。台高而安，深而明，夏凉而冬温。雨雪之朝，风月之夕，余未尝不在，客未尝不从。撷园蔬，取池鱼，酿秫酒，瀹脱粟而食之，曰：\"乐哉游乎！\"方是时，余弟子由适在济南，闻而赋之，且名其台曰\"超然\"，以见余之无所往而不乐者，盖游于物之外也。","dynasty":"宋","author":"苏轼"},{"title":"喜雨亭记","text":"亭以雨名，志喜也。古者有喜则以名物，示不忘也。周公得禾，以名其书；汉武得鼎，以名其年；叔孙胜狄，以名其子。其喜之大小不齐，其示不忘一也。余至扶风之明年，始治官舍，为亭于堂之北，而凿池其南，引流种木，以为休息之所。是岁之春，雨麦于岐山之阳，其占为有年。既而弥月不雨，民方以为忧。越三月乙卯乃雨，甲子又雨，民以为未足；丁卯大雨，三日乃止。官吏相与庆于庭，商贾相与歌于市，农夫相与抃于野，忧者以乐，病者以愈，而吾亭适成。于是举酒于亭上以属客，而告之曰：\"五日不雨可乎？\"曰：\"五日不雨则无麦。\"\"十日不雨可乎？\"曰：\"十日不雨则无禾。\"无麦无禾，岁且荐饥，狱讼繁兴，而盗贼滋炽。则吾与二三子，虽欲优游以乐于此亭，其可得耶？今天不遗斯民，始旱而赐之以雨，使吾与二三子，得相与优游而乐于亭者，皆雨之赐也。其又可忘邪？既以名亭，又从而歌之。歌曰：\"使天而雨珠，寒者不得以为襦；使天而雨玉，饥者不得以为粟。一雨三日，繄谁之力？民曰太守，太守不有。归之天子，天子曰不。归之造物，造物不自以为功。归之太空，太空冥冥。不可得而名，吾以名吾亭。\"","dynasty":"宋","author":"苏轼"},{"title":"放鹤亭记","text":"熙宁十年秋，彭城大水。云龙山人张君之草堂，水及其半扉。明年春，水落，迁于故居之东，东山之麓。升高而望，得异境焉，作亭于其上。彭城之山，冈岭四合，隐然如大环，独缺其西一面，而山人之亭适当其缺。春夏之交，草木际天，秋冬雪月，千里一色。风雨晦明之间，俯仰百变。山人有二鹤，甚驯而善飞，旦则望西山之缺而放焉，纵其所如，或立于陂田，或翔于云表，暮则傃东山而归，故名之曰\"放鹤亭\"。郡守苏轼，时从宾客僚吏往见山人，饮酒于斯亭而乐之。揖山人而告之曰：\"子知隐居之乐乎？虽南面之君，未可与易也。《易》曰：‘鸣鹤在阴，其子和之。’《诗》曰：‘鹤鸣于九皋，声闻于天。’盖其为物，清远闲放，超然于尘垢之外，故《易》《诗》人以比贤人君子。隐德之士，狎而玩之，宜若有益而无损者，然卫懿公好鹤则亡其国。周公作《酒诰》，卫武公作《抑戒》，以为荒惑败乱无若酒者，而刘伶、阮籍之徒以此全其真而名后世。嗟夫！南面之君，虽清远闲放如鹤者犹不得好，好之则亡其国；而山林遁世之士，虽荒惑败乱如酒者犹不能为害，而况于鹤乎？由此观之，其为乐未可以同日而语也。\"山人欣然而笑曰：\"有是哉！\"乃作放鹤、招鹤之歌曰：鹤飞去兮西山之缺，高翔而下览兮择所适。翻然敛翼，宛将集兮，忽何所见，矫然而复击。独终日于涧谷之间兮，啄苍苔而履白石。鹤归来兮，东山之阴。其下有人兮，黄冠草屦，葛衣而鼓琴。躬耕而食兮，其余以汝饱。归来归来兮，西山不可以久留。","dynasty":"宋","author":"苏轼"},{"title":"凌虚台记","text":"国于南山之下，宜若起居饮食与山接也。四方之山，莫高于终南，而都邑之丽山者，莫近于扶风。以至近求最高，其势必得。而太守之居，未尝知有山焉。虽非事之所以损益，而物理有不当然者，此凌虚之所为筑也。方其未筑也，太守陈公杖履逍遥于其下。见山之出于林木之上者，累累如人之旅行于墙外而见其髻也，曰：\"是必有异。\"使工凿其前为方池，以其土筑台，高出于屋之檐而止。然后人之至于其上者，恍然不知台之高，而以为山之踊跃奋迅而出也。公曰：\"是宜名凌虚。\"以告其从事苏轼，而求文以为记。轼复于公曰：\"物之废兴成毁，不可得而知也。昔者荒草野田，霜露之所蒙翳，狐虺之所窜伏。方是时，岂知有凌虚台耶？废兴成毁，相寻于无穷，则台之复为荒草野田，皆不可知也。尝试与公登台而望，其东则秦穆之祈年、橐泉也，其南则汉武之长杨、五柞，而其北则隋之仁寿、唐之九成也。计其一时之盛，宏杰诡丽，坚固而不可动者，岂特百倍于台而已哉？然而数世之后，欲求其仿佛，而破瓦颓垣无复存者，既已化为禾黍荆棘丘墟陇亩矣，而况于此台欤！夫台犹不足恃以长久，而况于人事之得丧，忽往而忽来者欤！而或者欲以夸世而自足，则过矣。盖世有足恃者，而不在乎台之存亡也。\"既以言于公，退而为之记。","dynasty":"宋","author":"苏轼"},{"title":"方山子传","text":"方山子，光、黄间隐人也。少时慕朱家、郭解为人，闾里之侠皆宗之。稍壮，折节读书，欲以此驰骋当世，然终不遇。晚乃遁于光、黄间，曰岐亭。庵居蔬食，不与世相闻。弃车马，毁冠服，徒步往来山中，人莫识也。见其所著帽，方耸而高，曰：\"此岂古方山冠之遗像乎？\"因谓之方山子。余谪居于黄，过岐亭，适见焉。曰：\"呜呼！此吾故人陈慥季常也，何为而在此？\"方山子亦矍然问余所以至此者。余告之故。俯而不答，仰而笑，呼余宿其家。环堵萧然，而妻子奴婢皆有自得之意。余既耸然异之。独念方山子少时，使酒好剑，用财如粪土。前十有九年，余在岐下，见方山子从两骑，挟二矢，游西山，鹊起于前，使骑逐而射之，不获。方山子怒马独出，一发得之。因与余马上论用兵及古今成败，自谓一世豪士。今几日耳，精悍之色犹见于眉间，而岂山中之人哉？然方山子世有勋阀，当得官，使从事于其间，今已显闻。而其家在洛阳，园宅壮丽，与公侯等。河北有田，岁得帛千匹，亦足以富乐。皆弃不取，独来穷山中，此岂无得而然哉？余闻光、黄间多异人，往往阳狂垢污，不可得而见，方山子傥见之欤？","dynasty":"宋","author":"苏轼"},{"title":"文与可画筼筜谷偃竹记","text":"竹之始生，一寸之萌耳，而节叶具焉。自蜩腹蛇蚹以至于剑拔十寻者，生而有之也。今画者乃节节而为之，叶叶而累之，岂复有竹乎！故画竹必先得成竹于胸中，执笔熟视，乃见其所欲画者，急起从之，振笔直遂，以追其所见，如兔起鹘落，少纵则逝矣。与可之教予如此。予不能然也，而心识其所以然。夫既心识其所以然而不能然者，内外不一，心手不相应，不学之过也。故凡有见于中而操之不熟者，平居自视了然，而临事忽焉丧之，岂独竹乎！子由为《墨竹赋》以遗与可曰：\"庖丁，解牛者也，而养生者取之；轮扁，斫轮者也，而读书者与之。今夫夫子之托于斯竹也，而予以为有道者，则非耶？\"子由未尝画也，故得其意而已。若予者，岂独得其意，并得其法。与可画竹，初不自贵重，四方之人持缣素而请者，足相蹑于其门。与可厌之，投诸地而骂曰：\"吾将以为袜！\"士大夫传之，以为口实。及与可自洋州还，而余为徐州。与可以书遗余曰：\"近语士大夫，吾墨竹一派，近在彭城，可往求之。袜材当萃于子矣。\"书尾复写一诗，其略曰：\"拟将一段鹅溪绢，扫取寒梢万尺长。\"予谓与可：\"竹长万尺，当用绢二百五十匹，知公倦于笔砚，愿得此绢而已。\"与可无以答，则曰：\"吾言妄矣，世岂有万尺竹哉？\"余因而实之，答其诗曰：\"世间亦有千寻竹，月落庭空影许长。\"与可笑曰：\"苏子辩矣，然二百五十匹绢，吾将买田而归老焉。\"因以所画《筼筜谷偃竹》遗予曰：\"此竹数尺耳，而有万尺之势。\"筼筜谷在洋州，与可尝令予作《洋州三十咏》，《筼筜谷》其一也。予诗云：\"汉川修竹贱如蓬，斤斧何曾赦箨龙。料得清贫馋太守，渭滨千亩在胸中。\"与可是日与其妻游谷中，烧笋晚食，发函得诗，失笑喷饭满案。元丰二年正月二十日，与可没于陈州。是岁七月七日，予在湖州曝书画，见此竹，废卷而哭失声。昔曹孟德祭桥公文，有车过腹痛之语，而予亦载与可畴昔戏笑之言者，以见与可于予亲厚无间如此也。","dynasty":"宋","author":"苏轼"},{"title":"潮州韩文公庙碑","text":"匹夫而为百世师，一言而为天下法。是皆有以参天地之化，关盛衰之运，其生也有自来，其逝也有所为。故申、吕自岳降，傅说为列星，古今所传，不可诬也。孟子曰：\"我善养吾浩然之气。\"是气也，寓于寻常之中，而塞乎天地之间。卒然遇之，则王公失其贵，晋、楚失其富，良、平失其智，贲、育失其勇，仪、秦失其辩。是孰使之然哉？其必有不依形而立，不恃力而行，不待生而存，不随死而亡者矣。故在天为星辰，在地为河岳，幽则为鬼神，而明则复为人。此理之常，无足怪者。自东汉以来，道丧文弊，异端并起，历唐贞观、开元之盛，辅以房、杜、姚、宋而不能救。独韩文公起布衣，谈笑而麾之，天下靡然从公，复归于正，盖三百年于此矣。文起八代之衰，而道济天下之溺；忠犯人主之怒，而勇夺三军之帅：此岂非参天地，关盛衰，浩然而独存者乎？盖尝论天人之辨，以谓人无所不至，惟天不容伪。智可以欺王公，不可以欺豚鱼；力可以得天下，不可以得匹夫匹妇之心。故公之精诚，能开衡山之云，而不能回宪宗之惑；能驯鳄鱼之暴，而不能弭皇甫镈、李逢吉之谤；能信于南海之民，庙食百世，而不能使其身一日安于朝廷之上。盖公之所能者天也，其所不能者人也。","dynasty":"宋","author":"苏轼"},{"title":"赤壁赋","text":"壬戌之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，诵明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。白露横江，水光接天。纵一苇之所如，凌万顷之茫然。浩浩乎如冯虚御风，而不知其所止；飘飘乎如遗世独立，羽化而登仙。于是饮酒乐甚，扣舷而歌之。歌曰：\"桂棹兮兰桨，击空明兮溯流光。渺渺兮予怀，望美人兮天一方。\"客有吹洞箫者，倚歌而和之。其声呜呜然，如怨如慕，如泣如诉，余音袅袅，不绝如缕。舞幽壑之潜蛟，泣孤舟之嫠妇。苏子愀然，正襟危坐而问客曰：\"何为其然也？\"客曰：\"月明星稀，乌鹊南飞，此非曹孟德之诗乎？西望夏口，东望武昌，山川相缪，郁乎苍苍，此非孟德之困于周郎者乎？方其破荆州，下江陵，顺流而东也，舳舻千里，旌旗蔽空，酾酒临江，横槊赋诗，固一世之雄也，而今安在哉？况吾与子渔樵于江渚之上，侣鱼虾而友麋鹿，驾一叶之扁舟，举匏樽以相属。寄蜉蝣于天地，渺沧海之一粟。哀吾生之须臾，羡长江之无穷。挟飞仙以遨游，抱明月而长终。知不可乎骤得，托遗响于悲风。\"苏子曰：\"客亦知夫水与月乎？逝者如斯，而未尝往也；盈虚者如彼，而卒莫消长也。盖将自其变者而观之，则天地曾不能以一瞬；自其不变者而观之，则物与我皆无尽也，而又何羡乎？且夫天地之间，物各有主，苟非吾之所有，虽一毫而莫取。惟江上之清风，与山间之明月，耳得之而为声，目遇之而成色，取之无禁，用之不竭。是造物者之无尽藏也，而吾与子之所共适。\"客喜而笑，洗盏更酌。肴核既尽，杯盘狼藉。相与枕藉乎舟中，不知东方之既白。","dynasty":"宋","author":"苏轼"},{"title":"后赤壁赋","text":"是岁十月之望，步自雪堂，将归于临皋。二客从予过黄泥之坂。霜露既降，木叶尽脱。人影在地，仰见明月，顾而乐之，行歌相答。已而叹曰：\"有客无酒，有酒无肴，月白风清，如此良夜何！\"客曰：\"今者薄暮，举网得鱼，巨口细鳞，状如松江之鲈。顾安所得酒乎？\"归而谋诸妇。妇曰：\"我有斗酒，藏之久矣，以待子不时之需。\"于是携酒与鱼，复游于赤壁之下。江流有声，断岸千尺；山高月小，水落石出。曾日月之几何，而江山不可复识矣。予乃摄衣而上，履巉岩，披蒙茸，踞虎豹，登虬龙，攀栖鹘之危巢，俯冯夷之幽宫。盖二客不能从焉。划然长啸，草木震动，山鸣谷应，风起水涌。予亦悄然而悲，肃然而恐，凛乎其不可留也。反而登舟，放乎中流，听其所止而休焉。时夜将半，四顾寂寥。适有孤鹤，横江东来。翅如车轮，玄裳缟衣，戛然长鸣，掠予舟而西也。须臾客去，予亦就睡。梦一道士，羽衣蹁跹，过临皋之下，揖予而言曰：\"赤壁之游乐乎？\"问其姓名，俯而不答。\"呜呼！噫嘻！我知之矣。畴昔之夜，飞鸣而过我者，非子也邪？\"道士顾笑，予亦惊寤。开户视之，不见其处。","dynasty":"宋","author":"苏轼"},{"title":"黠鼠赋","text":"苏子夜坐，有鼠方啮。拊床而止之，既止复作。使童子烛之，有橐中空。嘐嘐聱聱，声在橐中。曰：\"嘻！此鼠之见闭而不得去者也。\"发而视之，寂无所有，举烛而索，中有死鼠。童子惊曰：\"是方啮也，而遽死耶？向为何声，岂其鬼耶？\"覆而出之，堕地乃走，虽有敏者，莫措其手。苏子叹曰：\"异哉，是鼠之黠也！闭于橐中，橐坚而不可穴也。故不啮而啮，以声致人；不死而死，以形求脱也。吾闻有生，莫智于人。拢龙伐蛟，登龟狩麟，役万物而君之，卒见使于一鼠，堕此虫之计中，惊脱兔于处女，乌在其为智也？\"坐而假寐，私念其故。若有告余者曰：\"汝为多学而识之，望道而未见也。不一于汝，而二于物，故一鼠之啮而为之变也。人能碎千金之璧，不能无失声于破釜；能搏猛虎，不能无变色于蜂虿：此不一之患也。言出于汝，而忘之耶？\"余俯而笑，仰而觉。使童子执笔，记余之作。","dynasty":"宋","author":"苏轼"},{"title":"后杞菊赋","text":"天随生自言常食杞菊。及夏五月，枝叶老硬，气味苦涩，犹食不已。因作赋以自广。始余尝疑之，以为士不遇，穷约可也，至于饥饿嚼啮草木，则过矣。而余仕宦十有九年，家日益贫，衣食之奉，殆不如昔者。及移守胶西，意且一饱，而斋厨索然，不堪其忧。日与通守刘君廷式，循古城废圃，求杞菊食之，扪腹而笑。然后知天随生之言，可信不谬。作《后杞菊赋》以自嘲，且解之云：\"吁嗟先生，谁使汝坐堂上称太守？前宾客之造请，后掾属之趋走。朝衙达午，夕坐过酉。曾杯酒之不设，揽草木以诳口。对案颦蹙，举箸噎呕。昔阴将军设麦饭与葱叶，井丹推去而不嗅。怪先生之眷眷，岂故山之无有？\"先生听然而笑曰：\"人生一世，如屈伸肘。何者为贫？何者为富？何者为美？何者为陋？或糠核而瓠肥，或粱肉而墨瘦。何侯方丈，庾郎三九。较丰约于梦寐，卒同归于一朽。吾方以杞为粮，以菊为糗。春食苗，夏食叶，秋食花实而冬食根，庶几乎西河、南阳之寿。\"","dynasty":"宋","author":"苏轼"},{"title":"秋阳赋","text":"越王之孙，有贤公子，宅于不土之里，而咏无言之诗。以告东坡居士曰：\"吾心皎然，如秋阳之明；吾气肃然，如秋阳之清。吾好善而欲成之，如秋阳之坚百谷；吾恶恶而欲刑之，如秋阳之陨群木。夫是以乐而赋之，子以为何如？\"居士笑曰：\"公子何自知秋阳哉？生于华屋之下，而长游于朝廷之上，出拥大盖，入侍帏幄，暑至于温，寒至于凉而已矣。何自知秋阳哉？若予者，乃真知之。方夏潦之淫也，云烝雨泄，雷电发越，江湖为一，后土冒没，舟行城郭，鱼龙入室。菌衣生于用器，蛙蚓行于几席。夜违湿而五迁，昼燎衣而三易。是犹未足病也。耕于三吴，有田一廛。禾已实而生耳，稻方秀而泥蟠。沟塍交通，墙壁颓穿。面垢落塈之涂，目泫湿薪之烟。釜甑其空，四邻悄然。鹳鹤鸣于户庭，妇宵兴而永叹。计有食其几何，矧无衣于穷年。忽釜星之杂出，又灯花之双悬。清风西来，鼓钟其镗。奴婢喜而告余，此雨止之祥也。蚤作而占之，则长庚澹澹，其不芒矣。浴于旸谷，升于扶桑。曾未转盼，而倒景飞于屋梁矣。方是时，如醉而醒，如喑而鸣。如痿而起行，如还故乡初见父兄。公子亦有此乐乎？\"公子曰：\"善哉！吾虽不身履，而可以意知也。\"居士曰：\"日行于天，南北异宜。赫然而炎非其虐，穆然而温非其慈。且今之温者，昔之炎者也。云何以夏为盾而以冬为衰乎？吾侪小人，轻愠易喜。彼冬夏之畏爱，乃群狙之三四。自今知之，可以无惑。居不墐户，出不仰笠，暑不言病，以无忘秋阳之德。\"公子拊掌，一笑而作。","dynasty":"宋","author":"苏轼"}]}};
+const CORPUS_ORDER = ['ddj', 'xiaoxue', 'junior', 'gaokao', 'sushi'];
+const CORPUS = {
+  ddj: { name: '道德经', items: null },
+  xiaoxue: CORPUS_EXTRA.xiaoxue,
+  junior: CORPUS_EXTRA.junior,
+  gaokao: CORPUS_EXTRA.gaokao,
+  sushi: CORPUS_EXTRA.sushi
+};
+
+function firstFourHans(text) {
+  return String(text || '').replace(/[^\u4e00-\u9fff]/g, '').slice(0, 4) || '—';
+}
+
+function buildItemsForCorpus(id) {
+  if (id === 'ddj') {
+    return daodejing.map(function (c) {
+      return { ch: c.ch, title: firstFourHans(c.text), text: c.text, dynasty: '先秦', author: '老子' };
+    });
+  }
+  const c = CORPUS[id];
+  if (!c || !c.items) return [];
+  return c.items.map(function (it, i) {
+    return {
+      ch: i + 1,
+      title: it.title || ('第' + (i + 1) + '篇'),
+      text: it.text || '',
+      dynasty: it.dynasty || '',
+      author: it.author || ''
+    };
+  });
+}
+
+let corpusId = localStorage.getItem('ddj86_corpus') || 'ddj';
+if (!CORPUS[corpusId]) corpusId = 'ddj';
+let currentItems = buildItemsForCorpus(corpusId);
+
+function getCorpus() { return CORPUS[corpusId] || CORPUS.ddj; }
+function getItem(ch) {
+  return currentItems.find(function (c) { return c.ch === ch; }) || currentItems[0];
+}
+function maxChapter() {
+  return currentItems.length ? currentItems[currentItems.length - 1].ch : 1;
+}
+
+function refreshCorpusBar() {
+  const bar = document.getElementById('corpusBar');
+  if (!bar) return;
+  bar.innerHTML = CORPUS_ORDER.map(function (id) {
+    const c = CORPUS[id];
+    if (!c) return '';
+    const n = id === 'ddj' ? 81 : ((c.items && c.items.length) || 0);
+    const active = id === corpusId ? ' active' : '';
+    return '<button type="button" data-corpus="' + id + '" class="' + active.trim() +
+      '" title="' + c.name + ' · ' + n + ' 篇">' + c.name + '</button>';
+  }).join('');
+  bar.querySelectorAll('button[data-corpus]').forEach(function (btn) {
+    btn.onclick = function () { setCorpus(btn.getAttribute('data-corpus')); };
+  });
+  const h1 = document.getElementById('corpusTitleH1');
+  const sub = document.getElementById('corpusSubtitle');
+  if (h1) h1.textContent = getCorpus().name;
+  if (sub) sub.textContent = '五笔86版 · 编码练习 · ' + currentItems.length + ' 篇';
+}
+
+function setCorpus(id) {
+  if (!CORPUS[id] || id === corpusId) return;
+  corpusId = id;
+  localStorage.setItem('ddj86_corpus', id);
+  currentItems = buildItemsForCorpus(id);
+  currentChapter = currentItems.length ? currentItems[0].ch : 1;
+  localStorage.setItem('ddj86_chapter', String(currentChapter));
+  refreshCorpusBar();
+  refreshCorpusBar();
+  renderChapterList();
+  selectChapter(currentChapter);
+}
+
+// ===== 86版五笔编码字典(道德经用字) =====
+const WB86 = {
+'一':'G','二':'FG','三':'DG','四':'LH','五':'GG','六':'UY','七':'AG','八':'WTY','九':'VT','十':'FGH',
+'百':'DJ','千':'TFK','万':'DNV','兆':'IQV',
+'上':'HHGG','下':'GHI','左':'DAF','右':'DKF','中':'KHK',
+'大':'DDDD','小':'IHT','多':'QQU','少':'ITR',
+'天':'GDI','地':'FBN','日':'JJJJ','月':'EEEE','星':'JTG',
+'人':'WWWW','从':'WWY','众':'WWW','民':'NAV','子':'BBBB','女':'VVVV','父':'WQU','母':'XGUI',
+'道':'UTHP','德':'TFLN','仁':'WFG','义':'YQI','礼':'PYNN','智':'TDKJ','信':'WYG','忠':'KHNU','孝':'FTB','慈':'UXXN','俭':'WWGI',
+'善':'UDUK','恶':'GOGN','美':'UGDU','好':'VBG','真':'FHWU',
+'水':'IIII','火':'OOOO','木':'SSSS','金':'QQQQ','土':'FFFF','山':'MMMM',
+'有':'DEF','无':'FQV','是':'JGH','不':'GII','非':'DJDD','可':'SKD','能':'CEXX',
+'之':'PPPP','乎':'TUHK','者':'FTJF','也':'BNHN','矣':'CTDU','焉':'GHGO','哉':'FAKD','兮':'WGNB','夫':'FWI','邪':'AHTB',
+'而':'DMJJ','与':'GNGD','则':'MJH','乃':'ETN','且':'EGD','或':'AKGD','若':'ADKF','如':'VKG','虽':'KJU','然':'QDOU',
+'故':'DTY','以':'NYWY','因':'LDI','为':'YLYI','所':'RNRH','于':'GFK',
+'此':'HXN','彼':'THCY','其':'ADWU','自':'THD',
+'至':'GCFF','及':'EYI','既':'VCAQ','已':'NNNN','未':'FII','将':'UQFY','欲':'WWKW',
+'生':'TGD','死':'GQXB','存':'DHBD','亡':'YNV','出':'BMK','入':'TYI','来':'GOI','去':'FCU','归':'JVG',
+'行':'TFHH','走':'FHU','坐':'WWFF','立':'UUUU','止':'HHHG',
+'见':'MQB','闻':'UBD','听':'KRH','视':'PYMQ','观':'CMQN','言':'YYYY','语':'YGKG','说':'YUKQ','曰':'JHNG',
+'知':'TDKG','识':'YKWY','学':'IPBF','习':'NUD','教':'FTBT','问':'UKD','思':'LNU','悟':'NGKG',
+'心':'NYNY','性':'NTGG','意':'UJNU','志':'FNU',
+'名':'QKF','实':'PUDU','利':'TJH','害':'PDHK','功':'ALN','过':'FPI','罪':'LDJD','福':'PYGL','祸':'PYKW',
+'难':'CWYG','易':'JQRR','强':'XKJY','弱':'XUXU','刚':'MQJH','柔':'CBTS','虚':'HAOG','盈':'ECLF','满':'IAGW',
+'圣':'CFF','王':'GGGG','侯':'WNTD','君':'VTKD','臣':'AHNH','兵':'RGWU',
+'家':'PEU','国':'LGYI','乡':'XTE',
+'清':'IGEG','浊':'IJY','静':'GEQH','动':'FCLN','深':'IPWS','高':'YMKF',
+'明':'JEG','光':'IQB','色':'QCB','声':'FNR',
+'长':'TAYI','短':'TDGU','厚':'DJBD','薄':'AIGF','重':'TGJF','轻':'LCAG',
+'先':'TFQB','后':'RGKD','始':'VCKG','终':'XTUY','久':'QYI','远':'FQPV','近':'RPK',
+'开':'GAK','闭':'UFTE','塞':'PFJF','通':'CEPK','达':'DPI',
+'守':'PFU','取':'BCY','舍':'WFKF','弃':'YCAJ','得':'TJGF','失':'RWI','求':'FIYI',
+'执':'RVYY','持':'RFFY','抱':'RQNN','握':'RNGF',
+'食':'WYVE','饮':'QNQW','乐':'QII','苦':'ADF','甘':'AFD',
+'爱':'EPDC','恨':'NVEY','忧':'NDNN','患':'KKHN','恐':'AMYN','惧':'NHWY','悲':'DJDN','哀':'YEU','怒':'VCNU','喜':'FKUK',
+'宠':'PDXB','辱':'DFEF','贵':'KHGM','贱':'MGT','富':'PGKL','贫':'WVMU',
+'亲':'USU','疏':'NHYQ','友':'DCU','敌':'TDT',
+'正':'GHD','直':'FHF','曲':'MAD','枉':'SGG','全':'WGF','缺':'RMNW',
+'妙':'VITT','微':'TMGT','玄':'YXU','精':'OGEG','神':'PYJH','灵':'VOU','气':'RNB',
+'阴':'BEG','阳':'BJG','冲':'UKHH','和':'TKG','混':'IJXX','沌':'IGBN',
+'谷':'WWKF','渊':'ITOH','海':'ITXU','川':'KTHH','江':'IAG','河':'ISKG',
+'象':'QJEU','形':'GAET','状':'UDY',
+'器':'KKDK','物':'TRQR','用':'ETNH','成':'DNNT','败':'MTY','废':'YNTY',
+'治':'ICKG','理':'GJFG','法':'IFCY','令':'WYCU','约':'XQYY',
+'经':'XCAG','文':'YYGY','字':'PBF','章':'UJJ',
+'读':'YFND','诵':'YCEH','背':'UXEF','记':'YNN',
+'身':'TMDT','手':'RTGH','足':'KHU','目':'HHHH','耳':'BGHG','口':'KKKK',
+'玉':'GYI','宝':'PGYU',
+'是':'JGHU','否':'GIKF','对':'CFY','错':'QAJG',
+'门':'UYHN','户':'YNE','室':'PGCF','屋':'NGCF',
+'车':'LGNH',
+'与':'GNG','则':'MJH','此':'HXN','时':'JFY','间':'UJD',
+'常':'IPKH','化':'WXN','变':'YOCU',
+'白':'RRRR','黑':'LFOU','红':'XAG',
+'根':'SVEY','本':'SGD','源':'IDRI','流':'IYCQ',
+'复':'TJTU','改':'NTY','变':'YOC',
+'异':'NAJ','同':'MGKD',
+'争':'QVHJ','战':'HKAT','胜':'ETGG',
+'新':'USRH','旧':'HJG','老':'FTXB',
+'教':'FTBT',
+'私':'TCY','公':'WCU',
+'居':'NDD','住':'WYGG',
+'死':'GQXB','活':'ITDG',
+'福':'PYGL','祸':'PYKW',
+'光':'IQB','明':'JE',
+'高':'YMKF','低':'WQAY',
+'朝':'FJEG',
+'退':'VEPI','进':'FJPK',
+'升':'TAK','降':'BTAH',
+'附':'BWFY','离':'YBMC',
+'合':'WGKF','散':'AETY',
+'聚':'BCTI','分':'WVB',
+'乘':'TUXV',
+'孤':'BRCY','独':'QTJY',
+'寂':'PHIC','寞':'PAJD',
+'枯':'SDG','荣':'APSU',
+'忘':'YNNU',
+'德':'TFLN','怨':'QBNU',
+'小':'IHT','大':'DDDD',
+'难':'CWYG','易':'JQRR',
+'图':'LTUI','谋':'YAFS',
+'慎':'NFHW','终':'XTUY',
+'如':'VKG','始':'VCKG',
+'辅':'LGEY','助':'EGLN',
+'败':'MTY','事':'GKVH',
+'千':'TFK','里':'JFD',
+'行':'TFHH','始':'VCKG',
+'足':'KHU','下':'GHI',
+'拜':'RDFH','寿':'DTFU',
+'礼':'PYNN','物':'TRQR',
+'财':'MFTT','富':'PGKL',
+'行':'TFHH',
+'目':'HHHH',
+'单':'UJFJ',
+'合':'WGKF','同':'MGKD',
+'协':'FLWY','商':'UMWK',
+'打':'RSH','杀':'QSU',
+'搬':'RTEC','运':'FCPI',
+'穿':'PWAT',
+'盖':'UGLF',
+'披':'RHCY','挂':'RFFG',
+'系':'TXIU',
+'线':'XGT',
+'织':'XKWY','编':'XYNA',
+'补':'PUHY',
+'针':'QFH',
+'是':'JGHU',
+'间':'UJD',
+'晚':'JQKQ',
+'暂':'LRJF',
+'鹅':'TRNG'
+};
+
+// ===== 构建完整Wubi字典(从所有章节提取唯一字) =====
+function buildWubiDict() {
+  const allChars = new Set();
+  daodejing.forEach(c => { for (let ch of c.text) allChars.add(ch); });
+  // 补充常见字编码
+  const more = {
+'阿':'BSKG','哎':'KAQY','埃':'FCTD','欸':'CTDW','矮':'TDTV','霭':'FYJN','暧':'JEPC','瑷':'GEPC','安':'PVF','庵':'YDJN','鞍':'AFPV','岸':'MDFJ','案':'PVSU','暗':'JUJG','黯':'LFOJ',
+'昂':'JQBJ','敖':'GQTY','遨':'GQTP','獒':'GQTD','聱':'GQTB','媪':'VJLG','坳':'FXLN','傲':'WGQT','奥':'TMOD','巴':'CNHN','拔':'RDCY','魃':'RQCC','把':'RCN','霸':'FAFE','柏':'SRG',
+'捭':'RRTF','般':'TEMC','斑':'GYGG','坂':'FRCY','板':'SRCY','版':'THGC','办':'LWI','半':'UFK','伴':'WUFH','傍':'WUPY','谤':'YUPY','包':'QNV','煲':'WKSO','饱':'QNQN','保':'WKSY',
+'报':'RBCY','豹':'EEQY','暴':'JAWI','爆':'OJAI','卑':'RTFJ','杯':'SGIY','北':'UXN','狈':'QTMY','备':'TLF','倍':'WUKG','被':'PUHC','辈':'DJDL','鞴':'AFAE','奔':'DFAJ','贲':'FAMU',
+'崩':'MEEF','迸':'UAPK','逼':'GKLP','鼻':'THLJ','比':'XXN','妣':'VXXN','笔':'TTFN','鄙':'KFLB','必':'NTE','毕':'XXFJ','庇':'YXXV','毖':'XXNT','陛':'BXXF','婢':'VRTF','敝':'UMIT',
+'裨':'PURF','弊':'UMIA','碧':'GRDF','蔽':'AUMT','壁':'NKUF','避':'NKUP','臂':'NKUE','璧':'NKUY','边':'LPV','鞭':'AFWQ','扁':'YNMA','弁':'CAJ','抃':'RYHY','便':'WGJQ','遍':'YNMP',
+'辨':'UYTU','辩':'UYUH','标':'SFIY','飑':'MQQN','表':'GEU','别':'KLJH','宾':'PRGW','滨':'IPRW','缤':'XPRW','鬓':'DEPW','冰':'UIY','并':'UAJ','病':'UGMW','拨':'RNTY','波':'IHCY',
+'剥':'VIJH','播':'RTOL','蕃':'ATOL','伯':'WRG','驳':'CQQY','帛':'RMHJ','博':'FGEF','渤':'IFPL','搏':'RGEF','镈':'QGEF','簸':'TADC','卜':'HHY','逋':'GEHP','哺':'KGEY','捕':'RGEY',
+'布':'DMHJ','步':'HIR','怖':'NDMH','餔':'WPGY','才':'FTE','材':'SFTT','裁':'FAYE','采':'ESU','彩':'ESET','菜':'AESU','参':'CDER','骖':'CCDE','餐':'HQCE','残':'GQGT','蚕':'GDJU',
+'惭':'NLRH','惨':'NCDE','黪':'LFOE','灿':'OMH','仓':'WBB','沧':'IWBN','苍':'AWBB','藏':'ADNT','操':'RKKS','曹':'GMAJ','嘈':'KGMJ','槽':'SGMJ','草':'AJJ','侧':'WMJH','测':'IMJH',
+'策':'TGMI','岑':'MWYN','噌':'KULJ','层':'NFCI','曾':'ULJF','插':'RTFV','茶':'AWSU','察':'PWFI','差':'UDAF','钗':'QCYY','侪':'WYJH','柴':'HXSU','豺':'EEFT','茝':'AAHH','虿':'DNJU',
+'襜':'PUQY','婵':'VUJF','谗':'YQKU','馋':'QNQU','蝉':'JUJF','廛':'YJFF','潺':'INBB','巉':'MQKY','产':'UTE','谄':'YQVG','繟':'XGLF','昌':'JJF','肠':'ENRT','尝':'IPFC','偿':'WIPC',
+'场':'FNRT','昶':'YNIJ','氅':'IMKN','怅':'NTAY','畅':'JHNR','唱':'KJJG','超':'FHVK','巢':'VJSU','嘲':'KFJE','潮':'IFJE','耖':'DIIT','彻':'TAVN','坼':'FRYY','掣':'RMHR','澈':'IYCT',
+'尘':'IFF','沉':'IPMN','辰':'DFEI','陈':'BAIY','晨':'JDFE','趁':'FHWE','榇':'SUSY','称':'TQIY','蛏':'JCFG','撑':'RIPR','丞':'BIGF','承':'BDII','诚':'YDNT','城':'FDNT','宬':'PDNT',
+'程':'TKGG','裎':'PUKG','塍':'EUDF','澄':'IWGU','橙':'SWGU','骋':'CMGN','蚩':'BHGJ','痴':'UTDK','池':'IBN','驰':'CBN','迟':'NYPI','篪':'TRHM','尺':'NYI','侈':'WQQY','齿':'HWBJ',
+'耻':'BHG','豉':'GKUC','叱':'KXN','斥':'RYI','赤':'FOU','炽':'OKWY','翅':'FCND','敕':'GKIT','充':'YCQB','舂':'DWVF','虫':'JHNY','崇':'MPFI','仇':'WVN','惆':'NMFK','畴':'LDTF',
+'愁':'TONU','筹':'TDTF','酬':'SGYH','踌':'KHDF','雠':'WYYY','丑':'NFD','臭':'THDU','初':'PUVN','摴':'RFFN','樗':'SFFN','刍':'QVF','除':'BWTY','厨':'DGKF','滁':'IBWT','锄':'QEGL',
+'橱':'SDGF','躇':'KHAJ','楚':'SSNH','处':'THI','俶':'WHIC','畜':'YXLF','触':'QEJY','黜':'LFOM','矗':'FHFH','揣':'RMDJ','啜':'KCCC','传':'WFNY','船':'TEMK','椽':'SXEY','窗':'PWTQ',
+'摐':'RTWH','床':'YSI','创':'WBJH','怆':'NWBN','吹':'KQWY','垂':'TGAF','棰':'STGF','槌':'SWNP','锤':'QTGF','春':'DWJF','纯':'XGBN','唇':'DFEK','淳':'IYBG','辍':'LCCC','疵':'UHXV',
+'词':'YNGK','祠':'PYNK','辞':'TDUH','雌':'HXWY','鹚':'UXXG','次':'UQWY','伺':'WNGK','刺':'GMIJ','赐':'MJQR','匆':'QRYI','葱':'AQRN','聪':'BUKN','丛':'WWGF','粗':'OEGG','徂':'TEGG',
+'殂':'GQEG','促':'WKHY','簇':'TYTD','蹙':'DHIH','蹴':'KHYN','汆':'WIU','窜':'PWKH','爨':'WFMO','崔':'MWYF','催':'WMWY','摧':'RMWY','脆':'EQDB','悴':'NYWF','萃':'AYWF','翠':'NYWF',
+'村':'SFY','寸':'FGHY','磋':'DUDA','鹾':'HLQA','剉':'RWWF','厝':'DAJD','挫':'RWWF','措':'RAJG','怛':'NJGG','沓':'IJF','答':'TWGK','靼':'AFJG','歹':'GQI','逮':'VIPI','代':'WAY',
+'岱':'WAMJ','迨':'CKPD','带':'GKPH','待':'TFFY','怠':'CKNU','殆':'GQCK','贷':'WAMU','戴':'FALW','丹':'MYD','耽':'BPQN','箪':'TUJF','儋':'WQDY','胆':'EJGG','紞':'XPQN','旦':'JGF',
+'但':'WJGG','诞':'YTHP','啖':'KOOY','弹':'XUJF','淡':'IOOY','澹':'IQDY','当':'IVF','筜':'TIVF','荡':'AINR','刀':'VNT','岛':'QYNM','到':'GCFJ','倒':'WGCJ','悼':'NHJH','盗':'UQWL',
+'稻':'TEVG','的':'RQYY','灯':'OSH','登':'WGKU','等':'TFFU','磴':'DWGU','堤':'FJGH','滴':'IUMD','狄':'QTOY','敌':'TDTY','涤':'ITSY','荻':'AQTO','笛':'TMF','诋':'YQAY','坻':'FQAY',
+'底':'YQAY','抵':'RQAY','柢':'SQAY','骶':'MEQY','弟':'UXHT','帝':'UPMH','递':'UXHP','第':'TXHT','缔':'XUPH','颠':'FHWM','巅':'MFHM','点':'HKOU','电':'JNV','殿':'NAWC','簟':'TSJJ',
+'刁':'NGD','凋':'UMFK','貂':'EEVK','雕':'MFKY','吊':'KMHJ','钓':'QQYY','调':'YMFK','昳':'JRWY','堞':'FANS','揲':'RANS','叠':'CCCG','蝶':'JANS','蹀':'KHAS','丁':'SGH','钉':'QSH',
+'酊':'SGSH','顶':'SDMY','鼎':'HNDN','定':'PGHU','东':'AII','冬':'TUU','董':'ATGF','冻':'UAIY','栋':'SAIY','洞':'IMGK','都':'FTJB','兜':'QRNQ','抖':'RUFH','斗':'UFK','豆':'GKUF',
+'逗':'GKUP','窦':'PWFD','督':'HICH','毒':'GXGU','椟':'SFND','牍':'THGD','笃':'TCF','堵':'FFTJ','睹':'HFTJ','杜':'SFG','度':'YACI','渡':'IYAC','端':'UMDJ','段':'WDMC','断':'ONRH',
+'堆':'FWYG','兑':'UKQB','憝':'YBTN','敦':'YBTY','盾':'RFHD','钝':'QGBN','顿':'GBNM','遁':'RFHP','楯':'SRFH','咄':'KBMH','掇':'RCCC','夺':'DFU','朵':'MSU','缍':'XTGF','堕':'BDEF',
+'俄':'WTRT','娥':'VTRT','峨':'MTRT','鹅':'TRNG','蛾':'JTRT','苊':'ADBB','饿':'QNTT','鳄':'QGKN','恩':'LDNU','儿':'QTN','尔':'QIU','饵':'QNBG','贰':'AFMI','发':'NTCY','乏':'TPI',
+'伐':'WAT','罚':'LYJJ','阀':'UWAE','珐':'GFCY','帆':'MHMY','幡':'MHTL','翻':'TOLN','凡':'MYI','氾':'IBN','烦':'ODMY','樊':'SQQD','繁':'TXGI','反':'RCI','返':'RCPI','犯':'QTBN',
+'泛':'ITPY','饭':'QNRC','范':'AIBB','方':'YYGN','芳':'AYB','妨':'VYN','房':'YNYV','仿':'WYN','访':'YYN','舫':'TEYN','放':'YTY','飞':'NUI','菲':'ADJD','扉':'YNDD','霏':'FDJD',
+'騑':'CDJD','肥':'ECN','腓':'EDJD','匪':'ADJD','诽':'YDJD','吠':'KDY','费':'XJMU','纷':'XWVN','坟':'FYY','焚':'SSOU','粉':'OWVN','奋':'DLF','粪':'OAWU','丰':'DHK','风':'MQI',
+'枫':'SMQY','封':'FFFY','峰':'MTDH','烽':'OTDH','葑':'AFFF','蜂':'JTDH','冯':'UCG','逢':'TDHP','凤':'MCI','奉':'DWFH','缝':'XTDP','肤':'EFWY','弗':'XJK','伏':'WDY','凫':'QYNM',
+'佛':'WXJH','孚':'EBF','扶':'RFWY','芙':'AFWU','拂':'RXJH','服':'EBCY','俘':'WEBG','罘':'LGIU','浮':'IEBG','桴':'SEBG','符':'TWFU','艴':'ENJH','蜉':'JEBG','辐':'LGKL','抚':'RFQN',
+'甫':'GEHY','府':'YWFI','拊':'RWFY','斧':'WQRJ','俯':'WYWF','釜':'WQFU','付':'WFY','妇':'VVG','负':'QMU','赴':'FHHI','蚹':'JWFY','傅':'WGEF','赋':'MGAH','腹':'ETJT','覆':'STTT',
+'肝':'EFH','敢':'NBTY','感':'DGKN','干':'FGGH','冈':'MQI','港':'IAWN','戆':'UJTN','皋':'RDFJ','膏':'YPKE','杲':'JSU','缟':'XYMK','槁':'SYMK','稿':'TYMK','告':'TFKF','诰':'YTFK',
+'郜':'TFKB','戈':'AGNT','割':'PDHJ','歌':'SKSW','阁':'UTKD','革':'AFJ','格':'STKG','鬲':'GKMH','葛':'AJQN','隔':'BGKH','哿':'LKSK','舸':'TESK','个':'WHJ','各':'TKF','茛':'AVEU',
+'庚':'YVWI','耕':'DIFJ','羹':'UGOD','更':'GJQI','工':'AAAA','弓':'XNGN','攻':'ATY','供':'WAWY','肱':'EDCY','宫':'PKKF','恭':'AWNU','躬':'TMDX','觥':'QEIQ','拱':'RAWY','共':'AWU',
+'沟':'IQCY','钩':'QQCY','狗':'QTQK','苟':'AQKF','构':'SQCY','诟':'YRGK','垢':'FRGK','呱':'KRCY','姑':'VDG','沽':'IDG','鸪':'DQYG','古':'DGHG','扢':'RTNN','汩':'IJG','骨':'MEF',
+'罟':'LDF','毂':'FPLC','鼓':'FKUC','鹘':'MEQG','穀':'FPGC','固':'LDD','顾':'DBDM','梏':'STFK','牿':'TRTK','瓜':'RCYI','栝':'STDG','寡':'PDEV','诖':'YFFG','夬':'NWI','怪':'NCFG',
+'关':'UDU','官':'PNHN','冠':'PFQF','馆':'QNPN','管':'TPNN','灌':'IAKY','鹳':'AKKG','广':'YYGT','龟':'QJNB','规':'FWMQ','闺':'UFFD','瑰':'GRQC','宄':'PVB','庋':'YFCI','诡':'YQDB',
+'垝':'FQDB','癸':'WGDU','鬼':'RQCI','晷':'JTHK','刿':'HDJH','桂':'SFFG','鳜':'QGDW','滚':'IUCE','郭':'YBBH','崞':'MYBG','聒':'BTDG','虢':'EFHM','馘':'EFHM','果':'JSI','裹':'YJSE',
+'咳':'KYNW','还':'GIPI','孩':'BYNW','骸':'MEYW','骇':'CYNW','酣':'SGAF','含':'WYNK','函':'BIBK','涵':'IBIB','寒':'PFJU','韩':'FJFH','汉':'ICY','汗':'IFH','旱':'JFJ','悍':'NJFH',
+'瀚':'IFJN','杭':'SYMN','沆':'IYMN','蒿':'AYMK','毫':'YPTN','豪':'YPEU','壕':'FYPE','号':'KGNB','浩':'ITFK','耗':'DITN','淏':'IJGD','皓':'RTFK','禾':'TTTT','何':'WSKG','曷':'JQWN',
+'核':'SYNW','荷':'AWSK','阖':'UFCL','翮':'GKMN','褐':'PUJN','赫':'FOFO','鹤':'PWYG','壑':'HPGF','痕':'UVEI','姮':'VGJG','恒':'NGJG','横':'SAMW','衡':'TQDH','蘅':'ATQH','訇':'QYD',
+'弘':'XCY','吰':'KDCY','宏':'PDCU','闳':'UDCI','洪':'IAWY','竑':'YGY','虹':'JAG','鸿':'IAQG','篌':'TWND','候':'WHND','堠':'FWND','呼':'KTUH','忽':'QRNU','惚':'NQRN','狐':'QTRY',
+'胡':'DEG','壶':'FPOG','湖':'IDEG','鹕':'DEQG','糊':'ODEG','蝴':'JDEG','縠':'FPGC','醐':'SGDE','虎':'HAMV','互':'GXGD','护':'RYNT','怙':'NDG','扈':'YNKC','瓠':'DFNY','花':'AWXB',
+'哗':'KWXF','华':'WXFJ','滑':'IMEG','猾':'QTME','划':'AJH','画':'GLBJ','话':'YTDG','怀':'NGIY','徊':'TLKG','淮':'IWYG','槐':'SRQC','坏':'FGIY','欢':'CQWY','环':'GGIY','桓':'SGJG',
+'宦':'PAHH','唤':'KQMD','换':'RQMD','浣':'IPFQ','涣':'IQMD','肓':'YNEF','荒':'AYNQ','皇':'RGF','凰':'MRGD','隍':'BRGG','黄':'AMWU','惶':'NRGG','遑':'RGPD','篁':'TRGF','恍':'NIQN',
+'灰':'DOU','恢':'NDOY','晖':'JPLH','豗':'GQEI','辉':'IQPL','麾':'YSSN','隳':'BDAN','回':'LKD','洄':'ILKG','虺':'GQJI','悔':'NTXU','毁':'VAMC','会':'WFCU','讳':'YFNH','贿':'MDEG',
+'晦':'JTXU','秽':'TMQY','惠':'GJHN','慧':'DHDN','蕙':'AGJN','昏':'QAJF','浑':'IPLH','魂':'FCRC','诨':'YPLH','溷':'ILEY','豁':'PDHK','货':'WXMU','获':'AQTD','惑':'AKGN','霍':'FWYF',
+'讥':'YMN','击':'FMK','饥':'QNMN','机':'SMN','玑':'GMN','肌':'EMN','鸡':'CQYG','唧':'KVCB','姬':'VAHH','屐':'NTFC','积':'TKWY','基':'ADWF','赍':'FWWM','跻':'KHYJ','稽':'TDNJ',
+'激':'IRYT','羁':'LAFC','鞿':'AFXT','吉':'FKF','汲':'IEYY','级':'XEYY','即':'VCBH','极':'SEYY','急':'QVNU','疾':'UTDI','棘':'GMII','集':'WYSU','楫':'SKBG','藉':'ADIJ','籍':'TDIJ',
+'几':'MTN','己':'NNGN','脊':'IWEF','戟':'FJAT','计':'YFH','伎':'WFCY','纪':'XNN','忌':'NNU','芰':'AFCU','际':'BFIY','季':'TBF','济':'IYJH','荠':'AYJJ','迹':'YOPI','寄':'PDSK',
+'悸':'NTBG','祭':'WFIU','绩':'XGMY','塈':'VCAF','蓟':'AQGJ','霁':'FYJJ','稷':'TLWT','冀':'UXLW','髻':'DEFK','骥':'CUXW','加':'LKG','夹':'GUWI','佳':'WFFG','葭':'ANHC','嘉':'FKUK',
+'恝':'DHVN','戛':'DHAR','甲':'LHNH','贾':'SMU','假':'WNHC','价':'WWJH','驾':'LKCF','架':'LKSU','嫁':'VPEY','戋':'GGGT','奸':'VFH','尖':'IDU','坚':'JCFF','艰':'CVEY','兼':'UVOU',
+'煎':'UEJO','缣':'XUVO','蒹':'AUVO','鞯':'AFAB','拣':'RANW','减':'UDGT','剪':'UEJV','简':'TUJF','謇':'PFJY','蹇':'PFJH','建':'VFHP','饯':'QNGT','剑':'WGIJ','牮':'WARH','荐':'ADHB',
+'涧':'IUJG','舰':'TEMQ','渐':'ILRH','谏':'YGLI','楗':'SVFP','溅':'IMGT','鉴':'JTYQ','箭':'TUEJ','浆':'UQIU','僵':'WGLG','疆':'XFGG','奖':'UQDU','桨':'UQSU','匠':'ARK','绛':'XTAH',
+'犟':'XKJH','交':'UQU','郊':'UQBH','娇':'VTDJ','骄':'CTDJ','胶':'EUQY','焦':'WYOU','蛟':'JUQY','鲛':'QGUQ','角':'QEJ','侥':'WATQ','皎':'RUQY','矫':'TDTJ','脚':'EFCB','皦':'RYTY',
+'叫':'KNHH','较':'LUQY','徼':'TRYT','阶':'BWJH','皆':'XXRF','接':'RUVG','嗟':'KUDA','街':'TFFH','孑':'BNHG','节':'ABJ','劫':'FCLN','杰':'SOU','诘':'YFKG','洁':'IFKG','结':'XFKG',
+'捷':'RGVH','碣':'DJQN','竭':'UJQN','羯':'UDJN','解':'QEVH','介':'WJJ','戒':'AAK','芥':'AWJJ','界':'LWJJ','借':'WAJG','巾':'MHK','今':'WYNB','斤':'RTTH','津':'IVFH','矜':'CBTN',
+'衿':'PUWN','筋':'TELB','襟':'PUSI','仅':'WCY','尽':'NYUU','紧':'JCXI','谨':'YAKG','锦':'QRMH','馑':'QNAG','瑾':'GAKG','劲':'CALN','晋':'GOGJ','浸':'IVPC','禁':'SSFI','墐':'FAKG',
+'京':'YIU','荆':'AGAJ','荆棘':'AGAJ','惊':'NYIY','旌':'YTTG','鲸':'QGYI','井':'FJK','景':'JYIU','净':'UQVH','径':'TCAG','竞':'UKQB','竟':'UJQB','敬':'AQKT','境':'FUJQ','镜':'QUJQ',
+'炅':'JOU','究':'PWVB','鸠':'VQYG','啾':'KTOY','酒':'ISGG','咎':'THKF','救':'FIYT','就':'YIDN','舅':'VLLB','拘':'RQKG','狙':'QTEG','驹':'CQKG','雎':'EGWY','菊':'AQOU','橘':'SCBK',
+'举':'IWFH','矩':'TDAN','莒':'AKKF','巨':'AND','句':'QKD','拒':'RANG','具':'HWU','炬':'OANG','俱':'WHWY','据':'RNDG','距':'KHAN','屦':'NTOV','踞':'KHND','遽':'HAEP','醵':'SGHE',
+'娟':'VKEG','涓':'IKEG','鹃':'KEQG','蠲':'UWLJ','卷':'UDBB','倦':'WUDB','绢':'XKEG','眷':'UDHF','罥':'LKEF','决':'UNWY','绝':'XQCN','觉':'IPMQ','厥':'DUBW','蹶':'KHDW','嚼':'KELF',
+'矍':'HHWC','攫':'RHHC','军':'PLJ','均':'FQUG','皲':'PLHC','菌':'ALTU','麇':'YNJT','俊':'WCWT','郡':'VTKB','峻':'MCWT','浚':'ICWT','骏':'CCWT','濬':'IHPH','凯':'MNMN','慨':'NVCQ',
+'勘':'ADWL','堪':'FADN','嵁':'MADN','坎':'FQWY','槛':'SJTL','看':'RHF','康':'YVII','慷':'NYVI','糠':'OYVI','抗':'RYMN','考':'FTGN','柯':'SSKG','科':'TUFH','颗':'JSDM','渴':'IJQN',
+'克':'DQB','刻':'YNTJ','客':'PTKF','锞':'QJSY','肯':'HEF','裉':'PUVE','坑':'FYMN','铿':'QJCF','空':'PWAF','硿':'DPWA','箜':'TPWA','孔':'BNN','控':'RPWA','叩':'KBH','扣':'RKG',
+'寇':'PFQC','蔻':'APFL','刳':'DFNJ','哭':'KKDU','库':'YLK','夸':'DFNB','姱':'VDFN','跨':'KHDN','快':'NNWY','郐':'WFCB','宽':'PAMQ','窾':'PWFW','狂':'QTGG','诳':'YQTG','况':'UKQN',
+'旷':'JYT','亏':'FNV','窥':'PWFQ','逵':'FWFP','揆':'RWGD','葵':'AWGD','暌':'JWGD','跬':'KHFF','喟':'KLEG','聩':'BKHM','坤':'FJHH','昆':'JXXB','鲲':'QGJX','困':'LSI','括':'RTDG',
+'阔':'UITD','旯':'JVB','腊':'EAJG','蜡':'JAJG','赖':'GKIM','濑':'IGKM','籁':'TGKM','兰':'UFF','岚':'MMQU','栏':'SUFG','阑':'UGLI','蓝':'AJTL','澜':'IUGI','镧':'QUGI','览':'JTYQ',
+'揽':'RJTQ','懒':'NGKM','烂':'OUFG','滥':'IJTL','郎':'YVCB','狼':'QTYE','廊':'YYVB','琅':'GYVE','朗':'YVCE','浪':'IYVE','蒗':'AIYE','劳':'APLB','牢':'PRHJ','醪':'SGNE','姥':'VFTX',
+'了':'BNH','勒':'AFLN','雷':'FLF','羸':'YNKY','诔':'YDIY','垒':'CCCF','傫':'WLLI','泪':'IHG','类':'ODU','累':'LXIU','酹':'SGEF','颣':'HNDM','冷':'UWYC','狸':'QTJF','骊':'CGMY',
+'梨':'TJSU','鹂':'GMYG','嫠':'FITV','璃':'GYBC','篱':'TYBC','醨':'SGYC','藜':'ATQI','蠡':'XEJJ','李':'SBF','力':'LTN','历':'DLV','吏':'GKQI','丽':'GMYY','苈':'ADLB','例':'WGQJ',
+'枥':'SDLN','隶':'VII','荔':'ALLL','郦':'GMYB','栗':'SSU','猁':'QTJH','砺':'DDDN','莅':'AWUF','笠':'TUF','粒':'OUG','雳':'FDLB','连':'LPK','帘':'PWMH','怜':'NWYC','涟':'ILPY',
+'莲':'ALPU','廉':'YUVO','敛':'WGIT','练':'XANW','炼':'OANW','恋':'YONU','潋':'IWGT','良':'YVEI','凉':'UYIY','梁':'IVWS','粮':'OYVE','粱':'IVWO','两':'GMWW','量':'JGJF','辽':'BPK',
+'聊':'BQTB','僚':'WDUI','寥':'PNWE','潦':'IDUI','燎':'ODUI','蓼':'ANWE','料':'OUFH','列':'GQJH','冽':'UGQJ','洌':'IGQJ','烈':'GQJO','猎':'QTAJ','裂':'GQJE','趔':'FHGJ','邻':'WYCB',
+'林':'SSY','临':'JTYJ','磷':'DOQH','鳞':'QGOH','麟':'YNJH','凛':'UYLI','廪':'YYLI','伶':'WWYC','泠':'IWYC','瓴':'WYCN','凌':'UFWT','陵':'BFWT','绫':'XFWT','聆':'BWYC','菱':'AFWT',
+'零':'FWYC','岭':'MWYC','刘':'YJH','留':'QYVL','琉':'GYCQ','榴':'SQYL','柳':'SQTB','锍':'QYCQ','鹨':'NWEG','飂':'MQWY','龙':'DXV','栊':'SDXN','笼':'TDXB','聋':'DXBF','隆':'BTGG',
+'陇':'BDXN','拢':'RDXN','偻':'WOVG','蒌':'AOVF','楼':'SOVG','陋':'BGMN','漏':'INFY','镂':'QOVG','撸':'RQGJ','卢':'HNE','庐':'YYNE','芦':'AYNR','泸':'IHNT','炉':'OYNT','舻':'TEHN',
+'鲈':'QGHN','卤':'HLQI','鲁':'QGJF','橹':'SQGJ','陆':'BFMH','录':'VIU','赂':'MTKG','渌':'IVIY','鹿':'YNJX','琭':'GVIY','路':'KHTK','漉':'IYNX','鹭':'KHTG','麓':'SSYX','露':'FKHK',
+'驴':'CYNT','闾':'UKKD','吕':'KKF','侣':'WKKG','旅':'YTEY','缕':'XOVG','褛':'PUOV','履':'NTTT','虑':'HANI','率':'YXIF','绿':'XVIY','娈':'YOVF','峦':'YOMJ','鸾':'YOQG','乱':'TDNN',
+'掠':'RYIY','略':'LTKG','伦':'WWXN','纶':'XWXN','轮':'LWXN','论':'YWXN','罗':'LQU','螺':'JLXI','蠃':'YNKY','洛':'ITKG','络':'XTKG','荦':'APRH','珞':'GTKG','落':'AITK','麻':'YSSI',
+'马':'CNNG','骂':'KKCF','买':'NUDU','迈':'DNPV','麦':'GTU','卖':'FNUD','蛮':'YOJU','谩':'YJLC','慢':'NJLC','漫':'IJLC','缦':'XJLC','蔓':'AJLC','忙':'NYNN','芒':'AYNB','氓':'YNNA',
+'盲':'YNHF','茫':'AIYN','莽':'ADAJ','毛':'TFNV','茅':'ACBT','卯':'QTBH','芼':'ATFN','茂':'ADNT','冒':'JHF','贸':'QYVM','耄':'FTXN','袤':'YCBE','帽':'MHJH','貌':'EERQ','没':'IMCY',
+'眉':'NHD','梅':'STXU','媒':'VAFS','湄':'INHG','镅':'QNHG','每':'TXGU','妹':'VFIY','昧':'JFIY','袂':'PUNW','媚':'VNHG','寐':'PNHI','扪':'RUN','闷':'UNI','萌':'AJEF','盟':'JELF',
+'蒙':'APGE','甍':'ALPN','猛':'QTBL','孟':'BLF','梦':'SSQU','弥':'XQIY','迷':'OPI','麋':'YNJO','靡':'YSSD','米':'OYTY','弭':'XBG','觅':'EMQB','密':'PNTM','眠':'HNAN','绵':'XRMH',
+'免':'QKQB','勉':'QKQL','娩':'VQKQ','眄':'HGHN','面':'DMJD','苗':'ALF','渺':'IHIT','缈':'XHIT','庙':'YMD','灭':'GOI','岷':'MNAN','缗':'XNAJ','闵':'UYI','悯':'NUYY','敏':'TXGT',
+'鳘':'TXGQ','鸣':'KQYG','茗':'AQKF','冥':'PJUU','暝':'JPJU','命':'WGKB','谬':'YNWE','磨':'YSSD','抹':'RGSY','末':'GSI','沫':'IGSY','陌':'BDJG','莫':'AJDU','漠':'IAJD','蓦':'AJDC',
+'镆':'QAJD','墨':'LFOF','默':'LFOD','缪':'XNWE','鍪':'CBTQ','某':'AFSU','亩':'YLF','牡':'TRFG','沐':'ISY','牧':'TRTY','幕':'AJDH','慕':'AJDN','暮':'AJDJ','穆':'TRIE','那':'VFBH',
+'纳':'XMWY','奈':'DFIU','萘':'ADFI','男':'LLB','南':'FMUF','蝻':'JFMF','囊':'GKHE','攮':'RGKE','猱':'QTCS','恼':'NYBH','脑':'EYBH','疒':'UYGG','讷':'YMWY','馁':'QNEV','内':'MWI',
+'泥':'INXN','霓':'FVQB','你':'WQIY','拟':'RNYW','逆':'UBTP','溺':'IXUU','年':'RHFK','捻':'RWYN','念':'WYNN','娘':'VYVE','酿':'SGYE','鸟':'QYNG','袅':'QYNE','啮':'KHWB','蹑':'KHBC',
+'宁':'PSJ','凝':'UXTH','牛':'RHK','农':'PEI','侬':'WPEY','浓':'IPEY','秾':'TPEY','弄':'GAJ','奴':'VCY','驽':'VCCF','暖':'JEFC','虐':'HAAG','诺':'YADK','锘':'QADK','欧':'AQQW',
+'瓯':'AQGN','鸥':'AQQG','呕':'KAQY','偶':'WJMY','藕':'ADIY','琶':'GGCB','怕':'NRG','拍':'RRG','徘':'TDJD','排':'RDJD','派':'IREY','湃':'IRDF','攀':'SQQR','盘':'TELF','蟠':'JTOL',
+'判':'UDJH','拚':'RCAH','泮':'IUFH','盼':'HWVN','畔':'LUFH','旁':'UPYB','抛':'RVLN','咆':'KQNN','庖':'YQNV','袍':'PUQN','匏':'DFNN','醅':'SGUK','陪':'BUKG','培':'FUKG','赔':'MUKG',
+'沛':'IGMH','佩':'WMGH','旆':'YTGH','珮':'GMGH','配':'SGNN','辔':'XLXK','喷':'KFAM','盆':'WVLF','烹':'YBOU','朋':'EEG','彭':'FKUE','蓬':'ATDP','鹏':'EEQG','澎':'IFKE','邳':'GIGB',
+'霹':'FNKU','阰':'BXXN','陂':'BHCY','疲':'UHCI','郫':'RTFB','琵':'GGXX','匹':'AQV','疋':'NHI','圮':'FNN','淠':'ILGJ','辟':'NKUH','譬':'NKUY','偏':'WYNA','翩':'YNMN','骈':'CUAH',
+'蹁':'KHYA','片':'THGN','缥':'XSFI','飘':'SFIQ','瓢':'SFIY','殍':'GQEB','频':'HIDM','颦':'HIDF','品':'KKKF','牝':'TRXN','娉':'VMGN','砯':'DYIY','平':'GUHK','凭':'WTFM','苹':'AGUH',
+'屏':'NUAK','瓶':'UAGN','萍':'AIGH','坡':'FHCY','泊':'IRG','颇':'HCDM','迫':'RPD','破':'DHCY','魄':'RRQC','掊':'RUKG','仆':'WHY','扑':'RHY','蒱':'ARGY','蒲':'AIGY','朴':'SHY',
+'圃':'LGEY','浦':'IGEY','普':'UOGJ','氆':'TFNJ','瀑':'IJAI','曝':'JJAI','妻':'GVHV','凄':'UGVV','栖':'SSG','戚':'DHIT','萋':'AGVV','期':'ADWE','欹':'DSKW','欺':'ADWW','蹊':'KHED',
+'齐':'YJJ','岐':'MFCY','奇':'DSKF','歧':'HFCY','祈':'PYRH','俟':'WCTD','颀':'RDMY','崎':'MDSK','淇':'IADW','畦':'LFFG','萁':'AADW','跂':'KHFC','骐':'CADW','骑':'CDSK','棋':'SADW',
+'旗':'YTAW','乞':'TNB','企':'WHF','屺':'MNN','岂':'MNB','启':'YNKD','杞':'SNN','起':'FHNV','绮':'XDSK','棨':'YNTS','迄':'TNPV','泣':'IUG','契':'DHVD','砌':'DAVN','葺':'AKBF',
+'憩':'TDTN','恰':'NWGK','阡':'BTFH','迁':'TFPK','岍':'MGAH','牵':'DPRH','谦':'YUVO','愆':'TIFN','搴':'PAWR','前':'UEJJ','钱':'QGT','乾':'FJTN','潜':'IFWJ','黔':'LFON','浅':'IGT',
+'遣':'KHGP','堑':'LRFF','羌':'UDNB','枪':'SWBN','腔':'EPWA','墙':'FFUK','樯':'SFUK','悄':'NIEG','敲':'YMKC','缲':'XKKS','乔':'TDJJ','桥':'STDJ','憔':'NWYO','鞒':'AFTJ','樵':'SWYO',
+'巧':'AGNN','愀':'NTOY','峭':'MIEG','窍':'PWAN','切':'AVN','妾':'UVF','窃':'PWAV','挈':'DHVR','箧':'TAGW','锲':'QDHD','侵':'WVPC','衾':'WYNE','芹':'ARJ','秦':'DWTU','琴':'GGWN',
+'禽':'WYBC','勤':'AKGL','寝':'PUVC','青':'GEF','倾':'WXDM','卿':'QTVB','蜻':'JGEG','情':'NGEG','晴':'JGEG','擎':'AQKR','黥':'LFOI','顷':'XDMY','请':'YGEG','庆':'YDI','綮':'YNTI',
+'磬':'FNMD','穷':'PWLB','穹':'PWXB','茕':'APNF','琼':'GYIY','跫':'AMYH','丘':'RGD','秋':'TOY','虬':'JNN','逑':'FIYP','裘':'FIYE','糗':'OTHD','区':'AQI','岖':'MAQY','驱':'CAQY',
+'屈':'NBMK','趋':'FHQV','劬':'QKLN','鸲':'QKQG','渠':'IANS','蕖':'AIAS','璩':'GHAE','阒':'UHDI','趣':'FHBC','权':'SCY','泉':'RIU','拳':'UDRJ','犬':'DGTY','畎':'LDY','劝':'CLN',
+'炔':'ONWY','阙':'UUBW','却':'FCBH','悫':'FPGN','雀':'IWYF','确':'DQEH','鹊':'AJQG','囷':'LTI','群':'VTKD','燃':'OQDO','冉':'MFD','苒':'AMFF','染':'IVSU','穰':'TYKE','壤':'FYKE',
+'攘':'RYKE','纕':'XYKE','让':'YHG','荛':'AATQ','饶':'QNAQ','绕':'XATQ','热':'RVYO','壬':'TFD','忍':'VYNU','刃':'VYI','认':'YWY','仞':'WVYY','任':'WTFG','纫':'XVYY','葚':'AADN',
+'扔':'REN','仍':'WEN','戎':'ADE','茸':'ABF','容':'PWWK','嵘':'MAPS','溶':'IPWK','蓉':'APWK','融':'GKMJ','肉':'MWWI','儒':'WFDJ','孺':'BFDJ','襦':'PUFJ','汝':'IVG','乳':'EBNN',
+'蓐':'ADFF','阮':'BFQN','软':'LQWY','蕊':'ANNN','锐':'QUKQ','瑞':'GMDJ','闰':'UGD','润':'IUGG','箬':'TADK','洒':'ISG','腮':'ELNY','毵':'CDEN','桑':'CCCS','丧':'FUEU','搔':'RCYJ',
+'骚':'CCYJ','缫':'XVJS','扫':'RVG','涩':'IVYH','啬':'FULK','瑟':'GGNT','穑':'TWIK','森':'SSSU','僧':'WULJ','沙':'IITT','纱':'XITT','厦':'DDHT','嗄':'KDHT','晒':'JSG','衫':'PUET',
+'埏':'FTHP','珊':'GMMG','剡':'OOJH','扇':'YNND','伤':'WTLN','殇':'GQTR','觞':'QETR','赏':'IPKM','尚':'IMKF','裳':'IPKE','烧':'OATQ','梢':'SIEG','稍':'TIEG','勺':'QYI','奢':'DFTJ',
+'蛇':'JPXN','设':'YMCY','社':'PYFG','射':'TMDF','涉':'IHIT','赦':'FOTY','摄':'RBCC','歙':'WGKW','谁':'YWYG','申':'JHK','屾':'MMG','伸':'WJHH','什':'WFH','审':'PJHJ','哂':'KSG',
+'矧':'TDXH','谂':'YWYN','渖':'IPJH','甚':'ADWN','渗':'ICDE','牲':'TRTG','笙':'TTGF','绳':'XKJN','省':'ITHF','盛':'DNNL','师':'JGMH','诗':'YFFY','施':'YTBN','湿':'IJOG','酾':'SGGY',
+'石':'DGTG','莳':'AJFU','湜':'IJGH','史':'KQI','矢':'TDU','使':'WGKQ','士':'FGHG','氏':'QAV','世':'ANV','仕':'WFG','市':'YMHJ','示':'FIU','式':'AAD','侍':'WFFY','势':'RVYL',
+'试':'YAAG','饰':'QNTH','恃':'NFFY','拭':'RAAG','贳':'ANMU','适':'TDPD','轼':'LAAG','逝':'RRPK','释':'TOCH','嗜':'KFTJ','筮':'TAWW','誓':'RRYF','螫':'FOTJ','收':'NHTY','首':'UTHF',
+'受':'EPCU','狩':'QTPF','兽':'ULGK','售':'WYKF','授':'REPC','瘦':'UVHC','书':'NNHY','叔':'HICY','殊':'GQRI','梳':'SYCQ','淑':'IHIC','菽':'AHIC','舒':'WFKB','输':'LWGJ','蔬':'ANHQ',
+'秫':'TSYY','孰':'YBVF','熟':'YBVO','属':'NTKY','暑':'JFTJ','黍':'TWIU','署':'LFTJ','蜀':'LQJU','鼠':'VNUN','术':'SYI','戍':'DYNT','束':'GKII','述':'SYPI','树':'SCFY','恕':'VKNU',
+'庶':'YAOI','数':'OVTY','漱':'IGKW','澍':'IFKF','衰':'YKGE','帅':'JMHH','双':'CCY','霜':'FSHF','爽':'DQQQ','税':'TUKQ','睡':'HTGF','吮':'KCQN','顺':'KDMY','舜':'EPQH','瞬':'HEPH',
+'朔':'UBTE','硕':'DDMY','蒴':'AUBE','槊':'UBTS','丝':'XXGF','司':'NGKD','斯':'ADWR','嘶':'KADR','似':'WNYW','寺':'FFU','兕':'MMGQ','祀':'PYNN','泗':'ILG','驷':'CLG','涘':'ICTD',
+'肆':'DVFH','忪':'NWCY','松':'SWCY','耸':'WWBF','竦':'UGKI','讼':'YWCY','宋':'PSU','送':'UDPI','搜':'RVHC','飕':'MQVC','螋':'JVHC','叟':'VHCU','擞':'ROVT','苏':'ALWU','酥':'SGTY',
+'俗':'WWWK','夙':'MGQI','诉':'YRYY','肃':'VIJK','素':'GXIU','宿':'PWDJ','傃':'WGXI','粟':'SOU','溯':'IUBE','蔌':'AGKW','觫':'QEGI','簌':'TGKW','算':'THAJ','隋':'BDAE','随':'BDEP',
+'岁':'MQU','谇':'YYWF','遂':'UEPI','碎':'DYWF','邃':'PWUP','孙':'BIY','飧':'QWYE','损':'RKMY','笋':'TVTR','隼':'WYFJ','梭':'SCWT','蓑':'AYKE','索':'FPXI','锁':'QIMY','他':'WBN',
+'塔':'FAWK','挞':'RDPY','闼':'UDPI','榻':'SJNG','踏':'KHIJ','鞳':'AFAK','台':'CKF','苔':'ACKF','太':'DYI','泰':'DWIU','贪':'WYNM','滩':'ICWY','谈':'YOOY','郯':'OOBH','潭':'ISJH',
+'叹':'KCY','炭':'MDOU','探':'RPWS','汤':'INRT','镗':'QIPF','唐':'YVHK','堂':'IPKF','塘':'FYVK','傥':'WIPQ','涛':'IDTF','绦':'XTSY','焘':'DTFO','桃':'SIQN','陶':'BQRM','淘':'IQRM',
+'萄':'AQRM','讨':'YFY','忒':'ANI','特':'TRFF','慝':'AADN','腾':'EUDC','滕':'EUDI','藤':'AEUI','梯':'SUXT','荑':'AGXW','啼':'KUPH','提':'RJGH','题':'JGHM','蹄':'KHUH','体':'WSGG',
+'涕':'IUXT','替':'FWFJ','添':'IGDN','田':'LLLL','恬':'NTDG','畋':'LTY','填':'FFHW','阗':'UFHW','挑':'RIQN','条':'TSU','迢':'VKPD','蜩':'JMFK','髫':'DEVK','窕':'PWIQ','跳':'KHIQ',
+'帖':'MHHK','铁':'QRWY','厅':'DSK','汀':'ISH','廷':'TFPD','亭':'YPSJ','庭':'YTFP','停':'WYPS','婷':'VYPS','蜓':'JTFP','挺':'RTFP','艇':'TETP','茼':'AMGK','桐':'SMGK','铜':'QMGK',
+'童':'UJFF','僮':'WUJF','潼':'IUJF','曈':'JUJF','筒':'TMGK','痛':'UCEK','偷':'WWGJ','头':'UDI','投':'RMCY','透':'TEPV','凸':'HGMG','突':'PWDU','徒':'TFHY','涂':'IWTY','途':'WTPI',
+'屠':'NFTJ','吐':'KFG','兔':'QKQY','湍':'IMDJ','团':'LFTE','抟':'RFNY','推':'RWYG','颓':'TMDM','褪':'PUVP','吞':'GDKF','豚':'EEY','托':'RTAN','扡':'RTAN','脱':'EUKQ','陀':'BPXN',
+'驼':'CPXN','酡':'SGPX','橐':'GKHS','鼍':'KKLJ','柝':'SRYY','箨':'TRCH','洼':'IFFG','娲':'VKMW','蛙':'JFFG','娃':'VFFG','瓦':'GNYN','袜':'PUGS','外':'QHY','完':'PFQB','玩':'GFQN',
+'顽':'FQDM','宛':'PQBB','挽':'RQKQ','婉':'VPQB','惋':'NPQB','琬':'GPQB','汪':'IGG','网':'MQQI','往':'TYGG','罔':'MUYN','惘':'NMUN','妄':'YNVF','望':'YNEG','危':'QDBB','威':'DGVT',
+'逶':'TVPD','巍':'MTVC','围':'LFNH','帏':'MHFH','违':'FNHP','唯':'KWYG','帷':'MHWY','惟':'NWYG','维':'XWYG','嵬':'MRQC','伟':'WFNH','伪':'WYLY','尾':'NTFN','苇':'AFNH','委':'TVF',
+'廆':'YFCJ','猥':'QTLE','痿':'UTVD','韪':'JGHH','卫':'BGD','位':'WUG','味':'KFIY','畏':'LGEU','尉':'NFIF','谓':'YLEG','渭':'ILEG','蔚':'ANFF','魏':'TVRC','温':'IJLG','纹':'XYY',
+'汶':'IYY','翁':'WCNF','涡':'IKMW','蜗':'JKMW','我':'TRNT','沃':'ITDY','卧':'AHNH','涴':'IPQB','幄':'MHNF','渥':'INGF','乌':'QNGD','污':'IFNN','呜':'KQNG','巫':'AWWI','诬':'YAWW',
+'毋':'XDE','吴':'KGDU','吾':'GKF','芜':'AFQB','梧':'SGKG','午':'TFJ','武':'GAHD','侮':'WTXU','鹉':'GAHG','舞':'RLGH','兀':'GQV','勿':'QRE','务':'TLB','戊':'DNYT','误':'YKGD',
+'雾':'FTLB','寤':'PNHK','鹜':'CBTG','夕':'QTNY','西':'SGHG','希':'QDMH','昔':'AJF','郗':'QDMH','奚':'EXDU','息':'THNU','牺':'TRSG','悉':'TONU','惜':'NAJG','晞':'JQDH','稀':'TQDH',
+'翕':'WGKN','溪':'IEXD','皙':'SRRF','锡':'QJQR','熙':'AHKO','嘻':'KFKK','嬉':'VFKK','膝':'ESWI','熹':'FKUO','谿':'EXDK','曦':'JUGT','席':'YAMH','袭':'DXYE','觋':'AWWQ','隰':'BJXO',
+'洗':'ITFQ','徙':'THHY','屣':'NTHH','戏':'CAT','饩':'QNRN','细':'XLH','咥':'KGCF','隙':'BIJI','禊':'PYDD','嚱':'KHAA','虾':'JGHY','匣':'ALK','侠':'WGUW','狎':'QTLH','峡':'MGUW',
+'狭':'QTGW','遐':'NHFP','暇':'JNHC','瑕':'GNHC','霞':'FNHC','黠':'LFOK','夏':'DHTU','罅':'RMHH','仙':'WMH','纤':'XTFH','掀':'RRQW','跹':'KHTP','鲜':'QGUD','闲':'USI','弦':'XYXY',
+'贤':'JCMU','咸':'DGKT','娴':'VUSY','舷':'TEYX','衔':'TQFH','嫌':'VUVO','显':'JOGF','险':'BWGI','藓':'AGUD','县':'EGCU','限':'BVEY','宪':'PTFQ','羡':'UGUW','相':'SHG','香':'TJF',
+'湘':'ISHG','襄':'YKKE','详':'YUDH','祥':'PYUD','翔':'UDNG','享':'YBF','响':'KTMK','饷':'QNTK','飨':'XTWE','想':'SHNU','向':'TMKD','巷':'AWNB','项':'ADMY','像':'WQJE','枵':'SKGN',
+'宵':'PIEF','消':'IIEG','绡':'XIEG','逍':'IEPD','萧':'AVIJ','销':'QIEG','嘐':'KNWE','潇':'IAVJ','箫':'TVIJ','霄':'FIEF','崤':'MQDE','晓':'JATQ','肖':'IEF','效':'UQTY','校':'SUQY',
+'笑':'TTDU','啸':'KVIJ','些':'HXFF','歇':'JQWW','胁':'ELWY','挟':'RGUW','偕':'WXXR','斜':'WTUF','谐':'YXXR','携':'RWYE','撷':'RFKM','鞋':'AFFF','写':'PGNG','泄':'IANN','泻':'IPGG',
+'屑':'NIED','亵':'YRVE','谢':'YTMF','榭':'STMF','懈':'NQEH','獬':'QTQH','辛':'UYGH','欣':'RQWY','薪':'AUSR','馨':'FNMJ','衅':'TLUF','刑':'GAJH','饧':'QNNR','陉':'BCAG','醒':'SGJG',
+'兴':'IWU','杏':'SKF','姓':'VTGG','幸':'FUFJ','荇':'ATFH','凶':'QBK','兄':'KQB','汹':'IQBH','胸':'EQQB','雄':'DCWY','熊':'CEXO','夐':'QMWT','休':'WSY','修':'WHTE','羞':'UDNF',
+'朽':'SGNN','秀':'TEB','岫':'MMG','绣':'XTEN','袖':'PUMG','嗅':'KTHD','吁':'KGFH','戌':'DGNT','胥':'NHEF','须':'EDMY','嘘':'KHAG','墟':'FHAG','需':'FDMJ','徐':'TWTY','许':'YTFH',
+'序':'YCBK','叙':'WTCY','恤':'NTLG','勖':'JHLN','绪':'XFTJ','续':'XFND','婿':'VNHE','絮':'VKXI','轩':'LFH','宣':'PGJG','谖':'YEFC','喧':'KPGG','悬':'EGCN','旋':'YTNH','选':'TFQP',
+'泫':'IYXY','眩':'HYXY','削':'IEJH','穴':'PWU','雪':'FVF','血':'TLD','谑':'YHAG','勋':'KMLN','埙':'FKMY','薰':'ATGO','曛':'JTGO','寻':'VFU','旬':'QJD','浔':'IVFY','循':'TRFH',
+'讯':'YNFH','迅':'NFPK','驯':'CKH','巽':'NNAW','压':'DFYI','鸦':'AHTG','鸭':'LQYG','牙':'AHTE','芽':'AAHT','琊':'GAHB','崖':'MDFF','涯':'IDFF','衙':'TGKH','哑':'KGOG','雅':'AHTY',
+'烟':'OLDY','崦':'MDJN','淹':'IDJN','阏':'UYWU','鄢':'GHGB','延':'THPD','严':'GODR','芫':'AFQB','岩':'MDF','沿':'IMKG','炎':'OOU','盐':'FHLF','阎':'UQVD','颜':'UTEM','檐':'SQDY',
+'奄':'DJNB','俨':'WGOD','偃':'WAJV','掩':'RDJN','眼':'HVEY','扊':'YNHK','巘':'MHAD','厌':'DDI','咽':'KLDY','砚':'DMQN','宴':'PJVF','晏':'JPVF','艳':'DHQC','验':'CWGI','雁':'DWWY',
+'滟':'IDHC','酽':'SGGD','燕':'AUKO','央':'MDI','殃':'GQMD','鸯':'MDQG','鞅':'AFMD','扬':'RNRT','羊':'UDJ','旸':'JNRT','杨':'SNRT','飏':'MQNR','洋':'IUDH','仰':'WQBH','养':'UDYJ',
+'样':'SUDH','漾':'IUGI','幺':'XNNY','夭':'TDI','妖':'VTDY','腰':'ESVG','邀':'RYTP','肴':'QDEF','垚':'FFFF','姚':'VIQN','珧':'GION','摇':'RERM','遥':'ERMP','瑶':'GERM','飖':'ERMQ',
+'杳':'SJF','咬':'KUQY','窈':'PWXL','药':'AXQY','要':'SVF','曜':'JNWY','耀':'IQNY','噎':'KFPU','爷':'WQBJ','耶':'BBH','野':'JFCB','业':'OGD','叶':'KFH','曳':'JXE','夜':'YWTY',
+'烨':'OWXF','谒':'YJQN','伊':'WVTT','衣':'YEU','医':'ATDI','依':'WYEY','祎':'PYFH','揖':'RKBG','漪':'IQTK','噫':'KUJN','繄':'ATDI','黟':'LFOO','仪':'WYQY','夷':'GXWI','沂':'IRH',
+'宜':'PEGF','怡':'NCKG','迤':'TBPV','饴':'QNCK','移':'TQQY','遗':'KHGP','疑':'XTDH','乙':'NNLL','佁':'WCKG','苡':'ANYW','舣':'TEYQ','倚':'WDSK','忆':'NNN','议':'YYQY','亦':'YOU',
+'佚':'WRWY','役':'TMCY','抑':'RQBH','邑':'KCB','怿':'NCFH','诣':'YXJG','弈':'YOAJ','挹':'RKCN','浥':'IKCN','益':'UWLF','逸':'QKQP','溢':'IUWL','裔':'YEMK','翳':'ATDN','翼':'NLAW',
+'臆':'EUJN','懿':'FPGN','洇':'ILDY','茵':'ALDU','荫':'ABEF','音':'UJF','殷':'RVNC','喑':'KUJG','吟':'KWYN','寅':'PGMW','淫':'IETF','银':'QVEY','嚚':'KKDK','尹':'VTE','引':'XHH',
+'蚓':'JXHH','隐':'BQVN','印':'QGBH','慭':'UJTN','应':'YID','英':'AMDU','莺':'APQG','婴':'MMVF','缨':'XMMV','鹦':'MMVG','膺':'YWWE','鹰':'YWWG','迎':'QBPK','萤':'APJU','营':'APKK',
+'萦':'APXI','蝇':'JKJN','赢':'YNKY','瀛':'IYNY','郢':'KGBH','颍':'XIDM','影':'JYIE','映':'JMDY','硬':'DGJQ','媵':'EUDV','拥':'REH','庸':'YVEH','雍':'YXTY','慵':'NYVH','壅':'YXTF',
+'饔':'YXTE','永':'YNII','咏':'KYNI','泳':'IYNI','勇':'CELB','涌':'ICEH','踊':'KHCE','优':'WDNN','攸':'WHTY','呦':'KXLN','幽':'XXMK','悠':'WHTN','尤':'DNV','由':'MHNG','犹':'QTDN',
+'游':'IYTB','鱿':'QGDN','蝣':'JYTB','酉':'SGD','牖':'THGY','又':'CCCC','幼':'XLN','纡':'XGFH','迂':'GFPK','淤':'IYWU','余':'WTU','欤':'GNGW','臾':'VWI','鱼':'QGF','舁':'VAJ',
+'娱':'VKGD','渔':'IQGG','萸':'AVWU','隅':'BJMY','雩':'FFNB','渝':'IWGJ','腴':'EVWY','逾':'WGEP','愚':'JMHN','榆':'SWGJ','觎':'WGEQ','窬':'PWWJ','舆':'WFLW','予':'CBJ','伛':'WAQY',
+'宇':'PGFJ','屿':'MGNG','羽':'NNYG','雨':'FGHY','庾':'YVWI','妪':'VAQY','饫':'QNTD','育':'YCEF','郁':'DEBH','狱':'QTYD','浴':'IWWK','预':'CBDM','域':'FAKG','喻':'KWGJ','寓':'PJMY',
+'御':'TRHB','遇':'JMHP','愈':'WGEN','誉':'IWYF','豫':'CBQE','鸢':'AQYG','鸳':'QBQG','元':'FQB','员':'KMU','园':'LFQV','垣':'FGJG','原':'DRII','圆':'LKMI','援':'REFC','缘':'XXEY',
+'鼋':'FQKN','猿':'QTFE','辕':'LFKE','苑':'AQBB','院':'BPFQ','掾':'RXEY','愿':'DRIN','岳':'RGMJ','悦':'NUKQ','阅':'UUKQ','跃':'KHTD','越':'FHAT','樾':'SFHT','龠':'WGKA','瀹':'IWGA',
+'云':'FCU','芸':'AFCU','耘':'DIFC','筠':'TFQU','筼':'TKMU','允':'CQB','陨':'BKMY','郓':'PLBH','愠':'NJLG','缊':'XJLG','韵':'UJQU','匝':'AMHK','杂':'VSU','灾':'POU','栽':'FASI',
+'宰':'PUJ','再':'GMFD','在':'DHFD','载':'FALK','簪':'TAQJ','臧':'DNDT','遭':'GMAP','糟':'OGMJ','凿':'OGUB','早':'JHNH','枣':'GMIU','蚤':'CYJU','藻':'AIKS','造':'TFKP','慥':'NTFP',
+'燥':'OKKS','躁':'KHKS','择':'RCFH','泽':'ICFH','责':'GMU','迮':'THFP','昃':'JDWU','贼':'MADT','怎':'THFN','增':'FULJ','缯':'XULJ','锃':'QKGG','甑':'ULJN','乍':'THFD','咤':'KPTA',
+'柞':'STHF','斋':'YDMJ','摘':'RUMD','宅':'PTAB','沾':'IHKG','瞻':'HQDY','斩':'LRH','展':'NAEI','盏':'GLF','辗':'LNAE','占':'HKF','栈':'SGT','湛':'IADN','张':'XTAY','彰':'UJET',
+'涨':'IXTY','掌':'IPKR','丈':'DYI','帐':'MHTY','杖':'SDYY','嶂':'MUJH','瘴':'UUJK','招':'RVKG','昭':'JVKG','爪':'RHYI','召':'VKF','诏':'YVKG','赵':'FHQI','棹':'SHJH','照':'JVKO',
+'肇':'YNTH','蜇':'RRJU','遮':'YAOP','折':'RRH','哲':'RRKF','辄':'LBNN','詟':'YODY','谪':'YUMD','磔':'DQAS','辙':'LYCT','这':'YPI','浙':'IRRH','鹧':'YAOG','着':'UDHF','贞':'HMU',
+'珍':'GWET','斟':'ADWF','蓁':'ADWT','枕':'SPQN','轸':'LWET','阵':'BLH','振':'RDFE','朕':'EUDY','镇':'QFHW','震':'FDFE','征':'TGHG','峥':'MQVH','烝':'BIGO','钲':'QGHG','铮':'QQVH',
+'筝':'TQVH','郑':'UDBH','政':'GHTY','支':'FCU','卮':'RGBV','枝':'SFCY','祗':'PYQY','脂':'EXJG','值':'WFHG','埴':'FFHG','职':'BKWY','植':'SFHG','跖':'KHDG','踯':'KHUB','只':'KWU',
+'旨':'XJF','沚':'IHG','纸':'XQAN','芷':'AHF','指':'RXJG','忮':'NFCY','制':'RMHJ','炙':'QOU','质':'RFMI','峙':'MFFY','栉':'SABH','陟':'BHIT','桎':'SGCF','致':'GCFT','贽':'RVYM',
+'梽':'SFNY','稚':'TWYG','置':'LFHF','雉':'TDWY','钟':'QKHH','锺':'QTGF','种':'TKHH','冢':'PEYU','仲':'WKHH','州':'YTYH','舟':'TEI','周':'MFKD','洲':'IYTH','轴':'LMG','肘':'EFY',
+'宙':'PMF','昼':'NYJG','骤':'CBCI','朱':'RII','茱':'ARIU','株':'SRIY','珠':'GRIY','诸':'YFTJ','猪':'QTFJ','铢':'QRIY','橥':'QTFS','竹':'TTGH','烛':'OJY','逐':'EPI','舳':'TEMG',
+'躅':'KHLJ','主':'YGD','拄':'RYGG','渚':'IFTJ','煮':'FTJO','麈':'YNJG','瞩':'HNTY','杼':'SCBH','注':'IYGG','驻':'CYGG','柱':'SYGG','著':'AFTJ','筑':'TAMY','箸':'TFTJ','专':'FNYI',
+'转':'LFNY','撰':'RNNW','馔':'QNNW','妆':'UVG','庄':'YFD','壮':'UFG','追':'WNNP','坠':'BWFF','缀':'XCCC','缒':'XWNP','赘':'GQTM','窀':'PWGN','拙':'RBMH','斫':'DRH','酌':'SGQY',
+'啄':'KEYY','擢':'RNWY','濯':'INWY','兹':'UXXU','咨':'UQWK','姿':'UQWV','资':'UQWM','孳':'UXXB','滋':'IUXX','粢':'UQWO','辎':'LVLG','趑':'FHUW','锱':'QVLG','姊':'VTNT','耔':'DIBG',
+'紫':'HXXI','訾':'HXYF','恣':'UQWN','眦':'HHXN','宗':'PFIU','踪':'KHPI','总':'UKNU','纵':'XWWY','邹':'QVBH','诹':'YBCY','陬':'BBCY','鲰':'QGBC','菹':'AIEG','卒':'YWWF','族':'YTTD',
+'阻':'BEGG','组':'XEGG','祖':'PYEG','躜':'KHTM','朘':'ECWT','最':'JBCU','醉':'SGYF','尊':'USGF','樽':'SUSF','昨':'JTHF','佐':'WDAG','作':'WTHF','祚':'PYTF','座':'YWWF','做':'WDTY'
+};
+  return Object.assign({}, WB86, more);
+
+}
+const wubiDict = buildWubiDict();
+
+// ===== 获取Wubi编码 =====
+function getWubi(ch) {
+  if (/[\s\n\r]/.test(ch)) return ' ';
+  if (/[，。；：？！、""''（）《》…—·\u3000]/.test(ch)) return ch;
+  return wubiDict[ch] || '??';
+}
+function isPunct(ch) {
+  return /[，。；：？！、""''（）《》…—·；：？\u3000]/.test(ch);
+}
+
+// ===== 状态 =====
+let currentChapter = 1;
+let viewMode = 'practice';
+let charSize = 28;
+
+// ===== 界面初始化 =====
+function init() {
+  const saved = localStorage.getItem('ddj86_theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  // 支持 ?corpus=junior#5 从背诵页跳转
+  try {
+    const params = new URLSearchParams(location.search || '');
+    const qCorpus = params.get('corpus') || params.get('c');
+    if (qCorpus && CORPUS[qCorpus]) {
+      corpusId = qCorpus;
+      localStorage.setItem('ddj86_corpus', corpusId);
+      currentItems = buildItemsForCorpus(corpusId);
+    }
+  } catch (e) {}
+  const hash = parseInt(window.location.hash.replace('#',''));
+  const savedCh = parseInt(localStorage.getItem('ddj86_chapter') || '1');
+  const maxCh = maxChapter();
+  currentChapter = (hash >= 1 && hash <= maxCh) ? hash : savedCh;
+  if (currentChapter < 1 || currentChapter > maxCh) currentChapter = 1;
+  changeFontSize(localStorage.getItem('ddj86_fontsize') || '28');
+  document.getElementById('fontSizeSelect').value = localStorage.getItem('ddj86_fontsize') || '28';
+  refreshCorpusBar();
+  renderChapterList();
+  selectChapter(currentChapter);
+  // 默认进入打字练习模式
+  setViewMode('practice');
+  // 键盘事件
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
+    else if (e.key === 'ArrowUp' && e.ctrlKey) { e.preventDefault(); changeFontSize(Math.min(56, charSize + 4)); }
+    else if (e.key === 'ArrowDown' && e.ctrlKey) { e.preventDefault(); changeFontSize(Math.max(12, charSize - 4)); }
+    else if ((e.key === 'h' || e.key === 'H') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      location.href = 'index.html';
+    }
+    else if (e.key === '1') setCorpus('ddj');
+    else if (e.key === '2') setCorpus('xiaoxue');
+    else if (e.key === '3') setCorpus('junior');
+    else if (e.key === '4') setCorpus('gaokao');
+    else if (e.key === '5') setCorpus('sushi');
+  });
+}
+
+// ===== 计时器 =====
+function startPracticeTimer() {
+  stopPracticeTimer();
+  practiceSeconds = 0;
+  updateTimerDisplay();
+  practiceTimerId = setInterval(() => {
+    practiceSeconds++;
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function stopPracticeTimer() {
+  if (practiceTimerId) {
+    clearInterval(practiceTimerId);
+    practiceTimerId = null;
+  }
+}
+
+function resetPracticeTimer() {
+  stopPracticeTimer();
+  practiceSeconds = 0;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(practiceSeconds / 60);
+  const s = practiceSeconds % 60;
+  const display = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  const statsTimer = document.getElementById('practiceTimer');
+  if (statsTimer) statsTimer.textContent = display;
+  const toolbarTimer = document.getElementById('practiceToolbarTimer');
+  if (toolbarTimer) toolbarTimer.textContent = display;
+}
+
+// ===== 章节列表 =====
+function renderChapterList() {
+  const list = document.getElementById('chapterList');
+  const hints = {1:'🕯️蜡烛',2:'🦢白鹅',3:'👂耳朵',4:'⛵帆船',5:'🪝钩子',
+    6:'⛰️山谷',7:'🧗崖壁',8:'🤰孕妇',9:'😗口哨',10:'⚾棒球',
+    11:'🥢筷子',12:'🪑椅儿',13:'👨‍⚕️医生',14:'🔑钥匙',15:'🦜鹦鹉',
+    16:'🍑石榴',17:'🔬仪器',18:'🎒腰包',19:'🍶药酒',20:'🚬香烟',
+    21:'🐊鳄鱼',22:'🦆鸳鸯',23:'🎧耳机',24:'⏰闹钟',25:'🪕二胡',
+    26:'🏞️河流',27:'🎏彩旗',28:'🪷荷花',29:'🏀篮球',30:'🕳️山洞',
+    31:'🦈鲨鱼',32:'🪭扇儿',33:'🏔️山川',34:'🌲杉树',35:'🪸珊瑚',
+    36:'🪔香炉',37:'🐔山鸡',38:'🛋️沙发',39:'📐三角尺',40:'👨‍✈️司令',
+    41:'🎤司仪',42:'🍅柿饼',43:'🧣丝巾',44:'🦁石狮',45:'🫖水壶',
+    46:'🥝榴莲',47:'🚗司机',48:'🥒丝瓜',49:'🐕石狗',50:'🏅五环',
+    51:'👘舞衣',52:'🍄木耳',53:'☂️舞伞',54:'⚔️武士',55:'🥁锣鼓',
+    56:'🐌蜗牛',57:'🐔母鸡',58:'🦊尾巴',59:'⭐五角星',60:'🥝榴莲',
+    61:'🦽轮椅',62:'🦌鹿儿',63:'☂️绿伞',64:'🌿柳丝',65:'🏚️老屋',
+    66:'🪀溜溜球',67:'💦油漆',68:'📣喇叭',69:'🫎鹿角',70:'🦄麒麟',
+    71:'✈️机翼',72:'🐧企鹅',73:'🚩旗杆',74:'🐴骑士',75:'🧱积木',
+    76:'🦏犀牛',77:'♟️象棋',78:'🐸青蛙',79:'🎈气球',80:'🗼铁塔',81:'🐜白蚁'};
+  list.innerHTML = currentItems.map((c,i) => {
+    const preview = (c.title || c.text || '').replace(/[，。；：？！、]/g,'').substring(0, 12);
+    const titleTip = String(c.title || '').replace(/"/g, '&quot;');
+    const label = corpusId === 'ddj'
+      ? preview
+      : ((c.title || '') + (preview && c.title !== preview ? ' · ' + preview : ''));
+    const best = getChapterBest(c.ch) || '';
+    return '<div class="chapter-item'+(c.ch===currentChapter?' active':'')+'" onclick="selectChapter('+c.ch+')" title="'+titleTip+'">'+
+      '<span class="ch-num">'+c.ch+'</span>'+
+      '<span class="ch-hint">'+(hints[c.ch]||'')+'</span>'+
+      '<span class="ch-preview">'+label+'</span>'+
+      (best ? '<span class="ch-best">'+best+'</span>' : '')+
+      '</div>';
+  }).join('');
+}
+
+function sortChapters() {
+  const sort = document.getElementById('sortSelect').value;
+  if (sort === 'len') {
+    currentItems = currentItems.slice().sort(function (a, b) { return b.text.length - a.text.length; });
+  } else {
+    currentItems = buildItemsForCorpus(corpusId);
+  }
+  renderChapterList();
+  selectChapter(currentChapter);
+}
+
+// ===== 章节选择 =====
+function selectChapter(ch) {
+  stopPracticeTimer();
+  currentChapter = ch;
+  localStorage.setItem('ddj86_chapter', ch);
+  renderChapterList();
+  renderChapter();
+  setViewMode('practice');
+  updateBestTimeDisplay(ch);
+  // 滚动到当前章节
+  const items = document.querySelectorAll('.chapter-item');
+  const idx = currentItems.findIndex(c => c.ch === ch);
+  if (items[idx]) items[idx].scrollIntoView({block:'nearest'});
+}
+
+function goPrev() { const idx = currentItems.findIndex(c=>c.ch===currentChapter); if(idx>0) selectChapter(currentItems[idx-1].ch); }
+function goNext() { const idx = currentItems.findIndex(c=>c.ch===currentChapter); if(idx<currentItems.length-1) selectChapter(currentItems[idx+1].ch); }
+
+// ===== 渲染章节 =====
+function splitLines(text) {
+  // 按。？！：等句末标点分割，保留标点
+  const lines = [];
+  let current = '';
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    current += ch;
+    if ('。？！：'.includes(ch) && current.trim().length > 1) {
+      lines.push(current.trim());
+      current = '';
+    }
+  }
+  if (current.trim()) lines.push(current.trim());
+  return lines;
+}
+
+function getCleanChars(line) {
+  // 获取一行中的纯汉字（非标点、非空格）
+  return [...line].filter(ch => !isPunct(ch) && !/[\s\n\r]/.test(ch));
+}
+
+function renderChapter() {
+  const chapter = getItem(currentChapter);
+  if (!chapter) return;
+  const container = document.getElementById('chapterContainer');
+  document.getElementById('charCount').textContent = chapter.text.replace(/[，。；：？！、\s]/g,'').length;
+  
+  const uniqueCodes = new Set();
+  for (let ch of chapter.text) {
+    if (!isPunct(ch) && !/[\s\n\r]/.test(ch)) {
+      const wb = getWubi(ch);
+      if (wb && wb !== '??') uniqueCodes.add(wb);
+    }
+  }
+  document.getElementById('uniqueCount').textContent = uniqueCodes.size;
+
+  const lines = splitLines(chapter.text);
+  const headTitle = corpusId === 'ddj'
+    ? ('第 ' + chapter.ch + ' 章 · ' + (chapter.title || ''))
+    : (chapter.ch + '. ' + (chapter.title || ''));
+  // 副标题：年代 · 作者（无则回退语料名）
+  const metaBits = [];
+  if (chapter.dynasty) metaBits.push(chapter.dynasty);
+  if (chapter.author) metaBits.push(chapter.author);
+  const subLine = metaBits.length
+    ? metaBits.join(' · ')
+    : (getCorpus().name + (corpusId === 'ddj' ? ' · 老子' : ''));
+  let html = '<div class="chapter-header"><div class="ch-title">'+headTitle+'</div>'+
+    '<div class="ch-subtitle">'+subLine+'</div></div>';
+  
+  // 浏览/隐藏模式 - 传统的 char-grid
+  html += '<div id="studyArea">';
+  html += '<div class="char-grid" id="charGrid">';
+  for (let i = 0; i < chapter.text.length; i++) {
+    const ch = chapter.text[i];
+    if (ch === '\n' || ch === '\r') continue;
+    if (ch === '，' || ch === '；') {
+      html += '<div class="char-block punct"><div class="wb-code">'+ch+'</div><div class="wb-char">'+ch+'</div></div>';
+      html += '<div class="char-block space-block"><div class="wb-code">&nbsp;</div><div class="wb-char">&nbsp;</div></div>';
+    } else if (ch === '。' || ch === '？' || ch === '！' || ch === '：') {
+      html += '<div class="char-block punct"><div class="wb-code">'+ch+'</div><div class="wb-char">'+ch+'</div></div>';
+      html += '<div class="char-block space-block" style="min-width:24px"><div class="wb-code">&nbsp;</div><div class="wb-char">&nbsp;</div></div>';
+    } else if (isPunct(ch)) {
+      html += '<div class="char-block punct"><div class="wb-code">'+ch+'</div><div class="wb-char">'+ch+'</div></div>';
+    } else {
+      const wb = getWubi(ch);
+      html += '<div class="char-block show-code" data-char="'+ch+'" data-wubi="'+wb+'"><div class="wb-code">'+wb+'</div><div class="wb-char">'+ch+'</div></div>';
+    }
+  }
+  html += '</div></div>';
+  
+  // 练习模式区域
+  html += '<div id="practiceArea" style="display:none">';
+  
+  // 全局工具栏
+  html += '<div class="practice-global-toolbar">'+
+  '<span style=\"font-size:1.3em;font-weight:700;color:var(--accent);min-width:70px;text-align:center;font-variant-numeric:tabular-nums\" id=\"practiceToolbarTimer\">00:00</span>'+
+  '<button onclick=\"practiceCheckAll()\" style=\"font-size:.85em;padding:8px 18px\">✅ 全部检查</button>'+
+  '<button onclick=\"practiceResetAll()\" style=\"font-size:.85em;padding:8px 18px\">🔄 重新开始</button>'+
+  '<label style=\"font-size:.8em;display:flex;align-items:center;gap:4px;cursor:pointer;margin-left:8px\">'+
+  '<input type=\"checkbox\" id=\"showWubiCheck\" checked onchange=\"togglePracticeWubi()\">显示五笔编码</label>'+
+  '</div>';
+    '<label style="font-size:.8em;display:flex;align-items:center;gap:4px;cursor:pointer">'+
+    '<input type="checkbox" id="showWubiCheck" checked onchange="togglePracticeWubi()">显示五笔编码</label>'+
+    '</div>';
+  
+  for (let li = 0; li < lines.length; li++) {
+    const line = lines[li];
+    const cleanChars = getCleanChars(line);
+    html += '<div class="practice-section" id="psection-'+li+'">';
+    
+    // 参考行：显示字符+编码
+    html += '<div class="ref-line" id="refline-'+li+'">';
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '\n' || ch === '\r') continue;
+      if (isPunct(ch)) {
+        html += '<span class="practice-char-block punct-char"><span class="pwb-code">'+ch+'</span><span class="pwb-char">'+ch+'</span></span>';
+      } else {
+        const wb = getWubi(ch);
+        html += '<span class="practice-char-block pending" data-pchar="'+ch+'" data-pwubi="'+wb+'" data-pidx="'+i+'"><span class="pwb-code">'+wb+'</span><span class="pwb-char">'+ch+'</span></span>';
+      }
+    }
+    html += '</div>';
+    
+    // 输入行
+    html += '<div class="practice-input-row">'+
+      '<input type="text" class="practice-line-input" id="pline-'+li+'" data-line="'+li+'" placeholder="在此输入汉字…" autocomplete="off" oninput="onPracticeLineInput('+li+')" onkeydown="onPracticeLineKey(event,'+li+')">'+
+      '<span class="line-status" id="lstatus-'+li+'"></span>'+
+      '</div>';
+    
+    html += '</div>';
+  }
+  html += '</div>';
+  // 回对应语料的背诵 L3（无提示默写）
+  const recitePages = {
+    ddj: 'daodejing.html',
+    xiaoxue: 'xiaoxue.html',
+    junior: '789.html',
+    gaokao: 'gaokao.html',
+    sushi: 'sushi-works.html'
+  };
+  const recitePage = recitePages[corpusId] || 'daodejing.html';
+  const reciteHref = recitePage + '?mode=recite&level=3#' + chapter.ch;
+  html += '<div style="margin-top:14px;text-align:center;padding-bottom:16px;">'+
+    '<a href="'+reciteHref+'" target="_blank" rel="noopener" style="display:inline-block;color:var(--accent);text-decoration:underline;font-size:0.95em;">🗣️ 回背诵 L3 默打</a>'+
+    '</div>';
+
+  container.innerHTML = html;
+  applyViewMode();
+  // 顶栏「正文」随语料跳转
+  const btnStudy = document.getElementById('btnStudy');
+  if (btnStudy) {
+    btnStudy.href = recitePage + '#' + chapter.ch;
+    btnStudy.title = '打开' + getCorpus().name + '正文';
+  }
+}
+
+// ===== 视图模式 =====
+function setViewMode(mode) {
+  viewMode = mode;
+  const studyArea = document.getElementById('studyArea');
+  const practiceArea = document.getElementById('practiceArea');
+  const practiceStats = document.getElementById('practiceStats');
+  const btnStudy = document.getElementById('btnStudy');
+  const btnPractice = document.getElementById('btnPractice');
+
+  if (mode === 'practice') {
+    practiceStats.style.display = '';
+    if (studyArea) studyArea.style.display = 'none';
+    if (practiceArea) practiceArea.style.display = '';
+    if (btnStudy) { btnStudy.classList.remove('active'); btnStudy.style.background = 'var(--card-bg)'; btnStudy.style.color = 'var(--text)'; }
+    if (btnPractice) { btnPractice.classList.add('active'); btnPractice.style.background = 'var(--accent)'; btnPractice.style.color = '#fff'; }
+    practiceTotalChars = 0;
+    practiceCorrectChars = 0;
+    updatePracticeStats();
+    startPracticeTimer();
+    // 聚焦第一行输入框
+    setTimeout(() => {
+      const firstInput = document.getElementById('pline-0');
+      if (firstInput) firstInput.focus();
+    }, 100);
+  } else {
+    stopPracticeTimer();
+    practiceStats.style.display = 'none';
+    if (studyArea) studyArea.style.display = '';
+    if (practiceArea) practiceArea.style.display = 'none';
+    if (btnStudy) { btnStudy.classList.add('active'); btnStudy.style.background = 'var(--accent)'; btnStudy.style.color = '#fff'; }
+    if (btnPractice) { btnPractice.classList.remove('active'); btnPractice.style.background = 'var(--card-bg)'; btnPractice.style.color = 'var(--text)'; }
+  }
+}
+
+function applyViewMode() {
+  // 始终显示编码（仅保留打字练习模式）
+  const blocks = document.querySelectorAll('.char-block');
+  blocks.forEach(block => {
+    if (block.classList.contains('punct') || block.classList.contains('space-block')) return;
+    block.classList.remove('hide-code');
+    block.classList.add('show-code');
+  });
+}
+
+// ===== 打字练习(汉字输入) =====
+let practiceTotalChars = 0;
+let practiceCorrectChars = 0;
+let showPracticeWubi = true;
+let practiceSeconds = 0;
+let practiceTimerId = null;
+
+function togglePracticeWubi() {
+  showPracticeWubi = document.getElementById('showWubiCheck').checked;
+  document.querySelectorAll('#practiceArea .pwb-code').forEach(el => {
+    el.style.display = showPracticeWubi ? '' : 'none';
+  });
+}
+
+function onPracticeLineInput(lineIdx) {
+  const input = document.getElementById('pline-'+lineIdx);
+  if (!input) return;
+  const typed = [...input.value].filter(ch => !isPunct(ch) && !/[\s\n\r]/.test(ch));
+  const section = document.getElementById('psection-'+lineIdx);
+  const charBlocks = section.querySelectorAll('.practice-char-block:not(.punct-char)');
+  
+  let correct = 0;
+  
+  charBlocks.forEach((block, i) => {
+    const expected = block.dataset.pchar;
+    block.classList.remove('matched','unmatched','pending');
+    if (i < typed.length) {
+      if (typed[i] === expected) {
+        block.classList.add('matched');
+        correct++;
+      } else {
+        block.classList.add('unmatched');
+      }
+    } else {
+      block.classList.add('pending');
+    }
+  });
+  
+  // 更新行状态
+  const total = charBlocks.length;
+  const statusEl = document.getElementById('lstatus-'+lineIdx);
+  if (typed.length >= total && correct === total) {
+    statusEl.textContent = '✅ 全对';
+    statusEl.style.color = 'var(--success)';
+    section.classList.add('completed');
+    input.classList.add('correct');
+    input.classList.remove('wrong');
+  } else if (typed.length >= total && correct < total) {
+    statusEl.textContent = '❌ '+(total-correct)+'字错';
+    statusEl.style.color = 'var(--danger)';
+    section.classList.remove('completed');
+    input.classList.add('wrong');
+    input.classList.remove('correct');
+  } else {
+    statusEl.textContent = typed.length+'/'+total;
+    statusEl.style.color = 'var(--text)';
+    section.classList.remove('completed');
+    input.classList.remove('correct','wrong');
+  }
+  
+  recalcGlobalStats();
+}
+
+function onPracticeLineKey(e, lineIdx) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    // 跳到下一行
+    const nextInput = document.getElementById('pline-'+(lineIdx+1));
+    if (nextInput) nextInput.focus();
+  }
+}
+
+function practiceCheckAll() {
+  const inputs = document.querySelectorAll('.practice-line-input');
+  inputs.forEach(input => {
+    const li = parseInt(input.dataset.line);
+    onPracticeLineInput(li);
+  });
+  recalcGlobalStats();
+}
+
+function practiceResetAll() {
+  document.querySelectorAll('.practice-line-input').forEach(input => {
+    input.value = '';
+    input.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('#practiceArea .practice-char-block').forEach(block => {
+    block.classList.remove('matched','unmatched');
+    block.classList.add('pending');
+  });
+  document.querySelectorAll('.line-status').forEach(el => { el.textContent = ''; });
+  document.querySelectorAll('.practice-section').forEach(el => { el.classList.remove('completed'); });
+  practiceTotalChars = 0;
+  practiceCorrectChars = 0;
+  updatePracticeStats();
+  resetPracticeTimer();
+  startPracticeTimer();
+  const firstInput = document.getElementById('pline-0');
+  if (firstInput) firstInput.focus();
+}
+
+
+
+function formatSeconds(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+/** 每分钟字数，取整 */
+function calcCpm(chars, seconds) {
+  if (!chars || !seconds || seconds <= 0) return 0;
+  return Math.round(chars * 60 / seconds);
+}
+
+function loadBestCpm() {
+  try { return JSON.parse(localStorage.getItem('ddj86_bestcpm') || '{}'); }
+  catch(e) { return {}; }
+}
+
+function bestCpmKey(ch) { return corpusId + ':' + ch; }
+
+function saveBestCpm(ch, cpm) {
+  if (!cpm || cpm <= 0) return false;
+  const bt = loadBestCpm();
+  const k = bestCpmKey(ch);
+  const prev = bt[k];
+  if (prev != null && cpm <= prev) return false;
+  bt[k] = cpm;
+  localStorage.setItem('ddj86_bestcpm', JSON.stringify(bt));
+  return true;
+}
+
+function getStoredCpm(ch) {
+  const bt = loadBestCpm();
+  const v = bt[bestCpmKey(ch)];
+  return (v != null && v > 0) ? v : null;
+}
+
+/** 左栏：显示最佳打字速度（字/分） */
+function getChapterBest(ch) {
+  const v = getStoredCpm(ch);
+  if (v != null) return v + '字/分';
+  return '';
+}
+
+function recalcGlobalStats() {
+  let total = 0, correct = 0;
+  document.querySelectorAll('#practiceArea .practice-char-block:not(.punct-char)').forEach(block => {
+    total++;
+    if (block.classList.contains('matched')) correct++;
+  });
+  practiceTotalChars = total;
+  practiceCorrectChars = correct;
+  updatePracticeStats();
+  // 整章完成：记每分钟字数（取整），越高越好
+  if (total > 0 && correct === total) {
+    stopPracticeTimer();
+    const cpm = calcCpm(total, practiceSeconds);
+    if (saveBestCpm(currentChapter, cpm)) {
+      const el = document.getElementById('bestTime');
+      if (el) el.textContent = String(cpm);
+      renderChapterList();
+    } else {
+      updateBestTimeDisplay(currentChapter);
+    }
+  }
+}
+
+function updateBestTimeDisplay(ch) {
+  const el = document.getElementById('bestTime');
+  const v = getStoredCpm(ch);
+  if (el) el.textContent = v != null ? String(v) : '--';
+}
+
+function updatePracticeStats() {
+  document.getElementById('correctNum').textContent = practiceCorrectChars;
+  document.getElementById('wrongNum').textContent = practiceTotalChars - practiceCorrectChars;
+  document.getElementById('progressNum').textContent = practiceCorrectChars;
+  document.getElementById('totalNum').textContent = practiceTotalChars;
+}
+
+// ===== 字号 =====
+function changeFontSize(size) {
+  charSize = parseInt(size);
+  document.documentElement.style.setProperty('--char-size', charSize + 'px');
+  localStorage.setItem('ddj86_fontsize', size);
+  document.getElementById('fontSizeSelect').value = size;
+}
+
+// ===== 主题 =====
+function toggleTheme() {
+  const h = document.documentElement;
+  const next = h.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  h.setAttribute('data-theme', next);
+  localStorage.setItem('ddj86_theme', next);
+}
+
+// ===== 侧边栏 =====
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ===== 启动 =====
+init();
+
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

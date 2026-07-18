@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient>
+  </defs>
+  <!-- 卡片背景 -->
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">22=鸳鸯</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">2像鸳鸯弯弯颈，2是双双对对游</text>
+
+  <!-- 水面 -->
+  <ellipse cx="512" cy="800" rx="350" ry="70" fill="#7EC8E3" opacity="0.35"/>
+  <ellipse cx="512" cy="790" rx="320" ry="55" fill="#5BA4C7" opacity="0.25"/>
+
+  <!-- 涟漪 -->
+  <ellipse cx="400" cy="810" rx="60" ry="12" fill="none" stroke="#7EC8E3" stroke-width="2" opacity="0.5"/>
+  <ellipse cx="624" cy="820" rx="50" ry="10" fill="none" stroke="#7EC8E3" stroke-width="2" opacity="0.4"/>
+
+  <!-- 左鸳鸯（公）- 2形 -->
+  <g transform="translate(330, 520)">
+    <!-- 身体 -->
+    <ellipse cx="0" cy="60" rx="45" ry="55" fill="#E85D3A"/>
+    <!-- 翅膀纹 -->
+    <path d="M-25 40 Q0 60 25 40" fill="none" stroke="#C44B2E" stroke-width="3"/>
+    <path d="M-20 55 Q0 75 20 55" fill="none" stroke="#C44B2E" stroke-width="3"/>
+    <!-- 颈部2形 -->
+    <path d="M-10 20 Q-40 -20 -30 -70 Q-25 -90 -10 -90" fill="none" stroke="#E85D3A" stroke-width="16" stroke-linecap="round"/>
+    <!-- 头部 -->
+    <circle cx="-10" cy="-90" r="22" fill="#2E7D32"/>
+    <!-- 眼睛 -->
+    <circle cx="-20" cy="-95" r="5" fill="white"/>
+    <circle cx="-21" cy="-94" r="2.5" fill="#2C1810"/>
+    <!-- 喙 -->
+    <path d="M-28 -88 L-40 -85 L-32 -80Z" fill="#F9A825"/>
+    <!-- 冠羽 -->
+    <path d="M10 -105 Q25 -130 20 -140" fill="none" stroke="#F44336" stroke-width="3"/>
+    <path d="M5 -108 Q15 -135 8 -148" fill="none" stroke="#FF9800" stroke-width="3"/>
+  </g>
+
+  <!-- 右鸳鸯（母）- 2形 -->
+  <g transform="translate(620, 540)">
+    <!-- 身体 -->
+    <ellipse cx="0" cy="60" rx="40" ry="50" fill="#8D6E63"/>
+    <!-- 翅膀纹 -->
+    <path d="M-22 40 Q0 58 22 40" fill="none" stroke="#6D4C41" stroke-width="2.5"/>
+    <path d="M-18 55 Q0 72 18 55" fill="none" stroke="#6D4C41" stroke-width="2.5"/>
+    <!-- 颈部2形 -->
+    <path d="M-5 20 Q-35 -25 -25 -75 Q-20 -90 -8 -90" fill="none" stroke="#8D6E63" stroke-width="14" stroke-linecap="round"/>
+    <!-- 头部 -->
+    <circle cx="-8" cy="-90" r="20" fill="#795548"/>
+    <!-- 眼睛 -->
+    <circle cx="-17" cy="-95" r="4.5" fill="white"/>
+    <circle cx="-18" cy="-94" r="2" fill="#2C1810"/>
+    <!-- 喙 -->
+    <path d="M-25 -88 L-36 -85 L-28 -80Z" fill="#FFA726"/>
+  </g>
+
+  <!-- 爱心 -->
+  <text x="512" y="480" text-anchor="middle" font-size="36" fill="#F44336" opacity="0.6">♥</text>
+</svg>

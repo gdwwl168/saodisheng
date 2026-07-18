@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#1a1e28"/><stop offset="100%" stop-color="#0a0c14"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">50=五环</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">5个圆圈环环扣，0是奥运五环圆</text>
+  <circle cx="350" cy="480" r="38" fill="none" stroke="#4a90d0" stroke-width="8"/><circle cx="350" cy="480" r="38" fill="none" stroke="#6ab0f0" stroke-width="3" opacity="0.4"/>
+  <circle cx="435" cy="480" r="38" fill="none" stroke="#1a1a1e" stroke-width="8"/><circle cx="435" cy="480" r="38" fill="none" stroke="#3a3a3e" stroke-width="3" opacity="0.4"/>
+  <circle cx="520" cy="480" r="38" fill="none" stroke="#d04040" stroke-width="8"/><circle cx="520" cy="480" r="38" fill="none" stroke="#f06060" stroke-width="3" opacity="0.4"/>
+  <circle cx="393" cy="520" r="38" fill="none" stroke="#e8b830" stroke-width="8"/><circle cx="393" cy="520" r="38" fill="none" stroke="#fad850" stroke-width="3" opacity="0.4"/>
+  <circle cx="478" cy="520" r="38" fill="none" stroke="#40a040" stroke-width="8"/><circle cx="478" cy="520" r="38" fill="none" stroke="#60c060" stroke-width="3" opacity="0.4"/>
+  <text x="512" y="620" text-anchor="middle" font-size="20" fill="#808890" opacity="0.3">更快 · 更高 · 更强</text>
+</svg>

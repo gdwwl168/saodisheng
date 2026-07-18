@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">37=山鸡</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">3像鸡冠弯弯翘，7是脖子长长伸</text>
+  <!-- 地面 -->
+  <ellipse cx="512" cy="830" rx="250" ry="40" fill="#AED581" opacity="0.3"/>
+  <!-- 身体 -->
+  <ellipse cx="420" cy="680" rx="80" ry="100" fill="#D84315" transform="rotate(-15 420 680)"/>
+  <!-- 翅膀 -->
+  <ellipse cx="380" cy="650" rx="55" ry="70" fill="#BF360C" transform="rotate(-10 380 650)"/>
+  <!-- 尾巴 - 长羽 -->
+  <path d="M340 700 Q280 680 250 730 Q260 770 320 760" fill="#FF9800" opacity="0.7"/>
+  <path d="M350 720 Q270 720 240 780 Q260 820 330 790" fill="#F44336" opacity="0.6"/>
+  <path d="M360 690 Q290 660 260 710" fill="#FFD54F" opacity="0.5"/>
+  <!-- 脖子 - 7形直伸 -->
+  <path d="M470 610 L490 480 Q495 440 500 420" fill="none" stroke="#D84315" stroke-width="24" stroke-linecap="round"/>
+  <path d="M470 610 L490 480 Q495 440 500 420" fill="none" stroke="#BF360C" stroke-width="18" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <circle cx="500" cy="400" r="28" fill="#E64A19"/>
+  <!-- 鸡冠 - 3形弯 -->
+  <path d="M485 375 Q480 340 500 330 Q520 340 515 370 Q510 350 500 355 Q490 350 485 375Z" fill="#F44336"/>
+  <!-- 眼睛 -->
+  <circle cx="515" cy="390" r="6" fill="white"/>
+  <circle cx="517" cy="390" r="3" fill="#2C1810"/>
+  <!-- 喙 -->
+  <path d="M525 400 L555 395 L530 410Z" fill="#F9A825"/>
+  <!-- 垂肉 -->
+  <path d="M500 425 Q495 445 505 455" fill="none" stroke="#F44336" stroke-width="4" stroke-linecap="round"/>
+  <!-- 腿 -->
+  <line x1="380" y1="770" x2="370" y2="840" stroke="#F9A825" stroke-width="6"/>
+  <line x1="440" y1="770" x2="450" y2="840" stroke="#F9A825" stroke-width="6"/>
+  <path d="M370 840 L350 850 M370 840 L380 850 M370 840 L370 855" stroke="#F9A825" stroke-width="3"/>
+  <path d="M450 840 L430 850 M450 840 L460 850 M450 840 L450 855" stroke="#F9A825" stroke-width="3"/>
+</svg>

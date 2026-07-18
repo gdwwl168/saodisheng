@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a2028"/><stop offset="100%" stop-color="#0a1018"/></radialGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#A0A8B0"/><stop offset="100%" stop-color="#D0D8E0"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">17=仪器</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">1是试管直直立，7是仪器架弯弯</text>
+  <!-- 实验台 -->
+  <rect x="250" y="620" width="524" height="20" rx="4" fill="#505860"/>
+  <rect x="260" y="610" width="504" height="15" rx="3" fill="#606870" opacity="0.7"/>
+  <!-- 铁架台 7形 -->
+  <path d="M400 610 L400 300" stroke="#889098" stroke-width="10" stroke-linecap="round"/>
+  <path d="M400 610 L400 300" stroke="#A0A8B0" stroke-width="4" stroke-linecap="round"/>
+  <!-- 铁架底座 -->
+  <rect x="350" y="600" width="100" height="15" rx="4" fill="#606870"/>
+  <!-- 铁夹横臂 7形弯 -->
+  <path d="M400 320 L550 320 Q580 320 580 350 L580 450" fill="none" stroke="#889098" stroke-width="8" stroke-linecap="round"/>
+  <!-- 铁夹 -->
+  <rect x="570" y="420" width="20" height="30" rx="3" fill="#707880"/>
+  <circle cx="580" cy="435" r="3" fill="#505860"/>
+  <!-- 试管 1形 -->
+  <rect x="520" y="380" width="16" height="120" rx="6" fill="#D0E8FF" opacity="0.4"/>
+  <rect x="522" y="385" width="12" height="110" rx="4" fill="#E8F4FF" opacity="0.3"/>
+  <!-- 试管液面 -->
+  <ellipse cx="528" cy="460" rx="7" ry="3" fill="#80C0FF" opacity="0.4"/>
+  <rect x="522" y="460" width="12" height="35" rx="3" fill="#80C0FF" opacity="0.25"/>
+  <!-- 烧杯 -->
+  <path d="M600 480 L610 600 L670 600 L680 480Z" fill="#D0E8FF" opacity="0.25"/>
+  <line x1="610" y1="480" x2="670" y2="480" stroke="#A0D0FF" stroke-width="2" opacity="0.4"/>
+  <!-- 气泡 -->
+  <circle cx="635" cy="530" r="4" fill="white" opacity="0.3"/>
+  <circle cx="650" cy="555" r="3" fill="white" opacity="0.25"/>
+  <circle cx="620" cy="565" r="2.5" fill="white" opacity="0.2"/>
+</svg>

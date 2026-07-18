@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">86=八路</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">8像军号弯弯吹，6是军帽圆圆戴</text>
+  <!-- 人物 -->
+  <circle cx="512" cy="320" r="40" fill="#FFCCBC"/>
+  <!-- 军帽 - 6形圆 -->
+  <ellipse cx="512" cy="290" rx="50" ry="20" fill="#4E342E"/>
+  <ellipse cx="512" cy="285" rx="45" ry="18" fill="#6D4C41"/>
+  <text x="512" y="293" text-anchor="middle" font-size="18" fill="#F44336">★</text>
+  <!-- 身体 -->
+  <rect x="450" y="360" width="124" height="180" rx="10" fill="#9E9E9E"/>
+  <rect x="460" y="370" width="104" height="160" rx="8" fill="#BDBDBD"/>
+  <!-- 腰带 -->
+  <rect x="450" y="500" width="124" height="12" fill="#5D4037"/>
+  <rect x="500" y="495" width="24" height="22" rx="3" fill="#FFD54F"/>
+  <!-- 军号 - 8形弯 -->
+  <path d="M350 480 Q340 420 380 400 Q420 380 440 410 Q460 440 430 470" fill="none" stroke="#F9A825" stroke-width="14" stroke-linecap="round"/>
+  <ellipse cx="340" cy="480" rx="15" ry="30" fill="#FFD54F" transform="rotate(-15 340 480)"/>
+  <!-- 纽扣 -->
+  <circle cx="512" cy="420" r="6" fill="#FFD54F"/>
+  <circle cx="512" cy="460" r="6" fill="#FFD54F"/>
+  <circle cx="512" cy="495" r="6" fill="#FFD54F"/>
+  <!-- 绑腿 -->
+  <rect x="455" y="540" width="30" height="40" rx="5" fill="#4E342E"/>
+  <rect x="539" y="540" width="30" height="40" rx="5" fill="#4E342E"/>
+</svg>

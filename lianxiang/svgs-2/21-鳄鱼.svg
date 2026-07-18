@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a2820"/><stop offset="100%" stop-color="#0a1408"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">21=鳄鱼</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">2像鳄鱼弯嘴张，1像长尾直直拖</text>
+  <!-- 水面 -->
+  <ellipse cx="512" cy="620" rx="350" ry="40" fill="#2a6040" opacity="0.2"/>
+  <!-- 身体 2形弯曲 -->
+  <path d="M280 550 Q250 580 280 610 Q320 630 380 620" fill="#4a7030"/>
+  <path d="M380 620 Q500 590 600 610 Q660 620 700 600" fill="#5a8040"/>
+  <!-- 肚皮 -->
+  <ellipse cx="480" cy="610" rx="150" ry="25" fill="#8aa860" opacity="0.4"/>
+  <!-- 鳞片纹理 -->
+  <g fill="none" stroke="#3a6020" stroke-width="1.5" opacity="0.3">
+    <path d="M330 580 Q350 570 370 580"/>
+    <path d="M400 585 Q420 575 440 585"/>
+    <path d="M490 590 Q510 580 530 590"/>
+    <path d="M570 595 Q590 585 610 595"/>
+  </g>
+  <!-- 尾巴 1形直 -->
+  <path d="M700 600 Q750 590 780 580 Q800 575 810 570" fill="none" stroke="#4a7030" stroke-width="14" stroke-linecap="round"/>
+  <path d="M700 600 Q750 590 780 580" fill="none" stroke="#5a8040" stroke-width="6" stroke-linecap="round"/>
+  <!-- 尾鳍 -->
+  <path d="M800 560 L820 570 L800 580Z" fill="#3a6020"/>
+  <!-- 腿 -->
+  <rect x="360" y="620" width="12" height="25" rx="4" fill="#3a6020" transform="rotate(-15 360 620)"/>
+  <rect x="560" y="615" width="12" height="25" rx="4" fill="#3a6020" transform="rotate(10 560 615)"/>
+  <!-- 头 2形弯嘴 -->
+  <path d="M280 550 Q240 540 220 570 Q200 600 240 610 Q260 615 280 610" fill="#5a8040"/>
+  <!-- 上颚 -->
+  <path d="M240 555 Q210 555 200 570 Q260 565 280 555Z" fill="#4a7030"/>
+  <!-- 下颚 -->
+  <path d="M240 600 Q215 605 210 590 Q250 605 280 610Z" fill="#3a6020"/>
+  <!-- 眼睛 -->
+  <circle cx="260" cy="545" r="8" fill="#C89830"/>
+  <circle cx="260" cy="545" r="4" fill="#2a1a00"/>
+  <ellipse cx="258" cy="543" rx="2" ry="1.5" fill="white" opacity="0.6"/>
+  <!-- 牙齿 -->
+  <g fill="white" opacity="0.7">
+    <path d="M228 568 L232 575 L236 568Z"/>
+    <path d="M218 572 L222 578 L226 572Z"/>
+  </g>
+</svg>

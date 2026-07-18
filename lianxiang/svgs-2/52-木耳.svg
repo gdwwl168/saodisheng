@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1810"/><stop offset="100%" stop-color="#0a0804"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">52=木耳</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">5像木耳弯弯卷，2是耳片软软叠</text>
+  <rect x="280" y="300" width="28" height="500" rx="8" fill="#4a3020"/>
+  <rect x="288" y="300" width="6" height="500" fill="#6a4a30" opacity="0.4"/>
+  <path d="M308 420 Q370 400 390 440 Q410 480 370 510 Q330 540 300 500 Q280 470 308 420Z" fill="#4a3020"/>
+  <path d="M316 432 Q362 414 378 445 Q392 474 362 498 Q334 520 310 490 Q294 462 316 432Z" fill="#5a3a2a" opacity="0.5"/>
+  <path d="M308 530 Q380 510 400 550 Q420 590 380 620 Q340 650 310 610 Q290 580 308 530Z" fill="#3a2020"/>
+  <path d="M316 540 Q370 524 386 555 Q400 580 370 604 Q343 626 318 600 Q302 578 316 540Z" fill="#4a2a2a" opacity="0.5"/>
+  <path d="M308 630 Q340 610 360 640 Q375 670 350 690 Q325 705 305 675 Q292 652 308 630Z" fill="#3a2020"/>
+  <path d="M330 480 Q350 470 358 490" fill="none" stroke="#2a1810" stroke-width="1.5" opacity="0.4"/>
+  <path d="M328 580 Q348 570 355 595" fill="none" stroke="#2a1810" stroke-width="1.5" opacity="0.4"/>
+  <ellipse cx="380" cy="380" rx="20" ry="8" fill="#3a5020" opacity="0.3" transform="rotate(-15 380 380)"/>
+</svg>

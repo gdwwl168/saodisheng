@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">67=油漆</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">6像漆桶圆圆滚，7是刷子直直涂</text>
+  <!-- 漆桶 - 6形圆 -->
+  <ellipse cx="380" cy="680" rx="100" ry="120" fill="#FF9800"/>
+  <ellipse cx="380" cy="680" rx="90" ry="110" fill="#FFB74D"/>
+  <ellipse cx="380" cy="580" rx="100" ry="25" fill="#FF9800"/>
+  <ellipse cx="380" cy="560" rx="100" ry="25" fill="#E65100"/>
+  <!-- 桶身标签 -->
+  <rect x="320" y="650" width="120" height="60" rx="4" fill="#FFE082"/>
+  <text x="380" y="680" text-anchor="middle" font-size="20" font-weight="bold" fill="#E65100">油 漆</text>
+  <!-- 桶沿 -->
+  <ellipse cx="380" cy="580" rx="105" ry="15" fill="none" stroke="#E65100" stroke-width="3"/>
+  <!-- 刷子 - 7形直 -->
+  <rect x="480" y="300" width="24" height="280" rx="6" fill="#8D6E63"/>
+  <rect x="540" y="420" width="60" height="24" rx="6" fill="#8D6E63"/>
+  <!-- 刷毛 -->
+  <rect x="530" y="390" width="80" height="35" rx="6" fill="#FFB74D"/>
+  <rect x="535" y="385" width="70" height="30" rx="6" fill="#FF9800" opacity="0.6"/>
+  <!-- 油漆滴 -->
+  <path d="M560 500 Q565 520 560 535 Q555 545 558 540" fill="#FF9800"/>
+  <circle cx="570" cy="530" r="4" fill="#FF9800" opacity="0.5"/>
+  <!-- 漆流 -->
+  <path d="M380 680 Q400 750 370 800" fill="none" stroke="#FF9800" stroke-width="8" opacity="0.4"/>
+</svg>

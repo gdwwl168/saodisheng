@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">40=司令</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">4像军帽三角顶，0是帽徽圆圆闪</text>
+  <!-- 肩膀 -->
+  <path d="M200 400 Q512 420 824 400 L850 800 L174 800Z" fill="#455A64" opacity="0.3"/>
+  <!-- 身体 -->
+  <rect x="330" y="480" width="364" height="300" rx="10" fill="#2E4A2E"/>
+  <!-- 腰带 -->
+  <rect x="330" y="650" width="364" height="20" fill="#795548"/>
+  <rect x="480" y="643" width="64" height="34" rx="4" fill="#FFD54F"/>
+  <!-- 肩章 -->
+  <rect x="330" y="480" width="364" height="20" rx="4" fill="#F9A825"/>
+  <!-- 纽扣 -->
+  <circle cx="512" cy="560" r="8" fill="#FFD54F"/>
+  <circle cx="512" cy="600" r="8" fill="#FFD54F"/>
+  <circle cx="512" cy="640" r="8" fill="#FFD54F"/>
+  <!-- 头部 -->
+  <circle cx="512" cy="380" r="50" fill="#FFCCBC"/>
+  <!-- 军帽 - 4形三角 -->
+  <path d="M430 350 L512 230 L594 350" fill="#1B5E20" stroke="#1B3E1B" stroke-width="3"/>
+  <rect x="430" y="340" width="164" height="20" rx="6" fill="#2E7D32"/>
+  <!-- 帽檐 -->
+  <path d="M410 360 Q512 390 614 360" fill="#1B5E20"/>
+  <!-- 帽徽 - 0形圆 -->
+  <circle cx="512" cy="310" r="18" fill="#F44336"/>
+  <circle cx="512" cy="310" r="12" fill="#FFD54F"/>
+  <text x="512" y="316" text-anchor="middle" font-size="16" font-weight="bold" fill="#F44336">★</text>
+  <!-- 军衔条纹 -->
+  <line x1="330" y1="488" x2="694" y2="488" stroke="#F9A825" stroke-width="3"/>
+  <!-- 领章 -->
+  <rect x="470" y="430" width="24" height="16" rx="3" fill="#F44336"/>
+  <rect x="530" y="430" width="24" height="16" rx="3" fill="#F44336"/>
+</svg>

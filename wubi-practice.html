@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="wb-theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>五笔字根练习 · 86版</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+
+:root {
+  --bg: #fafafa; --text: #2c2c2c; --accent: #e65100;
+  --card-bg: #fff; --border: #e0e0e0; --shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+[data-theme="dark"] {
+  --bg: #1a1a2e; --text: #e0e0e0; --accent: #ff9800;
+  --card-bg: #252540; --border: #3a3a55; --shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Serif SC', system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+
+.header {
+  display: flex; align-items: center; padding: 10px 20px;
+  border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap;
+}
+.header a { color: var(--accent); text-decoration: none; font-size: 14px; }
+.header h1 { font-size: 1.2em; letter-spacing: 2px; flex: 1; }
+.header button {
+  padding: 5px 12px; border: 1px solid var(--border); border-radius: 6px;
+  background: var(--card-bg); color: var(--text); cursor: pointer;
+  font-family: inherit; font-size: 0.82em;
+}
+.header button:hover { background: var(--border); }
+
+.main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 24px 20px; gap: 20px; }
+
+/* Prompt area */
+.prompt-card {
+  background: var(--card-bg); border: 2px solid var(--border); border-radius: 16px;
+  padding: 32px 48px; text-align: center; box-shadow: var(--shadow);
+  min-width: 280px;
+}
+.prompt-label { font-size: 0.8em; opacity: 0.5; letter-spacing: 2px; margin-bottom: 12px; }
+.prompt-char {
+  font-size: 5em; font-weight: 700; color: var(--accent);
+  line-height: 1.2; letter-spacing: 0.05em;
+}
+.prompt-hint { font-size: 0.85em; opacity: 0.5; margin-top: 8px; }
+.prompt-result { font-size: 0.95em; margin-top: 12px; min-height: 1.5em; }
+#wubiInput:focus { border-color: var(--accent); }
+#charHint { margin-top: 8px; font-size: 0.8em; opacity: 0.5; min-height: 1.2em; }
+
+/* Stats */
+.stats { display: flex; gap: 20px; font-size: 0.9em; opacity: 0.7; }
+
+/* Keyboard */
+.keyboard {
+  display: flex; flex-direction: column; gap: 6px;
+  background: var(--card-bg); border-radius: 12px; padding: 16px;
+  box-shadow: var(--shadow); max-width: 800px; width: 100%;
+}
+.kb-row { display: flex; gap: 4px; justify-content: center; }
+.kb-key {
+  width: 52px; height: 56px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: inherit; font-size: 0.7em;
+  transition: all 0.15s; cursor: default;
+  position: relative;
+}
+.kb-key .key-label { font-weight: 700; font-size: 1.1em; }
+.kb-key .key-root { font-size: 0.65em; opacity: 0.5; line-height: 1.1; text-align: center; margin-top: 1px; }
+.kb-key.highlight {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+  transform: scale(1.08); box-shadow: 0 4px 12px rgba(230,81,0,0.3);
+}
+
+.kb-key.highlight .key-root { opacity: 0.8; }
+.kb-key.wrong-flash { background: #ef4444; color: #fff; border-color: #ef4444; }
+.kb-key.zone-hint { background: rgba(230,81,0,0.08); border-color: rgba(230,81,0,0.3); }
+
+/* Zone colors */
+.zone-h { border-left: 3px solid #ef4444; }
+.zone-s { border-left: 3px solid #f59e0b; }
+.zone-p { border-left: 3px solid #8b5cf6; }
+.zone-n { border-left: 3px solid #3b82f6; }
+.zone-z { border-left: 3px solid #22c55e; }
+
+.controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.controls button {
+  padding: 8px 18px; border: 1px solid var(--border); border-radius: 20px;
+  background: var(--card-bg); color: var(--text); font-family: inherit;
+  font-size: 0.85em; cursor: pointer; transition: all 0.2s;
+}
+.controls button:hover { background: var(--border); }
+.controls button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.footer { text-align: center; padding: 10px; opacity: 0.3; font-size: 0.7em; }
+
+@media (max-width: 768px) {
+  .kb-key { width: 36px; height: 44px; font-size: 0.6em; }
+  .kb-key .key-root { font-size: 0.55em; }
+  .kb-key .key-label { font-size: 0.9em; }
+  .prompt-char { font-size: 3em; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html"><img src="12345.png" alt="logo" style="width:20px;height:20px;border-radius:4px;vertical-align:middle;margin-right:4px;">← 藏经阁</a>
+  <h1>五笔字根 · 86版</h1>
+  <a href="poetry-chain.html" style="color:var(--accent);text-decoration:none;font-size:0.82em;padding:4px 10px;border:1px solid var(--border);border-radius:12px;">🐉 诗词接龙 →</a>
+  <button onclick="toggleTheme()">🌓</button>
+</div>
+
+<div style="display:flex;gap:8px;justify-content:center;padding:12px 20px 0;">
+  <button id="modeKeypos" onclick="setMode('keypos')" style="padding:8px 24px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:0.9em;cursor:pointer;transition:all 0.2s;">⌨️ 键位</button>
+  <button class="active" id="modeRoot" onclick="setMode('root')" style="padding:8px 24px;border:2px solid var(--accent);border-radius:20px;background:var(--accent);color:#fff;font-family:inherit;font-size:0.9em;cursor:pointer;transition:all 0.2s;">📚 字根练习</button>
+  <button id="modeChar" onclick="setMode('char')" style="padding:8px 24px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:0.9em;cursor:pointer;transition:all 0.2s;">🀄 单字练习</button>
+  <button id="modeMistake" onclick="setMode('mistake')" style="padding:8px 24px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:0.9em;cursor:pointer;transition:all 0.2s;">⚠️ 难拆单字</button>
+  <button id="modeDDJ" onclick="setMode('ddj')" style="padding:8px 24px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:0.9em;cursor:pointer;transition:all 0.2s;">☯️ 道德经</button>
+  <button id="modeDDJ2" onclick="setMode('ddj2')" style="padding:8px 24px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:0.9em;cursor:pointer;transition:all 0.2s;">📜 道德经常用字</button>
+  <a href="8655.html" style="padding:8px 24px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--text);font-family:inherit;font-size:0.9em;cursor:pointer;transition:all 0.2s;text-decoration:none;">🎯 打全文</a>
+</div>
+
+<div class="main">
+  <div class="prompt-card" id="promptCard">
+    <div class="prompt-label" id="zoneLabel">横区 · G键</div>
+    <div class="prompt-char" id="promptChar">王</div>
+    <div class="prompt-hint" id="promptHint">口诀：王旁青头戋五一</div>
+    <div class="prompt-result" id="promptResult"></div>
+    <div id="charInput" style="display:none;margin-top:16px;">
+      <input type="text" id="wubiInput" maxlength="4" autocomplete="off" placeholder="输入4位五笔编码"
+        style="width:180px;padding:10px 14px;font-size:1.3em;text-align:center;letter-spacing:6px;border:2px solid var(--border);border-radius:10px;background:var(--card-bg);color:var(--text);font-family:monospace;outline:none;"
+        oninput="checkWubiInput()">
+      <div style="margin-top:8px;font-size:0.8em;opacity:0.5;" id="charHint">输入五笔编码，自动检测</div>
+    </div>
+    <div id="strokeRule" style="display:none;margin-top:12px;font-size:0.78em;opacity:0.45;text-align:center;letter-spacing:1px;">📐 注意：提算横 · 点算捺 · 竖钩算竖 · 拐弯全是折</div>
+  </div>
+
+  <div class="stats">
+    <span>✅ 正确：<strong id="correctCount">0</strong></span>
+    <span>❌ 错误：<strong id="wrongCount">0</strong></span>
+    <span>📝 第 <strong id="roundCount">1</strong> 题</span>
+  </div>
+
+  <div class="keyboard" id="keyboard"></div>
+
+  <div class="controls">
+    <button class="active" data-zone="all" onclick="setZone('all')">全部</button>
+    <button data-zone="h" onclick="setZone('h')" style="border-left:3px solid #ef4444;">横区 GFDSA</button>
+    <button data-zone="s" onclick="setZone('s')" style="border-left:3px solid #f59e0b;">竖区 HJKLM</button>
+    <button data-zone="p" onclick="setZone('p')" style="border-left:3px solid #8b5cf6;">撇区 TREWQ</button>
+    <button data-zone="n" onclick="setZone('n')" style="border-left:3px solid #3b82f6;">捺区 YUIOP</button>
+    <button data-zone="z" onclick="setZone('z')" style="border-left:3px solid #22c55e;">折区 NBVCX</button>
+    <button onclick="currentMode==='root'?nextRoot():nextChar()">⏭ 跳过</button>
+    <button id="hintBtn" onclick="toggleHint()">👁️ 隐藏提示</button>
+  </div>
+</div>
+
+<div class="footer">扫地僧创作 · 二〇二六</div>
+
+<script>
+// ═══════ 86版五笔字根表 ═══════
+// Format: [{ key: 'G', zone: 'h', roots: ['王','一','五','戋'], mnemonic: '王旁青头戋五一' }]
+const wubiZones = [
+  { key: 'G', zone: 'h', roots: '王一五戋'.split(''), mnemonic: '王旁青头戋五一' },
+  { key: 'F', zone: 'h', roots: '土士二干十寸雨'.split(''), mnemonic: '土士二干十寸雨' },
+  { key: 'D', zone: 'h', roots: '大犬三羊古石厂'.split(''), mnemonic: '大犬三羊古石厂' },
+  { key: 'S', zone: 'h', roots: '木丁西'.split(''), mnemonic: '木丁西' },
+  { key: 'A', zone: 'h', roots: '工戈七弋匚'.split(''), mnemonic: '工戈草头右框七' },
+  { key: 'H', zone: 's', roots: '目上止卜虎'.split(''), mnemonic: '目具上止卜虎皮' },
+  { key: 'J', zone: 's', roots: '日早虫曰'.split(''), mnemonic: '日早两竖与虫依' },
+  { key: 'K', zone: 's', roots: '口川'.split(''), mnemonic: '口与川字根稀' },
+  { key: 'L', zone: 's', roots: '田甲四车力'.split(''), mnemonic: '田甲方框四车力' },
+  { key: 'M', zone: 's', roots: '山由贝几'.split(''), mnemonic: '山由贝下框几' },
+  { key: 'T', zone: 'p', roots: '禾竹丿彳'.split(''), mnemonic: '禾竹一撇双人立' },
+  { key: 'R', zone: 'p', roots: '白手斤扌'.split(''), mnemonic: '白手看头三二斤' },
+  { key: 'E', zone: 'p', roots: '月用乃豕'.split(''), mnemonic: '月衫乃用家衣底' },
+  { key: 'W', zone: 'p', roots: '人八登祭'.split(''), mnemonic: '人和八三四里' },
+  { key: 'Q', zone: 'p', roots: '金钅儿夕'.split(''), mnemonic: '金勺缺点无尾鱼' },
+  { key: 'Y', zone: 'n', roots: '言文方广'.split(''), mnemonic: '言文方广在四一' },
+  { key: 'U', zone: 'n', roots: '立辛六门疒'.split(''), mnemonic: '立辛两点六门病' },
+  { key: 'I', zone: 'n', roots: '水小氵'.split(''), mnemonic: '水旁兴头小倒立' },
+  { key: 'O', zone: 'n', roots: '火米业'.split(''), mnemonic: '火业头四点米' },
+  { key: 'P', zone: 'n', roots: '之宝宀冖'.split(''), mnemonic: '之宝盖建到底' },
+  { key: 'N', zone: 'z', roots: '已己巳尸'.split(''), mnemonic: '已半巳满不出己' },
+  { key: 'B', zone: 'z', roots: '子耳了也凵'.split(''), mnemonic: '子耳了也框向上' },
+  { key: 'V', zone: 'z', roots: '女刀九臼巛'.split(''), mnemonic: '女刀九臼山朝西' },
+  { key: 'C', zone: 'z', roots: '又巴马厶'.split(''), mnemonic: '又巴马丢矢矣' },
+  { key: 'X', zone: 'z', roots: '纟弓匕彑'.split(''), mnemonic: '慈母无心弓和匕' },
+];
+
+// ═══════ Root encodings (86版键面字编码) ═══════
+// Key-name chars: press key 4 times; Chengzi roots: key + stroke codes
+const rootCodes = {
+  // 横区 - 键名字
+  '王':'GGGG','土':'FFFF','大':'DDDD','木':'SSSS','工':'AAAA',
+  // 横区 - 成字字根
+  '一':'GGLL','五':'GGHG','戋':'GGGT','士':'FGHG','二':'FGG','干':'FGGH','十':'FGH','寸':'FGHY','雨':'FGHY',
+  '犬':'DGTY','三':'DGGG','羊':'UDJ','古':'DGHG','石':'DGTG','厂':'DGT',
+  '丁':'SGH','西':'SGHG',
+  '戈':'AGNT','七':'AGN','弋':'AGNY','匚':'AGN',
+  // 竖区 - 键名字
+  '目':'HHHH','日':'JJJJ','口':'KKKK','田':'LLLL','山':'MMMM',
+  // 竖区 - 成字字根
+  '上':'HHGG','止':'HHHG','卜':'HHY','虎':'HAMV',
+  '早':'JHNH','虫':'JHNY','曰':'JHNG',
+  '川':'KTHH',
+  '甲':'LHNH','四':'LHNG','车':'LGNH','力':'LTN',
+  '由':'MHNG','贝':'MHNY','几':'MTN',
+  // 撇区 - 键名字
+  '禾':'TTTT','白':'RRRR','月':'EEEE','人':'WWWW','金':'QQQQ',
+  // 撇区 - 成字字根
+  '竹':'TTGH','丿':'TTLL','彳':'TTTH',
+  '手':'RTGH','斤':'RTTH','扌':'RGHG',
+  '用':'ETNH','乃':'ETN','豕':'EGTY',
+  '八':'WTY','登':'WGKU','祭':'WFIU',
+  '钅':'QTGN','儿':'QTN','夕':'QTNY',
+  // 捺区 - 键名字
+  '言':'YYYY','立':'UUUU','水':'IIII','火':'OOOO','之':'PPPP',
+  // 捺区 - 成字字根
+  '文':'YYGY','方':'YYGN','广':'YYGT',
+  '辛':'UYGH','六':'UYGY','门':'UYHN','疒':'UYGG',
+  '小':'IHTY','氵':'IYYG',
+  '米':'OYTY','业':'OGD',
+  '宝':'PGYU','宀':'PYYN','冖':'PYN',
+  // 折区 - 键名字
+  '已':'NNNN','子':'BBBB','女':'VVVV','又':'CCCC','纟':'XXXX',
+  // 折区 - 成字字根
+  '己':'NNGN','巳':'NNGN','尸':'NNGT',
+  '耳':'BGHG','了':'BNH','也':'BNHN','凵':'BNH',
+  '刀':'VNT','九':'VTN','臼':'VTHG','巛':'VNNN',
+  '巴':'CNHN','马':'CNNG','厶':'CNY',
+  '弓':'XNGN','匕':'XTN','彑':'XNN',
+};
+
+// Build flat list of all roots
+let allRoots = [];
+wubiZones.forEach(z => {
+  z.roots.forEach(r => allRoots.push({ char: r, key: z.key, zone: z.zone, mnemonic: z.mnemonic, code: rootCodes[r] || '' }));
+});
+
+// ═══════ Single-char data ═══════
+const hardWords = [
+  { char:'逑', code:'FIYP', breakdown:'十 氵(水旁) 丶(点) 辶(走之)' },
+  { char:'燕', code:'AUKO', breakdown:'廿(草头) 丬(两点) 口 灬(四点)' },
+  { char:'啄', code:'KEYY', breakdown:'口 豕(家底) 丶(点) 丶(末笔)' },
+  { char:'踏', code:'KHIJ', breakdown:'口 止 氵(水日) 日' },
+  { char:'缘', code:'XXEY', breakdown:'纟 彑 豕(家底) 丶(点)' },
+  { char:'善', code:'UDUK', breakdown:'丷(两点) 羊(三横) 䒑(两点) 口' },
+  { char:'焉', code:'GHGO', breakdown:'一 止 一 灬(四点)' },
+  { char:'卷', code:'UDBB', breakdown:'丷(两点) 大 巳 巳(末折)' },
+  { char:'览', code:'JTYQ', breakdown:'丨丨(两竖) 丿(撇) 丶(点) 儿' },
+  { char:'豕', code:'EGTY', breakdown:'月(家底) 一 丿(撇) 丶(末捺)' },
+  { char:'膏', code:'YPKE', breakdown:'高字头(亠口) 冖(宝盖) 口 月' },
+  { char:'羲', code:'UGTT', breakdown:'丷(两点) 王 禾 丿(末撇)' },
+  { char:'藏', code:'ADNT', breakdown:'艹(草头) 厂 乙(折) 丿(末撇)' },
+  { char:'疆', code:'XFGG', breakdown:'弓 土 一 一(末横)' },
+  { char:'舞', code:'RLGH', breakdown:'𠂉(撇横) 四 一 丨(末竖)' },
+  { char:'黎', code:'TQTI', breakdown:'禾 勹(勺) 丿(人下撇) 氵(水)' },
+  { char:'貌', code:'EERQ', breakdown:'豸(豸头) 豸(豸身) 白 儿' },
+  { char:'鼠', code:'VNUN', breakdown:'臼(鼠头) 乙(竖折) 丷(两点) 乙(末折识码)' },
+  { char:'鹤', code:'PWYG', breakdown:'冖(宝盖) 亻(单人) 丶(点) 一(末横)' },
+  { char:'鼎', code:'HNDN', breakdown:'目 乙(折) 丆(横撇) 乙(末折)' },
+];
+
+// ═══════ Common mistakes - 20 hard chars ═══════
+const mistakeWords = [
+  { char:'凸', code:'HGMG', breakdown:'丨(竖) 一 冂(下框) 一' },
+  { char:'凹', code:'MMGD', breakdown:'冂(下框) 冂 一 末横' },
+  { char:'养', code:'UDYJ', breakdown:'丷(两点) 乛(折) 丶(点) 丿(末撇)' },
+  { char:'段', code:'WDMC', breakdown:'亻(单人) 丿(撇) 几 又' },
+  { char:'承', code:'BDII', breakdown:'了 三 氵 识(捺杂合)' },
+  { char:'插', code:'RTFV', breakdown:'扌 丿(撇) 十 臼' },
+  { char:'搜', code:'RVHC', breakdown:'扌 臼 丨(竖) 又' },
+  { char:'舆', code:'WFLW', breakdown:'亻(单人) 二 车 八' },
+  { char:'肃', code:'VIJK', breakdown:'肀 小 丨丨 识' },
+  { char:'兜', code:'QRNQ', breakdown:'勹(勺) 白 乚(折) 儿' },
+  { char:'垂', code:'TGAF', breakdown:'丿(撇) 一 艹(草底) 二' },
+  { char:'重', code:'TGJF', breakdown:'丿(撇) 一 日 二' },
+  { char:'曹', code:'GMAJ', breakdown:'一 冂(下框) 艹(草头) 日' },
+  { char:'勤', code:'AKGL', breakdown:'艹(草头) 口 一 力' },
+  { char:'拜', code:'RDFH', breakdown:'𠂉(手变体) 三(三横) 十 丨(末竖识码)' },
+  { char:'武', code:'GAHD', breakdown:'一 弋 止 末识别' },
+  { char:'年', code:'RHFK', breakdown:'𠂉(撇横) 丨(竖) 十 丨(末竖)' },
+  { char:'典', code:'MAWU', breakdown:'冂(下框) 艹(草头) 八 两点' },
+  { char:'尴', code:'DNJL', breakdown:'厂 乙(折) 丨丨(两竖) 末识别' },
+  { char:'尬', code:'DNWJ', breakdown:'厂 乙(折) 人 丨(末竖)' },
+  { char:'乘', code:'TUXV', breakdown:'禾 丷(两点) 匕 末识别' },
+  { char:'鬼', code:'RQCI', breakdown:'白 儿 厶 末识别' },
+];
+
+// ═══════ 道德经常用字 - 10 chars ═══════
+const daodejing2Words = [
+  { char:'橐', code:'GKHS', breakdown:'一 口 丨(竖) 木底' },
+  { char:'屈', code:'NBMK', breakdown:'尸 凵(下框) 山 末竖' },
+  { char:'牝', code:'TRXN', breakdown:'丿(撇) 牛 匕 折' },
+  { char:'邪', code:'AHTB', breakdown:'工 丨(竖) 丿(撇) 阝(耳旁)' },
+  { char:'异', code:'NAJ', breakdown:'巳 艹(草头) 丨丨(两竖)识' },
+  { char:'身', code:'TMDT', breakdown:'丿(撇) 冂(下框) 三 丿(末撇)' },
+  { char:'扇', code:'YNND', breakdown:'丶(点) 尸 羽 末横识' },
+  { char:'所', code:'RNRH', breakdown:'斤 尸 厂 丨(竖)' },
+  { char:'勤', code:'AKGL', breakdown:'艹(草头) 口 一 力' },
+  { char:'籥', code:'TWGA', breakdown:'竹 人 一 廾(草底)' },
+];
+
+// ═══════ 道德经生僻字 - 20 chars ═══════
+const daodejingWords = [
+  { char:'牝', code:'TRXN', breakdown:'丿 牛 匕 折' },
+  { char:'牡', code:'TRFG', breakdown:'丿 牛 土 横' },
+  { char:'嗄', code:'KDHT', breakdown:'口 厂 丨 攵' },
+  { char:'虚', code:'HAOG', breakdown:'丨 七 业底 末横' },
+  { char:'敝', code:'UMIT', breakdown:'丷 冂 小 攵' },
+  { char:'飂', code:'MTJE', breakdown:'风框 丿 丨丨 彡' },
+  { char:'繟', code:'XKKF', breakdown:'纟 口 口 横' },
+  { char:'羲', code:'UGTT', breakdown:'羊头 三横 禾 攵' },
+  { char:'矜', code:'CBTN', breakdown:'矛 今折 丿 折' },
+  { char:'舆', code:'WFLW', breakdown:'人 二 车 八' },
+  { char:'琭', code:'GVIY', breakdown:'王 彐 水 丶' },
+  { char:'硌', code:'DTKG', breakdown:'石 夂 口 横' },
+  { char:'曷', code:'JQWN', breakdown:'日 勹 人 折' },
+  { char:'赍', code:'FWWM', breakdown:'十 人 人 贝' },
+  { char:'孳', code:'UXXB', breakdown:'丷 幺 幺 子' },
+  { char:'倏', code:'WHTD', breakdown:'亻 丨 夂 犬' },
+  { char:'澹', code:'IQDY', breakdown:'氵 勹 厂 言' },
+  { char:'翳', code:'ATDN', breakdown:'艹 丿 大 羽底' },
+  { char:'寥', code:'PNWE', breakdown:'宀 羽 人 彡' },
+  { char:'蛊', code:'JLF', breakdown:'虫 皿 识' },
+];
+
+
+let currentMode = 'root';
+let currentRoot = null;
+let currentHardWord = null;
+let currentZone = 'all';
+let showHint = true;
+let correctCount = 0;
+let wrongCount = 0;
+let roundCount = 0;
+let lastAnswerWrong = false;
+
+// ═══════ Keyboard ═══════
+const kbLayout = [
+  ['Q','W','E','R','T','Y','U','I','O','P'],
+  ['A','S','D','F','G','H','J','K','L'],
+  ['Z','X','C','V','B','N','M'],
+];
+
+function renderKeyboard(highlightKey) {
+  const kb = document.getElementById('keyboard');
+  const keyRoots = {};
+  wubiZones.forEach(z => {
+    z.roots.forEach(r => { keyRoots[z.key] = z.mnemonic.slice(0, 4); });
+  });
+
+  let html = '';
+  kbLayout.forEach(row => {
+    html += '<div class="kb-row">';
+    row.forEach(key => {
+      const entry = wubiZones.find(z => z.key === key);
+      const zoneClass = entry ? 'zone-' + entry.zone : '';
+      const hlClass = key === highlightKey ? ' highlight' : '';
+      const rootsText = keyRoots[key] || '';
+      html += `<div class="kb-key ${zoneClass}${hlClass}" id="kb-${key}">
+        <span class="key-label">${key}</span>
+        <span class="key-root">${rootsText}</span>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  kb.innerHTML = html;
+}
+
+function showCorrect(key) {
+  const el = document.getElementById('kb-' + key);
+  if (el) {
+    el.classList.add('highlight');
+    setTimeout(() => el.classList.remove('highlight'), 800);
+  }
+}
+
+function showWrong(key) {
+  const el = document.getElementById('kb-' + key);
+  if (el) {
+    el.classList.add('wrong-flash');
+    setTimeout(() => el.classList.remove('wrong-flash'), 500);
+  }
+}
+
+// ═══════ Game ═══════
+function setZone(zone) {
+  currentZone = zone;
+  currentMode = 'root';
+  document.querySelectorAll('.controls button[data-zone]').forEach(b => b.classList.remove('active'));
+  const target = document.querySelector(`.controls button[data-zone="${zone}"]`);
+  if (target) target.classList.add('active');
+  correctCount = 0; wrongCount = 0; roundCount = 0;
+  updateStats();
+  nextRoot();
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  const btns = {keypos: document.getElementById('modeKeypos'), root: document.getElementById('modeRoot'), char: document.getElementById('modeChar'), mistake: document.getElementById('modeMistake'), ddj: document.getElementById('modeDDJ'), ddj2: document.getElementById('modeDDJ2')};
+  const ac = 'var(--accent)';
+  Object.keys(btns).forEach(k => {
+    if (k === mode) { btns[k].style.background=ac; btns[k].style.color='#fff'; btns[k].style.borderColor=ac; }
+    else { btns[k].style.background='var(--card-bg)'; btns[k].style.color='var(--text)'; btns[k].style.borderColor='var(--border)'; }
+  });
+  const isRoot = mode === 'root', isKeypos = mode === 'keypos';
+  const isCharMode = (mode === 'char' || mode === 'mistake' || mode === 'ddj' || mode === 'ddj2');
+  document.getElementById('charInput').style.display = (isRoot || isKeypos) ? 'none' : 'block';
+  document.getElementById('promptHint').style.display = (isRoot || isKeypos) ? '' : 'none';
+  document.getElementById('promptCard').style.display = '';
+  document.getElementById('keyboard').style.display = (isRoot || isKeypos) ? '' : 'none';
+  document.getElementById('hintBtn').style.display = isRoot ? '' : 'none';
+  document.getElementById('strokeRule').style.display = isCharMode ? '' : 'none';
+  document.querySelectorAll('.stats').forEach(el => { el.style.display = ''; });
+  document.querySelectorAll('.controls button[data-zone]').forEach(b => { b.style.display = isRoot ? '' : 'none'; });
+  correctCount = 0; wrongCount = 0; roundCount = 0;
+  updateStats();
+  if (isRoot) nextRoot(); else if (isKeypos) nextKey(); else nextChar();
+
+}
+
+// ═══════ Key position practice ═══════
+const keyLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXY'.split('');
+let currentKey = '';
+
+function nextKey() {
+  currentKey = keyLetters[Math.floor(Math.random() * keyLetters.length)];
+  roundCount++;
+  document.getElementById('promptChar').textContent = currentKey;
+  document.getElementById('zoneLabel').textContent = '键位练习';
+  document.getElementById('promptHint').textContent = '看键盘上高亮的键，在键盘上按同一个键';
+  document.getElementById('promptResult').textContent = '';
+  document.getElementById('roundCount').textContent = roundCount;
+  renderKeyboard(currentKey);
+}
+
+// ═══════ Single char ═══════
+const wubiTips = [
+  // 笔画归类（4条）
+  '笔画规则：提笔归横区，如「地」「把」的扌旁提',
+  '笔画规则：点笔归捺区，如「主」「为」的点',
+  '笔画规则：竖钩归竖区，如「小」「水」的中竖钩',
+  '笔画规则：拐弯全是折，如「九」「马」「飞」的折弯',
+  // 拆字原则（5条）
+  '书写顺序：从左到右、从上到下、从外到内拆',
+  '取大优先：能拆大字根就不拆小字根，如「香」拆禾日不拆丿木日',
+  '兼顾直观：保持汉字完整性，如「国」拆囗王丶不拆冂王丶一',
+  '能连不交：取相连不取相交，如「天」拆一大不拆二人',
+  '能散不连：优先分上下左右，如「午」拆𠂉十不拆丿干',
+  // 编码规则（4条）
+  '键名字：每键第一个字连打4下，如王GGGG、金QQQQ',
+  '成字字根：报户口+首笔+次笔+末笔，如文YYGY',
+  '≥4个字根：取1、2、3、末码，如热RVYO（扌九丶灬）',
+  '<4个字根：依次取完+末笔识别码，如云FCU',
+  // 识别码（3条）
+  '末笔识别码：末笔区号×字结构，左右1上下2杂合3',
+  '识别码示例：码末笔横+左右型→补G，青末笔横+上下型→补F',
+  '特殊：带辶廴的字取内部末笔，字型算杂合型',
+  // 词组（3条）
+  '二字词：各取前两码，如明天=日月一大',
+  '三字词：前两字首码+末字前两码，如计算机=讠竹木几',
+  '四字词：各取首码，如民主党派=乙丶氵氵',
+];
+function randomTip() { return wubiTips[Math.floor(Math.random() * wubiTips.length)]; }
+
+function nextChar() {
+  document.getElementById('wubiInput').disabled = false;
+  const pool = currentMode === 'mistake' ? mistakeWords : currentMode === 'ddj' ? daodejingWords : currentMode === 'ddj2' ? daodejing2Words : hardWords;
+  currentHardWord = pool[Math.floor(Math.random() * pool.length)];
+  roundCount++;
+  document.getElementById('promptChar').textContent = currentHardWord.char;
+  document.getElementById('zoneLabel').textContent = currentMode === 'ddj2' ? '道德经常用字' : '单字练习';
+  document.getElementById('promptHint').textContent = '';
+  document.getElementById('promptResult').textContent = '';
+  document.getElementById('wubiInput').value = '';
+  document.getElementById('charHint').textContent = '输入五笔编码，自动检测';
+  document.getElementById('charHint').style.color = '';
+  document.getElementById('roundCount').textContent = roundCount;
+  document.getElementById('strokeRule').textContent = '📐 ' + randomTip();
+  setTimeout(() => document.getElementById('wubiInput')?.focus(), 100);
+}
+
+function checkWubiInput() {
+  if (!currentHardWord) return;
+  const input = document.getElementById('wubiInput');
+  const val = input.value.toUpperCase();
+  const correct = currentHardWord.code;
+  const hint = document.getElementById('charHint');
+  if (val.length === 0) { hint.textContent = '输入五笔编码，自动检测'; hint.style.color = ''; return; }
+  let display = '';
+  let allMatch = true;
+  for (let i = 0; i < correct.length; i++) {
+    if (i < val.length) {
+      if (val[i] === correct[i]) { display += `<span style="color:#22c55e;">${val[i]}</span>`; }
+      else { display += `<span style="color:#ef4444;">${val[i]}</span>`; allMatch = false; }
+    } else {
+      display += '<span style="opacity:0.3;">_</span>'; allMatch = false;
+    }
+  }
+  hint.innerHTML = display + ' <span style="opacity:0.4;">' + (allMatch ? '' : '→ ' + correct) + '</span>';
+  const codeLen = correct.length;
+  const isComplete = val.length === codeLen;
+  if (isComplete && allMatch) {
+    correctCount++;
+    lastAnswerWrong = false;
+    document.getElementById('promptResult').innerHTML = '<span style="color:#22c55e;">✅ 正确！' + currentHardWord.char + ' → ' + correct + '</span><br><span style="font-size:0.75em;opacity:0.6;">' + (currentHardWord.breakdown || '') + '</span>';
+    cheerSound();
+    updateStats();
+    document.getElementById('wubiInput').disabled = true;
+    document.getElementById('charHint').textContent = '按空格键继续下一题';
+  } else if (isComplete && !allMatch) {
+    wrongCount++;
+    lastAnswerWrong = true;
+    document.getElementById('promptResult').innerHTML = '<span style="color:#ef4444;">❌ 应为 <b>' + correct + '</b></span><br><span style="font-size:0.75em;opacity:0.6;">' + (currentHardWord.breakdown || '') + '</span>';
+    muyu();
+    updateStats();
+    document.getElementById('wubiInput').disabled = true;
+    document.getElementById('charHint').textContent = '按空格键再试一次';
+  }
+}
+
+function toggleHint() {
+  showHint = !showHint;
+  document.getElementById('hintBtn').textContent = showHint ? '👁️ 隐藏提示' : '👁️ 显示提示';
+  updatePromptDisplay();
+}
+
+function updatePromptDisplay() {
+  if (!currentRoot) return;
+  document.getElementById('promptChar').textContent = currentRoot.char;
+  const zoneNames = {h:'横区', s:'竖区', p:'撇区', n:'捺区', z:'折区'};
+  if (showHint) {
+    document.getElementById('zoneLabel').textContent = zoneNames[currentRoot.zone] + ' · ' + currentRoot.key + '键';
+    const code = currentRoot.code ? ' | 编码：' + currentRoot.code : '';
+    document.getElementById('promptHint').textContent = '口诀：' + currentRoot.mnemonic + code;
+  } else {
+    document.getElementById('zoneLabel').textContent = '？区 · ？键';
+    document.getElementById('promptHint').textContent = '口诀已隐藏';
+  }
+}
+
+function nextRoot() {
+  let pool = currentZone === 'all' ? allRoots : allRoots.filter(r => r.zone === currentZone);
+  currentRoot = pool[Math.floor(Math.random() * pool.length)];
+  roundCount++;
+  updatePromptDisplay();
+  document.getElementById('promptResult').textContent = '';
+  document.getElementById('roundCount').textContent = roundCount;
+  renderKeyboard(null);
+}
+
+function updateStats() {
+  document.getElementById('correctCount').textContent = correctCount;
+  document.getElementById('wrongCount').textContent = wrongCount;
+}
+
+// ═══════ Keyboard input ═══════
+document.addEventListener('keydown', e => {
+  if (e.key === ' ') {
+    e.preventDefault();
+    if (currentMode === 'keypos') { nextKey(); }
+    else if (currentMode === 'root') { nextRoot(); }
+    else if (document.getElementById('wubiInput').disabled) {
+      if (lastAnswerWrong) { document.getElementById('wubiInput').disabled = false; document.getElementById('wubiInput').value = ''; document.getElementById('wubiInput').focus(); document.getElementById('charHint').textContent = '重新输入编码'; document.getElementById('promptResult').textContent = ''; lastAnswerWrong = false; }
+      else { nextChar(); }
+    }
+    return;
+  }
+  if (e.target.tagName === 'INPUT') return;
+  // H 回首页：键位/字根模式里 H 是字母，不拦截
+  if ((e.key === 'h' || e.key === 'H') && currentMode !== 'keypos' && currentMode !== 'root' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    e.preventDefault();
+    location.href = 'index.html';
+    return;
+  }
+  // Keypos mode
+  if (currentMode === 'keypos') {
+    const pressed = e.key.toUpperCase();
+    if (!keyLetters.includes(pressed)) return;
+    e.preventDefault();
+    if (pressed === currentKey) {
+      correctCount++; document.getElementById('promptResult').innerHTML = '<span style=\"color:#22c55e;\">✅ '+currentKey+' 正确！</span>';
+      showCorrect(currentKey); zoneSound(currentKey); updateStats(); setTimeout(nextKey, 500);
+    } else {
+      wrongCount++; document.getElementById('promptResult').innerHTML = '<span style=\"color:#ef4444;\">❌ 这是 '+pressed+'，要找 '+currentKey+'</span>';
+      showWrong(pressed); muyu(); updateStats();
+    }
+    return;
+  }
+  if (currentMode !== 'root') return;
+  if (!currentRoot) return;
+  if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+  const pressed = e.key.toUpperCase();
+  const validKeys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  if (!validKeys.includes(pressed)) return;
+
+  e.preventDefault();
+  const correctKey = currentRoot.key;
+
+  if (pressed === correctKey) {
+    correctCount++;
+    const code = currentRoot.code ? ` 编码：<b>${currentRoot.code}</b>` : '';
+    document.getElementById('promptResult').innerHTML = `<span style="color:#22c55e;">✅ 正确！${currentRoot.char} → ${correctKey} 键${code}</span>`;
+    showCorrect(correctKey);
+    cheerSound();
+    setTimeout(nextRoot, 600);
+  } else {
+    wrongCount++;
+    const code = currentRoot.code ? ` 编码：<b>${currentRoot.code}</b>` : '';
+    document.getElementById('promptResult').innerHTML = `<span style="color:#ef4444;">❌ ${currentRoot.char} 在 <b>${correctKey}</b> 键，不是 ${pressed}${code}</span>`;
+    showWrong(pressed);
+    muyu();
+    setTimeout(() => showCorrect(correctKey), 300);
+  }
+  updateStats();
+});
+
+// ═══════ Theme ═══════
+function toggleTheme() {
+  const h = document.documentElement;
+  const next = h.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  h.setAttribute('data-theme', next);
+  localStorage.setItem('wb-theme', next);
+}
+
+// ═══════ Sounds ═══════
+function muyu(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const t=ctx.currentTime;const o=ctx.createOscillator();const g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(800,t);o.frequency.exponentialRampToValueAtTime(300,t+.08);g.gain.setValueAtTime(.25,t);g.gain.exponentialRampToValueAtTime(.001,t+.1);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+.12)}catch(e){}}
+function cheerSound(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const t=ctx.currentTime;[523,659,784,1047].forEach((f,i)=>{const o=ctx.createOscillator();const g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(f,t+i*.08);g.gain.setValueAtTime(.15,t+i*.08);g.gain.exponentialRampToValueAtTime(.001,t+i*.08+.4);o.connect(g);g.connect(ctx.destination);o.start(t+i*.08);o.stop(t+i*.08+.5)})}catch(e){}}
+
+// Zone sounds for keypos mode
+const keyZone = {G:'h',F:'h',D:'h',S:'h',A:'h', H:'s',J:'s',K:'s',L:'s',M:'s', T:'p',R:'p',E:'p',W:'p',Q:'p', Y:'n',U:'n',I:'n',O:'n',P:'n', N:'z',B:'z',V:'z',C:'z',X:'z'};
+function zoneSound(key) {
+  try {
+    const zone = keyZone[key] || 'h';
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    const configs = {
+      h: { type: 'triangle', notes: [262,330,392], vol: 0.12, dur: 0.5 },  // 横区-木琴
+      s: { type: 'square', notes: [392,494,587], vol: 0.08, dur: 0.4 },     // 竖区-方波
+      p: { type: 'sawtooth', notes: [330,440,554], vol: 0.06, dur: 0.6 },    // 撇区-锯波
+      n: { type: 'sine', notes: [494,587,698], vol: 0.12, dur: 0.55 },       // 捺区-长笛
+      z: { type: 'triangle', notes: [220,277,330], vol: 0.1, dur: 0.45 },    // 折区-低音
+    };
+    const cfg = configs[zone];
+    cfg.notes.forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = cfg.type;
+      o.frequency.setValueAtTime(f, t + i * 0.07);
+      g.gain.setValueAtTime(cfg.vol, t + i * 0.07);
+      g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.07 + cfg.dur);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t + i * 0.07); o.stop(t + i * 0.07 + cfg.dur + 0.05);
+    });
+  } catch(e) {}
+}
+
+// ═══════ Init ═══════
+(function() {
+  const t = localStorage.getItem('wb-theme');
+  if (t) document.documentElement.setAttribute('data-theme', t);
+  renderKeyboard(null);
+  nextRoot();
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

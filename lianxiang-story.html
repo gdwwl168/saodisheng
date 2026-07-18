@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="lianxiang_theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>编码故事 · 扫地僧</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap');
+:root {
+  --bg: #f5efe0; --text: #3b3223; --accent: #8b4513;
+  --gold: #c4a97d; --card-bg: #faf7f2; --border: #d4c5a9;
+}
+[data-theme="dark"] {
+  --bg: #1a1610; --text: #d4c5a9; --accent: #c9a96e;
+  --gold: #c9a96e; --card-bg: #252018; --border: #3a3028;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Serif SC', serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+.header { text-align: center; padding: 24px 20px 8px; }
+.header a { color: var(--accent); text-decoration: none; font-size: 14px; letter-spacing: 2px; }
+.header a:hover { color: var(--gold); }
+.header h1 { font-family: 'Ma Shan Zheng', cursive; font-size: 2em; color: var(--accent); letter-spacing: 0.15em; margin-top: 8px; }
+.tip { text-align: center; font-size: 0.78em; opacity: 0.5; padding: 4px 20px 12px; letter-spacing: 1px; }
+
+.story-container { max-width: 900px; margin: 0 auto; padding: 0 20px 40px; display: flex; flex-direction: column; gap: 16px; }
+
+.scene-card {
+  display: flex; gap: 20px; background: var(--card-bg); border-radius: 16px;
+  border: 1px solid var(--border); overflow: hidden; transition: all 0.3s;
+  cursor: pointer;
+}
+.scene-card:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.scene-card:nth-child(even) { flex-direction: row-reverse; }
+
+.scene-img {
+  flex: 0 0 320px; height: 220px; overflow: hidden;
+  background: var(--border);
+}
+.scene-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.scene-info {
+  flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 16px 20px 16px 4px;
+}
+.scene-card:nth-child(even) .scene-info { padding: 16px 4px 16px 20px; }
+.scene-range {
+  font-size: 1.6em; font-weight: 700; color: var(--accent); letter-spacing: 0.05em;
+}
+.scene-name {
+  font-size: 1.3em; color: var(--text); margin-top: 4px; letter-spacing: 0.1em;
+  font-family: 'Ma Shan Zheng', cursive;
+}
+.scene-desc { font-size: 0.82em; opacity: 0.6; margin-top: 8px; line-height: 1.6; }
+.scene-mapping { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.mapping-tag { font-size: 0.7em; background: var(--border); color: var(--text); padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+.mapping-tag .num { color: var(--accent); font-weight: 700; margin-right: 2px; }
+
+/* Lightbox */
+.lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; }
+.lightbox.show { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 80vh; object-fit: contain; border-radius: 12px; }
+.lightbox .lb-info { color: #fff; margin-top: 16px; font-size: 1.1em; letter-spacing: 0.1em; opacity: 0.8; }
+.lightbox .lb-close { position: absolute; top: 20px; right: 28px; color: #fff; font-size: 2em; cursor: pointer; background: none; border: none; }
+.lightbox .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); color: #fff; font-size: 2.4em; cursor: pointer; background: rgba(255,255,255,0.08); border: none; border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 1; }
+.lightbox .lb-nav:hover { background: rgba(255,255,255,0.2); }
+.lightbox .lb-prev { left: 16px; }
+.lightbox .lb-next { right: 16px; }
+
+.footer { text-align: center; padding: 12px; opacity: 0.3; font-size: 0.68em; letter-spacing: 0.1em; }
+
+.theme-btn { position: fixed; top: 12px; right: 16px; z-index: 99; background: var(--card-bg); border: 1px solid var(--border); border-radius: 50%; width: 36px; height: 36px; font-size: 1.1em; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+@media (max-width: 680px) {
+  .scene-card, .scene-card:nth-child(even) { flex-direction: column; }
+  .scene-img { flex: 0 0 200px; }
+  .scene-info, .scene-card:nth-child(even) .scene-info { padding: 12px 16px 16px; }
+}
+</style>
+</head>
+<body>
+<button class="theme-btn" onclick="toggleTheme()">🌓</button>
+<div class="header">
+  <a href="index.html"><img src="12345.png" alt="logo" style="width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:6px;">← 返回藏经阁</a>
+  <h1>编码故事</h1>
+</div>
+<p class="tip">9个场景串联81个联想词 · 点击场景可放大看图 · 联想记忆法</p>
+
+<div class="story-container" id="storyContainer"></div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close">&times;</button>
+  <button class="lb-nav lb-prev" onclick="event.stopPropagation();navLightbox(-1)" title="上一张">◂</button>
+  <img id="lbImg" src="" alt="" onclick="event.stopPropagation()">
+  <button class="lb-nav lb-next" onclick="event.stopPropagation();navLightbox(1)" title="下一张">▸</button>
+  <div class="lb-info" id="lbInfo"></div>
+  <div class="scene-mapping" id="lbMap" style="max-width:92vw;justify-content:center;"></div>
+</div>
+
+<p class="footer">联想记忆法 · 81个数字编码全覆盖</p>
+
+<script>
+const scenes = [
+  { range:'第1-10章', name:'孕妇陪家人渡假', file:'lianxiang/01-10山谷.png',
+    desc:'阳光明媚的山谷，一个孕妇站在崖壁下小河旁，崖壁蜡烛正在燃烧，蜡烛下是带钩子的烛台，她的脚下有棒球和木球棒，她正在看着河里的帆船和白色的天鹅，突然一阵口哨声从天上传了过来，一只大耳朵从水下冒了出来，它听见了口哨的声音，山谷度假，令人难忘！',
+    map:['01蜡烛','02白鹅','03耳朵','04帆船','05钩子','06山谷','07崖壁','08孕妇','09口哨','10棒球'] },
+  { range:'第11-20章', name:'医生与鹦鹉谈话', file:'lianxiang/11-20诊所.png',
+    desc:'医生坐在他的诊所里的小木椅子上，很开心的样子，腰里挎着一个腰包，别着一个大钥匙，木头桌子上放着筷子、石榴和料酒、香烟，还有专用的仪器。一只鹦鹉站在他前面，可能他们是好伙伴，可能他们正在聊天呢。',
+    map:['11筷子','12椅子','13医生','14钥匙','15鹦鹉','16石榴','17仪器','18腰包','19料酒','20香烟'] },
+  { range:'第21-30章', name:'神秘人的爱好', file:'lianxiang/21-30河畔.png',
+    desc:'湾湾的河流，绿绿的草地，河流左边是篮球架与篮球，篮球架前一只鳄鱼正在看一对鸳鸯大秀亲密。河流的右边一只耳机吊在大树下，树上挂着一个可以看时间的闹钟，二胡随意地靠在大树下。大树右边有一个大山洞，难道是有人住在里面吗，那家伙爱听音乐，好拉二胡，还很守时，我猜这是他的神秘乐园。',
+    map:['21鳄鱼','22鸳鸯','23耳机','24闹钟','25二胡','26河流','27彩旗','28荷花','29篮球','30山洞'] },
+  { range:'第31-40章', name:'司令的美好一天', file:'lianxiang/31-40海景.png',
+    desc:'司令在海边渡假，惬意地坐在海边小屋的沙发上，手里拿着扇儿，沙发边的小木桌子上放着三角尺，还有香炉，小屋左边是彬树，树下有一只山鸡，后面是山川，前面是大海，海里有很大的鲨鱼与美丽的珊瑚，多么美好的一天啊！',
+    map:['31鲨鱼','32扇儿','33山川','34彬树','35珊瑚','36香炉','37山鸡','38沙发','39三角尺','40司令'] },
+  { range:'第41-50章', name:'石狮与石狗的婚礼', file:'lianxiang/41-50婚礼.png',
+    desc:'人类司仪穿西服主持石狮和石狗的婚礼，新郎石狮戴着红色的丝巾，宴席的桌上摆着柿儿饼、水壶和四个石榴，司机打开车门，欢迎石狗新娘下车，新娘很漂亮，手里拿着的竟然是丝瓜，脖子上挂着笨重的五环标志，从车上走下，走完红地毯，婚礼愉快结束。',
+    map:['41司仪','42柿饼','43丝巾','44石狮','45水壶','46石榴','47司机','48丝瓜','49石狗','50五环'] },
+  { range:'第51-60章', name:'武士的表演', file:'lianxiang/51-60演出.png',
+    desc:'武士穿着华丽的舞衣，手举一把旋转的舞伞，在舞台中央尽情表演。舞台左边锣鼓喧天为他伴奏，右边桌上摆着木耳和一整个大榴莲，后台的角落里一只母鸡正蹲着下蛋，长长的尾巴拖在地上，一只小蜗牛慢悠悠地从旁边爬过。夜空里一颗五角星闪闪发光，仿佛也在为这场精彩的演出喝彩呢！',
+    map:['51舞衣','52木耳','53舞伞','54武士','55锣鼓','56蜗牛','57母鸡','58尾巴','59五角星','60榴莲'] },
+  { range:'第61-70章', name:'老头看麒麟神兽', file:'lianxiang/61-70公园.png',
+    desc:'一座老屋前，一位老人坐在轮椅上，撑着一把绿伞晒太阳，屋旁柳丝随风飘飘。一只麒麟神兽头戴鹿角踏步而来，脖子上挂着一个喇叭，手里玩着一个溜溜球，脚边还放着一桶油漆。草地上几只鹿儿悠闲地吃着草，老屋、神兽、小鹿凑成一幅画，多么惬意的午后时光啊！',
+    map:['61轮椅','62鹿儿','63绿伞','64柳丝','65老屋','66溜溜球','67油漆','68喇叭','69鹿角','70麒麟'] },
+  { range:'第71-80章', name:'广场滑稽表演', file:'lianxiang/71-80广场.png',
+    desc:'铁塔耸立在广场中央，一旁的旗杆彩旗飘飘，天上飞机掠过留下白色尾迹。骑士骑着骏马巡游，犀牛安静地站在旁边，地上摆着一副巨大的象棋棋盘。企鹅摇摇晃晃地在广场上散步，青蛙蹲在荷叶上呱呱唱，气球飞向蓝天，角落一座积木搭的高塔稳稳地立着。广场上的每个角落都有不同的快乐！',
+    map:['71机翼','72企鹅','73旗杆','74骑士','75积木','76犀牛','77象棋','78青蛙','79气球','80铁塔'] },
+  { range:'第81章', name:'白蚁妈妈讲完了故事', file:'lianxiang/81白蚁.png',
+    desc:'一只白蚁领队带着七个小伙伴，八只排成笔直的一队，沿着绿色的树枝齐步爬行，像一支小小的行军队伍，阳光透过树叶洒在它们身上，认真又可爱，故事也讲完了，81个关联词大家都能记住~',
+    map:['81白蚁'] },
+];
+
+function renderScenes() {
+  const container = document.getElementById('storyContainer');
+  container.innerHTML = scenes.map((s, i) => `
+    <div class="scene-card" onclick="openLightbox(${i})">
+      <div class="scene-img"><img src="${s.file}" alt="${s.name}" loading="lazy"></div>
+      <div class="scene-info">
+        <div class="scene-range">${s.range}</div>
+        <div class="scene-name">${s.name}</div>
+        <div class="scene-desc">${s.desc}</div>
+        <div class="scene-mapping">${(s.map||[]).map(m=>`<span class="mapping-tag"><span class="num">${m.slice(0,2)}</span>${m.slice(2)}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+let currentSceneIdx = 0;
+
+function openLightbox(idx) {
+  currentSceneIdx = idx;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('show');
+}
+function updateLightbox() {
+  const s = scenes[currentSceneIdx];
+  document.getElementById('lbImg').src = s.file;
+  document.getElementById('lbInfo').textContent = s.range + ' · ' + s.name;
+  document.getElementById('lbMap').innerHTML = (s.map||[]).map(m=>`<span class="mapping-tag" style="color:#ccc;background:rgba(255,255,255,0.1);"><span class="num" style="color:#c9a96e;">${m.slice(0,2)}</span>${m.slice(2)}</span>`).join('');
+}
+function navLightbox(dir) {
+  currentSceneIdx = (currentSceneIdx + dir + scenes.length) % scenes.length;
+  updateLightbox();
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const cur = html.getAttribute('data-theme');
+  const next = cur === 'dark' ? '' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('lianxiang_theme', next);
+}
+
+(function init() {
+  const saved = localStorage.getItem('lianxiang_theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  renderScenes();
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+    if (document.getElementById('lightbox').classList.contains('show')) {
+      if (e.key === 'ArrowLeft') navLightbox(-1);
+      if (e.key === 'ArrowRight') navLightbox(1);
+      return;
+    }
+    if ((e.key === 'h' || e.key === 'H') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      location.href = 'index.html';
+    }
+  });
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

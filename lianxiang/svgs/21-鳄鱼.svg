@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient>
+  </defs>
+  <!-- 卡片背景 -->
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">21=鳄鱼</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">2像鳄鱼弯弯身，1是尾巴直直立</text>
+
+  <!-- 水 -->
+  <ellipse cx="512" cy="780" rx="280" ry="60" fill="#7EC8E3" opacity="0.4"/>
+  <ellipse cx="512" cy="770" rx="260" ry="45" fill="#5BA4C7" opacity="0.3"/>
+
+  <!-- 鳄鱼身体 - 2形状 -->
+  <path d="M280 550 Q280 420 400 380 Q500 340 550 370 Q600 400 580 480 Q560 560 500 590 Q420 620 350 590 Q280 560 280 550Z" fill="#5B8C5A" stroke="#3D6B3C" stroke-width="3"/>
+  <!-- 背部鳞片 -->
+  <path d="M320 420 L340 400 L360 420 L380 395 L400 415 L420 390 L440 410 L460 388 L480 408 L500 392 L520 415" fill="none" stroke="#3D6B3C" stroke-width="3"/>
+  <!-- 肚子浅色 -->
+  <path d="M300 560 Q380 610 500 590 Q560 570 570 510 Q500 540 380 540 Q320 540 300 560Z" fill="#8BC34A" opacity="0.5"/>
+
+  <!-- 尾巴 - 1形状（直直） -->
+  <line x1="280" y1="550" x2="200" y2="600" stroke="#5B8C5A" stroke-width="18" stroke-linecap="round"/>
+
+  <!-- 眼睛 -->
+  <circle cx="440" cy="430" r="14" fill="white"/>
+  <circle cx="444" cy="432" r="6" fill="#2C1810"/>
+
+  <!-- 嘴巴 -->
+  <path d="M540 400 Q560 380 580 395" fill="none" stroke="#3D6B3C" stroke-width="3"/>
+
+  <!-- 水花 -->
+  <circle cx="350" cy="740" r="8" fill="white" opacity="0.5"/>
+  <circle cx="450" cy="755" r="6" fill="white" opacity="0.4"/>
+  <circle cx="550" cy="750" r="7" fill="white" opacity="0.3"/>
+
+  <!-- 装饰小星星 -->
+  <text x="200" y="300" font-size="24" fill="#F9A825" opacity="0.4">✦</text>
+  <text x="750" y="280" font-size="20" fill="#F9A825" opacity="0.3">✦</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">45=水壶</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">4像壶盖三角盖，5是壶嘴弯弯流</text>
+  <!-- 壶身 - 5形弯 -->
+  <ellipse cx="512" cy="620" rx="140" ry="160" fill="#4FC3F7"/>
+  <ellipse cx="512" cy="620" rx="120" ry="140" fill="#29B6F6"/>
+  <ellipse cx="490" cy="580" rx="50" ry="35" fill="#81D4FA" opacity="0.4"/>
+  <!-- 壶底 -->
+  <path d="M380 760 Q512 800 644 760" fill="none" stroke="#0288D1" stroke-width="4"/>
+  <!-- 壶盖 - 4形三角 -->
+  <path d="M420 470 L512 400 L604 470Z" fill="#0288D1"/>
+  <circle cx="512" cy="415" r="12" fill="#01579B"/>
+  <!-- 壶嘴 - 5形弯 -->
+  <path d="M370 580 Q330 560 320 520 Q310 480 340 460 Q360 450 370 470" fill="none" stroke="#0288D1" stroke-width="16" stroke-linecap="round"/>
+  <!-- 把手 -->
+  <path d="M652 540 Q720 560 710 650 Q700 740 652 700" fill="none" stroke="#0288D1" stroke-width="16" stroke-linecap="round"/>
+  <!-- 蒸汽 -->
+  <path d="M500 400 Q480 360 500 330" fill="none" stroke="#B3E5FC" stroke-width="3" opacity="0.5"/>
+  <path d="M520 400 Q540 350 520 310" fill="none" stroke="#B3E5FC" stroke-width="3" opacity="0.4"/>
+  <path d="M512 400 Q512 370 512 340" fill="none" stroke="#B3E5FC" stroke-width="2.5" opacity="0.3"/>
+</svg>

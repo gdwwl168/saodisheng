@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1a28"/><stop offset="100%" stop-color="#0a0a18"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">45=水壶</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">4是壶嘴弯弯翘，5是壶身圆鼓鼓</text>
+  <!-- 桌面 -->
+  <ellipse cx="512" cy="680" rx="200" ry="18" fill="#0a0a10" opacity="0.4"/>
+  <!-- 壶身 5形圆鼓 -->
+  <ellipse cx="512" cy="540" rx="85" ry="70" fill="#A0B0C0"/>
+  <ellipse cx="512" cy="535" rx="72" ry="60" fill="#B8C8D8" opacity="0.5"/>
+  <!-- 壶身反光 -->
+  <ellipse cx="490" cy="520" rx="20" ry="40" fill="white" opacity="0.1" transform="rotate(-10 490 520)"/>
+  <!-- 壶底 -->
+  <ellipse cx="512" cy="605" rx="60" ry="12" fill="#8090A0"/>
+  <!-- 壶口 -->
+  <ellipse cx="512" cy="460" rx="35" ry="10" fill="#8090A0"/>
+  <ellipse cx="512" cy="460" rx="28" ry="7" fill="#1a1a2e"/>
+  <!-- 壶盖 -->
+  <ellipse cx="512" cy="460" rx="38" ry="6" fill="#A0B0C0"/>
+  <circle cx="512" cy="450" r="8" fill="#8090A0"/>
+  <!-- 壶嘴 4形弯 -->
+  <path d="M430 500 Q400 480 390 450 Q380 420 400 410 Q410 415 405 440 Q400 470 430 490" fill="none" stroke="#A0B0C0" stroke-width="14" stroke-linecap="round"/>
+  <!-- 壶嘴口 -->
+  <ellipse cx="398" cy="412" rx="6" ry="10" fill="#1a1a2e" transform="rotate(-20 398 412)"/>
+  <!-- 壶嘴高光 -->
+  <path d="M430 500 Q408 485 400 458" fill="none" stroke="white" stroke-width="2" opacity="0.12"/>
+  <!-- 壶把 5形弯 -->
+  <path d="M590 500 Q640 480 650 520 Q660 560 620 580 Q600 590 590 570" fill="none" stroke="#A0B0C0" stroke-width="12" stroke-linecap="round"/>
+  <!-- 蒸汽 -->
+  <g stroke="white" fill="none" opacity="0.08">
+    <path d="M500 435 Q495 410 500 385"/>
+    <path d="M512 430 Q508 405 512 380"/>
+    <path d="M524 435 Q519 410 524 385"/>
+  </g>
+</svg>

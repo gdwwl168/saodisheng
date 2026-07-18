@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">79=气球</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">7像气球弯弯飘，9是长绳悠悠飞</text>
+  <!-- 气球主体 - 7形圆飘 -->
+  <ellipse cx="400" cy="550" rx="95" ry="115" fill="#F44336"/>
+  <ellipse cx="400" cy="540" rx="80" ry="100" fill="#EF5350"/>
+  <ellipse cx="370" cy="500" rx="30" ry="20" fill="white" opacity="0.2"/>
+  <!-- 气球结点 -->
+  <path d="M390 665 L395 675 L405 675 L390 665" fill="#C62828"/>
+  <!-- 绳子 - 9形弯长 -->
+  <path d="M400 675 Q400 730 420 770 Q440 810 400 850" fill="none" stroke="#78909C" stroke-width="3"/>
+  <!-- 气球2（小） -->
+  <ellipse cx="550" cy="450" rx="65" ry="80" fill="#2196F3"/>
+  <ellipse cx="550" cy="440" rx="55" ry="70" fill="#42A5F5"/>
+  <ellipse cx="530" cy="420" rx="20" ry="14" fill="white" opacity="0.2"/>
+  <path d="M545 530 L550 540 L560 540" fill="#1565C0"/>
+  <path d="M550 540 Q560 580 545 620" fill="none" stroke="#78909C" stroke-width="2.5"/>
+  <!-- 气球3（远） -->
+  <ellipse cx="640" cy="520" rx="55" ry="70" fill="#FF9800" opacity="0.8"/>
+  <ellipse cx="638" cy="515" rx="45" ry="60" fill="#FFB74D" opacity="0.8"/>
+  <path d="M638 590 L640 600 L648 600" fill="#E65100" opacity="0.8"/>
+  <path d="M640 600 Q640 650 650 680" fill="none" stroke="#78909C" stroke-width="2" opacity="0.8"/>
+  <!-- 云朵 -->
+  <ellipse cx="300" cy="300" rx="60" ry="22" fill="white" opacity="0.35"/>
+  <ellipse cx="700" cy="350" rx="50" ry="18" fill="white" opacity="0.3"/>
+</svg>

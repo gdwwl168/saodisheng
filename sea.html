@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="sea-theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a1628">
+<meta name="description" content="海洋舟（海洋皮划艇）知识专页：艇型装备、桨法救援、风浪潮汐、导航团队与清单复盘">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="12345.png" type="image/png">
+<link rel="apple-touch-icon" href="12345.png">
+<title>海洋舟 · 藏经阁</title>
+<style>
+:root {
+  --bg: #eef6f8;
+  --text: #1a3038;
+  --accent: #0d6e7a;
+  --gold: #3d9aad;
+  --card: #f7fbfc;
+  --border: #b8d4dc;
+  --muted: rgba(26,48,56,0.55);
+  --sidebar: #e0eef2;
+  --warn-bg: #e8f4f6;
+  --warn-border: #7eb8c4;
+  --code-bg: #dceef2;
+  --shadow: 0 2px 16px rgba(13,110,122,0.08);
+}
+[data-theme="dark"] {
+  --bg: #0a1628;
+  --text: #c5dde4;
+  --accent: #5eb8c9;
+  --gold: #7ec8d6;
+  --card: #122033;
+  --border: #1e3a4a;
+  --muted: rgba(197,221,228,0.55);
+  --sidebar: #0d1a2a;
+  --warn-bg: #152a32;
+  --warn-border: #2a5a68;
+  --code-bg: #152838;
+  --shadow: 0 2px 16px rgba(0,0,0,0.35);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", "STSong", serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh; height: 100dvh;
+  display: flex; overflow: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+.sidebar {
+  width: 280px; min-width: 280px;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 10;
+  transition: transform 0.25s ease, background 0.3s;
+}
+.side-head { padding: 20px 16px 14px; border-bottom: 1px solid var(--border); text-align: center; }
+.side-head img { width: 48px; height: 48px; border-radius: 10px; margin: 0 auto 8px; display: block; }
+.side-head h1 { font-size: 1.15em; color: var(--accent); letter-spacing: 0.12em; }
+.side-head .sub { font-size: 0.72em; opacity: 0.55; margin-top: 4px; line-height: 1.5; }
+.nav-list { flex: 1; overflow-y: auto; padding: 10px 8px 20px; -webkit-overflow-scrolling: touch; }
+.nav-list::-webkit-scrollbar { width: 4px; }
+.nav-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.nav-item {
+  display: block; width: 100%; text-align: left;
+  padding: 11px 14px; margin-bottom: 3px; border: none; border-radius: 10px;
+  background: transparent; color: var(--text); font-family: inherit;
+  font-size: 0.88em; letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s;
+}
+.nav-item:hover { background: rgba(13,110,122,0.1); }
+.nav-item.active { background: var(--accent); color: #fff; }
+.nav-item .num { opacity: 0.55; font-size: 0.85em; margin-right: 6px; }
+.nav-item.active .num { opacity: 0.85; }
+.side-foot { padding: 12px; border-top: 1px solid var(--border); text-align: center; font-size: 0.78em; }
+.side-foot a { color: var(--accent); text-decoration: none; margin: 0 8px; }
+.main { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.topbar {
+  display: flex; align-items: center; gap: 8px; padding: 10px 16px;
+  border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; flex-wrap: wrap;
+}
+.topbar button, .topbar a.btn {
+  padding: 7px 14px; border: 1px solid var(--border); border-radius: 18px;
+  background: var(--card); color: var(--text); font-family: inherit; font-size: 0.8em;
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+}
+.topbar button:hover, .topbar a.btn:hover { border-color: var(--accent); color: var(--accent); }
+.topbar .spacer { flex: 1; }
+.topbar .title-now { font-size: 0.9em; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; }
+#menuBtn { display: none; }
+.content { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 28px 36px 60px; }
+.article { max-width: 720px; margin: 0 auto; }
+.article h2 {
+  font-size: 1.45em; color: var(--accent); letter-spacing: 0.12em;
+  margin-bottom: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.article .meta { font-size: 0.78em; color: var(--muted); margin-bottom: 22px; }
+.article h3 { font-size: 1.08em; color: var(--gold); letter-spacing: 0.08em; margin: 26px 0 10px; }
+.article p { font-size: 0.98em; line-height: 1.9; margin-bottom: 12px; text-align: justify; }
+.article ul, .article ol { margin: 8px 0 16px 1.4em; line-height: 1.85; font-size: 0.95em; }
+.article li { margin-bottom: 6px; }
+.article table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 0.9em; }
+.article th, .article td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; vertical-align: top; }
+.article th { background: var(--card); color: var(--accent); letter-spacing: 0.06em; }
+.article code { font-family: ui-monospace, Consolas, monospace; background: var(--code-bg); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+.article .callout {
+  background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 12px;
+  padding: 14px 16px; margin: 18px 0; font-size: 0.9em; line-height: 1.75;
+}
+.article .callout strong { color: var(--accent); }
+.article .todo-tag {
+  display: inline-block; font-size: 0.72em; padding: 2px 8px; border-radius: 10px;
+  background: var(--code-bg); color: var(--muted); margin-left: 6px; vertical-align: middle;
+}
+.article a { color: var(--accent); }
+.article blockquote {
+  border-left: 3px solid var(--gold); padding: 4px 0 4px 14px; margin: 12px 0 16px;
+  opacity: 0.9; line-height: 1.8;
+}
+.sea-diagram {
+  margin: 16px 0 20px; background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 12px 12px; box-shadow: var(--shadow); text-align: center;
+}
+.sea-diagram svg { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; }
+.sea-diagram .cap { font-size: 0.82em; color: var(--muted); margin-top: 10px; line-height: 1.65; text-align: left; }
+.footer-note {
+  margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--border);
+  font-size: 0.78em; color: var(--muted); line-height: 1.7;
+}
+.backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 15; }
+.backdrop.show { display: block; }
+@media (max-width: 800px) {
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-105%);
+    z-index: 20; box-shadow: 4px 0 24px rgba(0,0,0,0.25);
+  }
+  .sidebar.open { transform: translateX(0); }
+  #menuBtn { display: inline-block; }
+  .content { padding: 18px 16px 48px; }
+  .topbar { padding: 8px 12px; }
+  .topbar .title-now { font-size: 0.82em; }
+}
+</style>
+</head>
+<body>
+<div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="side-head">
+    <img src="12345.png" alt="">
+    <h1>海洋舟</h1>
+    <div class="sub">Sea Kayak<br>沿岸 · 风浪 · 持续增补</div>
+  </div>
+  <nav class="nav-list" id="navList"></nav>
+  <div class="side-foot">
+    <a href="index.html">🏠 首页</a>
+    <a href="SRT.html">🪢 SRT</a>
+    <a href="#" onclick="toggleTheme();return false;">🌓 主题</a>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <button type="button" id="menuBtn" onclick="toggleSidebar()">☰ 目录</button>
+    <span class="title-now" id="titleNow">概述</span>
+    <span class="spacer"></span>
+    <a class="btn" href="index.html" title="回首页 (H)">🏠</a>
+    <a class="btn" href="SRT.html" title="SRT">🪢</a>
+    <button type="button" onclick="toggleTheme()" title="主题 (T)">🌓</button>
+  </header>
+  <div class="content" id="content"></div>
+</div>
+<script>
+const ARTICLES = [
+  {
+    id: "overview",
+    title: "概述：什么是海洋舟",
+    status: "stable",
+    html: "<p><strong>海洋舟</strong>在此专指以<strong>海洋皮划艇（sea kayak）</strong>为主的近海与开阔水域舟行：用双叶桨推进、艇体细长、可装喷裙与密封舱，适合沿岸巡航、岛礁跳跃与多日巡航。</p>\n<p>英文常见：<em>sea kayaking</em> / <em>touring kayaking</em>。与激流舟（whitewater）、休闲坐式舟（SOT）、SUP、赛艇不是同一套技术与风险模型。</p>\n<blockquote>核心能力不只是「会划」：还包括<strong>翻艇后自救/他救、风浪潮汐判断、导航与团队纪律</strong>。</blockquote>\n<h3>和相近活动对比</h3>\n<table>\n  <tr><th></th><th>海洋舟</th><th>激流舟</th><th>坐式休闲舟 / SUP</th></tr>\n  <tr><td>水域</td><td>海、大湖、宽河口</td><td>河流激流</td><td>静水、近岸休闲</td></tr>\n  <tr><td>艇型</td><td>细长、舱室、龙骨线</td><td>短、机动、防撞</td><td>稳、宽、易上</td></tr>\n  <tr><td>必备技能</td><td>湿出舱、再入水、支撑、导航</td><td>翻滚、读水、障碍</td><td>平衡、基础救生</td></tr>\n  <tr><td>典型风险</td><td>风浪、离岸风、低温、航道</td><td>暗礁、孔洞、冲击</td><td>落水、走神、晒伤</td></tr>\n</table>\n<div class=\"sea-diagram\" aria-label=\"海洋舟能力三角\">\n  <svg viewBox=\"0 0 420 200\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n    <title>能力三角：船技 · 海况 · 团队</title>\n    <polygon points=\"210,28 60,170 360,170\" fill=\"currentColor\" opacity=\"0.06\" stroke=\"var(--accent,#0d6e7a)\" stroke-width=\"2\"/>\n    <circle cx=\"210\" cy=\"28\" r=\"6\" fill=\"var(--accent,#0d6e7a)\"/>\n    <circle cx=\"60\" cy=\"170\" r=\"6\" fill=\"var(--accent,#0d6e7a)\"/>\n    <circle cx=\"360\" cy=\"170\" r=\"6\" fill=\"var(--accent,#0d6e7a)\"/>\n    <text x=\"210\" y=\"18\" text-anchor=\"middle\" font-size=\"13\" fill=\"currentColor\">船技（桨/翻滚/救援）</text>\n    <text x=\"50\" y=\"192\" text-anchor=\"middle\" font-size=\"13\" fill=\"currentColor\">海况判断</text>\n    <text x=\"370\" y=\"192\" text-anchor=\"middle\" font-size=\"13\" fill=\"currentColor\">团队与决策</text>\n    <text x=\"210\" y=\"115\" text-anchor=\"middle\" font-size=\"12\" fill=\"currentColor\" opacity=\"0.7\">缺一不可</text>\n  </svg>\n  <p class=\"cap\">只练馆内静水翻滚、却不懂离岸风，或只懂天气预报却不会再入水——都不够出海。</p>\n</div>\n<div class=\"callout\">\n  <strong>⚠️ 安全声明：</strong>本页为自学笔记与概念整理，<strong>不能替代</strong>合格教练、俱乐部课程与本地航海/海事规定。开阔水域有生命危险，请勿仅凭文字出海。\n</div>"
+  },
+  {
+    id: "history",
+    title: "简史与文化",
+    status: "stable",
+    html: "<p>皮艇（kayak）起源于北极原住民（如因纽特）的猎捕与交通舟，传统为<strong>骨架 + 兽皮</strong>，人与舟高度一体。现代玻璃钢/聚乙烯/复合材料海洋舟在 20 世纪中后叶随休闲航海与探险热潮普及。</p>\n<table>\n  <tr><th>线索</th><th>说明</th></tr>\n  <tr><td>传统</td><td>窄舱、喷裙概念、滚转（rolling）与极地求生智慧</td></tr>\n  <tr><td>现代 tour</td><td>前后密封舱、舵/稳向板、日巡与多日装载</td></tr>\n  <tr><td>运动分支</td><td>竞速、冲浪式、探险穿越、无辅助远征等</td></tr>\n  <tr><td>中国语境</td><td>俱乐部、航海中心、海岛线路与桨板市场并行；标准与教练体系仍以各协会/俱乐部为准</td></tr>\n</table>\n<blockquote>尊重水域与文化：传统技术是生存系统，不是「酷炫动作库」。</blockquote>"
+  },
+  {
+    id: "craft",
+    title: "艇型与部件",
+    status: "stable",
+    html: "<p>选艇先问：<strong>在哪划、装多少、自己翻得起来吗</strong>。</p>\n<h3>常见艇型</h3>\n<table>\n  <tr><th>类型</th><th>特征</th><th>适合</th></tr>\n  <tr><td><strong>海洋巡航艇</strong></td><td>4.5–5.5 m 级常见；尖瘦；前后舱；可装舵/稳向板</td><td>沿岸、多日、风浪中的航向稳定</td></tr>\n  <tr><td><strong>日巡 / 过渡艇</strong></td><td>略短略稳；学习曲线友好</td><td>入门到中级海况</td></tr>\n  <tr><td><strong>坐式 SOT</strong></td><td>敞坐、自排；稳</td><td>暖水近岸；远海能力通常弱于坐舱海舟</td></tr>\n  <tr><td><strong>折叠 / 充气结构</strong></td><td>便携</td><td>旅行；刚性与风浪表现看具体产品</td></tr>\n</table>\n<h3>关键部件</h3>\n<ul>\n  <li><strong>座舱与喷裙桥</strong>：喷裙密封，防浪进舱</li>\n  <li><strong>前后密封舱</strong>：浮力与装载；舱口盖要真的密封</li>\n  <li><strong>舵（rudder）</strong>：脚控转向，巡航省力；浅水/登陆要注意</li>\n  <li><strong>稳向板（skeg）</strong>：改善偏航，不主动转向</li>\n  <li><strong>甲板绳与弹性网</strong>：固定泵、桨漂、地图盒</li>\n  <li><strong>安全线 / 拉手</strong>：救援抓握</li>\n</ul>\n<div class=\"sea-diagram\">\n  <svg viewBox=\"0 0 440 140\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n    <title>海洋舟侧视示意</title>\n    <ellipse cx=\"220\" cy=\"70\" rx=\"190\" ry=\"28\" fill=\"none\" stroke=\"var(--accent,#0d6e7a)\" stroke-width=\"3\"/>\n    <rect x=\"185\" y=\"48\" width=\"70\" height=\"28\" rx=\"8\" fill=\"currentColor\" opacity=\"0.12\" stroke=\"currentColor\" stroke-width=\"1.5\"/>\n    <text x=\"220\" y=\"66\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\">座舱</text>\n    <text x=\"70\" y=\"55\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.75\">船首舱</text>\n    <text x=\"340\" y=\"55\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.75\">船尾舱</text>\n    <text x=\"220\" y=\"115\" text-anchor=\"middle\" font-size=\"12\" fill=\"currentColor\" opacity=\"0.7\">细长水线 · 甲板绳 · 舱盖</text>\n  </svg>\n  <p class=\"cap\">示意而已：真实艇有龙骨线、舷弧与干舷差异，试划比参数表重要。</p>\n</div>"
+  },
+  {
+    id: "gear",
+    title: "个人装备",
+    status: "stable",
+    html: "<p>「人的装备」与「艇的装备」分开想。以下为海洋日巡常见个人系统（俱乐部清单为准）。</p>\n<table>\n  <tr><th>装备</th><th>作用</th></tr>\n  <tr><td><strong>救生衣 PFD</strong></td><td>浮力与口袋；必须合身、可游泳活动；海上建议足够浮力等级（看当地规范）</td></tr>\n  <tr><td><strong>双叶桨</strong></td><td>推进；长度/羽角/左右手习惯要匹配</td></tr>\n  <tr><td><strong>喷裙</strong></td><td>挡浪；要能<strong>果断湿出舱拉开</strong></td></tr>\n  <tr><td><strong>舱底泵 / 海绵</strong></td><td>排水；泵最好甲板可取</td></tr>\n  <tr><td><strong>桨漂 paddle float</strong></td><td>自救再入水辅助</td></tr>\n  <tr><td><strong>吹管 / 保险绳</strong></td><td>防桨丢失（用法要防缠绕）</td></tr>\n  <tr><td>衣着</td><td>湿衣/干衣层、防风壳、帽、手套；按<strong>水温</strong>不是气温</td></tr>\n  <tr><td>通讯与信号</td><td>哨子（PFD 上）、防水手机/VHF、亮色/反光</td></tr>\n  <tr><td>导航</td><td>海图/地图盒、罗盘、备用电源的 GPS/手机</td></tr>\n  <tr><td>其他</td><td>刀具（队规）、急救、饮用水、防晒、头灯</td></tr>\n</table>\n<div class=\"callout\"><strong>原则：</strong>落水后 30 秒内能摸到的，才算「带着」。泵和哨子埋在后舱等于没带。</div>"
+  },
+  {
+    id: "paddle",
+    title: "桨法基础",
+    status: "stable",
+    html: "<p>海洋舟桨法目标：<strong>直航省力、转向可控、支撑防翻</strong>。细节以教练徒手纠姿为准。</p>\n<h3>常用桨</h3>\n<table>\n  <tr><th>桨法</th><th>用途</th></tr>\n  <tr><td><strong>前进桨 forward</strong></td><td>主推进；躯干转动，不只靠手臂</td></tr>\n  <tr><td><strong>横扫 sweep</strong></td><td>转向、调整船头</td></tr>\n  <tr><td><strong>倒桨 reverse</strong></td><td>减速、微调</td></tr>\n  <tr><td><strong>抽拉 draw</strong></td><td>侧移靠岸、贴伴</td></tr>\n  <tr><td><strong>支撑 brace</strong></td><td>低/高支撑抗侧倾；风浪中保命动作</td></tr>\n  <tr><td><strong>舵效 / 边缘 edge</strong></td><td>压舷协助转向（进阶）</td></tr>\n</table>\n<ul>\n  <li>握距大致与肩宽相关，勿过窄或过宽</li>\n  <li>直航看远处参照，用轻微扫桨修正，而不是猛纠</li>\n  <li>有舵时：舵辅助直航，不替代读风读浪</li>\n</ul>\n<p class=\"todo-tag\">馆内可先练：10 分钟直航不大幅蛇形 + 左右扫桨调头</p>"
+  },
+  {
+    id: "wetexit",
+    title: "湿出舱与再入水",
+    status: "stable",
+    html: "<p>翻艇后，若不会滚转，标准路径是：<strong>湿出舱（wet exit）→ 控艇 → 再入水（re-entry）或呼叫他救</strong>。</p>\n<h3>湿出舱原则</h3>\n<ol>\n  <li>保持冷静，双手找喷裙前环/释放</li>\n  <li>前推/拉开喷裙，膝移出，手扶船</li>\n  <li><strong>人先保呼吸</strong>，再抓桨与船；艇尽量不离手</li>\n  <li>到水面后清点：人、艇、桨、同伴位置</li>\n</ol>\n<div class=\"callout\"><strong>必须练到条件反射：</strong>喷裙释放不能「想不起来」。泳池课反复练。</div>\n<h3>自救再入水（概念）</h3>\n<ul>\n  <li>排空部分舱水（泵）再爬回，或使用<strong>桨漂 + 后甲板</strong>等教练所教方法</li>\n  <li>风浪中自救显著更难——这是限制出海等级的原因</li>\n  <li>穿喷裙、着 PFD 的真实配置下练，勿只穿泳裤假练</li>\n</ul>"
+  },
+  {
+    id: "rolling",
+    title: "翻滚（滚转）",
+    status: "stable",
+    html: "<p><strong>滚转（Eskimo / kayak roll）</strong>：翻覆后不湿出舱，借桨与髋部扭转回到正浮。海洋舟加分项，在冷水与风浪中价值极高，但<strong>不是</strong>忽视 PFD、通讯与团队的理由。</p>\n<ul>\n  <li>常见教学：扫桨滚、C to C 等变体（名称因体系而异）</li>\n  <li>先在泳池掌握「髋弹 + 头最后起来」</li>\n  <li>海中滚转要在有保护与合适海况下进阶</li>\n  <li>不会滚转仍可航海，但路线选择必须更保守，并扎实湿出舱/救援</li>\n</ul>"
+  },
+  {
+    id: "rescue",
+    title: "救援与编队",
+    status: "stable",
+    html: "<p>海上救援以<strong>防止走散、尽快恢复航行能力</strong>为目标。</p>\n<h3>他救概念</h3>\n<table>\n  <tr><th>类型</th><th>说明</th></tr>\n  <tr><td>船侧 T / 平行靠拢</td><td>救援艇稳定翻覆艇，协助排水与爬回（具体手法面授）</td></tr>\n  <tr><td>拖带 tow</td><td>受伤、乏力、逆风；有拖带绳与释放意识</td></tr>\n  <tr><td>岸救 / 外援</td><td>超出能力立刻通讯，勿硬扛</td></tr>\n</table>\n<h3>编队习惯</h3>\n<ul>\n  <li>能互视或约定间距；雾中更密、有计划</li>\n  <li>强手可前探或殿后；新手在中间</li>\n  <li>一人翻艇：邻近者立刻靠近，其余保持队形别全体扎堆失控</li>\n</ul>\n<div class=\"callout\"><strong>冷水现实：</strong>救援窗口按分钟计。衣着与决策比「再划远一点」优先。</div>"
+  },
+  {
+    id: "weather",
+    title: "风浪潮汐与天气",
+    status: "stable",
+    html: "<p>海洋舟的「地形」是流动的。<strong>风、浪、潮、能见度</strong>决定能不能出、往哪走、何时收。</p>\n<h3>风</h3>\n<ul>\n  <li><strong>离岸风</strong>：把你吹向外海，回岸变逆风——近岸最大陷阱之一</li>\n  <li>迎风/侧风/顺风：体能与偏航完全不同</li>\n  <li>看预报的同时看<strong>实况海面</strong>与当地地形加速（岬角、狭管）</li>\n</ul>\n<h3>浪与涌</h3>\n<ul>\n  <li>风浪周期短、涌浪周期长；叠加会突然变陡</li>\n  <li>近岸碎浪带（surf）是独立技术，勿在不会破浪出入时硬冲</li>\n</ul>\n<h3>潮汐与流</h3>\n<ul>\n  <li>潮高影响登陆点与暗礁；潮流可远超你的巡航速度</li>\n  <li>海峡、河口、岬角流速大；错过潮窗可能无法原路返回</li>\n</ul>\n<h3>其他</h3>\n<ul>\n  <li>雾：导航与防碰撞压力陡增</li>\n  <li>雷暴：金属桨与开阔水面风险；提前下撤</li>\n  <li>水温：决定穿着与翻艇后的存活时间预期</li>\n</ul>\n<div class=\"callout\"><strong>行前三问：</strong>风往哪吹？潮往哪流？翻了冷不冷？有一个答不上来就别出。</div>"
+  },
+  {
+    id: "nav",
+    title: "导航与避碰",
+    status: "stable",
+    html: "<p>海岸线看起来「靠岸就不会丢」，实际上雾、夜、长沙滩与离岸流会让人失去参照。</p>\n<ul>\n  <li>纸质/防水海图或可靠电子图 + <strong>罗盘</strong>备份</li>\n  <li>航线规划：出发/登陆点、备选湾、避难点、潮窗</li>\n  <li>目测：成对叠标、特征岬、灯塔（若有）</li>\n  <li>GPS 会没电、进水、丢星——不能当唯一手段</li>\n</ul>\n<h3>避碰意识（极简）</h3>\n<ul>\n  <li>商船/渔船惯性大、驾驶台盲区大：<strong>假设他看不见你</strong></li>\n  <li>航道、港池、渡轮线：尽量避开或快速垂直穿越（按当地规则与领队）</li>\n  <li>亮色 PFD/艇、灯光、雷达反射器（进阶配置）提高存在感</li>\n  <li>不确定时早避让、早通讯</li>\n</ul>\n<p class=\"todo-tag\">具体《国际海上避碰规则》条款以正式航海学习为准</p>"
+  },
+  {
+    id: "packing",
+    title: "装载与打包",
+    status: "stable",
+    html: "<p>海洋舟装载影响<strong>稳性、耐波与救援</strong>。重物低而居中，左右平衡，舱盖真密封。</p>\n<div class=\"sea-diagram\">\n  <svg viewBox=\"0 0 440 200\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">\n    <title>装载分层</title>\n    <rect x=\"30\" y=\"30\" width=\"380\" height=\"50\" rx=\"8\" fill=\"currentColor\" opacity=\"0.08\" stroke=\"currentColor\"/>\n    <text x=\"220\" y=\"50\" text-anchor=\"middle\" font-size=\"13\" fill=\"currentColor\">甲板：泵 · 桨漂 · 地图盒（可及）</text>\n    <text x=\"220\" y=\"70\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.65\">勿堆高影响稳性与翻滚</text>\n    <rect x=\"30\" y=\"100\" width=\"170\" height=\"70\" rx=\"8\" fill=\"currentColor\" opacity=\"0.08\" stroke=\"var(--accent,#0d6e7a)\"/>\n    <text x=\"115\" y=\"130\" text-anchor=\"middle\" font-size=\"12\" fill=\"currentColor\">前舱：轻、体积大</text>\n    <text x=\"115\" y=\"150\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.7\">睡垫/空袋</text>\n    <rect x=\"240\" y=\"100\" width=\"170\" height=\"70\" rx=\"8\" fill=\"currentColor\" opacity=\"0.08\" stroke=\"var(--accent,#0d6e7a)\"/>\n    <text x=\"325\" y=\"130\" text-anchor=\"middle\" font-size=\"12\" fill=\"currentColor\">后舱：重物偏低</text>\n    <text x=\"325\" y=\"150\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.7\">水/食物/营地</text>\n  </svg>\n  <p class=\"cap\">多日巡航再细拆日用袋与宿营袋；防水桶/袋分层，湿干隔离。</p>\n</div>\n<ul>\n  <li>人穿：PFD、哨、通讯；不进舱</li>\n  <li>应急：泵、桨漂、抛绳（若带）在甲板系统</li>\n  <li>试装后在浅水做一次稳性体感，再出长线</li>\n</ul>"
+  },
+  {
+    id: "signals",
+    title: "信号与通讯",
+    status: "stable",
+    html: "<table>\n  <tr><th>手段</th><th>用途</th></tr>\n  <tr><td>哨子</td><td>短距吸引注意；固定在 PFD</td></tr>\n  <tr><td>手势 / 桨势</td><td>队内：靠拢、停、登陆（全队统一）</td></tr>\n  <tr><td>VHF 海事电台</td><td>船岸/遇险频道（需会用与持证要求看地区）</td></tr>\n  <tr><td>手机</td><td>近岸备份；防水壳 + 电量；无信号区域勿依赖</td></tr>\n  <tr><td>焰火/染色剂等</td><td>进阶求生配置；训练后使用</td></tr>\n</table>\n<p>进水前约定：<strong>离散集合点、超时联络、谁带主通讯</strong>。</p>"
+  },
+  {
+    id: "roles",
+    title: "团队角色",
+    status: "stable",
+    html: "<table>\n  <tr><th>角色</th><th>责任</th></tr>\n  <tr><td>领队</td><td>线路与海况决策；一票否决出海；简报</td></tr>\n  <tr><td>导航</td><td>可兼；盯潮窗与航向</td></tr>\n  <tr><td>前卫</td><td>探路、报浪与交通</td></tr>\n  <tr><td>殿后</td><td>盯掉队与新手；清点</td></tr>\n  <tr><td>新手机照护</td><td>登陆/出发辅助；不多人指挥</td></tr>\n  <tr><td>救援熟练者</td><td>分布在队中，非全部扎在队首</td></tr>\n</table>\n<div class=\"callout\"><strong>最小四问：</strong>谁决策？集合点在哪？超时怎么办？新手谁盯？</div>"
+  },
+  {
+    id: "training",
+    title: "学习路径",
+    status: "stable",
+    html: "<ol>\n  <li><strong>泳池 / 静水：</strong>湿出舱、再入水、基础桨、翻滚入门</li>\n  <li><strong>有风的湖/湾：</strong>偏航、支撑、短拖带</li>\n  <li><strong>近岸有保护的海：</strong>登陆破浪入门（有教练）、编队</li>\n  <li><strong>导航与天气课：</strong>再谈岛跳与多日</li>\n  <li><strong>救援日：</strong>定期复训冷水/风浪模拟（在安全条件下）</li>\n</ol>\n<p>能力进阶看<strong>最弱项</strong>：只会直划不会救援，就限制在「游泳可回岸」的范围。</p>"
+  },
+  {
+    id: "checklist",
+    title: "出发检查清单",
+    status: "stable",
+    html: "<h3>人</h3>\n<ul>\n  <li>□ PFD 合身扣好 + 哨子</li>\n  <li>□ 衣着匹配<strong>水温</strong></li>\n  <li>□ 喷裙可快速释放（现场拉一次确认）</li>\n  <li>□ 饮水、热量、防晒、药</li>\n</ul>\n<h3>艇与甲板</h3>\n<ul>\n  <li>□ 舱盖密封、舱内大致干燥</li>\n  <li>□ 泵、桨漂可及；桨与保险</li>\n  <li>□ 舵/稳向板工作正常</li>\n  <li>□ 装载平衡，无松散拖挂</li>\n</ul>\n<h3>计划</h3>\n<ul>\n  <li>□ 预报：风、浪、潮、能见度</li>\n  <li>□ 航线、备选登陆、返回时限</li>\n  <li>□ 地面联系人已知逾期怎么办</li>\n  <li>□ 口令/集合点已复述</li>\n</ul>"
+  },
+  {
+    id: "debrief",
+    title: "课后复盘模板",
+    status: "stable",
+    html: "<table>\n  <tr><th>项</th><th>记录</th></tr>\n  <tr><td>日期地点海况</td><td></td></tr>\n  <tr><td>风/浪/潮实际 vs 预报</td><td></td></tr>\n  <tr><td>技术：桨/支撑/救援</td><td></td></tr>\n  <tr><td>近失</td><td></td></tr>\n  <tr><td>装备问题</td><td></td></tr>\n  <tr><td>下次只改 3 件事</td><td>1. 2. 3.</td></tr>\n</table>\n<p>队内 10 分钟：亮点 + 改进 + 装备损伤登记 + 下次目标。</p>"
+  },
+  {
+    id: "mistakes",
+    title: "常见失误",
+    status: "stable",
+    html: "<table>\n  <tr><th>失误</th><th>更好做法</th></tr>\n  <tr><td>按气温穿衣服</td><td>按水温与翻艇后生存</td></tr>\n  <tr><td>离岸风近岸玩</td><td>预留逆风体能与撤退线</td></tr>\n  <tr><td>泵在后舱底</td><td>甲板可及</td></tr>\n  <tr><td>只会直划就岛跳</td><td>先救援与导航课</td></tr>\n  <tr><td>雾中散队</td><td>加密间距、声信号、集合点</td></tr>\n  <tr><td>航道里自拍</td><td>避让交通，存在感与尽早穿越</td></tr>\n  <tr><td>翻艇丢桨丢船</td><td>湿出舱流程练到抓牢</td></tr>\n</table>"
+  },
+  {
+    id: "safety",
+    title: "安全要点",
+    status: "stable",
+    html: "<ol>\n  <li>跟人学，先泳池后海</li>\n  <li>告知地面行程与逾期动作</li>\n  <li>PFD 一直穿；冷水着装诚实</li>\n  <li>风浪潮三问通过再下水</li>\n  <li>能力以<strong>最弱队员 + 最弱技能</strong>设限</li>\n  <li>商船前假设自己不可见</li>\n  <li>超能力立即撤，荣耀留给回家</li>\n</ol>"
+  },
+  {
+    id: "environment",
+    title: "海洋与礼仪",
+    status: "stable",
+    html: "<ul>\n  <li>无痕：垃圾带回，勿在潮间带破坏生物</li>\n  <li>野生动物保持距离；鸟类繁殖季绕行</li>\n  <li>尊重渔民网具与养殖区；当地规定优先</li>\n  <li>私人码头与军事区勿擅入</li>\n  <li>拍照不挡救援与航道</li>\n</ul>"
+  },
+  {
+    id: "glossary",
+    title: "术语速查",
+    status: "stable",
+    html: "<table>\n  <tr><th>术语</th><th>说明</th></tr>\n  <tr><td>Sea kayak / 海洋皮划艇</td><td>适海细长坐舱艇</td></tr>\n  <tr><td>PFD</td><td>个人浮力衣</td></tr>\n  <tr><td>Spray skirt / 喷裙</td><td>座舱挡水裙</td></tr>\n  <tr><td>Wet exit</td><td>湿出舱</td></tr>\n  <tr><td>Re-entry</td><td>再入水回舱</td></tr>\n  <tr><td>Roll</td><td>翻滚回正</td></tr>\n  <tr><td>Brace</td><td>支撑桨</td></tr>\n  <tr><td>Skeg / Rudder</td><td>稳向板 / 舵</td></tr>\n  <tr><td>Paddle float</td><td>桨漂</td></tr>\n  <tr><td>Offshore wind</td><td>离岸风</td></tr>\n  <tr><td>Fetch</td><td>风区长度，影响浪</td></tr>\n  <tr><td>Tide / Current</td><td>潮汐 / 潮流</td></tr>\n  <tr><td>Surf launch/land</td><td>碎浪带出入水</td></tr>\n  <tr><td>Tow</td><td>拖带</td></tr>\n  <tr><td>VHF</td><td>甚高频海事电台</td></tr>\n  <tr><td>Cockpit</td><td>座舱</td></tr>\n  <tr><td>Bulkhead</td><td>密封舱壁</td></tr>\n  <tr><td>Beam sea</td><td>横浪</td></tr>\n  <tr><td>Following sea</td><td>顺浪</td></tr>\n</table>"
+  },
+  {
+    id: "resources",
+    title: "书目与资源",
+    status: "stable",
+    html: "<h3>检索关键词</h3>\n<p><code>sea kayaking</code> · <code>海洋皮划艇</code> · <code>touring kayak</code> · <code>wet exit</code> · <code>kayak roll</code> · <code>paddle float rescue</code> · <code>coastal navigation</code> · <code>离岸风</code> · <code>潮汐窗</code></p>\n<h3>学习方向</h3>\n<ul>\n  <li>本地有资质的皮划艇/航海俱乐部课程</li>\n  <li>海事天气与潮汐公开数据（以你所在海域官方源为准）</li>\n  <li>经典英文 rec 向书籍关键词：<em>sea kayaker</em> manual、<em>coastal kayaking</em></li>\n</ul>\n<h3>本站相关</h3>\n<p>\n  <a href=\"#checklist\" onclick=\"showArticle('checklist');return false;\">清单</a> ·\n  <a href=\"#weather\" onclick=\"showArticle('weather');return false;\">风浪潮</a> ·\n  <a href=\"#rescue\" onclick=\"showArticle('rescue');return false;\">救援</a> ·\n  <a href=\"#glossary\" onclick=\"showArticle('glossary');return false;\">术语</a> ·\n  <a href=\"SRT.html\">SRT 单绳</a>（另一项户外）\n</p>\n<div class=\"callout\">待补：你常划海域的本地潮汐口诀、俱乐部课表链接（可自行增补）。</div>"
+  },
+  {
+    id: "changelog",
+    title: "专页说明 · 如何增补",
+    status: "stable",
+    html: "<p>结构与 <code>SRT.html</code> 相同：所有章节在 <code>ARTICLES</code> 数组，侧栏自动生成。</p>\n<ul>\n  <li>新增：复制一节，改 <code>id</code> / <code>title</code> / <code>html</code></li>\n  <li><code>status: 'draft'</code> 显示「待补」</li>\n  <li>Hash：如 <code>sea.html#weather</code></li>\n</ul>\n<h3>增补记录</h3>\n<ul>\n  <li><strong>2026-07-13</strong>：首建海洋舟专页——概述、艇型、装备、桨法、湿出舱/翻滚/救援、风浪潮、导航、装载、信号角色、学习路径、清单复盘、术语与安全礼仪。</li>\n</ul>\n<p>快捷键：<strong>H</strong> 首页 · <strong>T</strong> 主题 · Esc 关目录</p>"
+  }
+];
+
+const navList = document.getElementById('navList');
+const content = document.getElementById('content');
+const titleNow = document.getElementById('titleNow');
+const sidebar = document.getElementById('sidebar');
+const backdrop = document.getElementById('backdrop');
+
+function renderNav() {
+  navList.innerHTML = ARTICLES.map((a, i) => {
+    const tag = a.status === 'draft' ? ' <span style="opacity:.7;font-size:.75em">·待补</span>' : '';
+    return '<button type="button" class="nav-item" data-id="' + a.id + '" onclick="showArticle(\'' + a.id + '\')">' +
+      '<span class="num">' + String(i + 1).padStart(2, '0') + '</span>' + a.title + tag +
+    '</button>';
+  }).join('');
+}
+
+function showArticle(id) {
+  const a = ARTICLES.find(x => x.id === id) || ARTICLES[0];
+  titleNow.textContent = a.title.replace(/：.*/, '');
+  content.innerHTML = '<article class="article">' +
+    '<h2>' + a.title + (a.status === 'draft' ? '<span class="todo-tag">待补</span>' : '') + '</h2>' +
+    '<div class="meta">海洋舟 · Sea Kayak · 藏经阁笔记</div>' +
+    a.html +
+    '<div class="footer-note">扫地僧 · 藏经阁 · 海洋舟专页 · 仅供学习备忘，出海请跟专业训练与本地规定</div>' +
+  '</article>';
+  content.scrollTop = 0;
+  navList.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === a.id);
+  });
+  history.replaceState(null, '', '#' + a.id);
+  closeSidebar();
+}
+
+function toggleSidebar() {
+  sidebar.classList.toggle('open');
+  backdrop.classList.toggle('show');
+}
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  backdrop.classList.remove('show');
+}
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('sea-theme', next); } catch (e) {}
+}
+
+document.addEventListener('keydown', e => {
+  const tag = (document.activeElement && document.activeElement.tagName) || '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  if (e.key === 'h' || e.key === 'H') { e.preventDefault(); location.href = 'index.html'; }
+  if (e.key === 't' || e.key === 'T') { e.preventDefault(); toggleTheme(); }
+  if (e.key === 'Escape') closeSidebar();
+});
+
+(function () {
+  try {
+    const s = localStorage.getItem('sea-theme');
+    if (s !== null) document.documentElement.setAttribute('data-theme', s);
+    else if (window.cjgResolveTheme) document.documentElement.setAttribute('data-theme', cjgResolveTheme('sea-theme', ''));
+  } catch (e) {}
+  renderNav();
+  const hash = (location.hash || '').replace(/^#/, '');
+  showArticle(hash && ARTICLES.some(a => a.id === hash) ? hash : ARTICLES[0].id);
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

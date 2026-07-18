@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1e1a18"/><stop offset="100%" stop-color="#0e0a08"/></radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#F0D060"/><stop offset="100%" stop-color="#C89830"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">14=钥匙</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">1是钥匙身直直，4是齿槽三角开</text>
+  <!-- 桌面 -->
+  <ellipse cx="512" cy="650" rx="280" ry="30" fill="#0a0806" opacity="0.4"/>
+  <!-- 钥匙环 0形 -->
+  <circle cx="512" cy="380" r="40" fill="none" stroke="url(#gold)" stroke-width="12"/>
+  <circle cx="512" cy="380" r="40" fill="none" stroke="#F0E080" stroke-width="4" opacity="0.4"/>
+  <!-- 钥匙身 1形 -->
+  <rect x="496" y="420" width="32" height="200" rx="4" fill="url(#gold)"/>
+  <rect x="500" y="420" width="10" height="200" fill="#F0E080" opacity="0.35"/>
+  <!-- 钥匙头 1+4形 -->
+  <rect x="486" y="610" width="52" height="35" rx="4" fill="url(#gold)"/>
+  <!-- 齿 4形三角 -->
+  <path d="M486 620 L466 620 L466 610Z" fill="url(#gold)"/>
+  <path d="M486 635 L470 635 L470 625Z" fill="url(#gold)"/>
+  <path d="M538 620 L558 620 L558 610Z" fill="url(#gold)"/>
+  <path d="M538 635 L554 635 L554 625Z" fill="url(#gold)"/>
+  <!-- 中心线槽 -->
+  <line x1="512" y1="610" x2="512" y2="645" stroke="#A07820" stroke-width="1.5" opacity="0.5"/>
+  <!-- 高光 -->
+  <line x1="504" y1="430" x2="504" y2="600" stroke="white" stroke-width="1.5" opacity="0.15"/>
+  <!-- 锁孔示意 -->
+  <circle cx="400" cy="630" r="18" fill="#1a1a2e" opacity="0.5"/>
+  <rect x="397" y="630" width="6" height="15" rx="1.5" fill="#1a1a2e" opacity="0.5"/>
+</svg>

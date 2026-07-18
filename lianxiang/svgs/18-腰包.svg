@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="beltGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4A4A4A"/>
+      <stop offset="100%" stop-color="#2A2A2A"/>
+    </linearGradient>
+    <linearGradient id="bagGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5C8A60"/>
+      <stop offset="100%" stop-color="#2E5A30"/>
+    </linearGradient>
+    <linearGradient id="bagFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7CB880"/>
+      <stop offset="100%" stop-color="#407040"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="800" fill="#F5F0E8"/>
+  <rect x="20" y="20" width="760" height="760" rx="30" ry="30" fill="#FFF8F0"/>
+
+  <!-- Simple waist silhouette -->
+  <g transform="translate(400, 380)">
+    <!-- Waist outline -->
+    <path d="M -120,0 Q -100,-20 -50,-30 Q 50,-30 100,-20 Q 120,0 120,20 L 120,100 L -120,100 Z"
+          fill="#FDDCB5" opacity="0.3" stroke="#E8C8A0" stroke-width="1"/>
+  </g>
+
+  <!-- Belt = number 1 (straight horizontal) -->
+  <rect x="270" y="345" width="260" height="30" rx="4" fill="url(#beltGrad)"/>
+  <rect x="270" y="345" width="260" height="5" fill="#666" opacity="0.4"/>
+  <!-- Belt buckle -->
+  <rect x="380" y="340" width="40" height="40" rx="5" fill="#C0C0C0" stroke="#888" stroke-width="2"/>
+  <rect x="385" y="345" width="30" height="30" rx="3" fill="#D8D8D8"/>
+  <rect x="395" y="340" width="10" height="40" rx="2" fill="#999"/>
+
+  <!-- Waist bag = number 8 (round plump bag) -->
+  <g transform="translate(530, 350)">
+    <!-- Bag shadow -->
+    <ellipse cx="0" cy="160" rx="70" ry="12" fill="#DDD" opacity="0.3"/>
+    <!-- Bag body - rounded/plump -->
+    <path d="M -60,-20 Q -70,40 -60,90 Q -50,140 0,150 Q 50,140 60,90 Q 70,40 60,-20 Q 50,-50 0,-50 Q -50,-50 -60,-20 Z"
+          fill="url(#bagFill)" stroke="#2E5A30" stroke-width="2"/>
+    <!-- Bag highlight -->
+    <path d="M -40,-10 Q -45,30 -40,70 Q -30,110 0,125"
+          fill="none" stroke="white" stroke-width="6" opacity="0.12"/>
+
+    <!-- Zipper line -->
+    <line x1="-50" y1="-30" x2="50" y2="-30" stroke="#2E5A30" stroke-width="2"/>
+    <!-- Zipper teeth -->
+    <g stroke="#CCC" stroke-width="1" opacity="0.5">
+      <line x1="-45" y1="-30" x2="-45" y2="-26"/>
+      <line x1="-35" y1="-30" x2="-35" y2="-26"/>
+      <line x1="-25" y1="-30" x2="-25" y2="-26"/>
+      <line x1="-15" y1="-30" x2="-15" y2="-26"/>
+      <line x1="-5" y1="-30" x2="-5" y2="-26"/>
+      <line x1="5" y1="-30" x2="5" y2="-26"/>
+      <line x1="15" y1="-30" x2="15" y2="-26"/>
+      <line x1="25" y1="-30" x2="25" y2="-26"/>
+      <line x1="35" y1="-30" x2="35" y2="-26"/>
+      <line x1="45" y1="-30" x2="45" y2="-26"/>
+    </g>
+
+    <!-- Zipper pull -->
+    <circle cx="45" cy="-28" r="5" fill="#AAA"/>
+    <rect x="44" y="-28" width="8" height="3" rx="1" fill="#999"/>
+
+    <!-- Stitching -->
+    <path d="M -55,-15 Q -58,50 -50,110" fill="none" stroke="#2E5A30" stroke-width="1" opacity="0.4" stroke-dasharray="4,3"/>
+    <path d="M 55,-15 Q 58,50 50,110" fill="none" stroke="#2E5A30" stroke-width="1" opacity="0.4" stroke-dasharray="4,3"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="90" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="44" font-weight="bold" fill="#333">18=腰包</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="760" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="26" fill="#888">1像腰带直直绑，8是包包鼓鼓装</text>
+
+  <rect x="0" y="0" width="800" height="800" rx="28" ry="28" fill="none" stroke="#E8DDD0" stroke-width="4"/>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="60%"><stop offset="0%" stop-color="#1a3040"/><stop offset="100%" stop-color="#0a1520"/></radialGradient>
+    <radialGradient id="water" cx="50%" cy="30%"><stop offset="0%" stop-color="#2a6080" stop-opacity="0.3"/><stop offset="100%" stop-color="#1a4060" stop-opacity="0.1"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">02=白鹅</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">0像鹅身圆圆胖，2是鹅颈弯弯长</text>
+  <!-- 水面 -->
+  <ellipse cx="512" cy="750" rx="350" ry="40" fill="url(#water)"/>
+  <ellipse cx="512" cy="740" rx="300" ry="15" fill="#4a90b0" opacity="0.2"/>
+  <path d="M200 750 Q350 730 512 745 Q674 760 824 750" fill="none" stroke="#4a90b0" stroke-width="1.5" opacity="0.25"/>
+  <!-- 水波 -->
+  <path d="M300 760 Q400 755 500 762" fill="none" stroke="#5aa0c0" stroke-width="1" opacity="0.15"/>
+  <path d="M550 770 Q650 765 750 772" fill="none" stroke="#5aa0c0" stroke-width="1" opacity="0.15"/>
+  <!-- 鹅身 0形圆 -->
+  <ellipse cx="512" cy="620" rx="95" ry="70" fill="#F5F0E8"/>
+  <ellipse cx="512" cy="615" rx="80" ry="58" fill="#FFFAF5"/>
+  <ellipse cx="500" cy="640" rx="55" ry="40" fill="#EEE8DD" opacity="0.4"/>
+  <!-- 翅膀 -->
+  <path d="M440 590 Q420 620 440 660 Q460 640 440 590Z" fill="#E8DDD0"/>
+  <path d="M445 600 Q430 625 445 650 Q458 635 445 600Z" fill="#DDD0C0" opacity="0.7"/>
+  <!-- 鹅颈 2形弯 -->
+  <path d="M560 580 Q620 500 580 420 Q560 370 520 360" fill="none" stroke="#F5F0E8" stroke-width="28" stroke-linecap="round"/>
+  <path d="M560 580 Q620 500 580 420 Q560 370 520 360" fill="none" stroke="#FFFAF5" stroke-width="18" stroke-linecap="round"/>
+  <!-- 头 -->
+  <circle cx="512" cy="350" r="24" fill="#FFFAF5"/>
+  <circle cx="512" cy="348" r="20" fill="white"/>
+  <!-- 眼睛 -->
+  <circle cx="518" cy="342" r="4" fill="#1a1a2e"/>
+  <circle cx="519" cy="341" r="1.5" fill="white"/>
+  <!-- 喙 -->
+  <path d="M535 348 L560 345 L535 354Z" fill="#FF8800"/>
+  <line x1="535" y1="351" x2="556" y2="349" stroke="#E07700" stroke-width="0.8"/>
+  <!-- 冠 -->
+  <ellipse cx="505" cy="335" rx="8" ry="5" fill="#FFCC00" opacity="0.7"/>
+  <!-- 倒影 -->
+  <ellipse cx="512" cy="730" rx="80" ry="15" fill="#2a6080" opacity="0.2"/>
+</svg>

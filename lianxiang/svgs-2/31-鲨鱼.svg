@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a2838"/><stop offset="100%" stop-color="#081018"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">31=鲨鱼</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">3是鲨鳍三角尖，1是鱼身直直冲</text>
+  <!-- 海水 -->
+  <ellipse cx="512" cy="620" rx="380" ry="50" fill="#1a4060" opacity="0.3"/>
+  <path d="M150 610 Q350 590 512 605 Q674 620 874 610" fill="none" stroke="#3a6890" stroke-width="2" opacity="0.25"/>
+  <!-- 身体 1形 -->
+  <ellipse cx="460" cy="500" rx="160" ry="45" fill="#6088A0"/>
+  <ellipse cx="455" cy="495" rx="140" ry="35" fill="#78A0B8"/>
+  <!-- 肚皮 -->
+  <ellipse cx="470" cy="510" rx="100" ry="25" fill="#D0E0E8" opacity="0.4"/>
+  <!-- 头 -->
+  <path d="M300 500 Q280 480 270 500 Q280 520 300 500Z" fill="#5078A0"/>
+  <!-- 眼睛 -->
+  <circle cx="310" cy="485" r="8" fill="white"/>
+  <circle cx="312" cy="484" r="4.5" fill="#0a0a14"/>
+  <circle cx="313" cy="483" r="1.5" fill="white"/>
+  <!-- 嘴 -->
+  <path d="M275 502 Q290 510 310 508" fill="none" stroke="#3a6080" stroke-width="2"/>
+  <!-- 鳃裂 -->
+  <g stroke="#3a6080" stroke-width="1.5" opacity="0.4">
+    <line x1="340" y1="475" x2="340" y2="495"/>
+    <line x1="348" y1="478" x2="348" y2="498"/>
+    <line x1="356" y1="480" x2="356" y2="500"/>
+  </g>
+  <!-- 背鳍 3形三角 -->
+  <path d="M450 460 Q480 400 510 430 Q510 460 470 465Z" fill="#4a6880"/>
+  <path d="M460 458 Q480 415 500 435" fill="none" stroke="#6088A0" stroke-width="2"/>
+  <!-- 胸鳍 -->
+  <path d="M400 510 Q380 530 360 520" fill="none" stroke="#5078A0" stroke-width="12" stroke-linecap="round"/>
+  <!-- 尾鳍 3形 -->
+  <path d="M610 490 Q650 460 660 440 Q640 470 620 500Z" fill="#4a6880"/>
+  <path d="M610 510 Q650 540 660 560 Q640 530 620 500Z" fill="#4a6880"/>
+  <path d="M610 490 Q620 500 610 510" fill="none" stroke="#3a5880" stroke-width="3"/>
+  <!-- 水泡 -->
+  <circle cx="250" cy="470" r="4" fill="white" opacity="0.15"/>
+  <circle cx="235" cy="455" r="3" fill="white" opacity="0.1"/>
+</svg>

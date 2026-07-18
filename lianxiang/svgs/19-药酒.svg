@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bottleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#D4A860"/>
+      <stop offset="30%" stop-color="#F0D898"/>
+      <stop offset="70%" stop-color="#E8C878"/>
+      <stop offset="100%" stop-color="#B89040"/>
+    </linearGradient>
+    <linearGradient id="liquidGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#CC8800"/>
+    </linearGradient>
+    <radialGradient id="bottleShine" cx="0.3" cy="0.3" r="0.5">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="800" fill="#F5F0E8"/>
+  <rect x="20" y="20" width="760" height="760" rx="30" ry="30" fill="#FFF8F0"/>
+
+  <!-- Small cup -->
+  <ellipse cx="520" cy="560" rx="30" ry="8" fill="#DDD"/>
+  <path d="M 490,560 Q 490,550 500,530 L 540,530 Q 550,550 550,560 Z" fill="#F0F0F0" stroke="#CCC" stroke-width="1"/>
+
+  <!-- Wine bottle body = number 1 (straight) + number 9 (curved neck) -->
+  <g>
+    <!-- Bottle body -->
+    <rect x="360" y="340" width="80" height="200" rx="15" fill="url(#bottleGrad)" stroke="#8B6914" stroke-width="2"/>
+    <!-- Bottle shine -->
+    <rect x="370" y="350" width="15" height="160" rx="8" fill="white" opacity="0.15"/>
+    <!-- Liquid inside -->
+    <rect x="365" y="420" width="70" height="115" rx="10" fill="url(#liquidGrad)" opacity="0.6"/>
+
+    <!-- Label -->
+    <rect x="370" y="380" width="60" height="50" rx="5" fill="#FFF8DC" stroke="#D4A860" stroke-width="1"/>
+    <text x="400" y="400" text-anchor="middle" font-family="serif" font-size="14" fill="#8B6914">药酒</text>
+    <text x="400" y="418" text-anchor="middle" font-family="serif" font-size="10" fill="#B89040">19</text>
+
+    <!-- Bottle neck = number 9 shape -->
+    <path d="M 375,340 Q 370,310 380,280 Q 395,260 415,265 Q 430,270 425,300 Q 420,320 425,340"
+          fill="url(#bottleGrad)" stroke="#8B6914" stroke-width="2"/>
+    <!-- Neck opening -->
+    <ellipse cx="402" cy="268" rx="22" ry="8" fill="#C49840" stroke="#8B6914" stroke-width="1.5"/>
+
+    <!-- Cork stopper -->
+    <rect x="393" y="255" width="18" height="18" rx="3" fill="#C4A060" stroke="#8B6914" stroke-width="1"/>
+    <rect x="393" y="255" width="5" height="18" fill="#D4B878" opacity="0.6"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="90" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="44" font-weight="bold" fill="#333">19=药酒</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="760" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="26" fill="#888">1像瓶身直直立，9是瓶口弯弯倒</text>
+
+  <rect x="0" y="0" width="800" height="800" rx="28" ry="28" fill="none" stroke="#E8DDD0" stroke-width="4"/>
+</svg>

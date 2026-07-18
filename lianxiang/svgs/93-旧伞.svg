@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">93=旧伞</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">9像伞面弯弯垂，3是伞柄曲曲扶</text>
+  <!-- 伞柄 - 3形弯 -->
+  <path d="M512 550 L512 760 Q512 810 540 850" fill="none" stroke="#5D4037" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="540" cy="855" r="10" fill="#4E342E"/>
+  <!-- 伞面破旧 - 9形弯垂 -->
+  <path d="M200 550 Q360 440 512 440 Q664 440 824 550 Q664 510 512 510 Q360 510 200 550Z" fill="#BDBDBD" opacity="0.6"/>
+  <path d="M220 540 Q370 450 512 450 Q654 450 804 540" fill="none" stroke="#9E9E9E" stroke-width="2" opacity="0.4"/>
+  <!-- 破洞 -->
+  <ellipse cx="400" cy="500" rx="10" ry="6" fill="#F5EDE0" stroke="#9E9E9E" stroke-width="1"/>
+  <ellipse cx="620" cy="495" rx="8" ry="5" fill="#F5EDE0" stroke="#9E9E9E" stroke-width="1"/>
+  <!-- 补丁 -->
+  <rect x="480" y="465" width="20" height="15" fill="#A5D6A7" opacity="0.5" transform="rotate(15 490 472)"/>
+  <!-- 雨滴 -->
+  <path d="M280 600 Q282 620 280 630" fill="none" stroke="#90CAF9" stroke-width="2" opacity="0.3"/>
+  <path d="M350 580 Q352 605 350 618" fill="none" stroke="#90CAF9" stroke-width="2" opacity="0.25"/>
+  <path d="M670 590 Q672 610 670 620" fill="none" stroke="#90CAF9" stroke-width="2" opacity="0.25"/>
+</svg>

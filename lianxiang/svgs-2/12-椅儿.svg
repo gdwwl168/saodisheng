@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1820"/><stop offset="100%" stop-color="#0a0810"/></radialGradient>
+    <linearGradient id="chair" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8B6040"/><stop offset="100%" stop-color="#C09060"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">12=椅儿</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">1是椅背直直立，2是扶手弯弯翘</text>
+  <!-- 地面 -->
+  <ellipse cx="512" cy="700" rx="250" ry="20" fill="#0a0810" opacity="0.4"/>
+  <!-- 椅腿 -->
+  <rect x="370" y="580" width="16" height="120" rx="3" fill="#7A5030"/>
+  <rect x="638" y="580" width="16" height="120" rx="3" fill="#7A5030"/>
+  <!-- 椅座 -->
+  <rect x="350" y="560" width="324" height="30" rx="8" fill="url(#chair)"/>
+  <rect x="355" y="564" width="314" height="22" rx="6" fill="#D0A870" opacity="0.3"/>
+  <!-- 椅背 1形直 -->
+  <rect x="480" y="340" width="64" height="230" rx="8" fill="url(#chair)"/>
+  <rect x="486" y="344" width="52" height="220" rx="6" fill="#D0A870" opacity="0.25"/>
+  <!-- 椅背横梁 -->
+  <rect x="480" y="360" width="64" height="12" rx="3" fill="#A07040"/>
+  <rect x="480" y="520" width="64" height="10" rx="3" fill="#9A6838"/>
+  <!-- 扶手 2形弯 -->
+  <path d="M384 420 Q350 420 350 460 Q350 500 384 500" fill="none" stroke="url(#chair)" stroke-width="18" stroke-linecap="round"/>
+  <path d="M640 420 Q674 420 674 460 Q674 500 640 500" fill="none" stroke="url(#chair)" stroke-width="18" stroke-linecap="round"/>
+  <!-- 扶手高光 -->
+  <path d="M384 425 Q360 425 358 455" fill="none" stroke="#D0A870" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+  <path d="M640 425 Q664 425 666 455" fill="none" stroke="#D0A870" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+  <!-- 坐垫 -->
+  <ellipse cx="512" cy="555" rx="140" ry="12" fill="#C87860" opacity="0.4"/>
+</svg>

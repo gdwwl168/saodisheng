@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">75=积木</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">7像木块弯弯叠，5是积木层层搭</text>
+  <!-- 积木块 -->
+  <rect x="340" y="700" width="180" height="60" rx="8" fill="#F44336"/>
+  <rect x="360" y="640" width="140" height="60" rx="8" fill="#2196F3"/>
+  <rect x="380" y="580" width="100" height="60" rx="8" fill="#4CAF50"/>
+  <rect x="400" y="520" width="80" height="60" rx="8" fill="#FF9800"/>
+  <rect x="420" y="460" width="60" height="60" rx="8" fill="#9C27B0"/>
+  <!-- 三角形顶点 - 7形 -->
+  <path d="M440 400 L450 340 L460 400Z" fill="#FFEB3B"/>
+  <!-- 积木凸起 -->
+  <circle cx="420" cy="700" r="8" fill="#E53935"/>
+  <circle cx="460" cy="700" r="8" fill="#E53935"/>
+  <circle cx="420" cy="640" r="8" fill="#1976D2"/>
+  <circle cx="450" cy="640" r="8" fill="#1976D2"/>
+  <!-- 散落积木 -->
+  <rect x="550" y="720" width="50" height="50" rx="6" fill="#80DEEA" opacity="0.7"/>
+  <rect x="600" y="680" width="45" height="45" rx="6" fill="#F48FB1" opacity="0.7"/>
+  <circle cx="575" cy="720" r="7" fill="#4DD0E1"/>
+  <circle cx="622" cy="680" r="7" fill="#F06292"/>
+</svg>

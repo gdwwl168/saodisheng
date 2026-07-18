@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="music_theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#7c5cbf">
+<meta name="description" content="小朋友钢琴入门：彩色琴键、跟弹儿歌、随便玩">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="12345.png" type="image/png">
+<link rel="apple-touch-icon" href="12345.png">
+<title>小小钢琴家 · 趣味入门</title>
+<style>
+:root {
+  --bg: #fff6fb;
+  --bg2: #eef3ff;
+  --text: #3a2f4a;
+  --muted: #7a6d8a;
+  --card: #ffffff;
+  --border: #ecdff5;
+  --accent: #7c5cbf;
+  --accent2: #ff7eb3;
+  --gold: #f5c542;
+  --shadow: 0 10px 30px rgba(124, 92, 191, 0.12);
+  --ok: #3db87a;
+  --piano-bg: #2b2438;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1528;
+  --bg2: #241c36;
+  --text: #f0e6ff;
+  --muted: #b5a5c9;
+  --card: #2a223d;
+  --border: #3d3358;
+  --accent: #b794f6;
+  --accent2: #ff9ec8;
+  --gold: #f6d365;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --ok: #5ad69a;
+  --piano-bg: #14101f;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 500px at 10% -10%, #ffd6ef 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #d9e4ff 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+[data-theme="dark"] body,
+body[data-theme="dark"] {
+  background:
+    radial-gradient(1000px 400px at 10% -10%, rgba(255, 126, 179, 0.12) 0%, transparent 55%),
+    radial-gradient(800px 400px at 100% 0%, rgba(124, 92, 191, 0.18) 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+}
+
+button { font-family: inherit; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px 6px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.topbar a, .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.92em;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s;
+}
+.topbar a:hover, .icon-btn:hover { transform: translateY(-1px); }
+.top-actions { display: flex; gap: 8px; }
+
+.hero {
+  text-align: center;
+  padding: 8px 16px 10px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.hero .badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffd6ef, #dce7ff);
+  color: #6a4a9a;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+[data-theme="dark"] .hero .badge {
+  background: linear-gradient(90deg, rgba(255,126,179,0.25), rgba(124,92,191,0.3));
+  color: #f0e6ff;
+}
+.hero h1 {
+  font-size: clamp(1.6em, 4vw, 2.2em);
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.hero h1 span {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero p {
+  color: var(--muted);
+  font-size: 0.95em;
+  line-height: 1.55;
+}
+
+.layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 8px 16px 36px;
+  display: grid;
+  gap: 16px;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+.modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.mode-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 0.92em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.mode-btn.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(124, 92, 191, 0.28);
+}
+
+.status {
+  text-align: center;
+  min-height: 2.6em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 8px 2px;
+}
+.status .big {
+  font-size: 1.15em;
+  font-weight: 800;
+}
+.status .sub {
+  color: var(--muted);
+  font-size: 0.88em;
+}
+.stars {
+  letter-spacing: 2px;
+  color: var(--gold);
+  font-size: 1.15em;
+  min-height: 1.3em;
+}
+
+.song-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+.song-btn {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 0.9em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.song-btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+.song-btn.active {
+  background: #fff4d6;
+  border-color: var(--gold);
+  color: #8a5a00;
+}
+[data-theme="dark"] .song-btn.active {
+  background: rgba(246, 211, 101, 0.18);
+  color: var(--gold);
+}
+.song-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+}
+.action-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #6ec6ff, #7c5cbf);
+  box-shadow: 0 6px 14px rgba(110, 198, 255, 0.28);
+}
+.action-btn.pink { background: linear-gradient(135deg, #ff9ec8, #ff7eb3); }
+.action-btn.green { background: linear-gradient(135deg, #5ad69a, #3db87a); }
+.action-btn.gray {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+.action-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+.action-btn:not(:disabled):hover { transform: translateY(-1px); }
+
+/* Piano */
+.piano-wrap {
+  background: linear-gradient(180deg, #3a314d, var(--piano-bg));
+  border-radius: 22px;
+  padding: 18px 14px 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.piano-hint {
+  color: #d8ccec;
+  text-align: center;
+  font-size: 0.82em;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+.piano {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 220px;
+  max-width: 920px;
+  margin: 0 auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pedal-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  padding-top: 4px;
+}
+.sustain-pedal {
+  min-width: 200px;
+  border: 2px solid rgba(201, 169, 110, 0.45);
+  border-radius: 999px;
+  padding: 12px 22px;
+  background: linear-gradient(180deg, #4a415c, #2a2238);
+  color: #f0e6ff;
+  font-family: inherit;
+  font-size: 0.95em;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 6px 0 #1a1426, 0 10px 20px rgba(0,0,0,0.35);
+  transition: transform 0.08s, box-shadow 0.12s, background 0.2s, border-color 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.sustain-pedal:hover { border-color: rgba(255, 209, 102, 0.7); }
+.sustain-pedal:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #1a1426, 0 4px 10px rgba(0,0,0,0.3);
+}
+.sustain-pedal.on {
+  background: linear-gradient(180deg, #f6d365, #fda085);
+  color: #3a2a10;
+  border-color: #ffd166;
+  box-shadow: 0 6px 0 #c4893a, 0 0 24px rgba(255, 209, 102, 0.45);
+}
+.sustain-pedal.on:active {
+  box-shadow: 0 2px 0 #c4893a, 0 0 16px rgba(255, 209, 102, 0.35);
+}
+.sustain-pedal .pedal-icon { font-size: 1.25em; line-height: 1; }
+.sustain-pedal .pedal-state {
+  font-size: 0.78em;
+  opacity: 0.75;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+}
+.sustain-pedal.on .pedal-state {
+  background: rgba(0,0,0,0.12);
+  opacity: 0.9;
+  font-weight: 900;
+}
+.white-key {
+  position: relative;
+  flex: 1 1 0;
+  max-width: 78px;
+  height: 100%;
+  margin: 0 2px;
+  border: none;
+  border-radius: 0 0 12px 12px;
+  background: linear-gradient(180deg, #fff 0%, #f4f0ff 70%, #ebe4ff 100%);
+  box-shadow: 0 6px 0 #cfc4e8, 0 10px 16px rgba(0,0,0,0.25);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+  gap: 2px;
+  color: #4a3a66;
+  transition: transform 0.05s, filter 0.1s, box-shadow 0.1s;
+}
+.white-key .emoji { font-size: 1.25em; line-height: 1; }
+.white-key .solfa { font-size: 0.95em; font-weight: 900; }
+.white-key .letter { font-size: 0.72em; opacity: 0.65; font-weight: 700; }
+.white-key .kbd {
+  font-size: 0.68em;
+  opacity: 0.5;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 6px;
+  padding: 1px 5px;
+  margin-top: 2px;
+  background: rgba(255,255,255,0.55);
+}
+.white-key.active, .white-key:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #cfc4e8, 0 4px 8px rgba(0,0,0,0.2);
+  filter: brightness(0.97);
+}
+.white-key.target {
+  outline: 3px solid #ff7eb3;
+  outline-offset: -3px;
+  animation: pulse 0.9s ease-in-out infinite;
+}
+.white-key.correct-flash {
+  background: linear-gradient(180deg, #e8ffe8, #b8f0c8) !important;
+}
+.white-key.wrong-flash {
+  background: linear-gradient(180deg, #ffe8ef, #ffc1d4) !important;
+}
+.white-key.chord-glow,
+.black-key.chord-glow {
+  outline: 3px solid #ffd166;
+  outline-offset: -3px;
+  filter: brightness(1.08);
+  box-shadow: 0 0 18px rgba(255, 209, 102, 0.55) !important;
+}
+
+.black-key {
+  position: absolute;
+  top: 0;
+  width: 7.2%;
+  max-width: 48px;
+  height: 58%;
+  border: none;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(180deg, #4a415c, #1c1628 70%, #0f0b16);
+  box-shadow: 0 6px 0 #000, 0 8px 12px rgba(0,0,0,0.4);
+  color: #d8ccec;
+  font-size: 0.62em;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  transition: transform 0.05s;
+}
+.black-key.active, .black-key:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #000, 0 4px 8px rgba(0,0,0,0.35);
+}
+.black-key.target {
+  outline: 3px solid var(--gold);
+  outline-offset: -2px;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 6px 0 #cfc4e8, 0 0 0 0 rgba(255,126,179,0.45); }
+  50% { box-shadow: 0 6px 0 #cfc4e8, 0 0 0 10px rgba(255,126,179,0); }
+}
+
+/* Color tints for white keys */
+.white-key[data-note="C4"] { background: linear-gradient(180deg, #fff, #ffe0e8); }
+.white-key[data-note="D4"] { background: linear-gradient(180deg, #fff, #ffe9d0); }
+.white-key[data-note="E4"] { background: linear-gradient(180deg, #fff, #fff3b8); }
+.white-key[data-note="F4"] { background: linear-gradient(180deg, #fff, #dfffe0); }
+.white-key[data-note="G4"] { background: linear-gradient(180deg, #fff, #d8f0ff); }
+.white-key[data-note="A4"] { background: linear-gradient(180deg, #fff, #e4e0ff); }
+.white-key[data-note="B4"] { background: linear-gradient(180deg, #fff, #f3e0ff); }
+.white-key[data-note="C5"] { background: linear-gradient(180deg, #fff, #ffe0e8); }
+
+.learn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+.learn-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 10px;
+  text-align: center;
+  background: var(--bg);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.learn-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+.learn-card .e { font-size: 1.6em; }
+.learn-card .n { font-weight: 900; font-size: 1.1em; margin-top: 2px; }
+.learn-card .s { color: var(--muted); font-size: 0.82em; margin-top: 2px; }
+
+.tips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+.tip-card {
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(255,126,179,0.08), rgba(124,92,191,0.08));
+  border: 1px solid var(--border);
+}
+.tip-card h3 { font-size: 0.95em; margin-bottom: 4px; }
+.tip-card p { color: var(--muted); font-size: 0.86em; line-height: 1.5; }
+
+.progress-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+  max-width: 420px;
+  width: 100%;
+  margin: 6px auto 0;
+}
+.progress-bar > i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent), var(--gold));
+  transition: width 0.2s ease;
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+.confetti i {
+  position: absolute;
+  top: -12px;
+  width: 10px;
+  height: 14px;
+  border-radius: 2px;
+  animation: fall linear forwards;
+  opacity: 0.95;
+}
+@keyframes fall {
+  to { transform: translateY(105vh) rotate(720deg); opacity: 0.2; }
+}
+
+.floating-note {
+  position: fixed;
+  pointer-events: none;
+  z-index: 40;
+  font-size: 1.4em;
+  animation: floatUp 0.8s ease-out forwards;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-60px) scale(1.3); }
+}
+
+@media (max-width: 700px) {
+  .piano { height: 190px; }
+  .white-key .emoji { font-size: 1.05em; }
+  .white-key .solfa { font-size: 0.85em; }
+  .white-key .kbd { display: none; }
+  .black-key { width: 8.5%; height: 55%; font-size: 0; }
+  .hero p { font-size: 0.88em; }
+}
+@media (max-width: 420px) {
+  .piano { height: 170px; }
+  .white-key .letter { display: none; }
+  .white-key { padding-bottom: 8px; }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="index.html" title="回首页">🏠 首页</a>
+    <div class="top-actions">
+      <button type="button" class="icon-btn" id="soundBtn" title="声音开关">🔊</button>
+      <button type="button" class="icon-btn" id="themeBtn" title="切换主题">🌓</button>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="badge">🎵 小朋友 · 趣味钢琴入门</div>
+    <h1>做一天 <span>小小钢琴家</span></h1>
+    <p>点一下单音 · 长按出和弦 · 跟着儿歌弹 · 开心最重要！</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel modes" id="modeBar" aria-label="模式">
+      <button type="button" class="mode-btn active" data-mode="free">🎹 随便弹</button>
+      <button type="button" class="mode-btn" data-mode="follow">⭐ 跟我弹</button>
+      <button type="button" class="mode-btn" data-mode="learn">🌈 认音符</button>
+    </section>
+
+    <section class="status panel" id="statusPanel">
+      <div class="big" id="statusBig">点下面的彩色琴键，听听好听的声音～</div>
+      <div class="sub" id="statusSub">电脑可按键盘：A S D F G H J K</div>
+      <div class="stars" id="stars"></div>
+      <div class="progress-bar" id="progressBar" hidden><i id="progressFill"></i></div>
+    </section>
+
+    <section class="panel" id="songPanel" hidden>
+      <div class="song-row" id="songList"></div>
+      <div class="song-actions">
+        <button type="button" class="action-btn" id="demoBtn">▶ 听一遍</button>
+        <button type="button" class="action-btn green" id="startFollowBtn">⭐ 开始跟弹</button>
+        <button type="button" class="action-btn pink" id="retryBtn" hidden>再来一次</button>
+        <button type="button" class="action-btn gray" id="stopBtn">停止</button>
+      </div>
+    </section>
+
+    <section class="panel" id="learnPanel" hidden>
+      <div class="learn-grid" id="learnGrid"></div>
+    </section>
+
+    <section class="piano-wrap">
+      <div class="piano-hint" id="pianoHint">小提示：白键是“大路”，黑键是“小路”。先认白键就够啦！</div>
+      <div class="piano" id="piano" role="group" aria-label="钢琴键盘"></div>
+      <div class="pedal-row">
+        <button type="button" class="sustain-pedal" id="sustainPedal" aria-pressed="false" title="延音踏板：踩下后声音拖长，松开后渐渐消失（空格键也可）">
+          <span class="pedal-icon">🦶</span>
+          <span class="pedal-label">延音踏板</span>
+          <span class="pedal-state" id="sustainState">关</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="tips">
+      <div class="tip-card">
+        <h3>🐾 像小动物一样弹</h3>
+        <p>每个白键有一只小动物。看到猫咪就弹「哆」，小狗「来」……好玩又好记。</p>
+      </div>
+      <div class="tip-card">
+        <h3>👂 先听，再弹</h3>
+        <p>跟我弹模式：先点「听一遍」，记住旋律，再跟着粉色闪烁的键慢慢弹。</p>
+      </div>
+      <div class="tip-card">
+        <h3>🎉 错了也没关系</h3>
+        <p>弹错会轻轻提示，不会扣分。多试几次就会啦——勇敢的小小音乐家！</p>
+      </div>
+      <div class="tip-card">
+        <h3>✨ 长按出和弦</h3>
+        <p>按住白键约半秒，会叠出「哆-咪-梭」式白键和弦，只亮白键，不会乱点亮 C#、D#。</p>
+      </div>
+      <div class="tip-card">
+        <h3>🦶 延音踏板</h3>
+        <p>平时松手声音就停。点亮踏板后，松手音还会拖一会儿；再点一下关闭，之前拖着的音会一起停。电脑可按住空格。</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+<script>
+(function () {
+  // ===== Notes: one octave + high C =====
+  const NOTES = [
+    { id: 'C4',  name: 'C',  solfa: '哆', emoji: '🐱', freq: 261.63, kbd: 'a', color: '#ff7eb3', black: false },
+    { id: 'Cs4', name: 'C#', solfa: '',   emoji: '',   freq: 277.18, kbd: 'w', color: '#333', black: true, after: 'C4' },
+    { id: 'D4',  name: 'D',  solfa: '来', emoji: '🐶', freq: 293.66, kbd: 's', color: '#ffb347', black: false },
+    { id: 'Ds4', name: 'D#', solfa: '',   emoji: '',   freq: 311.13, kbd: 'e', color: '#333', black: true, after: 'D4' },
+    { id: 'E4',  name: 'E',  solfa: '咪', emoji: '🐰', freq: 329.63, kbd: 'd', color: '#ffe066', black: false },
+    { id: 'F4',  name: 'F',  solfa: '发', emoji: '🐸', freq: 349.23, kbd: 'f', color: '#69db7c', black: false },
+    { id: 'Fs4', name: 'F#', solfa: '',   emoji: '',   freq: 369.99, kbd: 't', color: '#333', black: true, after: 'F4' },
+    { id: 'G4',  name: 'G',  solfa: '梭', emoji: '🐦', freq: 392.00, kbd: 'g', color: '#4dabf7', black: false },
+    { id: 'Gs4', name: 'G#', solfa: '',   emoji: '',   freq: 415.30, kbd: 'y', color: '#333', black: true, after: 'G4' },
+    { id: 'A4',  name: 'A',  solfa: '拉', emoji: '🐼', freq: 440.00, kbd: 'h', color: '#9775fa', black: false },
+    { id: 'As4', name: 'A#', solfa: '',   emoji: '',   freq: 466.16, kbd: 'u', color: '#333', black: true, after: 'A4' },
+    { id: 'B4',  name: 'B',  solfa: '西', emoji: '🦊', freq: 493.88, kbd: 'j', color: '#da77f2', black: false },
+    { id: 'C5',  name: 'C',  solfa: '哆↑', emoji: '🦄', freq: 523.25, kbd: 'k', color: '#ff7eb3', black: false }
+  ];
+  const byId = Object.fromEntries(NOTES.map(n => [n.id, n]));
+  const byKbd = Object.fromEntries(NOTES.filter(n => n.kbd).map(n => [n.kbd, n.id]));
+
+  // songs: note ids + rest null; beat = quarter note base
+  const SONGS = [
+    {
+      id: 'twinkle',
+      title: '🌟 小星星',
+      tempo: 420,
+      notes: [
+        'C4','C4','G4','G4','A4','A4','G4', null,
+        'F4','F4','E4','E4','D4','D4','C4', null,
+        'G4','G4','F4','F4','E4','E4','D4', null,
+        'G4','G4','F4','F4','E4','E4','D4', null,
+        'C4','C4','G4','G4','A4','A4','G4', null,
+        'F4','F4','E4','E4','D4','D4','C4'
+      ]
+    },
+    {
+      id: 'tigers',
+      title: '🐯 两只老虎',
+      tempo: 380,
+      notes: [
+        'C4','D4','E4','C4',
+        'C4','D4','E4','C4',
+        'E4','F4','G4', null,
+        'E4','F4','G4', null,
+        'G4','A4','G4','F4','E4','C4',
+        'G4','A4','G4','F4','E4','C4',
+        'C4','G4','C4', null,
+        'C4','G4','C4'
+      ]
+    },
+    {
+      id: 'mary',
+      title: '🐑 小羊玛丽',
+      tempo: 400,
+      notes: [
+        'E4','D4','C4','D4','E4','E4','E4', null,
+        'D4','D4','D4', null,
+        'E4','G4','G4', null,
+        'E4','D4','C4','D4','E4','E4','E4','E4',
+        'D4','D4','E4','D4','C4'
+      ]
+    },
+    {
+      id: 'birthday',
+      title: '🎂 生日快乐',
+      tempo: 450,
+      notes: [
+        'C4','C4','D4','C4','F4','E4', null,
+        'C4','C4','D4','C4','G4','F4', null,
+        'C4','C4','C5','A4','F4','E4','D4', null,
+        'A4','A4','A4','F4','G4','F4'
+      ]
+    },
+    {
+      id: 'newyear',
+      title: '🧧 新年好',
+      tempo: 400,
+      notes: [
+        'C4','C4','C4','G4',
+        'A4','A4','G4', null,
+        'E4','E4','D4','D4','C4', null,
+        'G4','G4','E4','E4',
+        'G4','G4','E4', null,
+        'G4','E4','D4','C4','D4','E4','C4'
+      ]
+    },
+    {
+      id: 'bee',
+      title: '🐝 小蜜蜂',
+      tempo: 360,
+      notes: [
+        'G4','E4','E4', null,
+        'F4','D4','D4', null,
+        'C4','D4','E4','F4','G4','G4','G4', null,
+        'G4','E4','E4', null,
+        'F4','D4','D4', null,
+        'C4','E4','G4','G4','C4'
+      ]
+    }
+  ];
+
+  const PRAISE = [
+    '太棒啦！🎵',
+    '你真是小小音乐家！🌟',
+    '耳朵真灵！👂',
+    '弹得越来越好听了！💖',
+    '再来一首怎么样？🦄',
+    '哇，指尖在跳舞！💃'
+  ];
+  const TRY_AGAIN = [
+    '差一点点，再试试～',
+    '没关系，再弹一次！',
+    '听一听，找找粉色键～',
+    '慢慢来，你一定行！'
+  ];
+
+  // state
+  let mode = 'free';
+  let soundOn = true;
+  let audioCtx = null;
+  let currentSong = SONGS[0];
+  let followIdx = -1; // -1 idle
+  let followActive = false;
+  let demoTimer = null;
+  let stars = 0;
+  let playCount = 0;
+
+  // DOM
+  const piano = document.getElementById('piano');
+  const statusBig = document.getElementById('statusBig');
+  const statusSub = document.getElementById('statusSub');
+  const starsEl = document.getElementById('stars');
+  const songPanel = document.getElementById('songPanel');
+  const learnPanel = document.getElementById('learnPanel');
+  const songList = document.getElementById('songList');
+  const progressBar = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  const keyEls = {};
+
+  // ===== Audio：按下发声 / 松手停音；仅延音踏板踩下时，松手后音可继续 =====
+  let sustainOn = false;
+  const heldVoices = Object.create(null); // noteId -> voice（手指/键盘正按着）
+  const sustainedVoices = [];             // 延音池（松手后仍响）
+  const MAX_SUSTAIN = 16;
+
+  function ensureAudio() {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AC();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function fadeVoice(voice, fadeSec) {
+    if (!voice || voice._dead) return;
+    voice._dead = true;
+    try {
+      const ctx = ensureAudio();
+      const t0 = ctx.currentTime;
+      const g = voice.gain.gain;
+      let cur = 0.0001;
+      try { cur = Math.max(g.value, 0.0001); } catch (e) {}
+      g.cancelScheduledValues(t0);
+      g.setValueAtTime(cur, t0);
+      g.exponentialRampToValueAtTime(0.0001, t0 + fadeSec);
+      voice.osc.stop(t0 + fadeSec + 0.04);
+    } catch (e) { /* ignore */ }
+  }
+
+  function createVoice(freq, type, vol) {
+    const ctx = ensureAudio();
+    const t0 = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    const level = Math.max(0.02, vol);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(2800, t0);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(level, t0 + 0.015);
+    // 轻微自然衰减到平台，避免刺耳
+    gain.gain.exponentialRampToValueAtTime(level * 0.7, t0 + 0.25);
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t0);
+    return { osc, gain, level };
+  }
+
+  /** 一次性短音（试听/跟弹/和弦点缀）——一定会自动停，不受延音池干扰 */
+  function playTone(freq, duration = 0.45, type = 'triangle', vol = 0.22) {
+    if (!soundOn) return;
+    try {
+      const ctx = ensureAudio();
+      const t0 = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      const level = Math.max(0.02, vol);
+      const dur = Math.max(0.08, duration || 0.42);
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, t0);
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(2800, t0);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(level, t0 + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + dur + 0.03);
+    } catch (e) { /* ignore */ }
+  }
+
+  function playNote(noteId, duration) {
+    const n = byId[noteId];
+    if (!n) return;
+    playTone(n.freq, duration || 0.42, n.black ? 'square' : 'triangle');
+  }
+
+  /** 按下琴键：开始持续发声（跟着手指） */
+  function noteOn(noteId) {
+    if (!soundOn) return;
+    const n = byId[noteId];
+    if (!n) return;
+    // 同键连按：先停掉旧的
+    noteOff(noteId, { force: true, silent: true });
+    try {
+      const voice = createVoice(n.freq, n.black ? 'square' : 'triangle', 0.2);
+      heldVoices[noteId] = voice;
+    } catch (e) { /* ignore */ }
+  }
+
+  /**
+   * 松开琴键：
+   * - 没踩延音 → 马上渐停
+   * - 踩着延音 → 放进延音池，等松开踏板再停
+   */
+  function noteOff(noteId, opts) {
+    const force = opts && opts.force;
+    const voice = heldVoices[noteId];
+    if (!voice) return;
+    delete heldVoices[noteId];
+    if (!force && sustainOn) {
+      sustainedVoices.push(voice);
+      while (sustainedVoices.length > MAX_SUSTAIN) {
+        fadeVoice(sustainedVoices.shift(), 0.1);
+      }
+    } else {
+      fadeVoice(voice, force ? 0.08 : 0.22);
+    }
+  }
+
+  /** 松开延音踏板：延音池里所有音全部停 */
+  function releaseSustainPedal() {
+    const list = sustainedVoices.splice(0, sustainedVoices.length);
+    list.forEach(v => fadeVoice(v, 0.4));
+  }
+
+  /** 紧急停止：所有声音（按着的 + 延音的） */
+  function silenceAll() {
+    Object.keys(heldVoices).forEach(id => {
+      fadeVoice(heldVoices[id], 0.08);
+      delete heldVoices[id];
+    });
+    releaseSustainPedal();
+  }
+
+  function setSustain(on, opts) {
+    const next = !!on;
+    if (!next && sustainOn) releaseSustainPedal();
+    sustainOn = next;
+    const btn = document.getElementById('sustainPedal');
+    const st = document.getElementById('sustainState');
+    if (btn) {
+      btn.classList.toggle('on', sustainOn);
+      btn.setAttribute('aria-pressed', sustainOn ? 'true' : 'false');
+    }
+    if (st) st.textContent = sustainOn ? '开' : '关';
+    if (opts && opts.announce) {
+      statusSub.textContent = sustainOn
+        ? '🦶 延音开：松手后音还会拖一会儿，再点踏板关闭'
+        : '延音关：松手声音就会停';
+    }
+  }
+
+  // 长按和弦：只用白键「隔一个」叠（哆-咪-梭），避免 C#/D# 等黑键被点亮吓到小朋友
+  const WHITE_IDS = NOTES.filter(n => !n.black).map(n => n.id);
+  const LONG_PRESS_MS = 450;
+
+  function kidChordIds(rootId) {
+    const n = byId[rootId];
+    if (!n) return [rootId];
+    // 黑键长按：只加强高八度感，不点亮其它键
+    if (n.black) return [rootId];
+    const i = WHITE_IDS.indexOf(rootId);
+    if (i < 0) return [rootId];
+    const ids = [rootId];
+    if (WHITE_IDS[i + 2]) ids.push(WHITE_IDS[i + 2]);
+    if (WHITE_IDS[i + 4]) ids.push(WHITE_IDS[i + 4]);
+    // 高位白键不够时，用下方白键补成三音（好听即可）
+    if (ids.length < 3 && i >= 2) ids.push(WHITE_IDS[i - 2]);
+    if (ids.length < 3 && i >= 4) ids.push(WHITE_IDS[i - 4]);
+    return ids.filter((id, idx, arr) => arr.indexOf(id) === idx);
+  }
+
+  function playChord(noteId) {
+    const n = byId[noteId];
+    if (!n) return;
+    const ids = kidChordIds(noteId);
+    // 根音已在 noteOn 里响着；只补另外的白键短音
+    ids.forEach(id => {
+      if (id === noteId) return;
+      const x = byId[id];
+      if (x) playTone(x.freq, 0.85, 'sine', 0.13);
+    });
+    // 黑键：补一个高五度短音（不亮其它键）
+    if (n.black && ids.length === 1) {
+      playTone(n.freq * Math.pow(2, 7 / 12), 0.75, 'sine', 0.1);
+    }
+    ids.forEach(id => {
+      const el = keyEls[id];
+      if (!el) return;
+      el.classList.add('chord-glow');
+      setTimeout(() => el.classList.remove('chord-glow'), 520);
+    });
+    const labels = ids.map(id => {
+      const x = byId[id];
+      return x ? ((x.emoji || '') + (x.solfa || x.name)) : '';
+    }).filter(Boolean).join(' + ');
+    statusBig.textContent = '🎶 和弦！' + labels;
+    statusSub.textContent = '长按白键出和弦（只亮白键）；松手即停';
+    floatEmoji(noteId);
+  }
+
+  // ===== UI: piano =====
+  function buildPiano() {
+    piano.innerHTML = '';
+    const whites = NOTES.filter(n => !n.black);
+    whites.forEach(n => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'white-key';
+      btn.dataset.note = n.id;
+      btn.setAttribute('aria-label', n.solfa + ' ' + n.name);
+      btn.innerHTML =
+        '<span class="emoji">' + n.emoji + '</span>' +
+        '<span class="solfa">' + n.solfa + '</span>' +
+        '<span class="letter">' + n.name + '</span>' +
+        '<span class="kbd">' + n.kbd.toUpperCase() + '</span>';
+      bindKey(btn, n.id);
+      piano.appendChild(btn);
+      keyEls[n.id] = btn;
+    });
+
+    // black keys positioned over white keys
+    requestAnimationFrame(() => layoutBlackKeys());
+    window.addEventListener('resize', layoutBlackKeys);
+  }
+
+  function layoutBlackKeys() {
+    // remove old black keys
+    piano.querySelectorAll('.black-key').forEach(el => el.remove());
+    const whiteIds = NOTES.filter(n => !n.black).map(n => n.id);
+    NOTES.filter(n => n.black).forEach(n => {
+      const afterIdx = whiteIds.indexOf(n.after);
+      if (afterIdx < 0) return;
+      const w0 = keyEls[whiteIds[afterIdx]];
+      const w1 = keyEls[whiteIds[afterIdx + 1]];
+      if (!w0 || !w1) return;
+      const pianoRect = piano.getBoundingClientRect();
+      const r0 = w0.getBoundingClientRect();
+      const r1 = w1.getBoundingClientRect();
+      const mid = (r0.right + r1.left) / 2 - pianoRect.left;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'black-key';
+      btn.dataset.note = n.id;
+      btn.textContent = n.name;
+      btn.setAttribute('aria-label', n.name);
+      const widthPct = Math.min(48, pianoRect.width * 0.072);
+      btn.style.left = (mid - widthPct / 2) + 'px';
+      btn.style.width = widthPct + 'px';
+      bindKey(btn, n.id);
+      piano.appendChild(btn);
+      keyEls[n.id] = btn;
+    });
+    // re-apply target if following
+    if (followActive && followIdx >= 0) setTarget(currentTarget());
+  }
+
+  function bindKey(el, noteId) {
+    let longTimer = null;
+    let downId = null;
+    const clearLong = () => {
+      if (longTimer) {
+        clearTimeout(longTimer);
+        longTimer = null;
+      }
+    };
+    const down = (e) => {
+      e.preventDefault();
+      try { el.setPointerCapture && el.setPointerCapture(e.pointerId); } catch (err) {}
+      downId = e.pointerId;
+      pressNote(noteId, true, { hold: true });
+      clearLong();
+      longTimer = setTimeout(() => {
+        longTimer = null;
+        // 仍按着才出和弦
+        if (heldVoices[noteId]) playChord(noteId);
+      }, LONG_PRESS_MS);
+    };
+    const up = (e) => {
+      e.preventDefault();
+      if (downId != null && e.pointerId != null && e.pointerId !== downId) return;
+      clearLong();
+      downId = null;
+      noteOff(noteId);
+      releaseVisual(noteId);
+      try { el.releasePointerCapture && el.releasePointerCapture(e.pointerId); } catch (err) {}
+    };
+    el.addEventListener('pointerdown', down);
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+    el.addEventListener('lostpointercapture', (e) => {
+      clearLong();
+      downId = null;
+      noteOff(noteId);
+      releaseVisual(noteId);
+    });
+    el.addEventListener('contextmenu', (e) => e.preventDefault());
+  }
+
+  /** fromUser 交互按下；opts.hold=跟手持续音；否则短音（跟弹试听） */
+  function pressNote(noteId, fromUser, opts) {
+    const el = keyEls[noteId];
+    if (el) el.classList.add('active');
+    if (opts && opts.hold) {
+      noteOn(noteId);
+    } else {
+      playNote(noteId);
+      setTimeout(() => releaseVisual(noteId), 160);
+    }
+    floatEmoji(noteId);
+    playCount++;
+    if (fromUser) handleUserNote(noteId);
+    else if (mode === 'free') {
+      const n = byId[noteId];
+      statusBig.textContent = (n.emoji || '🎶') + ' ' + (n.solfa || n.name) + ' · ' + n.name;
+    }
+  }
+
+  function releaseVisual(noteId) {
+    const el = keyEls[noteId];
+    if (el) el.classList.remove('active');
+  }
+
+  function floatEmoji(noteId) {
+    const n = byId[noteId];
+    const el = keyEls[noteId];
+    if (!n || !el) return;
+    const r = el.getBoundingClientRect();
+    const span = document.createElement('div');
+    span.className = 'floating-note';
+    span.textContent = n.emoji || '♪';
+    span.style.left = (r.left + r.width / 2 - 10) + 'px';
+    span.style.top = (r.top - 8) + 'px';
+    document.body.appendChild(span);
+    setTimeout(() => span.remove(), 800);
+  }
+
+  // ===== Modes =====
+  function setMode(m) {
+    stopAll();
+    mode = m;
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.mode === m);
+    });
+    songPanel.hidden = m !== 'follow';
+    learnPanel.hidden = m !== 'learn';
+    progressBar.hidden = m !== 'follow';
+    clearTargets();
+
+    if (m === 'free') {
+      statusBig.textContent = '点一下单音，长按出和弦，还可踩延音～';
+      statusSub.textContent = '键盘 A–K 弹奏 · 空格=延音 · 长按出和弦';
+      document.getElementById('pianoHint').textContent = '小提示：点=单音；长按=和弦；延音踏板=声音拖长！';
+    } else if (m === 'follow') {
+      selectSong(currentSong.id);
+      statusBig.textContent = '选一首儿歌，先听一遍，再跟我弹！';
+      statusSub.textContent = '粉色闪烁的键 = 下一个要弹的音';
+      document.getElementById('pianoHint').textContent = '跟弹时只弹亮起来的键，弹对会自动走到下一个～';
+    } else {
+      statusBig.textContent = '点卡片或琴键，认识哆来咪吧！';
+      statusSub.textContent = '七个小动物 = 七个音';
+      document.getElementById('pianoHint').textContent = '认会白键就可以弹很多儿歌啦！';
+      buildLearn();
+    }
+  }
+
+  function buildLearn() {
+    const grid = document.getElementById('learnGrid');
+    grid.innerHTML = NOTES.filter(n => !n.black).map(n =>
+      '<button type="button" class="learn-card" data-note="' + n.id + '">' +
+        '<div class="e">' + n.emoji + '</div>' +
+        '<div class="n">' + n.solfa + '</div>' +
+        '<div class="s">' + n.name + ' · 键 ' + n.kbd.toUpperCase() + '</div>' +
+      '</button>'
+    ).join('');
+    grid.querySelectorAll('.learn-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.note;
+        pressNote(id, true);
+        const n = byId[id];
+        statusBig.textContent = n.emoji + ' 这是「' + n.solfa + '」· ' + n.name;
+        statusSub.textContent = '记一记：' + n.emoji + ' = ' + n.solfa;
+      });
+    });
+  }
+
+  // ===== Songs / follow =====
+  function buildSongList() {
+    songList.innerHTML = SONGS.map(s =>
+      '<button type="button" class="song-btn" data-id="' + s.id + '">' + s.title + '</button>'
+    ).join('');
+    songList.querySelectorAll('.song-btn').forEach(btn => {
+      btn.addEventListener('click', () => selectSong(btn.dataset.id));
+    });
+  }
+
+  function selectSong(id) {
+    stopAll();
+    currentSong = SONGS.find(s => s.id === id) || SONGS[0];
+    songList.querySelectorAll('.song-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.id === currentSong.id);
+    });
+    statusBig.textContent = currentSong.title;
+    statusSub.textContent = '先点「听一遍」，再点「开始跟弹」';
+    progressFill.style.width = '0%';
+    document.getElementById('retryBtn').hidden = true;
+  }
+
+  function playableNotes(song) {
+    return song.notes.filter(n => n); // skip rests for follow index tracking separately
+  }
+
+  function currentTarget() {
+    if (!followActive || followIdx < 0) return null;
+    // followIdx walks all song.notes including rests (auto-skip rests)
+    return currentSong.notes[followIdx] || null;
+  }
+
+  function advanceFollow() {
+    followIdx++;
+    while (followIdx < currentSong.notes.length && !currentSong.notes[followIdx]) {
+      followIdx++;
+    }
+    updateFollowProgress();
+    if (followIdx >= currentSong.notes.length) {
+      completeSong();
+      return;
+    }
+    setTarget(currentSong.notes[followIdx]);
+    const n = byId[currentSong.notes[followIdx]];
+    statusBig.textContent = '请弹：' + (n.emoji || '') + ' ' + (n.solfa || n.name);
+    statusSub.textContent = currentSong.title + ' · 第 ' + (countPlayedSoFar() + 1) + ' 个音';
+  }
+
+  function countPlayedSoFar() {
+    let c = 0;
+    for (let i = 0; i < followIdx; i++) if (currentSong.notes[i]) c++;
+    return c;
+  }
+
+  function totalPlayable() {
+    return currentSong.notes.filter(Boolean).length;
+  }
+
+  function updateFollowProgress() {
+    const done = countPlayedSoFar();
+    const total = totalPlayable();
+    const pct = total ? Math.min(100, Math.round((done / total) * 100)) : 0;
+    progressFill.style.width = pct + '%';
+  }
+
+  function setTarget(noteId) {
+    clearTargets();
+    if (!noteId) return;
+    const el = keyEls[noteId];
+    if (el) el.classList.add('target');
+  }
+
+  function clearTargets() {
+    Object.values(keyEls).forEach(el => {
+      el.classList.remove('target', 'correct-flash', 'wrong-flash');
+    });
+  }
+
+  function startFollow() {
+    stopDemo();
+    followActive = true;
+    followIdx = -1;
+    document.getElementById('retryBtn').hidden = true;
+    progressFill.style.width = '0%';
+    statusBig.textContent = '准备好了吗？第一个音来啦！';
+    advanceFollow();
+  }
+
+  function handleUserNote(noteId) {
+    if (mode === 'learn') {
+      const n = byId[noteId];
+      if (n && !n.black) {
+        statusBig.textContent = n.emoji + ' 「' + n.solfa + '」· ' + n.name;
+        statusSub.textContent = '键位：' + n.kbd.toUpperCase();
+      } else if (n) {
+        statusBig.textContent = '🖤 黑键 ' + n.name;
+        statusSub.textContent = '黑键稍后再学也没关系';
+      }
+      return;
+    }
+    if (mode === 'free') {
+      const n = byId[noteId];
+      statusBig.textContent = (n.emoji || '🎶') + ' ' + (n.solfa || n.name) + ' · ' + n.name;
+      if (playCount > 0 && playCount % 12 === 0) {
+        addStar();
+        statusSub.textContent = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+      } else {
+        statusSub.textContent = '继续弹，想弹什么就弹什么！';
+      }
+      return;
+    }
+    if (mode !== 'follow' || !followActive) return;
+
+    const need = currentTarget();
+    const el = keyEls[noteId];
+    if (!need) return;
+
+    if (noteId === need) {
+      if (el) {
+        el.classList.add('correct-flash');
+        setTimeout(() => el.classList.remove('correct-flash'), 200);
+      }
+      advanceFollow();
+    } else {
+      if (el) {
+        el.classList.add('wrong-flash');
+        setTimeout(() => el.classList.remove('wrong-flash'), 220);
+      }
+      statusSub.textContent = TRY_AGAIN[Math.floor(Math.random() * TRY_AGAIN.length)];
+      // keep target
+      setTarget(need);
+    }
+  }
+
+  function completeSong() {
+    followActive = false;
+    clearTargets();
+    progressFill.style.width = '100%';
+    addStar();
+    addStar();
+    statusBig.textContent = '🎉 弹完啦！' + currentSong.title;
+    statusSub.textContent = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+    document.getElementById('retryBtn').hidden = false;
+    burstConfetti();
+    playCheer();
+  }
+
+  /** 跟弹成功：掌声 + 欢呼 + 胜利音阶（全合成，无需音频文件） */
+  function playCheer() {
+    if (!soundOn) return;
+    try {
+      const ctx = ensureAudio();
+      const t0 = ctx.currentTime;
+      const master = ctx.createGain();
+      master.gain.setValueAtTime(0.9, t0);
+      master.gain.exponentialRampToValueAtTime(0.0001, t0 + 2.4);
+      master.connect(ctx.destination);
+
+      // 1) 掌声：多段噪声脉冲
+      for (let i = 0; i < 28; i++) {
+        const start = t0 + Math.random() * 1.35;
+        const dur = 0.04 + Math.random() * 0.07;
+        const bufSize = Math.floor(ctx.sampleRate * dur);
+        const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let j = 0; j < bufSize; j++) {
+          data[j] = (Math.random() * 2 - 1) * (1 - j / bufSize);
+        }
+        const src = ctx.createBufferSource();
+        src.buffer = buffer;
+        const bp = ctx.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.frequency.value = 1200 + Math.random() * 2800;
+        bp.Q.value = 0.7;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, start);
+        g.gain.exponentialRampToValueAtTime(0.18 + Math.random() * 0.12, start + 0.008);
+        g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+        src.connect(bp);
+        bp.connect(g);
+        g.connect(master);
+        src.start(start);
+        src.stop(start + dur + 0.02);
+      }
+
+      // 2) 欢呼「呜呼」：几个滑音人声感合成
+      const whoops = [
+        { t: 0.05, f0: 420, f1: 780, len: 0.35 },
+        { t: 0.22, f0: 380, f1: 920, len: 0.4 },
+        { t: 0.45, f0: 500, f1: 1100, len: 0.45 },
+        { t: 0.7, f0: 360, f1: 700, len: 0.3 }
+      ];
+      whoops.forEach(w => {
+        const start = t0 + w.t;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        const f = ctx.createBiquadFilter();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(w.f0, start);
+        osc.frequency.exponentialRampToValueAtTime(w.f1, start + w.len * 0.55);
+        osc.frequency.exponentialRampToValueAtTime(w.f0 * 1.1, start + w.len);
+        f.type = 'bandpass';
+        f.frequency.setValueAtTime(w.f0 * 1.4, start);
+        f.frequency.exponentialRampToValueAtTime(w.f1 * 1.2, start + w.len * 0.5);
+        f.Q.value = 4;
+        g.gain.setValueAtTime(0.0001, start);
+        g.gain.exponentialRampToValueAtTime(0.07, start + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.0001, start + w.len);
+        osc.connect(f);
+        f.connect(g);
+        g.connect(master);
+        osc.start(start);
+        osc.stop(start + w.len + 0.02);
+      });
+
+      // 3) 胜利叮咚音阶
+      const fanfare = [523.25, 659.25, 783.99, 1046.5];
+      fanfare.forEach((freq, i) => {
+        const start = t0 + 0.08 + i * 0.11;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, start);
+        g.gain.setValueAtTime(0.0001, start);
+        g.gain.exponentialRampToValueAtTime(0.16, start + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
+        osc.connect(g);
+        g.connect(master);
+        osc.start(start);
+        osc.stop(start + 0.4);
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  function addStar() {
+    stars = Math.min(stars + 1, 20);
+    starsEl.textContent = '⭐'.repeat(Math.min(stars, 10)) + (stars > 10 ? ' +' + (stars - 10) : '');
+  }
+
+  // ===== Demo playback =====
+  function playDemo() {
+    stopAll();
+    statusBig.textContent = '▶ 正在演奏：' + currentSong.title;
+    statusSub.textContent = '竖起小耳朵听一听～';
+    let i = 0;
+    const step = () => {
+      if (i >= currentSong.notes.length) {
+        statusBig.textContent = currentSong.title + ' 听完了！';
+        statusSub.textContent = '可以点「开始跟弹」啦';
+        clearTargets();
+        demoTimer = null;
+        return;
+      }
+      const note = currentSong.notes[i];
+      clearTargets();
+      if (note) {
+        setTarget(note);
+        pressNote(note, false);
+        const n = byId[note];
+        statusBig.textContent = (n.emoji || '♪') + ' ' + (n.solfa || n.name);
+      }
+      i++;
+      demoTimer = setTimeout(step, currentSong.tempo);
+    };
+    step();
+  }
+
+  function stopDemo() {
+    if (demoTimer) {
+      clearTimeout(demoTimer);
+      demoTimer = null;
+    }
+  }
+
+  function stopAll() {
+    stopDemo();
+    followActive = false;
+    followIdx = -1;
+    clearTargets();
+    silenceAll();
+  }
+
+  // ===== Confetti =====
+  function burstConfetti() {
+    const box = document.getElementById('confetti');
+    box.innerHTML = '';
+    const colors = ['#ff7eb3', '#ffb347', '#ffe066', '#69db7c', '#4dabf7', '#9775fa', '#f5c542'];
+    for (let i = 0; i < 48; i++) {
+      const d = document.createElement('i');
+      d.style.left = Math.random() * 100 + '%';
+      d.style.background = colors[i % colors.length];
+      d.style.animationDuration = (1.2 + Math.random() * 1.4) + 's';
+      d.style.animationDelay = (Math.random() * 0.3) + 's';
+      d.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+      box.appendChild(d);
+    }
+    setTimeout(() => { box.innerHTML = ''; }, 2800);
+  }
+
+  // ===== Keyboard（按下发声，松手停音；长按出和弦）=====
+  const held = new Set();
+  const keyLongTimers = {};
+  document.addEventListener('keydown', (e) => {
+    if (e.repeat) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.code === 'Space' || e.key === ' ') return; // 交给延音逻辑
+    const key = e.key.toLowerCase();
+    const noteId = byKbd[key];
+    if (!noteId || held.has(key)) return;
+    held.add(key);
+    e.preventDefault();
+    pressNote(noteId, true, { hold: true });
+    if (keyLongTimers[key]) clearTimeout(keyLongTimers[key]);
+    keyLongTimers[key] = setTimeout(() => {
+      keyLongTimers[key] = null;
+      if (heldVoices[noteId]) playChord(noteId);
+    }, LONG_PRESS_MS);
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.code === 'Space' || e.key === ' ') return;
+    const key = e.key.toLowerCase();
+    held.delete(key);
+    if (keyLongTimers[key]) {
+      clearTimeout(keyLongTimers[key]);
+      keyLongTimers[key] = null;
+    }
+    const noteId = byKbd[key];
+    if (noteId) {
+      noteOff(noteId);
+      releaseVisual(noteId);
+    }
+  });
+
+  // first interaction unlocks audio on mobile
+  ['pointerdown', 'keydown'].forEach(ev => {
+    document.addEventListener(ev, () => { try { ensureAudio(); } catch (e) {} }, { once: true, passive: true });
+  });
+
+  // ===== Controls =====
+  document.getElementById('modeBar').addEventListener('click', (e) => {
+    const btn = e.target.closest('.mode-btn');
+    if (btn) setMode(btn.dataset.mode);
+  });
+  document.getElementById('demoBtn').addEventListener('click', playDemo);
+  document.getElementById('startFollowBtn').addEventListener('click', startFollow);
+  document.getElementById('retryBtn').addEventListener('click', startFollow);
+  document.getElementById('stopBtn').addEventListener('click', () => {
+    stopAll();
+    statusBig.textContent = '已停止。再选一首，或者随便弹！';
+    statusSub.textContent = currentSong.title;
+    progressFill.style.width = '0%';
+  });
+  document.getElementById('soundBtn').addEventListener('click', () => {
+    soundOn = !soundOn;
+    document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+    if (!soundOn) silenceAll();
+    if (soundOn) {
+      playTone(523.25, 0.2);
+    }
+  });
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('music_theme', next); } catch (e) {}
+  });
+
+  // ===== 延音踏板：按钮锁定开关；空格=临时踩住 =====
+  const sustainBtn = document.getElementById('sustainPedal');
+  let stickySustain = false; // 按钮锁定
+  let spaceSustain = false;  // 空格按住
+
+  function applySustainFromInputs(announce) {
+    setSustain(stickySustain || spaceSustain, { announce: !!announce });
+  }
+
+  sustainBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    try { ensureAudio(); } catch (err) {}
+    stickySustain = !stickySustain;
+    applySustainFromInputs(true);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.code === 'Space' || e.key === ' ') {
+      e.preventDefault();
+      if (e.repeat) return;
+      spaceSustain = true;
+      try { ensureAudio(); } catch (err) {}
+      applySustainFromInputs(true);
+    }
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.code === 'Space' || e.key === ' ') {
+      e.preventDefault();
+      spaceSustain = false;
+      applySustainFromInputs(true);
+    }
+  });
+  // 切到后台时松开临时延音，锁定状态保留
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      spaceSustain = false;
+      if (!stickySustain && sustainOn) setSustain(false);
+      else if (stickySustain) applySustainFromInputs(false);
+      else releaseSustainPedal();
+    }
+  });
+
+  // init
+  buildPiano();
+  buildSongList();
+  setMode('free');
+  setSustain(false, { forceUi: true });
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

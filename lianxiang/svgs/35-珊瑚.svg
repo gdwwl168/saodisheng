@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">35=珊瑚</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">3像珊瑚弯弯枝，5是红枝弯弯挂</text>
+  <!-- 海底 -->
+  <rect x="100" y="600" width="824" height="350" rx="10" fill="#B3E5FC" opacity="0.15"/>
+  <!-- 沙地 -->
+  <ellipse cx="512" cy="850" rx="350" ry="60" fill="#FFECB3" opacity="0.3"/>
+  <!-- 珊瑚主体 -->
+  <!-- 左枝 - 3形 -->
+  <path d="M420 750 Q380 680 400 620 Q420 560 390 520 Q365 490 350 460" fill="none" stroke="#E57373" stroke-width="14" stroke-linecap="round"/>
+  <path d="M410 650 Q440 630 450 600" fill="none" stroke="#E57373" stroke-width="10" stroke-linecap="round"/>
+  <path d="M395 580 Q370 560 360 530" fill="none" stroke="#EF5350" stroke-width="8" stroke-linecap="round"/>
+  <!-- 中枝 - 5形 -->
+  <path d="M490 780 Q470 670 520 600 Q570 530 560 470 Q550 430 520 400" fill="none" stroke="#F44336" stroke-width="16" stroke-linecap="round"/>
+  <path d="M530 600 Q580 590 600 550" fill="none" stroke="#F44336" stroke-width="10" stroke-linecap="round"/>
+  <path d="M540 520 Q580 500 590 460" fill="none" stroke="#E53935" stroke-width="8" stroke-linecap="round"/>
+  <!-- 右枝 - 3形 -->
+  <path d="M560 760 Q600 690 610 630 Q620 570 640 530 Q655 500 670 480" fill="none" stroke="#EF5350" stroke-width="12" stroke-linecap="round"/>
+  <!-- 小气泡 -->
+  <circle cx="400" cy="430" r="6" fill="none" stroke="#81D4FA" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="550" cy="380" r="5" fill="none" stroke="#81D4FA" stroke-width="1.5" opacity="0.4"/>
+  <circle cx="650" cy="450" r="4" fill="none" stroke="#81D4FA" stroke-width="1.5" opacity="0.4"/>
+  <circle cx="480" cy="350" r="7" fill="none" stroke="#81D4FA" stroke-width="1.5" opacity="0.3"/>
+  <!-- 海草 -->
+  <path d="M200 850 Q210 800 200 750 Q190 720 205 690" fill="none" stroke="#66BB6A" stroke-width="4" opacity="0.4"/>
+  <path d="M800 840 Q790 790 800 740" fill="none" stroke="#81C784" stroke-width="3" opacity="0.4"/>
+  <!-- 小鱼 -->
+  <path d="M280 650 Q270 640 280 635 L295 645Z" fill="#FF8A65" opacity="0.5"/>
+</svg>

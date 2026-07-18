@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="jm-theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>将军饮马 · 几何探究</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+
+:root {
+  --bg: #fafafa; --text: #2c2c2c; --accent: #2563eb;
+  --panel-bg: #fff; --border: #e0e0e0;
+}
+[data-theme="dark"] {
+  --bg: #1a1a2e; --text: #e0e0e0; --accent: #60a5fa;
+  --panel-bg: #252540; --border: #3a3a55;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Serif SC', system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+
+.header {
+  display: flex; align-items: center; padding: 12px 20px;
+  border-bottom: 1px solid var(--border); gap: 16px;
+  flex-wrap: wrap;
+}
+.header a { color: var(--accent); text-decoration: none; font-size: 14px; }
+.header h1 { font-size: 1.3em; letter-spacing: 2px; flex: 1; }
+.header button {
+  padding: 6px 14px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--panel-bg); color: var(--text); cursor: pointer;
+  font-family: inherit; font-size: 0.85em;
+}
+.header button:hover { background: var(--border); }
+
+.main { display: flex; flex: 1; min-height: 0; }
+
+.canvas-wrap {
+  flex: 1; position: relative; cursor: crosshair;
+  min-width: 0;
+}
+canvas { display: block; width: 100%; height: 100%; }
+
+.sidebar {
+  width: 300px; border-left: 1px solid var(--border);
+  background: var(--panel-bg); padding: 20px;
+  display: flex; flex-direction: column; gap: 16px;
+  overflow-y: auto;
+}
+.sidebar h3 { font-size: 1em; color: var(--accent); margin-bottom: 4px; }
+.sidebar .info { font-size: 0.82em; line-height: 1.7; opacity: 0.75; }
+.sidebar .formula {
+  background: rgba(37,99,235,0.06); border-radius: 8px;
+  padding: 12px; font-size: 0.85em; line-height: 1.8;
+}
+.sidebar .formula strong { color: var(--accent); }
+
+.slider-group { display: flex; flex-direction: column; gap: 4px; }
+.slider-group label { font-size: 0.8em; opacity: 0.7; }
+.slider-group input[type=range] { width: 100%; }
+.slider-group .val { font-size: 0.75em; opacity: 0.5; text-align: right; }
+
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-row button {
+  flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--panel-bg); color: var(--text); cursor: pointer;
+  font-family: inherit; font-size: 0.82em; transition: all 0.2s;
+}
+.btn-row button:hover { background: var(--border); }
+.btn-row button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.length-display {
+  text-align: center; font-size: 1.2em; font-weight: 700;
+  padding: 8px; border-radius: 8px;
+  background: rgba(37,99,235,0.06);
+}
+.length-display .big { font-size: 1.4em; color: var(--accent); }
+
+.footer { text-align: center; padding: 8px; opacity: 0.3; font-size: 0.7em; }
+
+@media (max-width: 768px) {
+  .main { flex-direction: column; }
+  .sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border); max-height: 40vh; }
+  .canvas-wrap { height: 50vh; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html"><img src="12345.png" alt="logo" style="width:22px;height:22px;border-radius:4px;vertical-align:middle;margin-right:4px;">← 藏经阁</a>
+  <h1>将军饮马 · 最短路径</h1>
+  <button onclick="resetAll()">↺ 重置</button>
+  <button onclick="toggleTheme()">🌓</button>
+</div>
+
+<div class="main">
+  <div class="canvas-wrap"><canvas id="canvas"></canvas></div>
+
+  <div class="sidebar">
+    <h3>📐 将军饮马问题</h3>
+    <div class="info">
+      将军从营地 <strong>A</strong> 出发，先到河边饮马，再回军营 <strong>B</strong>。如何走总路程最短？
+    </div>
+
+    <div class="formula">
+      <strong>解法：轴对称变换</strong><br>
+      作 A 关于河岸的对称点 A'<br>
+      连接 A'B 交河岸于 P<br>
+      则 AP + PB 为最短路径
+    </div>
+
+    <div class="length-display">
+      最短路径<br>
+      <span class="big" id="minLen">—</span>
+    </div>
+
+    <div class="slider-group">
+      <label>尝试点位置（拖滑块对比）</label>
+      <input type="range" id="trySlider" min="5" max="95" value="50" oninput="updateTryPoint()">
+      <span class="val" id="tryLen">拖动查看任意路径长度</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="active" id="btnNormal" onclick="setMode('normal')">自由拖动</button>
+      <button id="btnReflect" onclick="setMode('reflect')">显示对称</button>
+      <button onclick="animateSolution()">▶ 演示动画</button>
+    </div>
+
+    <div class="btn-row">
+      <button onclick="preset1()">📐 对称案例</button>
+      <button onclick="preset2()">📏 同侧案例</button>
+      <button onclick="preset3()">📊 极端案例</button>
+    </div>
+
+    <div class="info" style="font-size:0.75em;">
+      💡 拖动 <strong>A、B</strong> 两点<br>
+      💡 拖滑块尝试不同路径<br>
+      💡 "显示对称"查看几何原理
+    </div>
+  </div>
+</div>
+
+<div class="footer">扫地僧创作 · 二〇二六</div>
+
+<script>
+// ═══════ State ═══════
+const W = 800, H = 500;
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// Coordinate system: river is at y = 300
+const riverY = 300;
+let pointA = { x: 150, y: 120 };
+let pointB = { x: 600, y: 200 };
+let tryPercent = 50; // slider percentage along river
+
+let dragging = null;
+let mode = 'normal'; // 'normal' | 'reflect'
+let animating = false;
+
+// ═══════ Canvas Setup ═══════
+function resize() {
+  const wrap = canvas.parentElement;
+  const w = wrap.clientWidth;
+  const h = wrap.clientHeight;
+  canvas.width = w * devicePixelRatio;
+  canvas.height = h * devicePixelRatio;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+}
+
+function toCanvas(p) {
+  return {
+    x: p.x / W * canvas.clientWidth,
+    y: p.y / H * canvas.clientHeight
+  };
+}
+
+function toWorld(cx, cy) {
+  return {
+    x: cx / canvas.clientWidth * W,
+    y: cy / canvas.clientHeight * H
+  };
+}
+
+// ═══════ Geometry ═══════
+function reflect(p, yLine) {
+  return { x: p.x, y: 2 * yLine - p.y };
+}
+
+function dist(a, b) {
+  return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+}
+
+function intersectLine(p1, p2, yLine) {
+  // Find intersection of line p1-p2 with horizontal line at yLine
+  if (Math.abs(p1.y - p2.y) < 0.001) return { x: (p1.x + p2.x) / 2, y: yLine };
+  const t = (yLine - p1.y) / (p2.y - p1.y);
+  return { x: p1.x + t * (p2.x - p1.x), y: yLine };
+}
+
+function optimalPoint() {
+  const aRefl = reflect(pointA, riverY);
+  return intersectLine(aRefl, pointB, riverY);
+}
+
+function tryPoint() {
+  const opt = optimalPoint();
+  const left = Math.min(50, opt.x - 100);
+  const right = Math.max(W - 50, opt.x + 100);
+  return { x: left + (right - left) * tryPercent / 100, y: riverY };
+}
+
+// ═══════ Drawing ═══════
+function draw() {
+  const cw = canvas.clientWidth;
+  const ch = canvas.clientHeight;
+  ctx.clearRect(0, 0, cw, ch);
+
+  const sx = cw / W, sy = ch / H;
+  const tx = (p) => p.x * sx;
+  const ty = (p) => p.y * sy;
+
+  // Background grid
+  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border');
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x <= W; x += 50) {
+    ctx.beginPath(); ctx.moveTo(x * sx, 0); ctx.lineTo(x * sx, ch); ctx.stroke();
+  }
+  for (let y = 0; y <= H; y += 50) {
+    ctx.beginPath(); ctx.moveTo(0, y * sy); ctx.lineTo(cw, y * sy); ctx.stroke();
+  }
+
+  // River
+  ctx.fillStyle = 'rgba(59,130,246,0.1)';
+  ctx.fillRect(0, ty({y: riverY - 15}), cw, sy * 30);
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, ty({y: riverY})); ctx.lineTo(cw, ty({y: riverY})); ctx.stroke();
+  ctx.fillStyle = '#3b82f6';
+  ctx.font = `${13 * devicePixelRatio}px 'Noto Serif SC'`;
+  ctx.fillText('河 流', 10, ty({y: riverY - 6}));
+
+  // Reflection point A'
+  if (mode === 'reflect') {
+    const aRefl = reflect(pointA, riverY);
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(tx(pointA), ty(pointA));
+    ctx.lineTo(tx(aRefl), ty(aRefl)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    drawPoint(aRefl, '#94a3b8', "A'");
+  }
+
+  // Optimal path
+  const opt = optimalPoint();
+  const tryP = tryPoint();
+
+  // Show A'→B line in reflect mode
+  if (mode === 'reflect') {
+    const aRefl = reflect(pointA, riverY);
+    ctx.setLineDash([6, 3]);
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(tx(aRefl), ty(aRefl));
+    ctx.lineTo(tx(pointB), ty(pointB)); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // A→Opt→B optimal path
+  ctx.strokeStyle = '#22c55e';
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(tx(pointA), ty(pointA));
+  ctx.lineTo(tx(opt), ty(opt));
+  ctx.lineTo(tx(pointB), ty(pointB)); ctx.stroke();
+
+  // Try path (from slider)
+  if (Math.abs(tryP.x - opt.x) > 2) {
+    ctx.strokeStyle = '#ef4444';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 3]);
+    ctx.beginPath(); ctx.moveTo(tx(pointA), ty(pointA));
+    ctx.lineTo(tx(tryP), ty(tryP));
+    ctx.lineTo(tx(pointB), ty(pointB)); ctx.stroke();
+    ctx.setLineDash([]);
+    drawPoint(tryP, '#ef4444', '试');
+  }
+
+  // Points
+  drawPoint(pointA, '#2563eb', 'A 营地');
+  drawPoint(pointB, '#7c3aed', 'B 军营');
+  drawPoint(opt, '#22c55e', 'P 最佳');
+
+  // Length labels
+  const optLen = dist(pointA, opt) + dist(opt, pointB);
+  const tryLen = dist(pointA, tryP) + dist(tryP, pointB);
+
+  document.getElementById('minLen').textContent = optLen.toFixed(1) + ' 单位';
+  document.getElementById('tryLen').textContent =
+    `尝试路径: ${tryLen.toFixed(1)} (多走 ${(tryLen - optLen).toFixed(1)})`;
+}
+
+function drawPoint(p, color, label) {
+  const sx = canvas.clientWidth / W;
+  const sy = canvas.clientHeight / H;
+  const r = 7;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(p.x * sx, p.y * sy, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.font = `bold ${12 * devicePixelRatio}px 'Noto Serif SC'`;
+  ctx.fillText(label, p.x * sx + 10, p.y * sy - 10);
+}
+
+// ═══════ Interaction ═══════
+canvas.addEventListener('mousedown', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const wx = (e.clientX - rect.left) / rect.width * W;
+  const wy = (e.clientY - rect.top) / rect.height * H;
+  if (dist({x: wx, y: wy}, pointA) < 20) dragging = 'A';
+  else if (dist({x: wx, y: wy}, pointB) < 20) dragging = 'B';
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  if (!dragging) return;
+  const rect = canvas.getBoundingClientRect();
+  const wx = Math.max(10, Math.min(W - 10, (e.clientX - rect.left) / rect.width * W));
+  const wy = Math.max(10, Math.min(H - 10, (e.clientY - rect.top) / rect.height * H));
+  if (dragging === 'A') { pointA.x = wx; pointA.y = wy; }
+  if (dragging === 'B') { pointB.x = wx; pointB.y = wy; }
+  draw();
+});
+
+canvas.addEventListener('mouseup', () => { dragging = null; });
+
+// Touch
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const wx = (e.touches[0].clientX - rect.left) / rect.width * W;
+  const wy = (e.touches[0].clientY - rect.top) / rect.height * H;
+  if (dist({x: wx, y: wy}, pointA) < 30) dragging = 'A';
+  else if (dist({x: wx, y: wy}, pointB) < 30) dragging = 'B';
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  if (!dragging) return;
+  const rect = canvas.getBoundingClientRect();
+  const wx = Math.max(10, Math.min(W - 10, (e.touches[0].clientX - rect.left) / rect.width * W));
+  const wy = Math.max(10, Math.min(H - 10, (e.touches[0].clientY - rect.top) / rect.height * H));
+  if (dragging === 'A') { pointA.x = wx; pointA.y = wy; }
+  if (dragging === 'B') { pointB.x = wx; pointB.y = wy; }
+  draw();
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => { dragging = null; });
+
+// ═══════ Sound ═══════
+function hoofBeat() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    // Two quick taps simulating hoof beats
+    [0, 0.15].forEach(delay => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(120, t + delay);
+      osc.frequency.exponentialRampToValueAtTime(60, t + delay + 0.06);
+      gain.gain.setValueAtTime(0.15, t + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.08);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t + delay); osc.stop(t + delay + 0.1);
+    });
+  } catch(e) {}
+}
+
+// ═══════ Controls ═══════
+function updateTryPoint() {
+  tryPercent = parseInt(document.getElementById('trySlider').value);
+  draw();
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btnNormal').classList.toggle('active', m === 'normal');
+  document.getElementById('btnReflect').classList.toggle('active', m === 'reflect');
+  draw();
+}
+
+function resetAll() {
+  pointA = { x: 150, y: 120 };
+  pointB = { x: 600, y: 200 };
+  tryPercent = 50;
+  document.getElementById('trySlider').value = 50;
+  mode = 'normal';
+  document.getElementById('btnNormal').classList.add('active');
+  document.getElementById('btnReflect').classList.remove('active');
+  draw();
+}
+
+function preset1() {
+  pointA = { x: 150, y: 120 }; pointB = { x: 600, y: 200 }; tryPercent = 50;
+  document.getElementById('trySlider').value = 50; draw();
+}
+function preset2() {
+  pointA = { x: 200, y: 150 }; pointB = { x: 500, y: 100 }; tryPercent = 50;
+  document.getElementById('trySlider').value = 50; draw();
+}
+function preset3() {
+  pointA = { x: 100, y: 50 }; pointB = { x: 700, y: 280 }; tryPercent = 50;
+  document.getElementById('trySlider').value = 50; draw();
+}
+
+function animateSolution() {
+  if (animating) return;
+  animating = true;
+  mode = 'normal';
+  document.getElementById('btnNormal').classList.add('active');
+  document.getElementById('btnReflect').classList.remove('active');
+
+  let phase = 0;
+  const steps = 60;
+  const aRefl = reflect(pointA, riverY);
+  const opt = optimalPoint();
+
+  function step() {
+    phase++;
+    if (phase <= 20) {
+      // Phase 1: show reflection forming
+      mode = 'reflect';
+    } else if (phase <= 50) {
+      if (phase % 4 === 0) hoofBeat();
+      // Phase 2: slider moves from random to optimal
+      const t = (phase - 20) / 30;
+      tryPercent = Math.round(10 + 80 * (1 - t));
+      document.getElementById('trySlider').value = tryPercent;
+      updateTryPoint();
+    } else {
+      mode = 'normal';
+      tryPercent = 50;
+      document.getElementById('trySlider').value = 50;
+      animating = false;
+      draw();
+      return;
+    }
+    draw();
+    requestAnimationFrame(() => setTimeout(step, 100));
+  }
+  step();
+}
+
+function toggleTheme() {
+  const h = document.documentElement;
+  const next = h.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  h.setAttribute('data-theme', next);
+  localStorage.setItem('jm-theme', next);
+  draw();
+}
+
+// ═══════ Init ═══════
+window.addEventListener('resize', () => { resize(); draw(); });
+(function() {
+  const t = localStorage.getItem('jm-theme');
+  if (t) document.documentElement.setAttribute('data-theme', t);
+  resize();
+  draw();
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if ((e.key === 'h' || e.key === 'H') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      location.href = 'index.html';
+    }
+  });
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1810"/><stop offset="100%" stop-color="#0a0800"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">37=山鸡</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">3像山峰尖尖立，7是鸡冠翘翘弯</text>
+  <!-- 地面 -->
+  <ellipse cx="512" cy="700" rx="200" ry="18" fill="#0a0800" opacity="0.3"/>
+  <!-- 身体 -->
+  <ellipse cx="470" cy="580" rx="55" ry="45" fill="#C07030"/>
+  <ellipse cx="465" cy="575" rx="45" ry="36" fill="#D88840" opacity="0.5"/>
+  <!-- 翅膀 -->
+  <path d="M430 560 Q400 580 420 610 Q445 620 450 590Z" fill="#A05820"/>
+  <path d="M435 565 Q412 580 428 602 Q448 608 448 592Z" fill="#B86828" opacity="0.5"/>
+  <!-- 尾羽 7形弯翘 -->
+  <path d="M500 610 Q520 650 540 680 Q560 700 570 690" fill="none" stroke="#C07030" stroke-width="8" stroke-linecap="round"/>
+  <path d="M510 605 Q535 640 555 670 Q575 695 580 680" fill="none" stroke="#D88840" stroke-width="6" stroke-linecap="round"/>
+  <path d="M490 615 Q500 660 510 690" fill="none" stroke="#A05820" stroke-width="7" stroke-linecap="round"/>
+  <!-- 颈 -->
+  <path d="M440 550 Q430 510 440 470" fill="none" stroke="#D88840" stroke-width="14" stroke-linecap="round"/>
+  <!-- 头 -->
+  <circle cx="445" cy="455" r="18" fill="#D88840"/>
+  <circle cx="448" cy="452" r="14" fill="#E8A060" opacity="0.5"/>
+  <!-- 眼 -->
+  <circle cx="452" cy="448" r="3.5" fill="#1a0800"/>
+  <circle cx="453" cy="447" r="1.2" fill="white"/>
+  <!-- 喙 -->
+  <path d="M460 455 L478 458 L460 462Z" fill="#FF9800"/>
+  <!-- 鸡冠 3形尖 + 7形弯 -->
+  <path d="M435 440 Q430 420 440 405 Q450 415 445 435Z" fill="#E85D3A"/>
+  <path d="M448 438 Q450 415 458 400 Q468 410 458 435Z" fill="#E85D3A"/>
+  <path d="M460 442 Q465 420 472 408 Q480 418 470 440Z" fill="#F08060"/>
+  <!-- 腿 -->
+  <line x1="450" y1="620" x2="440" y2="680" stroke="#FF9800" stroke-width="4" stroke-linecap="round"/>
+  <line x1="475" y1="615" x2="480" y2="675" stroke="#FF9800" stroke-width="4" stroke-linecap="round"/>
+  <!-- 爪 -->
+  <path d="M435 680 L425 688 M435 680 L438 690 M435 680 L445 687" stroke="#FF9800" stroke-width="2"/>
+  <path d="M475 675 L465 683 M475 675 L478 685 M475 675 L485 682" stroke="#FF9800" stroke-width="2"/>
+</svg>

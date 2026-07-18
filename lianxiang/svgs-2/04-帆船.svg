@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#1a3048"/><stop offset="100%" stop-color="#081020"/></radialGradient>
+    <linearGradient id="sail" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#E8DDD0"/><stop offset="100%" stop-color="#FFFAF5"/></linearGradient>
+    <linearGradient id="hull" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5C3A2A"/><stop offset="100%" stop-color="#8B5A3A"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">04=帆船</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">0像船身两头圆，4是风帆三角扬</text>
+  <!-- 星星 -->
+  <circle cx="200" cy="250" r="2" fill="white" opacity="0.4"/>
+  <circle cx="350" cy="180" r="1.5" fill="white" opacity="0.3"/>
+  <circle cx="700" cy="200" r="2" fill="white" opacity="0.35"/>
+  <circle cx="820" cy="280" r="1.5" fill="white" opacity="0.25"/>
+  <circle cx="280" cy="300" r="1" fill="white" opacity="0.2"/>
+  <!-- 月亮 -->
+  <path d="M820 200 A40 40 0 1 1 800 150 A35 35 0 1 0 820 200Z" fill="#FFEECC" opacity="0.6"/>
+  <!-- 海面 -->
+  <ellipse cx="512" cy="680" rx="420" ry="50" fill="#1a4060" opacity="0.3"/>
+  <path d="M100 680 Q300 665 512 675 Q724 685 924 680" fill="none" stroke="#2a6080" stroke-width="2" opacity="0.3"/>
+  <path d="M150 710 Q350 695 512 705 Q674 715 874 710" fill="none" stroke="#2a6080" stroke-width="1.5" opacity="0.2"/>
+  <!-- 船身 0形椭圆 -->
+  <ellipse cx="512" cy="620" rx="150" ry="35" fill="url(#hull)"/>
+  <ellipse cx="512" cy="615" rx="140" ry="28" fill="#9B6A4A"/>
+  <rect x="372" y="605" width="280" height="20" rx="4" fill="#7A4A2A"/>
+  <!-- 船舷 -->
+  <line x1="380" y1="608" x2="644" y2="608" stroke="#5C3A2A" stroke-width="2"/>
+  <!-- 桅杆 1形直 -->
+  <line x1="512" y1="610" x2="512" y2="320" stroke="#6B4030" stroke-width="8" stroke-linecap="round"/>
+  <line x1="512" y1="610" x2="512" y2="320" stroke="#8B5A3A" stroke-width="4" stroke-linecap="round"/>
+  <!-- 主帆 4形三角 -->
+  <path d="M512 340 L400 570 L512 560Z" fill="url(#sail)" stroke="#C0A890" stroke-width="1.5"/>
+  <path d="M512 360 L420 555 L512 545Z" fill="white" opacity="0.15"/>
+  <!-- 桅顶小旗 -->
+  <path d="M512 320 L550 335 L512 345Z" fill="#E85D3A" opacity="0.8"/>
+  <!-- 船头浪花 -->
+  <path d="M340 625 Q320 620 310 630" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
+  <path d="M350 618 Q335 612 325 622" fill="none" stroke="white" stroke-width="1.5" opacity="0.2"/>
+</svg>

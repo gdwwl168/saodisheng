@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1a28"/><stop offset="100%" stop-color="#0a0a18"/></radialGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#505870"/><stop offset="100%" stop-color="#8890A0"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">23=耳机</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">2是耳罩圆圆，3是头梁弯弧挂</text>
+  <!-- 头梁 3形弯 -->
+  <path d="M360 460 Q360 300 512 280 Q664 300 664 460" fill="none" stroke="url(#band)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M360 460 Q360 300 512 280 Q664 300 664 460" fill="none" stroke="#A0A8B8" stroke-width="5" stroke-linecap="round" opacity="0.3"/>
+  <!-- 头梁垫 -->
+  <path d="M470 285 Q512 275 554 285" fill="none" stroke="#404048" stroke-width="14" stroke-linecap="round"/>
+  <path d="M475 283 Q512 274 549 283" fill="none" stroke="#585860" stroke-width="8" stroke-linecap="round"/>
+  <!-- 左耳罩 2形圆 -->
+  <circle cx="350" cy="500" r="55" fill="#404048"/>
+  <circle cx="350" cy="500" r="45" fill="#505058"/>
+  <circle cx="350" cy="500" r="32" fill="#383840"/>
+  <!-- 左耳垫 -->
+  <circle cx="350" cy="500" r="45" fill="none" stroke="#606068" stroke-width="6"/>
+  <!-- 左连接 -->
+  <rect x="370" y="455" width="20" height="10" rx="3" fill="#484850"/>
+  <!-- 右耳罩 2形圆 -->
+  <circle cx="674" cy="500" r="55" fill="#404048"/>
+  <circle cx="674" cy="500" r="45" fill="#505058"/>
+  <circle cx="674" cy="500" r="32" fill="#383840"/>
+  <circle cx="674" cy="500" r="45" fill="none" stroke="#606068" stroke-width="6"/>
+  <rect x="634" y="455" width="20" height="10" rx="3" fill="#484850"/>
+  <!-- 声波 -->
+  <g stroke="#6080a0" fill="none" opacity="0.2">
+    <path d="M280 480 Q260 480 250 500"/>
+    <path d="M274 490 Q250 492 240 510"/>
+    <path d="M744 480 Q764 480 774 500"/>
+    <path d="M750 490 Q774 492 784 510"/>
+  </g>
+  <!-- 音符 -->
+  <text x="230" y="440" font-size="18" fill="#6080a0" opacity="0.2">♪</text>
+  <text x="760" y="455" font-size="16" fill="#6080a0" opacity="0.2">♫</text>
+</svg>

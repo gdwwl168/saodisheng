@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient>
+  </defs>
+  <!-- 卡片背景 -->
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">23=耳机</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">2像头梁弯弯架，3是耳罩圆圆贴</text>
+
+  <!-- 头梁 - 2形弧形 -->
+  <path d="M320 220 Q320 120 400 100 Q512 80 624 100 Q704 120 704 220" fill="none" stroke="#37474F" stroke-width="22" stroke-linecap="round"/>
+  <!-- 头梁软垫 -->
+  <path d="M370 145 Q420 110 512 100 Q604 110 654 145" fill="none" stroke="#546E7A" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- 左耳罩 - 3形 -->
+  <g transform="translate(280, 300)">
+    <ellipse cx="0" cy="0" rx="85" ry="95" fill="#455A64" stroke="#37474F" stroke-width="4"/>
+    <!-- 耳罩内圈 -->
+    <ellipse cx="0" cy="0" rx="55" ry="65" fill="#263238"/>
+    <!-- 海绵 -->
+    <ellipse cx="0" cy="0" rx="45" ry="55" fill="#F44336" opacity="0.7"/>
+    <!-- 3的数字暗示：耳罩的曲线 -->
+    <path d="M-30 -30 Q-50 -10 -30 20 Q-10 50 10 40" fill="none" stroke="#E81A1A" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- 右耳罩 - 3形 -->
+  <g transform="translate(744, 300)">
+    <ellipse cx="0" cy="0" rx="85" ry="95" fill="#455A64" stroke="#37474F" stroke-width="4"/>
+    <ellipse cx="0" cy="0" rx="55" ry="65" fill="#263238"/>
+    <ellipse cx="0" cy="0" rx="45" ry="55" fill="#E81A1A" opacity="0.7"/>
+    <path d="M-30 -30 Q-50 -10 -30 20 Q-10 50 10 40" fill="none" stroke="#E81A1A" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- 支架连接 -->
+  <rect x="710" y="200" width="24" height="120" rx="6" fill="#546E7A"/>
+  <rect x="290" y="200" width="24" height="120" rx="6" fill="#546E7A"/>
+
+  <!-- 音频波纹 -->
+  <path d="M150 450 Q130 420 150 390 Q170 360 150 330" fill="none" stroke="#78909C" stroke-width="3" opacity="0.5"/>
+  <path d="M130 460 Q100 420 130 380 Q160 340 130 300" fill="none" stroke="#78909C" stroke-width="3" opacity="0.3"/>
+  <path d="M874 450 Q894 420 874 390 Q854 360 874 330" fill="none" stroke="#78909C" stroke-width="3" opacity="0.5"/>
+  <path d="M894 460 Q924 420 894 380 Q864 340 894 300" fill="none" stroke="#78909C" stroke-width="3" opacity="0.3"/>
+
+  <!-- 音乐音符 -->
+  <text x="200" y="650" font-size="40" fill="#E85D3A" opacity="0.5">♪</text>
+  <text x="780" y="680" font-size="36" fill="#E85D3A" opacity="0.4">♫</text>
+  <text x="500" y="750" font-size="44" fill="#E85D3A" opacity="0.45">♪</text>
+</svg>

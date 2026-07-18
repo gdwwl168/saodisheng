@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#2a1828"/><stop offset="100%" stop-color="#100a14"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">41=司仪</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">4面舞台四方方，1枝话筒话全场</text>
+  <!-- 舞台 -->
+  <rect x="250" y="520" width="524" height="20" rx="4" fill="#4a3050"/>
+  <!-- 主持人 身体 -->
+  <rect x="440" y="400" width="144" height="120" rx="16" fill="#2a1a2a"/>
+  <!-- 西装 -->
+  <rect x="440" y="400" width="144" height="120" rx="16" fill="#3a2a3a"/>
+  <!-- 衬衫 -->
+  <rect x="485" y="420" width="54" height="80" rx="6" fill="white" opacity="0.7"/>
+  <!-- 领结 -->
+  <path d="M500 435 L490 428 L490 442Z" fill="#C83030"/>
+  <path d="M500 435 L510 428 L510 442Z" fill="#C83030"/>
+  <circle cx="500" cy="435" r="3" fill="#E84040"/>
+  <!-- 头 -->
+  <circle cx="512" cy="360" r="35" fill="#F5D5B8"/>
+  <circle cx="512" cy="358" r="30" fill="#FDE0C8"/>
+  <!-- 五官 -->
+  <circle cx="502" cy="355" r="3" fill="#2a1010"/>
+  <circle cx="522" cy="355" r="3" fill="#2a1010"/>
+  <path d="M506 370 Q512 376 518 370" fill="none" stroke="#D48880" stroke-width="1.5"/>
+  <!-- 头发 -->
+  <path d="M478 345 Q478 325 512 322 Q546 325 546 345" fill="#2a1010"/>
+  <!-- 话筒 1+4形 -->
+  <rect x="540" y="340" width="12" height="80" rx="4" fill="#505860"/>
+  <ellipse cx="546" cy="340" rx="14" ry="8" fill="#606870"/>
+  <ellipse cx="546" cy="340" rx="10" ry="5" fill="#707880" opacity="0.5"/>
+  <!-- 话筒网格 -->
+  <g stroke="#505860" stroke-width="0.5" opacity="0.4">
+    <line x1="536" y1="337" x2="556" y2="337"/>
+    <line x1="536" y1="340" x2="556" y2="340"/>
+    <line x1="536" y1="343" x2="556" y2="343"/>
+  </g>
+  <!-- 聚光灯 -->
+  <path d="M512 180 L400 400 L624 400Z" fill="#FFEECC" opacity="0.05"/>
+  <!-- 音符飘出 -->
+  <text x="570" y="320" font-size="16" fill="#C898C0" opacity="0.3">♪</text>
+  <text x="590" y="300" font-size="14" fill="#C898C0" opacity="0.2">♫</text>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">74=骑士</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">7像长矛弯弯挥，4是铠甲三角坚</text>
+  <ellipse cx="512" cy="830" rx="250" ry="35" fill="#BCAAA4" opacity="0.2"/>
+  <!-- 马身 -->
+  <ellipse cx="400" cy="640" rx="90" ry="110" fill="#5D4037"/>
+  <!-- 马头 -->
+  <ellipse cx="320" cy="520" rx="40" ry="55" fill="#6D4C41"/>
+  <path d="M300 480 Q280 460 290 440" fill="none" stroke="#6D4C41" stroke-width="8"/>
+  <!-- 马腿 -->
+  <rect x="340" y="720" width="18" height="90" rx="6" fill="#5D4037"/>
+  <rect x="370" y="720" width="18" height="90" rx="6" fill="#5D4037"/>
+  <rect x="430" y="720" width="18" height="90" rx="6" fill="#5D4037"/>
+  <rect x="460" y="720" width="18" height="90" rx="6" fill="#5D4037"/>
+  <!-- 骑士身体 -->
+  <rect x="370" y="460" width="40" height="100" rx="8" fill="#607D8B"/>
+  <!-- 头盔 - 4形 -->
+  <path d="M370 430 L390 360 L410 430Z" fill="#78909C"/>
+  <rect x="365" y="425" width="50" height="10" rx="3" fill="#546E7A"/>
+  <circle cx="390" cy="390" r="5" fill="#F44336"/>
+  <!-- 长矛 - 7形 -->
+  <line x1="410" y1="490" x2="550" y2="360" stroke="#8D6E63" stroke-width="6" stroke-linecap="round"/>
+  <path d="M550 360 L560 355 L555 345Z" fill="#B0BEC5"/>
+  <!-- 盾牌 -->
+  <path d="M350 500 Q340 520 350 560 Q390 580 410 560 Q420 520 410 500Z" fill="#F44336" opacity="0.7"/>
+  <text x="380" y="540" font-size="14" fill="#FFD54F">★</text>
+</svg>

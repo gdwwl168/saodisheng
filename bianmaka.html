@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="bianmaka_theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>编码卡 · 扫地僧</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap');
+:root {
+  --bg: #f5efe0; --text: #3b3223; --accent: #8b4513;
+  --gold: #c4a97d; --card-bg: #faf7f2; --border: #d4c5a9;
+}
+[data-theme="dark"] {
+  --bg: #1a1610; --text: #d4c5a9; --accent: #c9a96e;
+  --gold: #c9a96e; --card-bg: #252018; --border: #3a3028;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Serif SC', serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* Top bar */
+.topbar {
+  display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
+  padding: 10px 12px; background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+}
+.topbar a, .topbar button {
+  padding: 5px 12px; border: 1px solid var(--border); border-radius: 14px;
+  color: var(--text); text-decoration: none; font-family: inherit;
+  font-size: 0.72em; letter-spacing: 1px; background: transparent; cursor: pointer;
+}
+.topbar a:hover, .topbar button:hover { background: var(--border); }
+.topbar a.active, .topbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.header { text-align: center; padding: 20px 20px 4px; }
+.header h1 { font-family: 'Ma Shan Zheng', cursive; font-size: 2em; color: var(--accent); letter-spacing: 0.15em; }
+.tip { text-align: center; font-size: 0.76em; opacity: 0.5; padding: 4px 20px 10px; letter-spacing: 1px; }
+
+.controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 6px 20px 12px; }
+.controls button {
+  padding: 7px 16px; border: 1px solid var(--border); border-radius: 16px;
+  background: var(--card-bg); color: var(--text); font-family: inherit;
+  font-size: 0.82em; cursor: pointer; transition: all 0.2s;
+}
+.controls button:hover { background: var(--border); }
+.controls button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Progress */
+.progress-wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px 8px; display: flex; align-items: center; gap: 8px; font-size: 0.72em; opacity: 0.5; }
+.progress-bar-outer { flex: 1; height: 4px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-bar-inner { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.3s; }
+
+/* Grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; max-width: 1000px; margin: 0 auto; padding: 8px 20px 40px; }
+.card { perspective: 800px; aspect-ratio: 1; }
+.card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.5s; transform-style: preserve-3d; cursor: pointer; }
+.card.flipped .card-inner { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; inset: 0; border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border: 1px solid var(--border); padding: 10px 8px; text-align: center;
+  user-select: none; overflow: hidden;
+}
+.card-front { background: var(--card-bg); }
+.card-front .num { font-size: 0.72em; opacity: 0.45; position: relative; z-index: 2; }
+.card-front .img-wrap { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.35s; z-index: 1; overflow: hidden; }
+.card-front .img-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; background: var(--card-bg); }
+.card-front .word { font-size: 1.1em; font-weight: 700; opacity: 0.8; transition: opacity 0.35s; position: relative; z-index: 2; letter-spacing: 0.08em; }
+.card.revealed .img-wrap { opacity: 1; }
+.card.revealed .num { opacity: 0; pointer-events: none; }
+.card.revealed .word { opacity: 0; pointer-events: none; }
+.card-back { background: rgba(139,69,19,0.04); border-color: var(--accent); transform: rotateY(180deg); padding: 12px 10px; }
+.card-back .mnemonic { font-size: 0.78em; opacity: 0.8; line-height: 1.7; margin-bottom: 6px; }
+.card-back .first-line { font-size: 0.7em; opacity: 0.45; line-height: 1.5; border-top: 1px dashed var(--border); padding-top: 6px; }
+.card:hover .card-front { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+.footer { text-align: center; padding: 12px; opacity: 0.3; font-size: 0.68em; letter-spacing: 0.1em; }
+
+/* SVG 放大查看器 */
+.svg-viewer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.svg-viewer-overlay.open { opacity: 1; pointer-events: auto; }
+.svg-viewer-content { width: min(800px, 95vw); height: min(800px, 95vh); display: flex; align-items: center; justify-content: center; position: relative; }
+.svg-viewer-content img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+.svg-viewer-label { position: absolute; bottom: -36px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.45); font-size: 0.82em; letter-spacing: 2px; white-space: nowrap; }
+
+/* 图片查看器 */
+.viewer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.viewer-overlay.open { opacity: 1; pointer-events: auto; }
+.viewer-close { position: absolute; top: 12px; right: 18px; font-size: 2.2em; color: #fff; cursor: pointer; z-index: 1002; opacity: 0.6; background: none; border: none; line-height: 1; }
+.viewer-close:hover { opacity: 1; }
+.viewer-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 2.8em; color: #fff; cursor: pointer; z-index: 1002; opacity: 0.5; background: none; border: none; padding: 20px 12px; user-select: none; transition: opacity 0.2s; }
+.viewer-nav:hover { opacity: 1; }
+.viewer-nav.prev { left: 4px; }
+.viewer-nav.next { right: 4px; }
+.viewer-img-wrap { width: min(500px, 90vw); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+.viewer-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+.viewer-info { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.5); font-size: 0.85em; letter-spacing: 2px; z-index: 1002; }
+
+/* 矢量图总览 */
+.svg-gallery-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 1000; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.svg-gallery-overlay.open { opacity: 1; pointer-events: auto; }
+.svg-gallery-header { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); flex-shrink: 0; }
+.svg-gallery-header .title { font-family: 'Ma Shan Zheng', cursive; font-size: 1.4em; color: #c9a96e; letter-spacing: 0.12em; }
+.svg-gallery-header .count { font-size: 0.78em; color: rgba(255,255,255,0.45); }
+.svg-gallery-close { margin-left: auto; font-size: 2em; color: #fff; cursor: pointer; opacity: 0.5; background: none; border: none; line-height: 1; transition: opacity 0.2s; }
+.svg-gallery-close:hover { opacity: 1; }
+.svg-set-btn { padding: 4px 14px; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: rgba(255,255,255,0.5); background: transparent; font-family: inherit; font-size: 0.75em; cursor: pointer; transition: all 0.2s; letter-spacing: 1px; }
+.svg-set-btn:hover { border-color: var(--accent); color: rgba(255,255,255,0.8); }
+.svg-set-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.svg-gallery-scroll { flex: 1; overflow-y: auto; padding: 16px 20px 40px; }
+.svg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; max-width: 1200px; margin: 0 auto; }
+.svg-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; cursor: pointer; }
+.svg-card:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+.svg-card .svg-num { font-size: 0.7em; color: rgba(255,255,255,0.35); }
+.svg-card .svg-img-wrap { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; }
+.svg-card .svg-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+.svg-card .svg-img-wrap .svg-fallback { font-size: 3em; opacity: 0.3; }
+.svg-card .svg-word { font-size: 0.82em; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
+.svg-card.missing { opacity: 0.4; border-style: dashed; }
+.svg-card.missing:hover { opacity: 0.7; }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px 12px 40px; }
+  .card-back .mnemonic { font-size: 0.85em; }
+  .card-back .first-line { font-size: 0.75em; }
+  .svg-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <a href="index.html"><img src="12345.png" alt="" style="width:18px;height:18px;border-radius:4px;vertical-align:middle;margin-right:4px;">藏经阁</a>
+  <a href="daodejing.html">老子</a>
+  <a href="sushi-works.html">苏轼</a>
+  <a href="xiaoxue.html">小学</a>
+  <a href="789.html">初中</a>
+  <a href="gaokao.html">高中</a>
+  <a href="emoji-study.html">📇记忆卡</a>
+  <a class="active">🔢编码卡</a>
+  <button class="icon-btn" onclick="toggleTheme()" title="切换主题">🌓</button>
+</div>
+
+<div class="header"><h1>数字编码卡</h1></div>
+<p class="tip">单击显编码图 → 再单击翻面看口诀 → 第三次单击盖上飘青烟 · 空格随机抽考</p>
+
+<div class="controls">
+  <button onclick="toggleAll()">👁️ 全部翻转</button>
+  <button onclick="shuffleOne()">🎲 随机抽考</button>
+  <button id="resetBtn" onclick="resetAll()">🔄 全部盖上</button>
+  <button onclick="openViewer(1)">🔍 放大看卡</button>
+  <button onclick="openSvgGallery()">📐 矢量图</button>
+</div>
+
+<div class="progress-wrap">
+  <span>已翻</span><span id="flipCount">0</span><span>/100</span>
+  <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar" style="width:0%"></div></div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<!-- 图片查看器 -->
+<div class="viewer-overlay" id="viewer" onclick="closeViewer(event)">
+  <button class="viewer-close" onclick="closeViewer()">&times;</button>
+  <button class="viewer-nav prev" onclick="event.stopPropagation();viewerNav(-1)">◂</button>
+  <button class="viewer-nav next" onclick="event.stopPropagation();viewerNav(1)">▸</button>
+  <div class="viewer-img-wrap" onclick="event.stopPropagation()">
+    <img id="viewerImg" src="" alt="">
+  </div>
+  <div class="viewer-info" id="viewerInfo"></div>
+</div>
+
+<!-- 矢量图放大查看器 -->
+<div class="svg-viewer-overlay" id="svgViewer" onclick="closeSvgViewer(event)">
+  <button class="viewer-close" onclick="closeSvgViewer()">&times;</button>
+  <button class="viewer-nav prev" onclick="event.stopPropagation();svgViewerNav(-1)">◂</button>
+  <button class="viewer-nav next" onclick="event.stopPropagation();svgViewerNav(1)">▸</button>
+  <div class="svg-viewer-content" onclick="event.stopPropagation()">
+    <img id="svgViewerImg" src="" alt="">
+    <div class="svg-viewer-label" id="svgViewerLabel"></div>
+  </div>
+</div>
+
+<!-- 矢量图总览 -->
+<div class="svg-gallery-overlay" id="svgGallery">
+  <div class="svg-gallery-header">
+    <span class="title">矢量图总览</span>
+    <button id="svgSet1Btn" class="svg-set-btn active" onclick="switchSvgSet(1)">组1</button>
+    <button id="svgSet2Btn" class="svg-set-btn" onclick="switchSvgSet(2)">组2</button>
+    <span class="count" id="svgCount">100张</span>
+    <button class="svg-gallery-close" onclick="closeSvgGallery()">&times;</button>
+  </div>
+  <div class="svg-gallery-scroll">
+    <div class="svg-grid" id="svgGrid"></div>
+  </div>
+</div>
+
+<div class="footer">扫地僧创作 · 二〇二六</div>
+
+<script>
+// ===== 数据 =====
+const chapterEmoji = ['','🕯️','🦢','👂','⛵','🪝','⛰️','🧗','🤰','🦺','⚾','🥢','🪑','👨‍⚕️','🔑','🦜','🍑','🔬','🎒','🍶','🚬','🐊','🦆','🎧','⏰','🪕','🏞️','🎏','🪷','🏀','🕳️','🦈','🪭','🏔️','🌲','🪸','🪔','🐔','🛋️','📐','👨‍✈️','🎤','🍅','🧣','🦁','🫖','🥝','🚗','🥒','🐕','🏅','👘','🍄','☂️','⚔️','🥁','🐌','🐔','🦊','⭐','🥝','🦽','🦌','☂️','🌿','🏚️','🪀','💦','📣','🫎','🦄','✈️','🐧','🚩','🐴','🧱','🦏','♟️','🐸','🎈','🗼','🐜','🎯','🥜','🚌','💎','🛣️','🏳️','👨','🍌','🍾','👕','⚽','☂️','👩‍🏫','🫖','🔥','🍶','🥃','👴','🐦'];
+
+const chapterWord = ['','蜡烛','白鹅','耳朵','帆船','钩子','山谷','崖壁','孕妇','口哨','棒球','筷子','椅儿','医生','钥匙','鹦鹉','石榴','仪器','腰包','药酒','香烟','鳄鱼','鸳鸯','耳机','闹钟','二胡','河流','彩旗','荷花','篮球','山洞','鲨鱼','扇儿','山川','杉树','珊瑚','香炉','山鸡','沙发','三角尺','司令','司仪','柿饼','丝巾','石狮','水壶','榴莲','司机','丝瓜','石狗','五环','舞衣','木耳','舞伞','武士','锣鼓','蜗牛','母鸡','尾巴','五角星','榴莲','轮椅','鹿儿','绿伞','柳丝','老屋','溜溜球','油漆','喇叭','鹿角','麒麟','机翼','企鹅','旗杆','骑士','积木','犀牛','象棋','青蛙','气球','铁塔','白蚁','靶儿','花生','巴士','宝物','八路','白旗','爸爸','芭蕉','酒瓶','球衣','球儿','旧伞','教师','酒壶','酒炉','酒器','酒杯','舅舅','百灵'];
+
+const chapterMnemonic = [
+'',
+'1是蜡烛身，烛泪滴下来',
+'2是鹅颈弯，浮在水面上',
+'3像耳垂弯，挂在脑袋旁',
+'4像风帆扬，漂在海中央',
+'5是弯钩尖，挂住就不放',
+'6像山谷深，回音荡四方',
+'7像悬崖折角，壁立千仞',
+'8是双身大肚，怀胎十月',
+'9像哨子弯管，一吹就响',
+'1像球棒，0是棒球圆',
+'两根筷子并排摆，11成双',
+'1是椅背直，2是扶手弯',
+'1是针筒，3是听诊器',
+'1把钥匙4个齿，14谐音钥匙',
+'1根栖木上站5彩鹦鹉',
+'1是树干，6像石榴圆肚',
+'1是试管，7像仪器架',
+'1是腰带，8像双包挂腰',
+'1是药瓶，9是酒杯，19药酒',
+'2手夹烟，0是烟圈吐，20支一包',
+'2像鳄鱼嘴，1像长尾直',
+'两只鸳鸯成双对，22不分离',
+'2是耳罩圆，3是头梁弯弧',
+'24小时转一圈，每天闹醒你',
+'2根琴弦5度定音，25二胡',
+'2是两岸对，6是河湾绕',
+'2是旗杆直，7是旗面飘',
+'2是荷茎弯，8是花瓣双层叠',
+'2号球员扣进9号篮框',
+'3是山形尖，0是洞口圆',
+'3是鲨鳍三角，1是鱼身直',
+'3是扇面展，2是扇柄直',
+'3像山峰叠，转过来像川流',
+'3像杉树尖，4像树冠伞',
+'3是珊瑚枝丫，5是礁石弯',
+'3是炉肚圆，6像香烟缭绕',
+'3是山峰，7像鸡冠翘',
+'3人坐8字形沙发，38谐音',
+'3是三角板，9是直尺长',
+'4星上将，0号军令，40司令',
+'4面威风，1枝话筒主持',
+'4个柿子压成2张饼',
+'4方丝巾，3折系颈',
+'4脚石狮左右各一，44守门',
+'4是壶嘴弯，5是壶身圆',
+'4月开花6月熟，46榴莲',
+'4个轮子7座客车，47司机',
+'4月播种8月摘瓜，48丝瓜',
+'4条腿的石刻狗，49石狗',
+'5个圆圈0缺口，奥运五环',
+'5月1日穿舞衣，51谐音',
+'5是木桩，2是木耳贴上面',
+'5人跳舞3把花伞转',
+'5岁习武4海为士，54武士',
+'5像鼓身，5像锣面，55对敲',
+'5是蜗壳旋，6是牛角弯',
+'5只母鸡下7个蛋，57母鸡',
+'5寸短尾8寸长巴，58尾巴',
+'5个尖角9在夜空，五角星',
+'6月榴莲裂开口，0是圆榴莲',
+'6旬老人坐1张轮椅',
+'6叉鹿角2只小鹿儿，62鹿儿',
+'6月撑伞3折绿伞，63谐音',
+'6月柳树4月飘絮，64柳丝',
+'6旬老人住5间老屋',
+'6像绳绕圈，66溜溜弹',
+'6桶桐油7层生漆，67油漆',
+'6寸喇叭口8度嘹亮，68喇叭',
+'6叉鹿角长9寸，69鹿角',
+'7彩鳞甲0圈祥云，70麒麟',
+'7号跑道1对大翼，71机翼',
+'7只企鹅2只摇摆，72企鹅',
+'7面彩旗挂3根杆，73旗杆',
+'7匹骏马4方骑士，74骑士',
+'7块积木搭5层高，75积木',
+'7吨犀牛6尺长角，76犀牛',
+'7对7博弈象走田马走日',
+'7只青蛙8声呱，78青蛙',
+'7色气球9个飞上天，79气球',
+'8面铁架0顶塔尖，80铁塔',
+'8只白蚁排成1队，81白蚁',
+'8环靶心2箭射中，82靶儿',
+'8月播种3月花生熟，83花生',
+'8个轮子4排座位，84巴士',
+'8件珍品5箱宝物，85宝物',
+'8面威风6路通达，86八路',
+'8面白旗7丈高飘，87白旗',
+'88谐音爸爸，父爱如山',
+'8棵芭蕉树上9串蕉，89芭蕉',
+'9壶老酒倒进0个瓶，90酒瓶',
+'9号球衣1人独穿，91球衣',
+'9个皮球2儿争抢，92球儿',
+'9把旧伞3折收起，93旧伞',
+'9月开学4方教师来，94教师',
+'9壶老酒5个酒壶装，95酒壶',
+'9个酒炉6锅温酒，96酒炉',
+'9件酒器7套装成，97酒器',
+'9瓶喝完剩8个杯，98酒杯',
+'99谐音舅舅，娘亲舅大',
+'百日百灵鸟，一鸣惊人',
+];
+
+const chapterFirst = [
+'',
+'道可道，非常道；名可名，非常名',
+'天下皆知美之为美，斯恶已',
+'不尚贤，使民不争；不贵难得之货',
+'道冲，而用之或不盈。渊兮似万物宗',
+'天地不仁，以万物为刍狗',
+'谷神不死，是谓玄牝',
+'天长地久。天地所以能长且久者',
+'上善若水。水善利万物而不争',
+'持而盈之，不如其已',
+'载营魄抱一，能无离乎',
+'三十辐共一毂，当其无有车之用',
+'五色令人目盲，五音令人耳聋',
+'宠辱若惊，贵大患若身',
+'视之不见名曰夷，听之不闻名曰希',
+'古之善为士者，微妙玄通深不可识',
+'致虚极，守静笃。万物并作吾以观复',
+'太上，下知有之；其次亲而誉之',
+'大道废，有仁义；智慧出有大伪',
+'绝圣弃智，民利百倍',
+'绝学无忧。唯之与阿，相去几何',
+'孔德之容，惟道是从',
+'曲则全，枉则直，洼则盈敝则新',
+'希言自然。飘风不终朝骤雨不终日',
+'企者不立，跨者不行',
+'有物混成，先天地生',
+'重为轻根，静为躁君',
+'善行无辙迹，善言无瑕谪',
+'知其雄，守其雌，为天下谿',
+'将欲取天下而为之，吾见其不得已',
+'以道佐人主者，不以兵强天下',
+'夫佳兵者，不祥之器',
+'道常无名，朴虽小天下莫能臣',
+'知人者智，自知者明',
+'大道泛兮，其可左右',
+'执大象，天下往。往而不害安平太',
+'将欲歙之，必固张之',
+'道常无为而无不为',
+'上德不德，是以有德',
+'昔之得一者：天得一以清',
+'反者道之动，弱者道之用',
+'上士闻道，勤而行之',
+'道生一，一生二，二生三',
+'天下之至柔，驰骋天下之至坚',
+'名与身孰亲？身与货孰多',
+'大成若缺，其用不弊',
+'天下有道，却走马以粪',
+'不出户，知天下；不窥牖见天道',
+'为学日益，为道日损',
+'圣人无常心，以百姓心为心',
+'出生入死。生之徒十有三',
+'道生之，德畜之，物形之势成之',
+'天下有始，以为天下母',
+'使我介然有知，行于大道唯施是畏',
+'善建者不拔，善抱者不脱',
+'含德之厚，比于赤子',
+'知者不言，言者不知',
+'以正治国，以奇用兵，以无事取天下',
+'其政闷闷，其民淳淳',
+'治人事天，莫若啬',
+'治大国若烹小鲜',
+'大国者下流，天下之交',
+'道者万物之奥，善人之宝',
+'为无为，事无事，味无味',
+'其安易持，其未兆易谋',
+'古之善为道者，非以明民将以愚之',
+'江海所以能为百谷王者，以其善下之',
+'天下皆谓我道大，似不肖',
+'善为士者不武，善战者不怒',
+'用兵有言：吾不敢为主而为客',
+'吾言甚易知，甚易行',
+'知不知，上；不知知，病',
+'民不畏威，则大威至',
+'勇于敢则杀，勇于不敢则活',
+'民不畏死，奈何以死惧之',
+'民之饥，以其上食税之多',
+'人之生也柔弱，其死也坚强',
+'天之道，其犹张弓与',
+'天下莫柔弱于水',
+'和大怨，必有余怨',
+'小国寡民。使有什伯之器而不用',
+'信言不美，美言不信',
+'','','','','','','','','','','','','','','','','','','',
+];
+
+// ===== 渲染 =====
+function imgPath(ch) {
+  const w = chapterWord[ch];
+  const nn = String(ch).padStart(2, '0');
+  return `lianxiang/svgs-2/${nn}-${w}.svg`;
+}
+
+function svgPath(ch) {
+  const w = chapterWord[ch];
+  const nn = String(ch).padStart(2, '0');
+  const dir = svgSet === 2 ? 'svgs-2' : 'svgs';
+  return `lianxiang/${dir}/${nn}-${w}.svg`;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  let html = '';
+  for (let i = 1; i <= 100; i++) {
+    const path = imgPath(i);
+    html += `<div class="card" id="c-${i}" onclick="flip(${i})">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="num">${i}</div>
+          <div class="img-wrap">
+            <img src="${path}" alt="${chapterWord[i]}" loading="lazy">
+          </div>
+          <div class="word">${chapterWord[i]}</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="mnemonic">💡 ${chapterMnemonic[i]}</div>
+          <div class="first-line">📜 ${chapterFirst[i]}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+// ===== 交互 =====
+let state = {}; // 0=hidden, 1=revealed, 2=flipped
+for (let i = 1; i <= 100; i++) state[i] = 0;
+
+function flip(ch) {
+  const card = document.getElementById(`c-${ch}`);
+  if (!card) return;
+
+  if (state[ch] === 0) {
+    card.classList.add('revealed');
+    state[ch] = 1;
+    muyu();
+  } else if (state[ch] === 1) {
+    card.classList.add('flipped');
+    state[ch] = 2;
+    chordSound();
+  } else {
+    card.classList.remove('flipped', 'revealed');
+    state[ch] = 0;
+    puffSmoke(card);
+  }
+  updateProgress();
+}
+
+function toggleAll() {
+  const allFlipped = Object.values(state).every(s => s >= 2);
+  for (let i = 1; i <= 100; i++) {
+    const card = document.getElementById(`c-${i}`);
+    if (!card) continue;
+    if (allFlipped) {
+      card.classList.remove('flipped', 'revealed');
+      state[i] = 0;
+    } else {
+      card.classList.add('revealed', 'flipped');
+      state[i] = 2;
+    }
+  }
+  if (!allFlipped) chordSound();
+  updateProgress();
+}
+
+function shuffleOne() {
+  const ch = Math.floor(Math.random() * 100) + 1;
+  const card = document.getElementById(`c-${ch}`);
+  if (card) {
+    card.classList.remove('flipped', 'revealed');
+    state[ch] = 2;
+    void card.offsetWidth;
+    card.classList.add('revealed', 'flipped');
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    chordSound();
+  }
+  updateProgress();
+}
+
+function resetAll() {
+  for (let i = 1; i <= 100; i++) {
+    const card = document.getElementById(`c-${i}`);
+    if (card) { card.classList.remove('flipped', 'revealed'); state[i] = 0; }
+  }
+  puffSmoke(document.getElementById('resetBtn'));
+  updateProgress();
+}
+
+function updateProgress() {
+  const n = Object.values(state).filter(s => s >= 1).length;
+  document.getElementById('flipCount').textContent = n;
+  document.getElementById('progressBar').style.width = n + '%';
+}
+
+// ===== 音效 =====
+function muyu() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, t);
+    osc.frequency.exponentialRampToValueAtTime(300, t + 0.08);
+    gain.gain.setValueAtTime(0.3, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(t); osc.stop(t + 0.15);
+  } catch(e) {}
+}
+
+function chordSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    [262, 330, 392, 523, 659].forEach((freq, i) => {
+      [1, 2, 3].forEach(m => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * m, t + i * 0.04);
+        gain.gain.setValueAtTime(0.12 / m, t + i * 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.04 + 1.5);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t + i * 0.04); osc.stop(t + i * 0.04 + 1.6);
+      });
+    });
+  } catch(e) {}
+}
+
+function randomNote() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    const notes = [262, 294, 330, 349, 392, 440, 523, 587, 659, 784, 880, 1047];
+    const freq = notes[Math.floor(Math.random() * notes.length)];
+    [1, 2, 3, 4].forEach((m, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq * m, t + i * 0.03);
+      gain.gain.setValueAtTime(0.15 / m, t + i * 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.03 + 0.4);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t + i * 0.03); osc.stop(t + i * 0.03 + 0.5);
+    });
+  } catch(e) {}
+}
+
+function puffSmoke(el) {
+  const rect = el.getBoundingClientRect();
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    const size = 4 + Math.random() * 8;
+    p.style.cssText = `position:fixed;z-index:999;pointer-events:none;width:${size}px;height:${size}px;border-radius:50%;background:rgba(140,170,160,0.5);left:${rect.left+rect.width/2+Math.random()*30-15}px;top:${rect.top+rect.height/2+Math.random()*16-8}px;transition:all 2s ease-out;`;
+    document.body.appendChild(p);
+    requestAnimationFrame(() => {
+      p.style.transform = `translate(${Math.random()*80-40}px,${-60-Math.random()*80}px) scale(2)`;
+      p.style.opacity = '0';
+    });
+    setTimeout(() => p.remove(), 2200);
+  }
+}
+
+// ===== 图片查看器 =====
+let viewerCh = 1;
+
+function openViewer(ch) {
+  viewerCh = ch || viewerCh;
+  document.getElementById('viewer').classList.add('open');
+  updateViewer();
+}
+
+function closeViewer(e) {
+  if (e && e.target !== document.getElementById('viewer')) return;
+  document.getElementById('viewer').classList.remove('open');
+}
+
+function updateViewer() {
+  const ch = viewerCh;
+  const path = imgPath(ch);
+  document.getElementById('viewerImg').src = path;
+  document.getElementById('viewerInfo').textContent = `${ch} · ${chapterWord[ch]}`;
+}
+
+function viewerNav(dir) {
+  viewerCh = ((viewerCh - 1 + dir + 100) % 100) + 1;
+  updateViewer();
+}
+
+// ===== 矢量图放大查看器 =====
+let svgViewerCh = 1;
+
+function openSvgViewer(ch) {
+  svgViewerCh = ch || svgViewerCh;
+  document.getElementById('svgViewer').classList.add('open');
+  updateSvgViewer();
+}
+
+function closeSvgViewer(e) {
+  if (e && e.target !== document.getElementById('svgViewer')) return;
+  document.getElementById('svgViewer').classList.remove('open');
+}
+
+function updateSvgViewer() {
+  const ch = svgViewerCh;
+  const path = svgPath(ch);
+  const img = document.getElementById('svgViewerImg');
+  // 强制刷新：SVG同名切换需要重置src
+  img.src = '';
+  img.src = path;
+  img.onerror = function() {
+    img.style.display = 'none';
+    document.getElementById('svgViewerLabel').textContent = `${ch} · ${chapterWord[ch]}（暂无矢量图）`;
+  };
+  img.onload = function() {
+    img.style.display = '';
+    document.getElementById('svgViewerLabel').textContent = `${ch} · ${chapterWord[ch]}（矢量组${svgSet}）`;
+  };
+}
+
+function svgViewerNav(dir) {
+  svgViewerCh = ((svgViewerCh - 1 + dir + 100) % 100) + 1;
+  updateSvgViewer();
+}
+
+// ===== 矢量图总览 =====
+let svgSet = 1;
+
+function switchSvgSet(set) {
+  if (svgSet === set) return;
+  svgSet = set;
+  document.getElementById('svgSet1Btn').classList.toggle('active', set === 1);
+  document.getElementById('svgSet2Btn').classList.toggle('active', set === 2);
+  document.getElementById('svgCount').textContent = '100张';
+  delete document.getElementById('svgCount').dataset.loaded;
+  buildSvgGallery(true);
+}
+
+function openSvgGallery() {
+  buildSvgGallery(false);
+  document.getElementById('svgGallery').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSvgGallery() {
+  document.getElementById('svgGallery').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function buildSvgGallery(force) {
+  const container = document.getElementById('svgGrid');
+  if (!force && container.children.length > 0) return;
+  let loadedCount = 0;
+  let html = '';
+  for (let i = 1; i <= 100; i++) {
+    const path = svgPath(i);
+    html += `<div class="svg-card" id="svg-${i}" onclick="openSvgViewer(${i})" title="点击放大看${chapterWord[i]}矢量图">
+      <span class="svg-num">${String(i).padStart(2,'0')}</span>
+      <div class="svg-img-wrap">
+        <img src="${path}" alt="${chapterWord[i]}"
+             onload="svgOnLoad(${i})"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';document.getElementById('svg-${i}').classList.add('missing');"
+             loading="lazy">
+        <span class="svg-fallback" style="display:none;">${chapterEmoji[i]}</span>
+      </div>
+      <span class="svg-word">${chapterWord[i]}</span>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function svgOnLoad(ch) {
+  // 计数并更新已加载数
+  const countEl = document.getElementById('svgCount');
+  const current = (parseInt(countEl.dataset.loaded) || 0) + 1;
+  countEl.dataset.loaded = current;
+  countEl.textContent = `已加载 ${current}/100`;
+}
+
+// ===== 主题 =====
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('bianmaka_theme', next);
+}
+
+// ===== 键盘 =====
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const svgOpen = document.getElementById('svgGallery').classList.contains('open');
+  const svgViewerOpen = document.getElementById('svgViewer').classList.contains('open');
+  const viewerOpen = document.getElementById('viewer').classList.contains('open');
+
+  if (svgViewerOpen) {
+    if (e.key === 'Escape') { e.preventDefault(); closeSvgViewer(); return; }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); svgViewerNav(-1); return; }
+    if (e.key === 'ArrowRight') { e.preventDefault(); svgViewerNav(1); return; }
+    return;
+  }
+  if (svgOpen) {
+    if (e.key === 'Escape') { e.preventDefault(); closeSvgGallery(); return; }
+    return;
+  }
+  if (viewerOpen) {
+    if (e.key === 'Escape') { e.preventDefault(); closeViewer(); return; }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); viewerNav(-1); return; }
+    if (e.key === 'ArrowRight') { e.preventDefault(); viewerNav(1); return; }
+    return;
+  }
+  if (e.key === ' ') { e.preventDefault(); shuffleOne(); }
+  if (e.key === 't' || e.key === 'T') toggleTheme();
+  if (e.key === 'h' || e.key === 'H') { e.preventDefault(); location.href = 'index.html'; }
+});
+
+// ===== 初始化 =====
+(function init() {
+  const savedTheme = localStorage.getItem('bianmaka_theme');
+  if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  renderGrid();
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

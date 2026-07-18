@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">91=球衣</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">9像衣领弯弯翻，1是衣身直直挂</text>
+  <!-- 衣架 -->
+  <line x1="300" y1="230" x2="724" y2="230" stroke="#90A4AE" stroke-width="4"/>
+  <path d="M512 230 Q512 200 480 190 Q460 185 460 210" fill="none" stroke="#90A4AE" stroke-width="4"/>
+  <!-- 球衣 - 1形直 -->
+  <rect x="400" y="260" width="224" height="320" rx="10" fill="#F44336"/>
+  <rect x="410" y="270" width="204" height="300" rx="8" fill="#EF5350"/>
+  <!-- 号码 "91" -->
+  <text x="512" y="480" text-anchor="middle" font-size="80" font-weight="bold" fill="#FFD54F">91</text>
+  <!-- 衣领 - 9形弯 -->
+  <path d="M450 260 Q480 280 512 260 Q544 280 574 260" fill="none" stroke="#B71C1C" stroke-width="4"/>
+  <rect x="460" y="265" width="104" height="15" rx="4" fill="#B71C1C"/>
+  <!-- 袖口 -->
+  <path d="M400 320 L380 340 L380 380 L400 360" fill="#F44336"/>
+  <path d="M624 320 L644 340 L644 380 L624 360" fill="#F44336"/>
+  <!-- 条纹 -->
+  <line x1="410" y1="350" x2="614" y2="350" stroke="#FFD54F" stroke-width="4"/>
+  <line x1="410" y1="530" x2="614" y2="530" stroke="#FFD54F" stroke-width="4"/>
+</svg>

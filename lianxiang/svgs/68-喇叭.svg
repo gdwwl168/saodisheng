@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">68=喇叭</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">6像喇叭圆圆口，8是管身弯弯吹</text>
+  <!-- 喇叭口 - 6形圆 -->
+  <ellipse cx="680" cy="520" rx="100" ry="140" fill="#FFD54F" stroke="#F9A825" stroke-width="4"/>
+  <ellipse cx="680" cy="520" rx="85" ry="125" fill="#FFECB3"/>
+  <ellipse cx="680" cy="520" rx="50" ry="70" fill="#FFF9C4"/>
+  <ellipse cx="680" cy="520" rx="20" ry="30" fill="#FFD54F"/>
+  <!-- 管身 - 8形弯曲 -->
+  <rect x="380" y="380" width="200" height="30" rx="8" fill="#F9A825"/>
+  <rect x="380" y="430" width="180" height="30" rx="8" fill="#F9A825"/>
+  <rect x="380" y="480" width="150" height="30" rx="8" fill="#F9A825"/>
+  <rect x="380" y="530" width="120" height="30" rx="8" fill="#F9A825"/>
+  <rect x="380" y="580" width="100" height="30" rx="8" fill="#F9A825"/>
+  <!-- 吹嘴 -->
+  <ellipse cx="350" cy="520" rx="15" ry="80" fill="#F9A825"/>
+  <rect x="350" y="440" width="30" height="160" fill="#F9A825"/>
+  <!-- 按键 -->
+  <circle cx="450" cy="445" r="6" fill="#FF8F00"/>
+  <circle cx="520" cy="445" r="6" fill="#FF8F00"/>
+  <circle cx="470" cy="495" r="6" fill="#FF8F00"/>
+  <circle cx="420" cy="545" r="6" fill="#FF8F00"/>
+  <!-- 音符 -->
+  <text x="780" y="430" font-size="30" fill="#FF8F00" opacity="0.4">♪</text>
+  <text x="750" y="470" font-size="26" fill="#FF8F00" opacity="0.35">♫</text>
+</svg>

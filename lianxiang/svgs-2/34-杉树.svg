@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a2818"/><stop offset="100%" stop-color="#0a1408"/></radialGradient>
+    <linearGradient id="trunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5C3A20"/><stop offset="100%" stop-color="#8B5A30"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">34=杉树</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">3像杉树尖尖顶，4是树冠三层叠</text>
+  <!-- 地面 -->
+  <ellipse cx="512" cy="700" rx="200" ry="20" fill="#1a3008" opacity="0.3"/>
+  <!-- 树干 1形 -->
+  <rect x="496" y="500" width="32" height="200" rx="6" fill="url(#trunk)"/>
+  <rect x="500" y="500" width="8" height="200" fill="#A07040" opacity="0.3"/>
+  <!-- 树冠层1 底 4形大 -->
+  <path d="M380 520 L420 400 Q512 370 604 400 L644 520Z" fill="#2E7D32"/>
+  <path d="M400 520 L432 410 Q512 382 592 410 L624 520Z" fill="#388E3C" opacity="0.5"/>
+  <!-- 树冠层2 中 -->
+  <path d="M410 440 L440 330 Q512 300 584 330 L614 440Z" fill="#388E3C"/>
+  <path d="M428 440 L452 340 Q512 314 572 340 L596 440Z" fill="#4CAF50" opacity="0.5"/>
+  <!-- 树冠层3 顶 3形尖 -->
+  <path d="M440 360 L512 220 L584 360Z" fill="#4CAF50"/>
+  <path d="M455 360 L512 240 L569 360Z" fill="#66BB6A" opacity="0.5"/>
+  <!-- 树顶星 -->
+  <circle cx="512" cy="215" r="6" fill="#FFD540" opacity="0.6"/>
+  <!-- 树干纹理 -->
+  <path d="M504 520 Q510 560 504 600 Q510 640 504 680" fill="none" stroke="#4a2a10" stroke-width="1" opacity="0.3"/>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1a24"/><stop offset="100%" stop-color="#080814"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">30=山洞</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">3是山形尖尖顶，0是洞口圆圆深</text>
+  <!-- 山体 3形 -->
+  <path d="M80 700 L280 320 L360 700Z" fill="#3a3a4a"/>
+  <path d="M100 690 L280 340 L340 690Z" fill="#4a4a5a" opacity="0.5"/>
+  <path d="M664 700 L744 320 L944 700Z" fill="#3a3a4a"/>
+  <path d="M684 690 L744 340 L904 690Z" fill="#4a4a5a" opacity="0.5"/>
+  <!-- 连接山脊 -->
+  <path d="M360 700 Q440 580 520 620 Q600 660 664 700Z" fill="#4a4a5a"/>
+  <path d="M370 690 Q448 590 520 625 Q592 660 654 690Z" fill="#5a5a6a" opacity="0.4"/>
+  <!-- 山洞 0形 -->
+  <ellipse cx="512" cy="600" rx="65" ry="55" fill="#080814"/>
+  <ellipse cx="512" cy="600" rx="58" ry="48" fill="#101020" opacity="0.8"/>
+  <!-- 洞内深处 -->
+  <ellipse cx="512" cy="610" rx="30" ry="25" fill="#050510" opacity="0.6"/>
+  <!-- 洞口岩石纹理 -->
+  <path d="M448 580 Q480 570 512 580 Q544 570 576 580" fill="none" stroke="#5a5a6a" stroke-width="3" opacity="0.5"/>
+  <path d="M455 620 Q480 630 512 625 Q544 620 569 625" fill="none" stroke="#5a5a6a" stroke-width="2.5" opacity="0.4"/>
+  <!-- 蝙蝠 -->
+  <path d="M460 560 Q470 555 480 560" fill="none" stroke="#3a3040" stroke-width="1.5" opacity="0.4"/>
+  <path d="M530 555 Q540 550 550 555" fill="none" stroke="#3a3040" stroke-width="1.5" opacity="0.4"/>
+  <!-- 洞口微光 -->
+  <circle cx="505" cy="595" r="8" fill="#FFEECC" opacity="0.03"/>
+</svg>

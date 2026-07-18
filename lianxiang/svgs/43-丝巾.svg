@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">43=丝巾</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">4像巾角三角飘，3是绢身弯弯绕</text>
+  <!-- 丝巾主体 - 3形飘逸 -->
+  <path d="M300 350 Q400 300 512 340 Q624 380 700 400 Q750 450 700 520 Q650 600 550 650 Q450 700 350 650 Q280 600 260 520 Q240 440 300 350Z" fill="#E91E63" opacity="0.5"/>
+  <path d="M320 380 Q410 340 512 370 Q614 400 680 420 Q720 460 680 510 Q640 570 550 610 Q460 650 370 610 Q310 570 290 510 Q270 450 320 380Z" fill="#F06292" opacity="0.6"/>
+  <!-- 丝巾折叠纹理 -->
+  <path d="M350 420 Q450 390 650 450" fill="none" stroke="#E91E63" stroke-width="2" opacity="0.3"/>
+  <path d="M300 500 Q450 470 650 530" fill="none" stroke="#E91E63" stroke-width="2" opacity="0.3"/>
+  <path d="M350 580 Q450 560 600 600" fill="none" stroke="#E91E63" stroke-width="2" opacity="0.3"/>
+  <!-- 三角巾角 - 4形 -->
+  <path d="M340 380 L280 320 L300 360Z" fill="#E91E63" opacity="0.7"/>
+  <path d="M680 440 L740 400 L720 430Z" fill="#E91E63" opacity="0.7"/>
+  <!-- 花纹 -->
+  <circle cx="480" cy="480" r="8" fill="#FFD54F" opacity="0.4"/>
+  <circle cx="520" cy="520" r="6" fill="#FFD54F" opacity="0.3"/>
+  <circle cx="450" cy="530" r="7" fill="#FFD54F" opacity="0.35"/>
+</svg>

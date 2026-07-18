@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient>
+    <linearGradient id="petalPink" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#F48FB1"/><stop offset="100%" stop-color="#FCE4EC"/></linearGradient>
+  </defs>
+  <!-- 卡片背景 -->
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">28=荷花</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">2像花瓣弯弯翘，8是莲蓬圆圆立</text>
+
+  <!-- 水面 -->
+  <ellipse cx="512" cy="820" rx="350" ry="50" fill="#7EC8E3" opacity="0.3"/>
+  <ellipse cx="512" cy="810" rx="300" ry="35" fill="#5BA4C7" opacity="0.2"/>
+
+  <!-- 荷叶 -->
+  <ellipse cx="350" cy="780" rx="120" ry="45" fill="#66BB6A" opacity="0.5"/>
+  <line x1="350" y1="780" x2="350" y2="750" stroke="#4CAF50" stroke-width="2"/>
+  <path d="M350 780 L280 740" fill="none" stroke="#4CAF50" stroke-width="1.5" opacity="0.5"/>
+  <path d="M350 780 L420 740" fill="none" stroke="#4CAF50" stroke-width="1.5" opacity="0.5"/>
+  <path d="M350 780 L300 760" fill="none" stroke="#4CAF50" stroke-width="1.5" opacity="0.5"/>
+  <path d="M350 780 L400 760" fill="none" stroke="#4CAF50" stroke-width="1.5" opacity="0.5"/>
+
+  <ellipse cx="700" cy="800" rx="100" ry="38" fill="#66BB6A" opacity="0.4"/>
+
+  <!-- 荷茎 -->
+  <line x1="512" y1="780" x2="512" y2="500" stroke="#66BB6A" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- 花瓣 - 2形弯弯 -->
+  <ellipse cx="460" cy="510" rx="30" ry="80" fill="url(#petalPink)" transform="rotate(-30 460 510)" opacity="0.85"/>
+  <ellipse cx="564" cy="510" rx="30" ry="80" fill="url(#petalPink)" transform="rotate(30 564 510)" opacity="0.85"/>
+  <ellipse cx="480" cy="480" rx="28" ry="75" fill="url(#petalPink)" transform="rotate(-15 480 480)" opacity="0.9"/>
+  <ellipse cx="544" cy="480" rx="28" ry="75" fill="url(#petalPink)" transform="rotate(15 544 480)" opacity="0.9"/>
+  <ellipse cx="512" cy="460" rx="28" ry="72" fill="#FCE4EC" opacity="0.95"/>
+
+  <!-- 花心/莲蓬 - 8形（圆形花心） -->
+  <circle cx="512" cy="470" r="30" fill="#FFD54F" stroke="#F9A825" stroke-width="2"/>
+  <!-- 莲子 -->
+  <circle cx="502" cy="460" r="4" fill="#8D6E63"/>
+  <circle cx="522" cy="460" r="4" fill="#8D6E63"/>
+  <circle cx="512" cy="478" r="4" fill="#8D6E63"/>
+  <circle cx="502" cy="475" r="3.5" fill="#8D6E63"/>
+  <circle cx="522" cy="475" r="3.5" fill="#8D6E63"/>
+
+  <!-- 花苞 -->
+  <ellipse cx="430" cy="430" rx="15" ry="35" fill="#F48FB1" transform="rotate(-20 430 430)" opacity="0.7"/>
+  <line x1="430" y1="430" x2="430" y2="500" stroke="#66BB6A" stroke-width="3"/>
+
+  <!-- 蜻蜓 -->
+  <line x1="620" y1="380" x2="660" y2="370" stroke="#42A5F5" stroke-width="4"/>
+  <circle cx="622" cy="380" r="6" fill="#42A5F5"/>
+  <ellipse cx="645" cy="365" rx="12" ry="4" fill="#90CAF9" transform="rotate(-10 645 365)" opacity="0.6"/>
+  <ellipse cx="655" cy="368" rx="12" ry="4" fill="#90CAF9" transform="rotate(-10 655 368)" opacity="0.6"/>
+
+  <!-- 水纹 -->
+  <ellipse cx="512" cy="800" rx="40" ry="8" fill="none" stroke="#7EC8E3" stroke-width="1.5" opacity="0.5"/>
+  <ellipse cx="512" cy="815" rx="25" ry="5" fill="none" stroke="#7EC8E3" stroke-width="1" opacity="0.4"/>
+</svg>

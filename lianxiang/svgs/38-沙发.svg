@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">38=沙发</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">3像靠背弯弯软，8是扶手圆圆满</text>
+  <!-- 沙发底座 -->
+  <rect x="180" y="650" width="664" height="80" rx="16" fill="#795548"/>
+  <rect x="190" y="730" width="644" height="30" rx="10" fill="#5D4037"/>
+  <!-- 沙发腿 -->
+  <rect x="230" y="760" width="20" height="50" rx="5" fill="#4E342E"/>
+  <rect x="500" y="760" width="20" height="50" rx="5" fill="#4E342E"/>
+  <rect x="770" y="760" width="20" height="50" rx="5" fill="#4E342E"/>
+  <!-- 坐垫 -->
+  <rect x="250" y="580" width="524" height="70" rx="20" fill="#8D6E63"/>
+  <rect x="270" y="580" width="160" height="70" rx="15" fill="#A1887F"/>
+  <rect x="450" y="580" width="124" height="70" rx="15" fill="#A1887F"/>
+  <rect x="594" y="580" width="160" height="70" rx="15" fill="#A1887F"/>
+  <!-- 靠背 - 3形弯 -->
+  <path d="M200 580 Q180 480 220 420 Q260 370 320 360 Q380 350 440 370 Q500 390 512 400 Q524 390 584 370 Q644 350 704 360 Q764 370 804 420 Q844 480 824 580" fill="#A1887F" stroke="#8D6E63" stroke-width="3"/>
+  <!-- 靠背装饰 -->
+  <path d="M260 560 Q300 440 400 410 Q500 390 600 410 Q700 440 764 560" fill="none" stroke="#BCAAA4" stroke-width="2" opacity="0.4"/>
+  <!-- 左扶手 - 8形圆 -->
+  <ellipse cx="210" cy="580" rx="50" ry="80" fill="#8D6E63" stroke="#795548" stroke-width="3"/>
+  <ellipse cx="210" cy="580" rx="35" ry="60" fill="#A1887F" opacity="0.4"/>
+  <!-- 右扶手 - 8形圆 -->
+  <ellipse cx="814" cy="580" rx="50" ry="80" fill="#8D6E63" stroke="#795548" stroke-width="3"/>
+  <ellipse cx="814" cy="580" rx="35" ry="60" fill="#A1887F" opacity="0.4"/>
+  <!-- 抱枕 -->
+  <rect x="340" y="500" width="80" height="60" rx="18" fill="#FF8A65" transform="rotate(-10 380 530)" opacity="0.7"/>
+  <rect x="600" y="500" width="80" height="60" rx="18" fill="#81C784" transform="rotate(10 640 530)" opacity="0.6"/>
+</svg>

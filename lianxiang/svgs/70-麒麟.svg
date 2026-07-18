@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">70=麒麟</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">7像麟角弯弯耸，0是宝珠圆圆含</text>
+  <!-- 祥云底座 -->
+  <ellipse cx="512" cy="820" rx="250" ry="40" fill="#FFF9C4" opacity="0.3"/>
+  <!-- 身体 -->
+  <ellipse cx="450" cy="650" rx="120" ry="140" fill="#FFB300"/>
+  <ellipse cx="460" cy="630" rx="100" ry="115" fill="#FFC107"/>
+  <!-- 鳞片 -->
+  <path d="M400 600 Q430 590 460 600 Q490 610 520 600" fill="none" stroke="#FF8F00" stroke-width="2" opacity="0.4"/>
+  <path d="M380 630 Q420 620 460 630 Q500 640 540 630" fill="none" stroke="#FF8F00" stroke-width="2" opacity="0.4"/>
+  <path d="M370 660 Q420 650 460 660 Q500 670 540 660" fill="none" stroke="#FF8F00" stroke-width="2" opacity="0.4"/>
+  <!-- 脖子 - 7形 -->
+  <path d="M380 580 Q330 500 310 440 Q290 390 300 350" fill="none" stroke="#FFC107" stroke-width="30" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <circle cx="305" cy="330" r="40" fill="#FFC107"/>
+  <!-- 麟角 - 7形弯 -->
+  <path d="M290 295 Q270 260 280 230" fill="none" stroke="#FF8F00" stroke-width="6" stroke-linecap="round"/>
+  <path d="M310 290 Q320 250 310 220" fill="none" stroke="#FF8F00" stroke-width="6" stroke-linecap="round"/>
+  <!-- 眼睛 -->
+  <circle cx="330" cy="320" r="7" fill="#2C1810"/>
+  <circle cx="331" cy="319" r="3" fill="white"/>
+  <!-- 嘴含宝珠 - 0形 -->
+  <circle cx="340" cy="350" r="18" fill="#F44336"/>
+  <circle cx="340" cy="350" r="12" fill="#EF5350" opacity="0.6"/>
+  <circle cx="336" cy="346" r="4" fill="white" opacity="0.4"/>
+  <!-- 尾巴 -->
+  <path d="M550 600 Q620 580 640 630 Q660 680 620 700" fill="none" stroke="#FFB300" stroke-width="12" stroke-linecap="round"/>
+  <!-- 腿 -->
+  <rect x="380" y="760" width="24" height="80" rx="8" fill="#FFB300"/>
+  <rect x="430" y="760" width="24" height="80" rx="8" fill="#FFB300"/>
+  <rect x="500" y="755" width="24" height="80" rx="8" fill="#FFB300"/>
+  <rect x="540" y="755" width="24" height="80" rx="8" fill="#FFB300"/>
+  <!-- 蹄 -->
+  <rect x="378" y="835" width="28" height="12" rx="4" fill="#FF8F00"/>
+  <rect x="428" y="835" width="28" height="12" rx="4" fill="#FF8F00"/>
+  <rect x="498" y="835" width="28" height="12" rx="4" fill="#FF8F00"/>
+  <rect x="538" y="835" width="28" height="12" rx="4" fill="#FF8F00"/>
+</svg>

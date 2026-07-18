@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">60=榴莲</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">6像果实圆圆鼓，0是果核圆圆藏</text>
+  <ellipse cx="512" cy="780" rx="200" ry="35" fill="#BCAAA4" opacity="0.2"/>
+  <ellipse cx="512" cy="590" rx="135" ry="155" fill="#9CCC65"/>
+  <ellipse cx="512" cy="590" rx="125" ry="145" fill="#AED581"/>
+  <!-- 刺 -->
+  <path d="M460 460 L450 400 L470 455" fill="#689F38"/>
+  <path d="M510 445 L510 380 L520 445" fill="#689F38"/>
+  <path d="M560 460 L570 400 L565 455" fill="#689F38"/>
+  <path d="M410 520 L360 510 L420 530" fill="#689F38"/>
+  <path d="M610 520 L660 510 L615 530" fill="#689F38"/>
+  <path d="M400 590 L340 590 L410 595" fill="#689F38"/>
+  <path d="M620 590 L680 590 L615 595" fill="#689F38"/>
+  <path d="M430 650 L390 690 L440 645" fill="#689F38"/>
+  <path d="M580 650 L620 690 L575 655" fill="#689F38"/>
+  <path d="M480 700 L470 745 L495 700" fill="#689F38"/>
+  <path d="M540 700 L550 745 L525 695" fill="#689F38"/>
+  <!-- 裂口6形果肉 -->
+  <path d="M470 570 Q490 550 520 565 Q545 580 550 600 Q545 630 520 635 Q480 625 470 570Z" fill="#FFE082"/>
+  <ellipse cx="510" cy="595" rx="22" ry="20" fill="#FFD54F"/>
+  <ellipse cx="510" cy="600" rx="10" ry="12" fill="#8D6E63"/>
+</svg>

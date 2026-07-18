@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="mtm-theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>凑数连连看 · 小学数学</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+
+:root {
+  --bg: #fefce8; --text: #422006; --accent: #f59e0b;
+  --card-bg: #fff; --border: #fde68a; --shadow: 0 4px 20px rgba(0,0,0,0.06);
+  --green: #22c55e; --red: #ef4444; --blue: #3b82f6; --pink: #ec4899;
+  --tile: #fff7ed;
+}
+[data-theme="dark"] {
+  --bg: #1a1a2e; --text: #fef3c7; --accent: #fbbf24;
+  --card-bg: #252540; --border: #3a3a55; --shadow: 0 4px 20px rgba(0,0,0,0.3);
+  --tile: #2a2a48;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans SC', system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; display: flex; flex-direction: column;
+  user-select: none; -webkit-user-select: none;
+}
+
+.header {
+  display: flex; align-items: center; padding: 10px 20px;
+  border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap;
+}
+.header a { color: var(--accent); text-decoration: none; font-size: 14px; }
+.header h1 { font-size: 1.25em; letter-spacing: 2px; flex: 1; }
+.header button, .header .nav-link {
+  padding: 6px 14px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--card-bg); color: var(--text); cursor: pointer;
+  font-family: inherit; font-size: 0.85em;
+  text-decoration: none; display: inline-flex; align-items: center;
+  white-space: nowrap;
+}
+.header .nav-link:hover { border-color: var(--accent); color: var(--accent); }
+
+.main {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  padding: 16px 16px 28px; gap: 14px; max-width: 720px; width: 100%; margin: 0 auto;
+}
+
+.tip {
+  font-size: 0.9em; opacity: 0.7; text-align: center; line-height: 1.5;
+}
+
+.target-row {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+}
+.target-btn {
+  padding: 8px 18px; border: 2px solid var(--border); border-radius: 20px;
+  background: var(--card-bg); color: var(--text); font-family: inherit;
+  font-size: 0.95em; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.target-btn.active {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(245,158,11,0.35);
+}
+.target-btn:hover { transform: translateY(-1px); }
+
+.hud {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  align-items: center; font-size: 0.92em; opacity: 0.85;
+}
+.hud strong { color: var(--accent); }
+.hud .goal {
+  background: var(--card-bg); border: 2px solid var(--border);
+  border-radius: 16px; padding: 6px 14px; font-weight: 900;
+}
+.hud .goal span { color: var(--green); font-size: 1.15em; }
+
+.stars { display: flex; gap: 4px; justify-content: center; font-size: 1.4em; }
+.star { opacity: 0.2; transition: opacity 0.3s; }
+.star.earned { opacity: 1; animation: starPop 0.5s ease-out; }
+@keyframes starPop {
+  0% { transform: scale(0) rotate(-180deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.board-wrap {
+  width: 100%;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.board {
+  display: grid;
+  gap: 10px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.tile {
+  aspect-ratio: 1;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--tile), var(--card-bg));
+  color: var(--text);
+  font-size: clamp(1.2em, 4.5vw, 1.8em);
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s, opacity 0.35s;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.06);
+  display: flex; align-items: center; justify-content: center;
+  min-width: 0;
+}
+.tile:hover:not(.gone):not(.matched) {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+.tile.selected {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, #fde68a, #fbbf24);
+  color: #422006;
+  box-shadow: 0 0 0 3px rgba(245,158,11,0.35), 0 4px 12px rgba(245,158,11,0.3);
+  transform: scale(1.06);
+}
+.tile.wrong {
+  border-color: var(--red);
+  animation: shake 0.4s ease;
+}
+.tile.matched {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+  transform: scale(1.08);
+}
+.tile.gone {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.4);
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-7px); }
+  75% { transform: translateX(7px); }
+}
+
+.actions {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+}
+.action-btn {
+  padding: 10px 18px; border: 2px solid var(--border); border-radius: 14px;
+  background: var(--card-bg); color: var(--text); font-family: inherit;
+  font-size: 0.92em; font-weight: 700; cursor: pointer; transition: all 0.15s;
+}
+.action-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+.action-btn.primary {
+  background: linear-gradient(135deg, var(--accent), #f97316);
+  color: #fff; border-color: transparent;
+}
+
+.msg {
+  min-height: 1.4em; text-align: center; font-weight: 700; font-size: 1em;
+  color: var(--accent);
+}
+
+.celebrate {
+  position: fixed; inset: 0; pointer-events: none; z-index: 99;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5em; animation: celebrateAnim 1.5s ease-out forwards; opacity: 0;
+}
+@keyframes celebrateAnim {
+  0% { opacity: 1; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+.win-banner {
+  display: none;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(245,158,11,0.15));
+  border: 2px solid var(--green);
+  border-radius: 18px;
+  padding: 14px 18px;
+  width: 100%;
+}
+.win-banner.show { display: block; animation: popIn 0.4s ease-out; }
+.win-banner h2 { font-size: 1.3em; margin-bottom: 6px; color: var(--green); }
+.win-banner p { opacity: 0.75; font-size: 0.9em; margin-bottom: 10px; }
+@keyframes popIn {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.footer { text-align: center; padding: 8px; opacity: 0.3; font-size: 0.7em; }
+
+@media (max-width: 480px) {
+  .header h1 { font-size: 1.05em; }
+  .board { gap: 8px; }
+  .tile { border-radius: 12px; font-size: 1.25em; }
+  .board-wrap { padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="index.html"><img src="12345.png" alt="logo" style="width:20px;height:20px;border-radius:4px;vertical-align:middle;margin-right:4px;">← 藏经阁</a>
+  <h1>凑数连连看</h1>
+  <a class="nav-link" href="make-ten.html" title="入门：凑十法">🧮 凑十法</a>
+  <button type="button" onclick="toggleTheme()" title="切换主题">🌓</button>
+</div>
+
+<div class="main">
+  <div class="stars" id="stars"></div>
+
+  <p class="tip">找出两个数字加起来等于目标！比「凑十法」更考验眼力～</p>
+
+  <div class="target-row">
+    <button type="button" class="target-btn active" data-target="10">🎯 凑 10</button>
+    <button type="button" class="target-btn" data-target="20">🔥 凑 20</button>
+    <button type="button" class="target-btn" data-target="30">💪 凑 30</button>
+  </div>
+
+  <div class="hud">
+    <div class="goal">目标：两个数相加 = <span id="goalNum">10</span></div>
+    <span>✅ 配对：<strong id="pairCount">0</strong>/<strong id="pairTotal">0</strong></span>
+    <span>⭐ 连对：<strong id="streakCount">0</strong></span>
+    <span>👀 步数：<strong id="moveCount">0</strong></span>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board" id="board" aria-label="数字棋盘"></div>
+  </div>
+
+  <div class="msg" id="msg">点两个能凑成目标的数字吧！</div>
+
+  <div class="win-banner" id="winBanner">
+    <h2>🎉 全部消完啦！</h2>
+    <p id="winText">真棒，再来一局吧</p>
+    <button type="button" class="action-btn primary" onclick="newGame()">再来一局</button>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="action-btn" onclick="shuffleBoard()" title="打乱剩余格子">🔀 打乱</button>
+    <button type="button" class="action-btn" onclick="hintPair()" title="提示一对">💡 提示</button>
+    <button type="button" class="action-btn primary" onclick="newGame()">🔄 新局</button>
+  </div>
+</div>
+
+<div class="footer">扫地僧创作 · 二〇二六</div>
+
+<script>
+(function () {
+  // 难度：目标 → 配对数、列数、数字范围
+  const LEVELS = {
+    10: { pairs: 6, cols: 4, minA: 1, maxA: 9, label: '凑 10' },
+    20: { pairs: 8, cols: 4, minA: 2, maxA: 18, label: '凑 20' },
+    30: { pairs: 10, cols: 5, minA: 5, maxA: 25, label: '凑 30' }
+  };
+
+  let target = 10;
+  let tiles = []; // { id, value, gone }
+  let selected = null; // index
+  let locked = false;
+  let streak = 0;
+  let pairsDone = 0;
+  let pairsTotal = 0;
+  let moves = 0;
+  let totalStars = 0;
+  let hintsLeft = 3;
+
+  // ═══════ Sounds（与凑十法同风格）═══════
+  function popSound() {
+    try {
+      const c = new (window.AudioContext || window.webkitAudioContext)();
+      const t = c.currentTime;
+      const o = c.createOscillator(); const g = c.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(600, t);
+      o.frequency.exponentialRampToValueAtTime(1200, t + 0.08);
+      g.gain.setValueAtTime(0.2, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+      o.connect(g); g.connect(c.destination);
+      o.start(t); o.stop(t + 0.2);
+    } catch (e) {}
+  }
+  function wrongSound() {
+    try {
+      const c = new (window.AudioContext || window.webkitAudioContext)();
+      const t = c.currentTime;
+      const o = c.createOscillator(); const g = c.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(300, t);
+      o.frequency.exponentialRampToValueAtTime(150, t + 0.15);
+      g.gain.setValueAtTime(0.2, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+      o.connect(g); g.connect(c.destination);
+      o.start(t); o.stop(t + 0.25);
+    } catch (e) {}
+  }
+  function matchSound() {
+    try {
+      const c = new (window.AudioContext || window.webkitAudioContext)();
+      const t = c.currentTime;
+      [523, 659, 784].forEach((f, i) => {
+        const o = c.createOscillator(); const g = c.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(f, t + i * 0.07);
+        g.gain.setValueAtTime(0.14, t + i * 0.07);
+        g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.07 + 0.28);
+        o.connect(g); g.connect(c.destination);
+        o.start(t + i * 0.07); o.stop(t + i * 0.07 + 0.32);
+      });
+    } catch (e) {}
+  }
+  function cheerSound() {
+    try {
+      const c = new (window.AudioContext || window.webkitAudioContext)();
+      const t = c.currentTime;
+      [523, 659, 784, 1047].forEach((f, i) => {
+        const o = c.createOscillator(); const g = c.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(f, t + i * 0.1);
+        g.gain.setValueAtTime(0.15, t + i * 0.1);
+        g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.4);
+        o.connect(g); g.connect(c.destination);
+        o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.5);
+      });
+    } catch (e) {}
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildValues(t) {
+    const lv = LEVELS[t];
+    const vals = [];
+    const used = {};
+    let guard = 0;
+    while (vals.length < lv.pairs * 2 && guard < 200) {
+      guard++;
+      let a = Math.floor(Math.random() * (lv.maxA - lv.minA + 1)) + lv.minA;
+      let b = t - a;
+      if (b < 1 || b > 99) continue;
+      // 凑 10 时避免过多重复对
+      const key = a <= b ? a + '+' + b : b + '+' + a;
+      if (used[key] >= 2) continue;
+      used[key] = (used[key] || 0) + 1;
+      vals.push(a, b);
+    }
+    // 若不足，补标准对
+    while (vals.length < lv.pairs * 2) {
+      const a = Math.floor(vals.length / 2) % (t - 1) + 1;
+      vals.push(a, t - a);
+    }
+    return shuffle(vals.slice(0, lv.pairs * 2));
+  }
+
+  function setTarget(t) {
+    target = t;
+    document.querySelectorAll('.target-btn').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.target, 10) === t);
+    });
+    document.getElementById('goalNum').textContent = t;
+    streak = 0;
+    moves = 0;
+    pairsDone = 0;
+    hintsLeft = t === 10 ? 3 : t === 20 ? 2 : 1;
+    document.getElementById('streakCount').textContent = '0';
+    document.getElementById('moveCount').textContent = '0';
+    newGame();
+  }
+
+  function newGame() {
+    const lv = LEVELS[target];
+    const vals = buildValues(target);
+    tiles = vals.map((v, i) => ({ id: i, value: v, gone: false }));
+    pairsTotal = lv.pairs;
+    pairsDone = 0;
+    selected = null;
+    locked = false;
+    moves = 0;
+    hintsLeft = target === 10 ? 3 : target === 20 ? 2 : 1;
+    document.getElementById('pairCount').textContent = '0';
+    document.getElementById('pairTotal').textContent = pairsTotal;
+    document.getElementById('moveCount').textContent = '0';
+    document.getElementById('winBanner').classList.remove('show');
+    document.getElementById('msg').textContent =
+      '点两个数字，让它们相加等于 ' + target + '！提示还剩 ' + hintsLeft + ' 次';
+    renderBoard();
+  }
+
+  function renderBoard() {
+    const lv = LEVELS[target];
+    const board = document.getElementById('board');
+    board.style.gridTemplateColumns = 'repeat(' + lv.cols + ', minmax(52px, 72px))';
+    board.innerHTML = tiles.map((tile, idx) => {
+      let cls = 'tile';
+      if (tile.gone) cls += ' gone';
+      if (selected === idx) cls += ' selected';
+      return '<button type="button" class="' + cls + '" data-idx="' + idx + '"' +
+        (tile.gone ? ' tabindex="-1" aria-hidden="true"' : '') + '>' +
+        (tile.gone ? '' : tile.value) + '</button>';
+    }).join('');
+    board.querySelectorAll('.tile:not(.gone)').forEach(el => {
+      el.addEventListener('click', () => onTileClick(parseInt(el.dataset.idx, 10)));
+    });
+  }
+
+  function onTileClick(idx) {
+    if (locked) return;
+    const tile = tiles[idx];
+    if (!tile || tile.gone) return;
+
+    if (selected === null) {
+      selected = idx;
+      renderBoard();
+      document.getElementById('msg').textContent = '再选一个，凑成 ' + target;
+      popSound();
+      return;
+    }
+
+    if (selected === idx) {
+      selected = null;
+      renderBoard();
+      document.getElementById('msg').textContent = '取消了，重新选两个吧';
+      return;
+    }
+
+    const a = tiles[selected];
+    const b = tile;
+    moves++;
+    document.getElementById('moveCount').textContent = moves;
+
+    if (a.value + b.value === target) {
+      // 配对成功
+      locked = true;
+      const i1 = selected, i2 = idx;
+      selected = null;
+      pairsDone++;
+      streak++;
+      document.getElementById('pairCount').textContent = pairsDone;
+      document.getElementById('streakCount').textContent = streak;
+
+      const board = document.getElementById('board');
+      const el1 = board.querySelector('[data-idx="' + i1 + '"]');
+      const el2 = board.querySelector('[data-idx="' + i2 + '"]');
+      if (el1) el1.classList.add('matched');
+      if (el2) el2.classList.add('matched');
+      matchSound();
+      document.getElementById('msg').textContent =
+        '太棒了！' + a.value + ' + ' + b.value + ' = ' + target;
+
+      if (streak > 0 && streak % 4 === 0) {
+        totalStars++;
+        renderStars();
+        cheerSound();
+        celebrate();
+      }
+
+      setTimeout(() => {
+        tiles[i1].gone = true;
+        tiles[i2].gone = true;
+        locked = false;
+        renderBoard();
+        if (pairsDone >= pairsTotal) {
+          onWin();
+        } else {
+          document.getElementById('msg').textContent = '继续！还剩 ' + (pairsTotal - pairsDone) + ' 对';
+        }
+      }, 420);
+    } else {
+      // 配对失败
+      locked = true;
+      streak = 0;
+      document.getElementById('streakCount').textContent = '0';
+      const i1 = selected, i2 = idx;
+      selected = null;
+      wrongSound();
+      document.getElementById('msg').textContent =
+        a.value + ' + ' + b.value + ' = ' + (a.value + b.value) + '，不是 ' + target + ' 哦';
+
+      const board = document.getElementById('board');
+      const el1 = board.querySelector('[data-idx="' + i1 + '"]');
+      const el2 = board.querySelector('[data-idx="' + i2 + '"]');
+      if (el1) el1.classList.add('wrong');
+      if (el2) el2.classList.add('wrong');
+      renderBoard();
+      // re-apply wrong after render
+      setTimeout(() => {
+        const b2 = document.getElementById('board');
+        const e1 = b2.querySelector('[data-idx="' + i1 + '"]');
+        const e2 = b2.querySelector('[data-idx="' + i2 + '"]');
+        if (e1) e1.classList.add('wrong');
+        if (e2) e2.classList.add('wrong');
+      }, 0);
+
+      setTimeout(() => {
+        locked = false;
+        renderBoard();
+        document.getElementById('msg').textContent = '再试试，找加起来等于 ' + target + ' 的两个数';
+      }, 480);
+    }
+  }
+
+  function shuffleBoard() {
+    if (locked) return;
+    const live = tiles.filter(t => !t.gone);
+    if (live.length < 2) return;
+    const vals = live.map(t => t.value);
+    shuffle(vals);
+    let k = 0;
+    tiles.forEach(t => {
+      if (!t.gone) t.value = vals[k++];
+    });
+    selected = null;
+    renderBoard();
+    document.getElementById('msg').textContent = '已打乱剩余数字，继续凑 ' + target + '！';
+    popSound();
+  }
+
+  function hintPair() {
+    if (locked) return;
+    if (hintsLeft <= 0) {
+      document.getElementById('msg').textContent = '提示用完啦，自己动脑筋找一找～';
+      wrongSound();
+      return;
+    }
+    // 找一对仍在的和
+    const alive = tiles.map((t, i) => ({ t, i })).filter(x => !x.t.gone);
+    for (let i = 0; i < alive.length; i++) {
+      for (let j = i + 1; j < alive.length; j++) {
+        if (alive[i].t.value + alive[j].t.value === target) {
+          hintsLeft--;
+          selected = null;
+          const board = document.getElementById('board');
+          renderBoard();
+          const e1 = board.querySelector('[data-idx="' + alive[i].i + '"]');
+          const e2 = board.querySelector('[data-idx="' + alive[j].i + '"]');
+          if (e1) e1.classList.add('selected');
+          if (e2) e2.classList.add('selected');
+          document.getElementById('msg').textContent =
+            '💡 提示：' + alive[i].t.value + ' 和 ' + alive[j].t.value +
+            '（还剩 ' + hintsLeft + ' 次提示）';
+          popSound();
+          setTimeout(() => renderBoard(), 1200);
+          return;
+        }
+      }
+    }
+    document.getElementById('msg').textContent = '咦，没找到可配对的？点「打乱」试试';
+  }
+
+  function onWin() {
+    totalStars++;
+    renderStars();
+    cheerSound();
+    celebrate();
+    const banner = document.getElementById('winBanner');
+    document.getElementById('winText').textContent =
+      LEVELS[target].label + ' 通关！用了 ' + moves + ' 步，连对最高很棒！';
+    banner.classList.add('show');
+    document.getElementById('msg').textContent = '🏆 全部消完！';
+  }
+
+  function renderStars() {
+    let html = '';
+    for (let i = 0; i < Math.min(totalStars, 10); i++) html += '<span class="star earned">⭐</span>';
+    for (let i = totalStars; i < 10; i++) html += '<span class="star">⭐</span>';
+    document.getElementById('stars').innerHTML = html;
+  }
+
+  function celebrate() {
+    const el = document.createElement('div');
+    el.className = 'celebrate';
+    el.textContent = ['🎉', '🌟', '👏', '💪', '🏆'][Math.floor(Math.random() * 5)];
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1600);
+  }
+
+  function toggleTheme() {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('mtm-theme', next); } catch (e) {}
+  }
+  window.toggleTheme = toggleTheme;
+  window.newGame = newGame;
+  window.shuffleBoard = shuffleBoard;
+  window.hintPair = hintPair;
+
+  document.querySelectorAll('.target-btn').forEach(btn => {
+    btn.addEventListener('click', () => setTarget(parseInt(btn.dataset.target, 10)));
+  });
+
+  // 主题恢复
+  try {
+    const th = localStorage.getItem('mtm-theme');
+    if (th !== null) document.documentElement.setAttribute('data-theme', th);
+  } catch (e) {}
+
+  renderStars();
+  setTarget(10);
+
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if ((e.key === 'h' || e.key === 'H') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      location.href = 'index.html';
+    }
+  });
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

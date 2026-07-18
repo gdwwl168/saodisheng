@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">47=司机</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">4像方向三角盘，7是挡把长长推</text>
+  <!-- 车身 -->
+  <rect x="200" y="580" width="624" height="200" rx="30" fill="#F44336"/>
+  <rect x="210" y="590" width="604" height="180" rx="25" fill="#EF5350"/>
+  <!-- 车窗 -->
+  <rect x="240" y="600" width="180" height="90" rx="15" fill="#BBDEFB" opacity="0.6"/>
+  <rect x="440" y="600" width="180" height="90" rx="15" fill="#BBDEFB" opacity="0.6"/>
+  <!-- 方向盘 - 4形三角示意 -->
+  <circle cx="300" cy="520" r="40" fill="none" stroke="#37474F" stroke-width="8"/>
+  <circle cx="300" cy="520" r="10" fill="#37474F"/>
+  <line x1="300" y1="520" x2="270" y2="490" stroke="#37474F" stroke-width="6"/>
+  <line x1="300" y1="520" x2="330" y2="490" stroke="#37474F" stroke-width="6"/>
+  <line x1="300" y1="520" x2="300" y2="480" stroke="#37474F" stroke-width="6"/>
+  <!-- 挡把 - 7形 -->
+  <line x1="580" y1="560" x2="580" y2="700" stroke="#37474F" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="580" cy="550" r="12" fill="#37474F"/>
+  <!-- 车轮 -->
+  <circle cx="320" cy="790" r="45" fill="#37474F"/>
+  <circle cx="320" cy="790" r="30" fill="#757575"/>
+  <circle cx="320" cy="790" r="8" fill="#BDBDBD"/>
+  <circle cx="700" cy="790" r="45" fill="#37474F"/>
+  <circle cx="700" cy="790" r="30" fill="#757575"/>
+  <circle cx="700" cy="790" r="8" fill="#BDBDBD"/>
+  <!-- 人物 -->
+  <circle cx="350" cy="450" r="30" fill="#FFCCBC"/>
+  <rect x="335" y="480" width="30" height="50" rx="8" fill="#1565C0"/>
+</svg>

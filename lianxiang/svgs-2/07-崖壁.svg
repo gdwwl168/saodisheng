@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1a28"/><stop offset="100%" stop-color="#0a0a18"/></radialGradient>
+    <linearGradient id="cliff" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6a5a4a"/><stop offset="100%" stop-color="#3a2a1a"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">07=崖壁</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">0像崖洞圆圆，7是峭壁折角尖</text>
+  <!-- 天空 -->
+  <rect x="0" y="200" width="1024" height="400" fill="#1a2840" opacity="0.3"/>
+  <!-- 崖壁主体 -->
+  <path d="M180 280 L350 250 L380 700 L100 700Z" fill="url(#cliff)"/>
+  <path d="M200 290 L340 260 L360 690 L140 690Z" fill="#7a6a5a" opacity="0.4"/>
+  <!-- 崖壁纹理 -->
+  <path d="M250 300 L260 650" stroke="#4a3a2a" stroke-width="2" opacity="0.3"/>
+  <path d="M300 280 L310 680" stroke="#4a3a2a" stroke-width="1.5" opacity="0.25"/>
+  <!-- 崖洞 0形 -->
+  <ellipse cx="650" cy="550" rx="70" ry="60" fill="#0a0a18"/>
+  <ellipse cx="650" cy="550" rx="65" ry="55" fill="#151525" opacity="0.7"/>
+  <!-- 洞内微光 -->
+  <ellipse cx="660" cy="540" rx="25" ry="30" fill="#FFEECC" opacity="0.05"/>
+  <!-- 崖壁折角 7形 -->
+  <path d="M644 350 L720 340 L740 720 L600 700Z" fill="#5a4a3a"/>
+  <path d="M660 360 L712 350 L728 700 L620 690Z" fill="#6a5a4a" opacity="0.5"/>
+  <path d="M720 340 L800 330 L830 700 L740 700Z" fill="#4a3a2a"/>
+  <path d="M730 345 L790 338 L815 690 L740 690Z" fill="#5a4a3a" opacity="0.4"/>
+  <!-- 7形折线强调 -->
+  <path d="M650 350 L720 340 L740 700" fill="none" stroke="#8a7a6a" stroke-width="4" opacity="0.6"/>
+  <!-- 月 -->
+  <circle cx="780" cy="240" r="25" fill="#FFEECC" opacity="0.5"/>
+  <circle cx="790" cy="235" r="20" fill="#1a1a28"/>
+  <!-- 松树 -->
+  <path d="M420 600 L450 520 L480 600Z" fill="#2a4030" opacity="0.5"/>
+  <path d="M410 640 L450 540 L490 640Z" fill="#2a4030" opacity="0.4"/>
+  <rect x="445" y="640" width="10" height="40" fill="#3a2a1a" opacity="0.4"/>
+</svg>

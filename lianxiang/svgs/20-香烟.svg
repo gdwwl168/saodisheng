@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <radialGradient id="emberGrad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#FF6600"/>
+      <stop offset="50%" stop-color="#FF3300"/>
+      <stop offset="100%" stop-color="#990000"/>
+    </radialGradient>
+    <filter id="glowFilter">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="800" fill="#F5F0E8"/>
+  <rect x="20" y="20" width="760" height="760" rx="30" ry="30" fill="#1a1a2e"/>
+
+  <!-- Cigarette body -->
+  <g transform="translate(400, 400) rotate(-15)">
+    <!-- White cigarette tube -->
+    <rect x="-120" y="-12" width="220" height="24" rx="8" fill="#F8F4F0" stroke="#D4D0C8" stroke-width="1.5"/>
+    <!-- Filter tip -->
+    <rect x="-120" y="-12" width="40" height="24" rx="8" fill="#E8D8B8" stroke="#D4C8A8" stroke-width="1"/>
+    <!-- Filter dots -->
+    <g fill="#D4C8A8" opacity="0.5">
+      <circle cx="-105" cy="0" r="1.5"/>
+      <circle cx="-100" cy="5" r="1.5"/>
+      <circle cx="-100" cy="-5" r="1.5"/>
+      <circle cx="-95" cy="0" r="1.5"/>
+      <circle cx="-90" cy="5" r="1.5"/>
+      <circle cx="-90" cy="-5" r="1.5"/>
+    </g>
+
+    <!-- Burning tip = number 0 -->
+    <ellipse cx="100" cy="0" rx="8" ry="12" fill="url(#emberGrad)"/>
+    <!-- Ash -->
+    <ellipse cx="95" cy="0" rx="10" ry="13" fill="#888" opacity="0.4"/>
+    <!-- Ember glow -->
+    <ellipse cx="100" cy="0" rx="5" ry="9" fill="#FF4400" filter="url(#glowFilter)" opacity="0.6"/>
+  </g>
+
+  <!-- Smoke = number 2 (curling smoke) -->
+  <g fill="none" stroke="#DDD" stroke-width="6" stroke-linecap="round" opacity="0.7">
+    <path d="M 500,380 Q 520,350 510,310 Q 500,270 530,230 Q 550,200 540,160"/>
+  </g>
+  <g fill="none" stroke="#EEE" stroke-width="4" stroke-linecap="round" opacity="0.5">
+    <path d="M 500,380 Q 520,350 510,310 Q 500,270 530,230 Q 550,200 540,160"/>
+  </g>
+  <!-- Secondary smoke curl -->
+  <g fill="none" stroke="#CCC" stroke-width="4" stroke-linecap="round" opacity="0.4">
+    <path d="M 490,385 Q 470,350 485,310 Q 500,280 480,240 Q 470,210 480,180"/>
+  </g>
+  <!-- Small smoke puffs -->
+  <g fill="#DDD" opacity="0.3">
+    <circle cx="515" cy="300" r="8"/>
+    <circle cx="525" cy="260" r="10"/>
+    <circle cx="535" cy="200" r="12"/>
+  </g>
+
+  <!-- Small ashtray -->
+  <ellipse cx="300" cy="550" rx="50" ry="12" fill="#555"/>
+  <ellipse cx="300" cy="548" rx="45" ry="10" fill="#444"/>
+  <ellipse cx="300" cy="546" rx="38" ry="8" fill="#333"/>
+
+  <!-- Ash particles falling -->
+  <g fill="#CCC" opacity="0.3">
+    <circle cx="490" cy="520" r="2"/>
+    <circle cx="495" cy="540" r="1.5"/>
+    <circle cx="488" cy="555" r="2"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="110" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="44" font-weight="bold" fill="#FFEECC">20=香烟</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="740" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="26" fill="#CCBBAA">2像烟圈弯弯绕，0是烟头圆圆燃</text>
+
+  <rect x="0" y="0" width="800" height="800" rx="28" ry="28" fill="none" stroke="#E8DDD0" stroke-width="4"/>
+</svg>

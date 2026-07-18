@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <radialGradient id="pomeGrad" cx="0.35" cy="0.3" r="0.7">
+      <stop offset="0%" stop-color="#FF6B6B"/>
+      <stop offset="60%" stop-color="#CC2222"/>
+      <stop offset="100%" stop-color="#880000"/>
+    </radialGradient>
+    <radialGradient id="pomeInner" cx="0.5" cy="0.4" r="0.4">
+      <stop offset="0%" stop-color="#FF9999"/>
+      <stop offset="100%" stop-color="#FF4444"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="800" fill="#F5F0E8"/>
+  <rect x="20" y="20" width="760" height="760" rx="30" ry="30" fill="#FFF8F0"/>
+
+  <!-- Branch = number 1 (straight) -->
+  <path d="M 100,350 Q 300,340 700,360" fill="none" stroke="#5A3A10" stroke-width="12" stroke-linecap="round"/>
+  <path d="M 100,350 Q 300,340 700,360" fill="none" stroke="#8B5A30" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 100,350 Q 300,340 700,360" fill="none" stroke="#A07040" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+
+  <!-- Small leaf -->
+  <g transform="translate(500, 345)">
+    <path d="M 0,0 Q -15,-25 -5,-40 Q 5,-35 8,-10 Z" fill="#4CD964"/>
+    <path d="M 0,0 Q 15,-20 8,-35 Q 2,-30 0,-5 Z" fill="#228B22"/>
+    <line x1="0" y1="0" x2="0" y2="-35" stroke="#228B22" stroke-width="1" opacity="0.5"/>
+  </g>
+
+  <!-- Pomegranate = number 6 (curved fruit shape) -->
+  <g transform="translate(400, 360)">
+    <!-- Fruit body -->
+    <path d="M 0,-30 Q 70,-20 75,60 Q 70,120 0,130 Q -70,120 -75,60 Q -70,-20 0,-30 Z"
+          fill="url(#pomeGrad)" stroke="#880000" stroke-width="2"/>
+    <!-- Highlight -->
+    <path d="M -30,-10 Q -20,30 -25,80" fill="none" stroke="white" stroke-width="6" opacity="0.15" stroke-linecap="round"/>
+
+    <!-- Crown/calyx at top -->
+    <g fill="#4A7020">
+      <polygon points="0,-30 -5,-45 5,-45"/>
+      <polygon points="0,-30 -15,-42 -8,-48"/>
+      <polygon points="0,-30 15,-42 8,-48"/>
+      <polygon points="0,-30 -20,-35 -12,-42"/>
+      <polygon points="0,-30 20,-35 12,-42"/>
+    </g>
+
+    <!-- Crack opening showing seeds inside -->
+    <path d="M -15,30 Q 0,15 15,30 Q 10,50 0,60 Q -10,50 -15,30 Z"
+          fill="#550000" stroke="#440000" stroke-width="1"/>
+    <path d="M -10,35 Q 0,25 10,35" fill="none" stroke="#330000" stroke-width="2"/>
+    <!-- Seeds visible inside -->
+    <g fill="#FF4444">
+      <ellipse cx="-3" cy="40" rx="5" ry="7" transform="rotate(-15,-3,40)"/>
+      <ellipse cx="5" cy="40" rx="5" ry="7" transform="rotate(15,5,40)"/>
+      <ellipse cx="0" cy="48" rx="4" ry="6"/>
+    </g>
+    <g fill="white" opacity="0.3">
+      <circle cx="-4" cy="38" r="2"/>
+      <circle cx="4" cy="42" r="1.5"/>
+    </g>
+
+    <!-- Stem -->
+    <line x1="0" y1="-35" x2="0" y2="-55" stroke="#5A4A20" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="90" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="44" font-weight="bold" fill="#333">16=石榴</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="760" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="26" fill="#888">1像枝干直直长，6是石榴弯弯挂</text>
+
+  <rect x="0" y="0" width="800" height="800" rx="28" ry="28" fill="none" stroke="#E8DDD0" stroke-width="4"/>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a2820"/><stop offset="100%" stop-color="#0a140e"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">06=山谷</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">0像山谷圆圆口，6是山道弯弯绕</text>
+  <!-- 天空 -->
+  <ellipse cx="512" cy="350" rx="350" ry="120" fill="#1a3040" opacity="0.4"/>
+  <!-- 左山 -->
+  <path d="M100 650 L280 280 L460 650Z" fill="#2a4030"/>
+  <path d="M120 640 L280 300 L440 640Z" fill="#3a5040" opacity="0.6"/>
+  <!-- 右山 -->
+  <path d="M564 650 L744 280 L924 650Z" fill="#2a4030"/>
+  <path d="M584 640 L744 300 L904 640Z" fill="#3a5040" opacity="0.6"/>
+  <!-- 山谷口 0形圆 -->
+  <ellipse cx="512" cy="620" rx="80" ry="40" fill="#1a3020" opacity="0.6"/>
+  <!-- 山谷通道 6形弯 -->
+  <path d="M512 630 Q490 580 480 520 Q470 460 512 400 Q554 460 544 520 Q534 580 512 630Z" fill="#0a1a0e" opacity="0.7"/>
+  <!-- 山路 6形 -->
+  <path d="M512 640 Q520 580 500 520 Q480 460 512 390" fill="none" stroke="#5a8060" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+  <!-- 树 -->
+  <circle cx="350" cy="400" r="25" fill="#2a5030" opacity="0.5"/>
+  <rect x="346" y="420" width="8" height="30" rx="2" fill="#4a3020" opacity="0.4"/>
+  <circle cx="674" cy="420" r="30" fill="#2a5030" opacity="0.5"/>
+  <rect x="670" y="440" width="8" height="35" rx="2" fill="#4a3020" opacity="0.4"/>
+  <!-- 飞鸟 -->
+  <path d="M380 320 Q390 310 400 318" fill="none" stroke="#6080a0" stroke-width="1.5" opacity="0.4"/>
+  <path d="M620 300 Q630 290 640 298" fill="none" stroke="#6080a0" stroke-width="1.5" opacity="0.4"/>
+  <!-- 阳光从谷口射入 -->
+  <path d="M512 350 L460 600 L564 600Z" fill="#FFEECC" opacity="0.04"/>
+</svg>

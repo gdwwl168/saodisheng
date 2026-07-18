@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a2818"/><stop offset="100%" stop-color="#0a1408"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">15=鹦鹉</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">1是栖木直直立，5是鹦鹉弯弯站</text>
+  <!-- 栖木 1形 -->
+  <line x1="200" y1="620" x2="824" y2="600" stroke="#6B4030" stroke-width="16" stroke-linecap="round"/>
+  <line x1="200" y1="620" x2="824" y2="600" stroke="#8B5A3A" stroke-width="8" stroke-linecap="round"/>
+  <!-- 栖木分叉 -->
+  <path d="M700 606 L730 570" stroke="#6B4030" stroke-width="8" stroke-linecap="round"/>
+  <path d="M280 618 L260 580" stroke="#6B4030" stroke-width="6" stroke-linecap="round"/>
+  <!-- 鹦鹉身体 5形弯 -->
+  <ellipse cx="480" cy="520" rx="55" ry="65" fill="#4CAF50"/>
+  <ellipse cx="480" cy="515" rx="45" ry="55" fill="#66BB6A"/>
+  <!-- 肚皮 -->
+  <ellipse cx="475" cy="530" rx="30" ry="35" fill="#C8E6C9" opacity="0.5"/>
+  <!-- 翅膀 -->
+  <path d="M430 500 Q400 520 420 560 Q440 550 430 500Z" fill="#388E3C"/>
+  <path d="M435 508 Q412 525 428 552 Q442 542 435 508Z" fill="#2E7D32" opacity="0.5"/>
+  <!-- 尾羽 5形下垂 -->
+  <path d="M460 580 Q440 640 420 680" fill="none" stroke="#388E3C" stroke-width="10" stroke-linecap="round"/>
+  <path d="M475 585 Q460 650 445 690" fill="none" stroke="#4CAF50" stroke-width="8" stroke-linecap="round"/>
+  <path d="M490 580 Q485 640 475 680" fill="none" stroke="#2E7D32" stroke-width="7" stroke-linecap="round"/>
+  <!-- 头 -->
+  <circle cx="500" cy="435" r="28" fill="#66BB6A"/>
+  <circle cx="500" cy="433" r="24" fill="#81C784"/>
+  <!-- 眼睛 -->
+  <circle cx="510" cy="428" r="6" fill="#2C1810"/>
+  <circle cx="512" cy="426" r="2.5" fill="white"/>
+  <!-- 喙 弯钩 -->
+  <path d="M525 435 L545 440 Q550 445 545 450 L525 445Z" fill="#FF9800"/>
+  <!-- 冠羽 -->
+  <path d="M490 412 Q495 390 500 410" fill="none" stroke="#FF5722" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="485" cy="415" rx="6" ry="4" fill="#E85D3A" transform="rotate(-20 485 415)"/>
+  <!-- 爪 -->
+  <path d="M460 580 L450 600 M460 580 L460 602 M460 580 L470 600" stroke="#FF9800" stroke-width="3" stroke-linecap="round"/>
+  <path d="M495 578 L490 598 M495 578 L498 600" stroke="#FF9800" stroke-width="3" stroke-linecap="round"/>
+</svg>

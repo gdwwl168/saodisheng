@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1618"/><stop offset="100%" stop-color="#0a0608"/></radialGradient>
+    <linearGradient id="bottle" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#C89860"/><stop offset="100%" stop-color="#F0D898"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">19=药酒</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">1是药瓶直直立，9是酒壶弯弯倒</text>
+  <!-- 桌面 -->
+  <ellipse cx="512" cy="680" rx="220" ry="25" fill="#0a0604" opacity="0.4"/>
+  <!-- 药瓶 1形 -->
+  <rect x="380" y="400" width="50" height="160" rx="10" fill="#E8E0D0" opacity="0.6"/>
+  <rect x="384" y="410" width="42" height="140" rx="8" fill="#F5F0E8" opacity="0.5"/>
+  <rect x="380" y="395" width="50" height="20" rx="5" fill="#C89860"/>
+  <rect x="390" y="385" width="30" height="15" rx="4" fill="#D0A870"/>
+  <!-- 瓶内药酒 -->
+  <rect x="386" y="480" width="38" height="60" rx="5" fill="#B88030" opacity="0.4"/>
+  <!-- 药标签 十字 -->
+  <rect x="395" y="445" width="20" height="25" rx="2" fill="white" opacity="0.7"/>
+  <rect x="400" y="448" width="10" height="19" rx="1.5" fill="#E85D3A" opacity="0.7"/>
+  <rect x="396" y="452" width="18" height="11" rx="1.5" fill="#E85D3A" opacity="0.7"/>
+  <!-- 酒壶 9形弯 -->
+  <path d="M600 460 Q600 380 650 370 Q700 360 720 410 Q740 460 690 520 Q650 565 610 540" fill="none" stroke="url(#bottle)" stroke-width="22" stroke-linecap="round"/>
+  <!-- 壶口 -->
+  <ellipse cx="610" cy="535" rx="15" ry="8" fill="#B08040"/>
+  <!-- 壶塞 -->
+  <rect x="605" y="518" width="10" height="18" rx="3" fill="#C89860"/>
+  <!-- 弯管高光 -->
+  <path d="M620 390 Q660 385 680 420 Q695 455 660 500" fill="none" stroke="white" stroke-width="2" opacity="0.15"/>
+  <!-- 小酒杯 -->
+  <path d="M460 640 L470 670 L500 670 L510 640Z" fill="#E8E0D0" opacity="0.5"/>
+  <ellipse cx="485" cy="640" rx="25" ry="6" fill="#DDD5CA" opacity="0.5"/>
+  <ellipse cx="485" cy="655" rx="18" ry="10" fill="#C89860" opacity="0.3"/>
+</svg>

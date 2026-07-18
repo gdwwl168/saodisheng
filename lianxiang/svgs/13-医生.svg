@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="stethoscope" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#888"/>
+      <stop offset="100%" stop-color="#CCC"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="800" fill="#F5F0E8"/>
+  <rect x="20" y="20" width="760" height="760" rx="30" ry="30" fill="#FFF8F0"/>
+
+  <!-- Doctor figure -->
+  <g transform="translate(400, 460)">
+    <!-- Body / white coat -->
+    <rect x="-55" y="-40" width="110" height="120" rx="8" fill="#F8F8FF" stroke="#D0D0E0" stroke-width="1.5"/>
+    <!-- Coat buttons -->
+    <circle cx="0" cy="-15" r="3" fill="#888"/>
+    <circle cx="0" cy="5" r="3" fill="#888"/>
+    <circle cx="0" cy="25" r="3" fill="#888"/>
+    <!-- Coat lapels -->
+    <path d="M -55,-40 L -20,-10 L -55,20 Z" fill="#F0F0F8" stroke="#D0D0E0" stroke-width="0.5"/>
+    <path d="M 55,-40 L 20,-10 L 55,20 Z" fill="#F0F0F8" stroke="#D0D0E0" stroke-width="0.5"/>
+
+    <!-- Head -->
+    <circle cx="0" cy="-70" r="35" fill="#FDDCB5" stroke="#E8B88A" stroke-width="1.5"/>
+    <!-- Hair -->
+    <path d="M -35,-70 Q -38,-100 0,-108 Q 38,-100 35,-70 Q 25,-105 0,-108 Q -25,-105 -35,-70 Z" fill="#3A2010"/>
+    <!-- Eyes -->
+    <ellipse cx="-12" cy="-72" rx="4" ry="5" fill="#3A2010"/>
+    <ellipse cx="12" cy="-72" rx="4" ry="5" fill="#3A2010"/>
+    <circle cx="-10" cy="-74" r="1.5" fill="white"/>
+    <circle cx="14" cy="-74" r="1.5" fill="white"/>
+    <!-- Smile -->
+    <path d="M -10,-58 Q 0,-50 10,-58" fill="none" stroke="#C89060" stroke-width="2" stroke-linecap="round"/>
+    <!-- Medical cap -->
+    <path d="M -35,-78 Q -30,-95 0,-100 Q 30,-95 35,-78 Q 20,-85 0,-88 Q -20,-85 -35,-78 Z" fill="#66BB6A"/>
+    <rect x="-5" y="-100" width="10" height="3" rx="1" fill="#CC3333"/>
+  </g>
+
+  <!-- Stethoscope = number 3 (curved tube) -->
+  <g fill="none" stroke="url(#stethoscope)" stroke-width="6" stroke-linecap="round">
+    <!-- Curved tube around neck -->
+    <path d="M 370,370 Q 330,340 310,370 Q 290,400 310,430 Q 330,460 370,440"/>
+    <path d="M 430,370 Q 470,340 490,370 Q 510,400 490,430 Q 470,460 430,440"/>
+    <!-- Central line down -->
+    <line x1="400" y1="440" x2="400" y2="390"/>
+  </g>
+
+  <!-- Stethoscope chest piece = number 0 (round disc) -->
+  <circle cx="400" cy="385" r="18" fill="#C0C0C0" stroke="#999" stroke-width="2"/>
+  <circle cx="400" cy="385" r="10" fill="#E8E8E8" stroke="#999" stroke-width="1"/>
+  <circle cx="400" cy="385" r="4" fill="#CCC"/>
+
+  <!-- Syringe = number 1 (straight) -->
+  <g transform="translate(220, 350)">
+    <rect x="-5" y="-120" width="10" height="100" rx="3" fill="#E8F4FF" stroke="#88BBDD" stroke-width="1"/>
+    <!-- Plunger -->
+    <rect x="-3" y="-20" width="6" height="30" rx="2" fill="#CCC"/>
+    <rect x="-5" y="-18" width="10" height="12" rx="2" fill="#AAA"/>
+    <!-- Needle -->
+    <line x1="0" y1="-120" x2="0" y2="-155" stroke="#CCC" stroke-width="3"/>
+    <!-- Measurement lines -->
+    <g stroke="#88BBDD" stroke-width="0.8" opacity="0.5">
+      <line x1="-5" y1="-100" x2="5" y2="-100"/>
+      <line x1="-5" y1="-80" x2="5" y2="-80"/>
+      <line x1="-5" y1="-60" x2="5" y2="-60"/>
+      <line x1="-5" y1="-40" x2="5" y2="-40"/>
+    </g>
+    <!-- Liquid inside -->
+    <rect x="-4" y="-100" width="8" height="60" rx="2" fill="#BBDDFF" opacity="0.5"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="90" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="44" font-weight="bold" fill="#333">13=医生</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="760" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="26" fill="#888">1像针管直直打，3是听筒弯弯诊</text>
+
+  <rect x="0" y="0" width="800" height="800" rx="28" ry="28" fill="none" stroke="#E8DDD0" stroke-width="4"/>
+</svg>

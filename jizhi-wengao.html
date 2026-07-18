@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<title>祭侄文稿 — 颜真卿行书</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Serif SC', 'ZCOOL XiaoWei', serif;
+    background: #f5efe0 url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q35 15 45 20 Q35 25 30 35 Q25 25 15 20 Q25 15 30 5z' fill='%23d4c5a9' opacity='0.12'/%3E%3C/svg%3E");
+    color: #3b3223;
+    min-height: 100vh;
+  }
+
+  .back-link {
+    display: inline-block; padding: 10px 20px; margin: 16px 0 0 20px;
+    color: #5a3e2b; text-decoration: none; font-size: 14px;
+    letter-spacing: 2px; transition: color .2s; position: relative; z-index: 10;
+  }
+  .back-link:hover { color: #8b5a2b; }
+
+  .hero {
+    background: linear-gradient(180deg, #1a1610 0%, #2c2416 50%, #4a3520 100%);
+    color: #f5e6c8; text-align: center; padding: 60px 20px 50px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 40px,
+      rgba(255,255,255,.01) 40px, rgba(255,255,255,.01) 41px);
+    pointer-events: none;
+  }
+  .hero .seal {
+    font-family: 'Ma Shan Zheng', cursive; font-size: 18px;
+    color: #c0392b; opacity: .7; letter-spacing: 4px;
+    margin-bottom: 12px; position: relative;
+  }
+  .hero h1 {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(52px, 9vw, 96px); letter-spacing: 14px;
+    position: relative; text-shadow: 2px 2px 12px rgba(0,0,0,.5); line-height: 1.3;
+  }
+  .hero .subtitle {
+    font-size: clamp(15px, 2.5vw, 20px); opacity: .8;
+    margin-top: 10px; letter-spacing: 4px; position: relative;
+  }
+  .hero .meta-line {
+    margin-top: 16px; font-size: 13px; opacity: .55;
+    letter-spacing: 3px; position: relative;
+    display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+  }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 24px 60px; }
+
+  .info-banner {
+    background: linear-gradient(135deg, #2c2416, #4a3520); color: #f5e6c8;
+    text-align: center; padding: 14px 20px; margin: -20px auto 32px;
+    max-width: 600px; border-radius: 8px; font-size: 14px;
+    letter-spacing: 3px; position: relative; z-index: 1;
+    box-shadow: 0 4px 20px rgba(0,0,0,.15);
+  }
+  .info-banner strong { color: #e8c56d; }
+
+  .section-title {
+    font-family: 'Ma Shan Zheng', cursive; font-size: 32px;
+    text-align: center; color: #5a3e2b; margin: 44px 0 24px;
+    letter-spacing: 5px; position: relative;
+  }
+  .section-title::after {
+    content: ''; display: block; width: 50px; height: 2px;
+    background: #c4a97d; margin: 8px auto 0; border-radius: 1px;
+  }
+
+  .artwork-frame {
+    background: #faf6ed; border: 2px solid #d4c5a9;
+    border-radius: 6px; padding: 12px;
+    box-shadow: 0 4px 28px rgba(0,0,0,.1); position: relative; overflow: hidden;
+  }
+  .artwork-frame::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+      rgba(139,115,85,.03) 2px, rgba(139,115,85,.03) 3px);
+    pointer-events: none; z-index: 2;
+  }
+  .artwork-frame img { width: 100%; height: auto; display: block; border-radius: 2px; }
+  .artwork-frame .caption {
+    text-align: center; font-size: 12px; color: #8b7355;
+    margin-top: 10px; letter-spacing: 2px;
+  }
+  .artwork-frame .caption a { color: #8b5a2b; }
+
+  .poem-card {
+    background: rgba(255,252,245,.88); border: 1px solid #d4c5a9;
+    border-radius: 12px; padding: 32px 36px; margin-bottom: 24px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.05);
+  }
+  .poem-card h3 {
+    font-family: 'Ma Shan Zheng', cursive; font-size: 26px;
+    color: #5a3e2b; letter-spacing: 4px; margin-bottom: 6px;
+  }
+  .poem-card .poem-subtitle {
+    font-size: 13px; color: #8b7355; margin-bottom: 18px; letter-spacing: 2px;
+  }
+  .poem-card .verse {
+    font-size: 18px; line-height: 2.2; color: #2c2416; letter-spacing: 2px;
+    padding: 20px 24px; background: rgba(139,115,85,.04);
+    border-radius: 8px; border-left: 3px solid #c4a97d; font-style: italic;
+  }
+  .poem-card .verse .line { display: block; }
+
+  .annotation-card {
+    background: rgba(255,252,245,.75); border: 1px dashed #c4a97d;
+    border-radius: 10px; padding: 22px 28px; margin-bottom: 20px;
+    font-size: 14px; line-height: 1.9; color: #4a3a28;
+  }
+  .annotation-card .point {
+    margin-bottom: 10px; display: flex; gap: 12px; align-items: baseline;
+  }
+  .annotation-card .point .num {
+    flex-shrink: 0; width: 24px; height: 24px; background: #5a3e2b;
+    color: #f5e6c8; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+  }
+
+  .timeline {
+    position: relative; padding-left: 30px; margin: 24px 0;
+  }
+  .timeline::before {
+    content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px;
+    width: 2px; background: #d4c5a9;
+  }
+  .timeline-item {
+    position: relative; margin-bottom: 20px; padding-left: 16px;
+  }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -24px; top: 6px;
+    width: 10px; height: 10px; background: #8b7355;
+    border-radius: 50%; border: 2px solid #f5efe0;
+  }
+  .timeline-item .t-date { font-size: 12px; color: #8b7355; letter-spacing: 2px; }
+  .timeline-item .t-text { font-size: 15px; color: #3b3223; margin-top: 2px; }
+
+  .detail-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin-bottom: 28px;
+  }
+  .detail-card {
+    background: rgba(255,252,245,.8); border: 1px solid #d4c5a9;
+    border-radius: 8px; padding: 20px 22px; text-align: center;
+  }
+  .detail-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .detail-card .label { font-size: 12px; color: #8b7355; letter-spacing: 2px; }
+  .detail-card .value {
+    font-family: 'Ma Shan Zheng', cursive; font-size: 22px;
+    color: #5a3e2b; margin-top: 2px; letter-spacing: 2px;
+  }
+
+  .seals-row {
+    display: flex; justify-content: center; gap: 16px;
+    flex-wrap: wrap; margin: 24px 0;
+  }
+  .seal-stamp {
+    width: 60px; height: 60px; border: 2px solid #c0392b;
+    border-radius: 6px; display: flex; align-items: center;
+    justify-content: center; font-family: 'Ma Shan Zheng', cursive;
+    font-size: 18px; color: #c0392b; opacity: .7; transform: rotate(-3deg);
+  }
+
+  .footer {
+    text-align: center; padding: 32px 20px; font-size: 13px;
+    color: #8b7355; letter-spacing: 2px;
+    border-top: 1px solid #d4c5a9; margin-top: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .poem-card { padding: 20px 16px; }
+    .poem-card .verse { font-size: 15px; padding: 14px 16px; }
+    .hero h1 { font-size: 42px; letter-spacing: 6px; }
+    .hero { padding: 40px 14px 34px; }
+    .info-banner { margin: -12px 12px 20px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link"><img src="12345.png" alt="logo" style="width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:6px;">← 返回藏经阁</a>
+
+<header class="hero">
+  <div class="seal">天下第二行书</div>
+  <h1>祭 侄 文 稿</h1>
+  <p class="subtitle">颜真卿行书 · 纸本墨迹卷</p>
+  <div class="meta-line">
+    <span>乾元元年（758年）</span>
+    <span>纵 28.3cm · 横 75.5cm</span>
+    <span>现藏台北故宫博物院</span>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="info-banner">
+    与王羲之《兰亭序》、苏轼《黄州寒食帖》并称<strong>「天下三大行书」</strong>
+  </div>
+
+  <section class="artwork-frame" style="margin-bottom: 40px;">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Yan_Zhenqing_-_Draft_Eulogy_for_My_Nephew_01.jpg"
+      alt="祭侄文稿 局部"
+      loading="lazy"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+    >
+    <div class="caption">
+      颜真卿《祭侄文稿》· 台北故宫博物院藏 ·
+      <a href="https://zh.wikipedia.org/wiki/File:Yan_Zhenqing_-_Draft_Eulogy_for_My_Nephew_01.jpg" target="_blank" rel="noopener">维基百科 · 高清原图</a>
+      · <a href="https://commons.wikimedia.org/wiki/Category:Draft_Eulogy_for_My_Nephew" target="_blank" rel="noopener">Commons 分类</a>
+    </div>
+    <svg class="scroll-svg" style="display:none;" viewBox="0 0 1200 280" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="280" fill="#faf6ed" rx="4"/>
+      <rect x="10" y="10" width="1180" height="260" fill="none" stroke="#d4c5a9" stroke-width="2"/>
+      <text x="600" y="80" text-anchor="middle" font-family="'Ma Shan Zheng', cursive" font-size="28" fill="#8b7355" letter-spacing="8">祭 侄 文 稿</text>
+      <text x="600" y="130" text-anchor="middle" font-family="'Noto Serif SC', serif" font-size="16" fill="#a09080">颜真卿 行书</text>
+      <text x="600" y="170" text-anchor="middle" font-family="'Noto Serif SC', serif" font-size="12" fill="#c0b0a0">图片加载失败，请点击上方链接查看原图</text>
+      <text x="600" y="210" text-anchor="middle" font-family="'Noto Serif SC', serif" font-size="12" fill="#c0b0a0">Image: Wikimedia Commons / Public Domain</text>
+    </svg>
+  </section>
+
+  <div class="detail-grid">
+    <div class="detail-card">
+      <div class="icon">📜</div>
+      <div class="label">书体</div>
+      <div class="value">行书</div>
+    </div>
+    <div class="detail-card">
+      <div class="icon">📏</div>
+      <div class="label">尺寸</div>
+      <div class="value">28.3 × 75.5 cm</div>
+    </div>
+    <div class="detail-card">
+      <div class="icon">📅</div>
+      <div class="label">创作时间</div>
+      <div class="value">758 年</div>
+    </div>
+    <div class="detail-card">
+      <div class="icon">🏛️</div>
+      <div class="label">现藏</div>
+      <div class="value">台北故宫</div>
+    </div>
+  </div>
+
+  <article class="poem-card">
+    <h3>祭侄赠赞善大夫季明文</h3>
+    <p class="poem-subtitle">乾元元年，岁次戊戌</p>
+    <div class="verse">
+      <span class="line"><strong>维乾元元年，岁次戊戌，九月庚午朔，三日壬申。</strong></span>
+      <span class="line">第十三叔，银青光禄大夫、使持节蒲州诸军事、蒲州刺史、上轻车都尉、丹阳县开国侯真卿，以清酌庶羞，祭于亡侄赠赞善大夫季明之灵：</span>
+      <span class="line"><strong>惟尔挺生，夙标幼德。宗庙瑚琏，阶庭兰玉。</strong></span>
+      <span class="line">每慰人心，方期戬谷。何图逆贼间衅，称兵犯顺。</span>
+      <span class="line">尔父竭诚，常山作郡。余时受命，亦在平原。</span>
+      <span class="line"><strong>仁兄爱我，俾尔传言。尔既归止，爰开土门。</strong></span>
+      <span class="line">土门既开，凶威大蹙。贼臣不救，孤城围逼。</span>
+      <span class="line">父陷子死，巢倾卵覆。天不悔祸，谁为荼毒。</span>
+      <span class="line"><strong>念尔遘残，百身何赎。呜呼哀哉！</strong></span>
+      <span class="line">吾承天泽，移牧河关。泉明比者，再陷常山。</span>
+      <span class="line">携尔首榇，及兹同还。抚念摧切，震悼心颜。</span>
+      <span class="line">方俟远日，卜尔幽宅。魂而有知，无嗟久客。</span>
+      <span class="line"><strong>呜呼哀哉！尚飨。</strong></span>
+    </div>
+  </article>
+
+  <h2 class="section-title">书法艺术赏析</h2>
+
+  <div class="annotation-card">
+    <div class="point">
+      <span class="num">1</span>
+      <span><strong>悲愤出绝艺</strong> —— 安史之乱中，颜真卿兄长颜杲卿、侄儿颜季明壮烈殉国。颜真卿面对亡侄头颅，悲愤交加，挥泪写下此文。通篇情感激越，笔墨随情绪由克制而奔放，多处涂抹圈改恰恰是其情感真实的印记。</span>
+    </div>
+    <div class="point">
+      <span class="num">2</span>
+      <span><strong>枯笔飞白，气势磅礴</strong> —— 随着悲愤加深，笔锋愈见苍劲。多处出现枯笔飞白，墨色浓淡干湿变幻无常。字迹从端楷渐入行草，最后几近狂草，笔势如江河决堤，不可遏止。</span>
+    </div>
+    <div class="point">
+      <span class="num">3</span>
+      <span><strong>忠义气节的巅峰</strong> —— 《祭侄文稿》的价值不仅在于书法艺术，更在于它所承载的忠义精神。颜真卿一门忠烈，此稿是血泪与墨迹的交融，被元人鲜于枢誉为"天下行书第二"。</span>
+    </div>
+  </div>
+
+  <h2 class="section-title">流传经过</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="t-date">758 年</div>
+      <div class="t-text">颜真卿在蒲州任上，面对侄儿季明头颅，挥泪写下《祭侄文稿》</div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-date">宋代</div>
+      <div class="t-text">入藏宣和内府，钤有"宣和""政和"等印，后经多位藏家递藏</div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-date">元代</div>
+      <div class="t-text">鲜于枢题跋，盛赞其为"天下行书第二"，张晏等亦有题跋</div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-date">清代</div>
+      <div class="t-text">入清宫内府，乾隆皇帝极为珍爱，钤有多方御印</div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-date">1949 年</div>
+      <div class="t-text">随故宫文物迁台，今藏台北故宫博物院</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">收藏印章</h2>
+
+  <div class="annotation-card">
+    <p>卷上钤有历代帝王及藏家印章数十方，包括：</p>
+    <div class="seals-row">
+      <div class="seal-stamp">乾隆<br>御览</div>
+      <div class="seal-stamp">宣和</div>
+      <div class="seal-stamp">政和</div>
+      <div class="seal-stamp">绍兴</div>
+      <div class="seal-stamp">鲜于<br>枢印</div>
+    </div>
+    <p style="text-align:center; font-size:12px; color:#8b7355; margin-top:8px;">印章跨越唐宋元明清多个朝代，记录了《祭侄文稿》流传的完整轨迹。</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  颜真卿 · 字清臣 · 世称颜鲁公<br>
+  「笔落惊风雨，书成泣鬼神」<br>
+  <span style="font-size:11px; opacity:.7;">页面图片来自 Wikimedia Commons，属于公有领域（Public Domain）</span>
+</footer>
+
+<div style="text-align:center;padding:12px;opacity:0.25;font-size:0.7em;letter-spacing:0.1em;">扫地僧创作 · 二〇二六</div>
+<script>document.addEventListener("keydown",e=>{if(e.key==="h"||e.key==="H")window.open("index.html","_self")});</script>
+<script>document.addEventListener("keydown",function(e){if(e.key==="?"||e.key==="/"){e.preventDefault();var p=document.getElementById("ksOverlay");p.style.display=p.style.display==="flex"?"none":"flex"}});</script>
+ <div class="ks-overlay" id="ksOverlay" onclick="if(event.target===this)this.classList.remove('show')" style="display:none;position:fixed;inset:0;background:rgba(20,16,10,0.85);z-index:200;align-items:center;justify-content:center;"> <div style="background:var(--card-bg,#faf7f2);border-radius:16px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);color:var(--text,#3b3223);font-family:inherit;"> <h3 style="text-align:center;margin-bottom:16px;font-size:1.1em;letter-spacing:2px;color:var(--accent,#8b4513);">⌨ 快捷键</h3> <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:0.85em;"> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">H</span><span style="opacity:0.7">回首页</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">1</span><span style="opacity:0.7">老子</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">2</span><span style="opacity:0.7">小学</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">3</span><span style="opacity:0.7">初中</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">4</span><span style="opacity:0.7">高中</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">5</span><span style="opacity:0.7">翻牌</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">6</span><span style="opacity:0.7">接龙</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">7</span><span style="opacity:0.7">消消乐</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">8</span><span style="opacity:0.7">连连看</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">9</span><span style="opacity:0.7">扫雷</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">0</span><span style="opacity:0.7">2048</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">T</span><span style="opacity:0.7">切换主题</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">-</span><span style="opacity:0.7">缩小字号</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">=</span><span style="opacity:0.7">放大字号</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">M</span><span style="opacity:0.7">放大镜</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">←↑</span><span style="opacity:0.7">上一篇</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">→↓</span><span style="opacity:0.7">下一篇</span> </div> <p style="margin-top:14px;text-align:center;font-size:0.75em;opacity:0.7;font-size:0.85em;">按 <b>?</b> 或 <b>/</b> 打开或关闭</p> </div> </div> 
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

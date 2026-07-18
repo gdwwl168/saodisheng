@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a2818"/><stop offset="100%" stop-color="#0a1408"/></radialGradient>
+    <linearGradient id="petal" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#F0A0B8"/><stop offset="100%" stop-color="#FFE0E8"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">28=荷花</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">2像荷茎弯弯立，8是花瓣双层叠</text>
+  <!-- 水面 -->
+  <ellipse cx="512" cy="720" rx="300" ry="30" fill="#1a4020" opacity="0.3"/>
+  <!-- 荷茎 2形弯 -->
+  <path d="M512 720 Q530 600 490 500 Q460 420 512 380" fill="none" stroke="#4a7030" stroke-width="8" stroke-linecap="round"/>
+  <!-- 荷叶 -->
+  <ellipse cx="380" cy="620" rx="70" ry="25" fill="#388E3C" opacity="0.6"/>
+  <ellipse cx="380" cy="618" rx="60" ry="18" fill="#4CAF50" opacity="0.4"/>
+  <path d="M380 620 L380 595" stroke="#2E7D32" stroke-width="1" opacity="0.4"/>
+  <!-- 花瓣 8形双层 -->
+  <!-- 外层 -->
+  <path d="M512 380 Q480 320 460 280 Q450 290 470 320 Q490 280 480 250 Q495 260 500 290 Q510 250 520 240 Q525 260 518 295 Q540 260 550 275 Q538 300 520 325 Q555 300 560 320 Q545 350 512 380Z" fill="url(#petal)" opacity="0.7"/>
+  <!-- 内层花瓣 -->
+  <path d="M512 380 Q495 340 485 310 Q492 315 500 335 Q505 310 512 300 Q518 310 512 338 Q530 315 535 325 Q525 345 512 380Z" fill="#FFD0E0" opacity="0.8"/>
+  <!-- 花蕊 -->
+  <circle cx="512" cy="375" r="10" fill="#FFD580"/>
+  <circle cx="512" cy="375" r="6" fill="#FFC040"/>
+  <!-- 花蕊点 -->
+  <circle cx="508" cy="370" r="1.5" fill="#B88020"/>
+  <circle cx="515" cy="372" r="1.5" fill="#B88020"/>
+  <circle cx="512" cy="378" r="1" fill="#B88020"/>
+  <!-- 莲蓬 -->
+  <ellipse cx="512" cy="372" rx="5" ry="3" fill="#C0E878" opacity="0.6"/>
+  <!-- 露珠 -->
+  <circle cx="390" cy="610" r="4" fill="white" opacity="0.3"/>
+</svg>

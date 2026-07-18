@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<title>扫地僧推二〇四八</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-0: #0a0a10;
+  --bg-1: #14141d;
+  --bg-2: #1f1f2c;
+  --panel: rgba(26, 26, 38, 0.72);
+  --panel-2: rgba(38, 38, 54, 0.5);
+  --border: rgba(255, 200, 100, 0.12);
+  --border-strong: rgba(255, 200, 100, 0.32);
+  --text: #f5e8d4;
+  --text-dim: #8a8aa3;
+  --text-faint: #5a5a72;
+  --accent: #f59e0b;
+  --accent-warm: #ff6b35;
+  --accent-glow: rgba(245, 158, 11, 0.4);
+  --accent-soft: rgba(245, 158, 11, 0.08);
+  --danger: #ef4444;
+  --success: #10b981;
+  --gold: #facc15;
+  --silver: #cbd5e1;
+  --bronze: #fb923c;
+  --cell-empty: #1a1a2e;
+  --cell-top: #3a3a4f;
+  --cell-side: #25253a;
+  --cell-bottom: #15152a;
+  --cell-revealed-1: #161624;
+  --cell-revealed-2: #1d1d2e;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg-0);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(245, 158, 11, 0.10), transparent 50%),
+    radial-gradient(ellipse at 82% 88%, rgba(255, 107, 53, 0.07), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.04), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 28px;
+  gap: 14px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; }
+
+.logo {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -3px 6px rgba(0,0,0,0.2);
+  transform: rotate(-6deg);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 28px;
+}
+
+.logo:hover { transform: rotate(0deg) scale(1.05); }
+.logo img { width: 100%; height: 100%; object-fit: cover; }
+
+.brand h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+}
+
+.brand .sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.action-btn {
+  width: 42px; height: 42px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  color: var(--text-dim);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(12px);
+}
+
+.action-btn:hover {
+  color: var(--accent);
+  border-color: var(--border-strong);
+  background: var(--accent-soft);
+}
+
+.action-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.action-btn svg { width: 20px; height: 20px; }
+
+main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 18px;
+  min-height: 0;
+}
+
+.game-area {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.game-area::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, var(--accent-soft), transparent 60%);
+  pointer-events: none;
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  gap: 16px;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 18px;
+  min-width: 140px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.counter-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+}
+
+.counter.score .counter-icon { background: rgba(245, 158, 11, 0.12); color: var(--accent); }
+.counter.best .counter-icon { background: rgba(16, 185, 129, 0.12); color: var(--success); }
+.counter-icon svg { width: 18px; height: 18px; }
+
+.counter-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.counter-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 16px var(--accent-glow);
+  min-width: 64px;
+}
+
+.counter-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.new-game-btn {
+  width: 64px; height: 64px;
+  border-radius: 18px;
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+  color: #1a1a24;
+  font-size: 32px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4), inset 0 2px 0 rgba(255,255,255,0.35), inset 0 -3px 8px rgba(0,0,0,0.2);
+}
+
+.new-game-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(245, 158, 11, 0.5), inset 0 2px 0 rgba(255,255,255,0.35), inset 0 -3px 8px rgba(0,0,0,0.2);
+}
+
+.new-game-btn:active { transform: translateY(0) scale(0.95); }
+
+.new-game-btn.won {
+  background: linear-gradient(135deg, var(--success), #34d399);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4), inset 0 2px 0 rgba(255,255,255,0.35), inset 0 -3px 8px rgba(0,0,0,0.2);
+}
+
+.board-wrap {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+  min-height: 0;
+}
+
+.board-container {
+  position: relative;
+  background: var(--bg-0);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.02);
+  padding: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.cell {
+  background: var(--cell-empty);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -2px 4px rgba(0,0,0,0.4);
+  transition: transform 0.12s ease;
+}
+
+.cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 50%);
+  pointer-events: none;
+}
+
+.tile {
+  position: absolute;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  transition: transform 0.12s ease;
+  z-index: 1;
+}
+
+.tile-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* Tile colors — warm amber theme */
+.tile-2    { background: linear-gradient(135deg, #3a3a4f, #2a2a3e); color: #cbd5e1; }
+.tile-4    { background: linear-gradient(135deg, #3d3a30, #2d2a20); color: #e2d5b6; }
+.tile-8    { background: linear-gradient(135deg, #5c3a1e, #3c2a0e); color: #f5c882; }
+.tile-16   { background: linear-gradient(135deg, #6b3410, #4b2400); color: #f5a84e; }
+.tile-32   { background: linear-gradient(135deg, #8b3a0e, #5b1a00); color: #ff8844; }
+.tile-64   { background: linear-gradient(135deg, #a02010, #701000); color: #ff6644; }
+.tile-128  { background: linear-gradient(135deg, #b8860b, #8b6500); color: #ffe082; box-shadow: 0 0 12px rgba(245, 158, 11, 0.3); }
+.tile-256  { background: linear-gradient(135deg, #c8960c, #9b7000); color: #ffe082; box-shadow: 0 0 16px rgba(245, 158, 11, 0.4); }
+.tile-512  { background: linear-gradient(135deg, #daa520, #b8860b); color: #fff; box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+.tile-1024 { background: linear-gradient(135deg, #f59e0b, #d97706); color: #1a1a24; box-shadow: 0 0 24px rgba(245, 158, 11, 0.6); }
+.tile-2048 { background: linear-gradient(135deg, #facc15, #f59e0b); color: #1a1a24; box-shadow: 0 0 32px rgba(250, 204, 21, 0.7); animation: glow2048 1.5s ease-in-out infinite; }
+.tile-4096 { background: linear-gradient(135deg, #ff6b35, #e55d2b); color: #fff; box-shadow: 0 0 36px rgba(255, 107, 53, 0.7); }
+.tile-8192 { background: linear-gradient(135deg, #ef4444, #c0392b); color: #fff; box-shadow: 0 0 40px rgba(239, 68, 68, 0.7); }
+.tile-super { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 0 44px rgba(16, 185, 129, 0.7); }
+
+@keyframes glow2048 {
+  0%, 100% { box-shadow: 0 0 28px rgba(250, 204, 21, 0.5); }
+  50% { box-shadow: 0 0 48px rgba(250, 204, 21, 0.9); }
+}
+
+.tile-new {
+  animation: tileAppear 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes tileAppear {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.tile-merged {
+  animation: tileMerge 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2;
+}
+
+@keyframes tileMerge {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ====== 青烟效果 ====== */
+.smoke-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  overflow: visible;
+}
+
+.zen-smoke {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, rgba(200, 175, 140, 0.85), rgba(160, 140, 110, 0.4), transparent 65%);
+  filter: blur(3px);
+  animation: zenSmokeRise var(--smoke-dur, 2s) var(--smoke-delay, 0s) ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes zenSmokeRise {
+  0% {
+    transform: translate(0, 0) scale(0.3);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--smoke-dx, -12px), var(--smoke-dy, -120px)) scale(var(--smoke-scale, 3));
+    opacity: 0;
+  }
+}
+
+/* ====== 侧边栏 ====== */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+}
+
+.panel-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  backdrop-filter: blur(12px);
+}
+
+.panel-title {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title::before {
+  content: '';
+  width: 4px; height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+.stat-row:first-child { padding-top: 0; }
+.stat-label { color: var(--text-dim); font-size: 13px; }
+.stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text); font-size: 15px; }
+
+.continue-btn {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(255, 107, 53, 0.12));
+  border: 1px solid var(--border-strong);
+  color: var(--accent);
+  padding: 12px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.continue-btn:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(255, 107, 53, 0.2));
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.continue-btn:active { transform: scale(0.98); }
+.continue-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.continue-btn svg { width: 16px; height: 16px; }
+
+.how-to { flex: 1; overflow-y: auto; }
+.how-to ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.how-to li {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  padding-left: 20px;
+  position: relative;
+}
+
+.how-to li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px; height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+.how-to strong { color: var(--text); font-weight: 600; }
+
+/* ====== Toast ====== */
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: var(--panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 12px 22px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  pointer-events: none;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.win { border-color: var(--success); color: var(--success); }
+.toast.lose { border-color: var(--danger); color: var(--danger); }
+
+/* ====== Overlay ====== */
+.overlay {
+  position: absolute;
+  inset: 22px;
+  background: rgba(10, 10, 16, 0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.overlay.show { opacity: 1; pointer-events: all; }
+
+.overlay-content {
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.overlay.show .overlay-content { transform: translateY(0); }
+
+.overlay-icon { font-size: 64px; margin-bottom: 12px; line-height: 1; }
+.overlay-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 38px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.overlay.win .overlay-title {
+  background: linear-gradient(135deg, var(--success), #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.overlay.lose .overlay-title {
+  background: linear-gradient(135deg, var(--danger), #f87171);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.overlay-subtitle { color: var(--text-dim); font-size: 14px; margin-bottom: 24px; }
+.overlay-final-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 20px var(--accent-glow);
+  margin-bottom: 8px;
+}
+
+.overlay-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.overlay-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+  color: #1a1a24;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+.overlay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px var(--accent-glow);
+}
+
+.overlay-btn.secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  box-shadow: none;
+}
+
+.overlay-btn.secondary:hover {
+  background: var(--accent-soft);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* ====== 上滑指示器 ====== */
+.swipe-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 42px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.15s;
+  color: var(--accent);
+  text-shadow: 0 0 18px var(--accent-glow);
+}
+
+.swipe-indicator.active { opacity: 0.7; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+@media (max-width: 900px) {
+  main { grid-template-columns: 1fr; }
+  .side-panel { display: none; }
+  .app { padding: 14px; }
+  .brand h1 { font-size: 22px; }
+}
+
+@media (max-width: 600px) {
+  .counter { padding: 8px 12px; min-width: auto; }
+  .counter-value { font-size: 20px; min-width: 50px; }
+  .new-game-btn { width: 52px; height: 52px; font-size: 26px; }
+  .action-btn { width: 38px; height: 38px; }
+  .board-container { padding: 7px; }
+  .board { gap: 7px; }
+  .overlay-btn { padding: 10px 18px; font-size: 13px; }
+  .overlay-title { font-size: 28px; }
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <img src="12345.png" alt="logo" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div>
+        <h1>扫地僧推二〇四八</h1>
+        <div class="sub">2048 MERGE · ZEN MONK STYLE</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="action-btn" id="undo-btn" title="悔棋" aria-label="悔棋">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10"/>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+        </svg>
+      </button>
+      <button class="action-btn" id="sound-btn" title="声音开关" aria-label="声音开关">
+        <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        </svg>
+        <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+          <line x1="23" y1="9" x2="17" y2="15"/>
+          <line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="game-area" id="game-area">
+      <div class="status-bar">
+        <div class="counter score">
+          <div class="counter-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <div class="counter-inner">
+            <span class="counter-label">分数</span>
+            <span class="counter-value" id="score">0</span>
+          </div>
+        </div>
+        <button class="new-game-btn" id="new-game-btn" title="重新开始" aria-label="重新开始">⟳</button>
+        <div class="counter best">
+          <div class="counter-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+              <path d="M4 22h16"/>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+            </svg>
+          </div>
+          <div class="counter-inner">
+            <span class="counter-label">最佳</span>
+            <span class="counter-value" id="best-score">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="board-wrap">
+        <div class="board-container" id="board-container">
+          <div class="board" id="board"></div>
+          <div class="swipe-indicator" id="swipe-indicator"></div>
+        </div>
+      </div>
+
+      <div class="overlay" id="overlay">
+        <div class="overlay-content">
+          <div class="overlay-icon" id="overlay-icon">🎉</div>
+          <div class="overlay-final-score" id="overlay-score">0</div>
+          <div class="overlay-title" id="overlay-title">功德圆满</div>
+          <div class="overlay-subtitle" id="overlay-subtitle">你已参透二〇四八的禅机</div>
+          <div class="overlay-actions">
+            <button class="overlay-btn" id="overlay-continue">继续参悟</button>
+            <button class="overlay-btn secondary" id="overlay-restart">重新修行</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side-panel">
+      <div class="panel-card">
+        <div class="panel-title">修行统计</div>
+        <div class="stat-row">
+          <span class="stat-label">当前步数</span>
+          <span class="stat-value" id="stat-moves">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">最高方块</span>
+          <span class="stat-value" id="stat-max-tile">--</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">历史最高方块</span>
+          <span class="stat-value" id="stat-best-tile">--</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">历史最高分</span>
+          <span class="stat-value" id="stat-best-score">--</span>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title">参悟心法</div>
+        <button class="continue-btn" id="continue-btn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          已达2048，继续突破
+        </button>
+        <div class="how-to">
+          <ul>
+            <li><strong>方向键 / WASD</strong> 推运方块</li>
+            <li><strong>触屏滑动</strong> 挪移乾坤</li>
+            <li>同数相合，衍生倍数</li>
+            <li>合至<strong>2048</strong>方为小成</li>
+            <li>格子满而无路，修行失败</li>
+            <li><strong>Ctrl+Z</strong> 或点↶ 悔棋一步</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   声音系统 —— 钢琴音色 + Web Audio API 合成
+   ============================================================ */
+const Sound = {
+  ctx: null,
+  enabled: true,
+  masterGain: null,
+
+  init() {
+    if (this.ctx) {
+      if (this.ctx.state === 'suspended') {
+        this.ctx.resume().catch(() => {});
+      }
+      return;
+    }
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AC();
+      this.masterGain = this.ctx.createGain();
+      this.masterGain.gain.value = 0.45;
+      this.masterGain.connect(this.ctx.destination);
+    } catch (e) {}
+  },
+
+  unlock() {
+    if (!this.ctx) this.init();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
+  },
+
+  toggle() {
+    this.enabled = !this.enabled;
+    if (this.masterGain) {
+      this.masterGain.gain.value = this.enabled ? 0.45 : 0;
+    }
+    return this.enabled;
+  },
+
+  // ── 基础音色引擎 ──
+  _piano(freq, velocity = 0.7, duration = 1.2) {
+    if (!this.ctx || !this.enabled) return;
+    const ctx = this.ctx;
+    const t = ctx.currentTime;
+    const harmonics = [
+      { mult: 1.0, gain: 1.0 },
+      { mult: 2.0, gain: 0.5 },
+      { mult: 3.0, gain: 0.25 },
+      { mult: 4.0, gain: 0.12 },
+    ];
+    harmonics.forEach(h => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      const detune = (Math.random() - 0.5) * 3;
+      osc.frequency.setValueAtTime(h.mult * freq + detune, t);
+      const vol = h.gain * velocity * 0.2;
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(vol * 0.5, t + 0.1);
+      g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+      osc.connect(g);
+      g.connect(this.masterGain);
+      osc.start(t);
+      osc.stop(t + duration + 0.1);
+    });
+  },
+
+  _pianoSoft(freq, velocity = 0.06, duration = 0.35) {
+    if (!this.ctx || !this.enabled) return;
+    const ctx = this.ctx;
+    const t = ctx.currentTime;
+    [1.0, 2.0].forEach(mult => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(mult * freq, t);
+      const vol = (1 / mult) * velocity;
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+      osc.connect(g);
+      g.connect(this.masterGain);
+      osc.start(t);
+      osc.stop(t + duration + 0.05);
+    });
+  },
+
+  // ── 木鱼声 ── 空心木质敲击，禅修韵味
+  _woodenFish() {
+    if (!this.ctx || !this.enabled) return;
+    const ctx = this.ctx;
+    const t = ctx.currentTime;
+    const baseFreq = 280; // 280 Hz，木鱼基频
+
+    // ① 敲击瞬态 — 噪声模拟木槌击打瞬间
+    const bufSize = Math.floor(ctx.sampleRate * 0.025);
+    const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.06));
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const bf = ctx.createBiquadFilter();
+    bf.type = 'bandpass';
+    bf.frequency.setValueAtTime(baseFreq * 0.9, t);
+    bf.Q.setValueAtTime(1.2, t);
+    const gn = ctx.createGain();
+    gn.gain.setValueAtTime(0.18, t);
+    gn.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+    src.connect(bf);
+    bf.connect(gn);
+    gn.connect(this.masterGain);
+    src.start(t);
+    src.stop(t + 0.03);
+
+    // ② 木腔体共振 — 三角波，空心木头的主体音色
+    const oscBody = ctx.createOscillator();
+    const gBody = ctx.createGain();
+    oscBody.type = 'triangle';
+    oscBody.frequency.setValueAtTime(baseFreq, t);
+    oscBody.frequency.exponentialRampToValueAtTime(baseFreq * 0.70, t + 0.12);
+    gBody.gain.setValueAtTime(0.20, t);
+    gBody.gain.setValueAtTime(0.16, t + 0.01);
+    gBody.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+    oscBody.connect(gBody);
+    gBody.connect(this.masterGain);
+    oscBody.start(t);
+    oscBody.stop(t + 0.26);
+
+    // ③ 空腔低频 — 正弦波，木鱼中空腔体的低沉嗡鸣
+    const oscCavity = ctx.createOscillator();
+    const gCavity = ctx.createGain();
+    oscCavity.type = 'sine';
+    oscCavity.frequency.setValueAtTime(baseFreq * 0.55, t);
+    gCavity.gain.setValueAtTime(0.16, t);
+    gCavity.gain.setValueAtTime(0.12, t + 0.015);
+    gCavity.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+    oscCavity.connect(gCavity);
+    gCavity.connect(this.masterGain);
+    oscCavity.start(t);
+    oscCavity.stop(t + 0.42);
+
+    // ④ 木质泛音 — 轻微高次谐波，木头纹理感
+    const oscWood = ctx.createOscillator();
+    const gWood = ctx.createGain();
+    oscWood.type = 'sine';
+    oscWood.frequency.setValueAtTime(baseFreq * 2.05, t);
+    gWood.gain.setValueAtTime(0.06, t);
+    gWood.gain.exponentialRampToValueAtTime(0.001, t + 0.10);
+    oscWood.connect(gWood);
+    gWood.connect(this.masterGain);
+    oscWood.start(t);
+    oscWood.stop(t + 0.12);
+  },
+
+  // 公开接口
+  woodenFish() {
+    this._woodenFish();
+  },
+
+  _ping(freq, velocity = 0.08, duration = 0.18) {
+    // 明亮短促的叮声
+    if (!this.ctx || !this.enabled) return;
+    const ctx = this.ctx;
+    const t = ctx.currentTime;
+    [1.0, 2.0, 3.0].forEach(mult => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(mult * freq, t);
+      const vol = (1 / mult) * velocity;
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+      osc.connect(g);
+      g.connect(this.masterGain);
+      osc.start(t);
+      osc.stop(t + duration + 0.02);
+    });
+  },
+
+  _pickFreq() {
+    // 从丰富音池中选音高，带随机跳跃
+    const r = Math.random();
+    if (r < 0.4) {
+      const pool = [262, 294, 330, 349, 392, 440, 494, 523, 587, 659, 698, 784];
+      return pool[Math.floor(Math.random() * pool.length)];
+    } else if (r < 0.7) {
+      return 220 + Math.random() * 560;
+    } else if (r < 0.9) {
+      const low = [131, 147, 165, 196, 220, 247];
+      return low[Math.floor(Math.random() * low.length)];
+    } else {
+      const high = [880, 988, 1047, 1175, 1319, 1568];
+      return high[Math.floor(Math.random() * high.length)];
+    }
+  },
+
+  // ── 20 种滑动音色（每次随机抽选）──
+  move() {
+    if (!this.ctx || !this.enabled) return;
+    const style = Math.floor(Math.random() * 20);
+    const freq = this._pickFreq();
+    const ctx = this.ctx;
+    const t = ctx.currentTime;
+
+    switch (style) {
+      case 0: // 轻柔单音
+        this._pianoSoft(freq, 0.06);
+        break;
+      case 1: // 双音五度和声
+        this._pianoSoft(freq, 0.05);
+        this._pianoSoft(freq * 1.5, 0.04);
+        break;
+      case 2: // 前倚音装饰 — 低半音滑入
+        this._pianoSoft(freq * 0.85, 0.04, 0.15);
+        setTimeout(() => this._pianoSoft(freq, 0.07, 0.28), 35);
+        break;
+      case 3: // 八度跳跃 — 低高交替
+        this._pianoSoft(freq * 0.5, 0.05, 0.20);
+        setTimeout(() => this._pianoSoft(freq, 0.06, 0.25), 50);
+        break;
+      case 4: // 上行小琶音 — 三连音
+        this._pianoSoft(freq, 0.04, 0.18);
+        setTimeout(() => this._pianoSoft(freq * 1.25, 0.04, 0.18), 40);
+        setTimeout(() => this._pianoSoft(freq * 1.5, 0.05, 0.20), 80);
+        break;
+      case 5: // 下行小琶音
+        this._pianoSoft(freq * 1.5, 0.05, 0.18);
+        setTimeout(() => this._pianoSoft(freq * 1.25, 0.04, 0.18), 35);
+        setTimeout(() => this._pianoSoft(freq, 0.06, 0.20), 70);
+        break;
+      case 6: // 断奏弹跳 — 极短促
+        this._ping(freq, 0.09, 0.10);
+        break;
+      case 7: // 双断奏
+        this._ping(freq, 0.07, 0.08);
+        setTimeout(() => this._ping(freq * 1.2, 0.06, 0.08), 50);
+        break;
+      case 8: // 颤音 — 快速交替
+        this._pianoSoft(freq, 0.04, 0.10);
+        setTimeout(() => this._pianoSoft(freq * 1.06, 0.04, 0.10), 30);
+        setTimeout(() => this._pianoSoft(freq, 0.04, 0.10), 60);
+        break;
+      case 9: // 柔和钟声 — 长延音泛音
+        this._piano(freq, 0.15, 2.5);
+        setTimeout(() => this._piano(freq * 2, 0.08, 1.8), 120);
+        break;
+      case 10: // 钢片琴闪烁 — 高音明亮
+        this._ping(freq * 2, 0.10, 0.22);
+        setTimeout(() => this._ping(freq * 3, 0.06, 0.18), 70);
+        break;
+      case 11: // 爵士摇摆 — 附点节奏
+        this._pianoSoft(freq, 0.06, 0.30);
+        setTimeout(() => this._pianoSoft(freq * 1.33, 0.04, 0.18), 100);
+        break;
+      case 12: // 五声漫步 — 羽调上行
+        this._pianoSoft(freq, 0.05, 0.22);
+        setTimeout(() => this._pianoSoft(freq * 1.2, 0.04, 0.20), 55);
+        setTimeout(() => this._pianoSoft(freq * 1.5, 0.05, 0.22), 110);
+        break;
+      case 13: // 蓝调弯音 — 微降半音
+        const bend = freq * 0.94;
+        this._pianoSoft(bend, 0.05, 0.25);
+        setTimeout(() => this._pianoSoft(freq, 0.06, 0.25), 60);
+        break;
+      case 14: // 回声 — 同音延迟弱化
+        this._pianoSoft(freq, 0.08, 0.28);
+        setTimeout(() => this._pianoSoft(freq, 0.04, 0.20), 150);
+        setTimeout(() => this._pianoSoft(freq, 0.02, 0.15), 280);
+        break;
+      case 15: // 马林巴 — 短促低频
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq * 0.5, t);
+        g.gain.setValueAtTime(0.07, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+        osc.connect(g);
+        g.connect(this.masterGain);
+        osc.start(t);
+        osc.stop(t + 0.3);
+        break;
+      case 16: // 竖琴刮奏 — 快速连音
+        for (let i = 0; i < 4; i++) {
+          setTimeout(() => this._pianoSoft(freq * Math.pow(1.12, i), 0.04, 0.12), i * 25);
+        }
+        break;
+      case 17: // 华丽颤音 — 大三度颤音
+        this._pianoSoft(freq, 0.06, 0.30);
+        setTimeout(() => this._pianoSoft(freq * 1.26, 0.05, 0.28), 52);
+        setTimeout(() => this._pianoSoft(freq, 0.06, 0.30), 104);
+        break;
+      case 18: // 风铃 — 高音渐散
+        const chimes = [freq * 1.5, freq * 2, freq * 2.5, freq * 3];
+        chimes.forEach((f, i) => {
+          setTimeout(() => this._ping(f, 0.05 - i * 0.01, 0.3 + i * 0.1), i * 45);
+        });
+        break;
+      case 19: // 爵士低音 — 低沉漫步
+        this._piano(freq * 0.5, 0.18, 0.55);
+        setTimeout(() => this._piano(freq * 0.67, 0.14, 0.45), 120);
+        break;
+    }
+  },
+
+  // ── 20 种合并音色（每次随机抽选）──
+  merge(value) {
+    if (!this.ctx || !this.enabled) return;
+    const baseFreq = 220 + Math.log2(value) * 42;
+    const velocity = Math.min(0.55, 0.1 + Math.log2(value) * 0.06);
+    const duration = Math.min(1.8, 0.5 + Math.log2(value) * 0.12);
+    const style = Math.floor(Math.random() * 20);
+
+    const playNote = (f, v, d, delay) => {
+      setTimeout(() => this._piano(f, v, d), delay);
+    };
+
+    switch (style) {
+      case 0: // 双音齐鸣 — 纯五度
+        playNote(baseFreq, velocity, duration, 0);
+        playNote(baseFreq * 1.5, velocity * 0.7, duration * 0.8, 40);
+        break;
+      case 1: // 大三和弦齐奏
+        playNote(baseFreq, velocity, duration, 0);
+        playNote(baseFreq * 1.25, velocity * 0.65, duration * 0.85, 30);
+        playNote(baseFreq * 1.5, velocity * 0.6, duration * 0.75, 60);
+        break;
+      case 2: // 滚奏琶音 — 从低到高
+        playNote(baseFreq, velocity * 0.5, duration * 0.6, 0);
+        playNote(baseFreq * 1.25, velocity * 0.6, duration * 0.7, 30);
+        playNote(baseFreq * 1.5, velocity * 0.7, duration * 0.8, 60);
+        playNote(baseFreq * 2, velocity * 0.6, duration * 0.9, 90);
+        break;
+      case 3: // 反琶音 — 从高到低
+        playNote(baseFreq * 2, velocity * 0.6, duration * 0.7, 0);
+        playNote(baseFreq * 1.5, velocity * 0.6, duration * 0.7, 35);
+        playNote(baseFreq * 1.25, velocity * 0.55, duration * 0.7, 70);
+        playNote(baseFreq, velocity * 0.65, duration, 105);
+        break;
+      case 4: // 四度和声 — 空灵
+        playNote(baseFreq, velocity, duration, 0);
+        playNote(baseFreq * 1.33, velocity * 0.65, duration * 0.8, 45);
+        playNote(baseFreq * 1.75, velocity * 0.55, duration * 0.7, 90);
+        break;
+      case 5: // 八度大跳
+        playNote(baseFreq, velocity * 0.7, duration * 0.6, 0);
+        playNote(baseFreq * 2, velocity * 0.8, duration, 55);
+        break;
+      case 6: // 前倚音加强 — 装饰音后主音
+        playNote(baseFreq * 0.8, velocity * 0.3, 0.15, 0);
+        playNote(baseFreq, velocity * 0.85, duration, 40);
+        playNote(baseFreq * 1.5, velocity * 0.5, duration * 0.7, 80);
+        break;
+      case 7: // 强力重击 — 短而响亮
+        playNote(baseFreq, velocity * 1.2, duration * 0.5, 0);
+        playNote(baseFreq * 1.5, velocity * 0.8, duration * 0.45, 25);
+        break;
+      case 8: // 钟声延音 — 长泛音
+        playNote(baseFreq, velocity * 0.55, duration * 2, 0);
+        setTimeout(() => playNote(baseFreq * 2, velocity * 0.35, duration * 1.5, 0), 150);
+        break;
+      case 9: // 颤音合奏 — 微细抖动
+        playNote(baseFreq, velocity * 0.65, duration, 0);
+        playNote(baseFreq * 1.02, velocity * 0.3, duration * 0.5, 50);
+        playNote(baseFreq * 1.5, velocity * 0.55, duration * 0.9, 70);
+        break;
+      case 10: // 泛音列 — 自然泛音上行
+        [1, 2, 3, 4, 5].forEach((mult, i) => {
+          playNote(baseFreq * mult, velocity * (1 / mult) * 1.2, duration * (1 - i * 0.15), i * 40);
+        });
+        break;
+      case 11: // 小七和弦 — 蓝调风味
+        playNote(baseFreq, velocity * 0.65, duration, 0);
+        playNote(baseFreq * 1.2, velocity * 0.5, duration * 0.85, 45);
+        playNote(baseFreq * 1.5, velocity * 0.55, duration * 0.8, 85);
+        playNote(baseFreq * 1.75, velocity * 0.4, duration * 0.7, 120);
+        break;
+      case 12: // 悬挂和弦 — 张力后释放
+        playNote(baseFreq, velocity * 0.6, duration * 0.7, 0);
+        playNote(baseFreq * 1.26, velocity * 0.55, duration * 0.8, 50);
+        playNote(baseFreq * 1.5, velocity * 0.6, duration, 100);
+        break;
+      case 13: // 华尔兹 — 强弱弱
+        playNote(baseFreq, velocity * 0.8, duration * 0.9, 0);
+        playNote(baseFreq * 1.25, velocity * 0.4, duration * 0.5, 120);
+        playNote(baseFreq * 1.5, velocity * 0.35, duration * 0.5, 220);
+        break;
+      case 14: // 探戈切分
+        playNote(baseFreq, velocity * 0.5, duration * 0.4, 0);
+        playNote(baseFreq * 1.5, velocity * 0.75, duration * 0.9, 70);
+        playNote(baseFreq * 1.25, velocity * 0.4, duration * 0.5, 160);
+        break;
+      case 15: // 东方五声 — 宫商角徵羽
+        const pentFreqs = [baseFreq, baseFreq * 1.125, baseFreq * 1.25, baseFreq * 1.5, baseFreq * 1.6875];
+        pentFreqs.forEach((f, i) => {
+          playNote(f, velocity * (0.4 + i * 0.12), duration * (0.5 + i * 0.1), i * 55);
+        });
+        break;
+      case 16: // 大跳炫技
+        playNote(baseFreq * 0.5, velocity * 0.5, duration * 0.5, 0);
+        playNote(baseFreq * 2, velocity * 0.75, duration * 0.85, 60);
+        playNote(baseFreq * 1.5, velocity * 0.55, duration * 0.7, 130);
+        break;
+      case 17: // 晶莹叮咚
+        this._ping(baseFreq, velocity * 0.6, 0.12);
+        setTimeout(() => this._ping(baseFreq * 1.5, velocity * 0.5, 0.10), 40);
+        playNote(baseFreq, velocity * 0.55, duration * 0.8, 90);
+        break;
+      case 18: // 渐强滚奏 — 音量递增
+        for (let i = 0; i < 6; i++) {
+          playNote(baseFreq * [1, 1.12, 1.25, 1.33, 1.5, 2][i], velocity * (0.2 + i * 0.12), duration * 0.6, i * 28);
+        }
+        break;
+      case 19: // 收束和弦 — 三音同时后延音
+        playNote(baseFreq, velocity * 0.6, duration * 1.6, 0);
+        playNote(baseFreq * 1.5, velocity * 0.5, duration * 1.4, 15);
+        playNote(baseFreq * 2, velocity * 0.4, duration * 1.8, 30);
+        break;
+    }
+  },
+
+  // ── 20 种连锁风格（每次随机抽选）──
+  _generatePhrase(totalNotes, startFreq) {
+    const p = [1, 9/8, 5/4, 4/3, 3/2, 5/3, 16/9]; // 自然音阶比率
+    const t = totalNotes;
+    const f = startFreq;
+    const style = Math.floor(Math.random() * 20);
+    const notes = [];
+
+    switch (style) {
+      case 0: // 舒缓上行
+        for (let i = 0; i < t; i++) {
+          notes.push({ f: f * p[i % 7] * (1 + Math.floor(i / 7)), d: i * 100, v: 0.04 + i / t * 0.06 });
+        } break;
+      case 1: // 急流下行
+        for (let i = 0; i < t; i++) {
+          const idx = t - 1 - i;
+          notes.push({ f: f * p[idx % 7] * (1 + Math.floor(idx / 7)), d: i * 65, v: 0.10 - i / t * 0.04 });
+        } break;
+      case 2: // 波浪起伏
+        for (let i = 0; i < t; i++) {
+          const wave = Math.sin(i * Math.PI / (t * 0.5)) * Math.min(t / 2, 8);
+          const idx = Math.max(0, Math.round(wave));
+          notes.push({ f: f * p[idx % 7] * (1 + Math.floor(idx / 7)), d: i * 60 + Math.random() * 20, v: 0.04 + Math.abs(Math.sin(i / t * Math.PI)) * 0.07 });
+        } break;
+      case 3: // 跳跃和弦 — 分解大跳
+        for (let i = 0; i < t; i++) {
+          const deg = [1, 5/4, 3/2, 2, 3, 1.5, 2.5, 4][i % 8];
+          notes.push({ f: f * deg, d: i * 50, v: 0.05 + (i % 3 === 0 ? 0.05 : 0) });
+        } break;
+      case 4: // 五声漫步 — 随机上下
+        for (let i = 0, s = 0; i < t; i++) {
+          s = Math.max(0, s + Math.floor(Math.random() * 5) - 2);
+          notes.push({ f: f * p[s % 7] * (1 + Math.floor(s / 7)), d: i * 65 + Math.random() * 30, v: 0.04 + Math.random() * 0.05 });
+        } break;
+      case 5: // 爵士摇摆
+        for (let i = 0; i < t; i++) {
+          notes.push({ f: f * p[i % 7] * (1 + Math.floor(i / 6)), d: Math.floor(i / 2) * 140 + (i % 2) * 35, v: i % 2 ? 0.05 : 0.09 });
+        } break;
+      case 6: // 古典琶音 — 三连音
+        for (let i = 0; i < t; i++) {
+          const oct = 1 + Math.floor(i / 3);
+          notes.push({ f: f * [1, 1.25, 1.5][i % 3] * oct, d: i * 75, v: 0.06 + i / t * 0.04 });
+        } break;
+      case 7: // 蓝调弯音 — 半音偏移
+        for (let i = 0; i < t; i++) {
+          const bend = (Math.random() - 0.5) * 0.05;
+          notes.push({ f: f * (p[i % 7] + bend) * (1 + Math.floor(i / 7)), d: i * 80, v: 0.04 + Math.random() * 0.06 });
+        } break;
+      case 8: // 东方五声 — 羽调式
+        for (let i = 0; i < t; i++) {
+          const order = [0, 2, 4, 1, 3, 5, 6];
+          notes.push({ f: f * p[order[i % 7]] * (1 + Math.floor(i / 7)), d: i * 90, v: 0.05 + i / t * 0.05 });
+        } break;
+      case 9: // 华尔兹 — 强-弱-弱
+        for (let i = 0; i < t; i++) {
+          notes.push({ f: f * p[i % 7] * (1 + Math.floor(i / 7)), d: i * 95, v: i % 3 === 0 ? 0.10 : 0.03 });
+        } break;
+      case 10: // 探戈切分
+        for (let i = 0; i < t; i++) {
+          const synco = i % 4 === 2 ? 0.10 : (i % 4 === 0 ? 0.06 : 0.03);
+          notes.push({ f: f * p[i % 7] * (1 + Math.floor(i / 7)), d: i * 55, v: synco });
+        } break;
+      case 11: // 急速冲刺
+        for (let i = 0; i < t; i++) {
+          notes.push({ f: f * p[i % 7] * (2 + Math.floor(i / 5)), d: i * Math.max(12, 70 - i * 2.5), v: 0.04 + i / t * 0.07 });
+        } break;
+      case 12: // 钟声齐鸣 — 泛音列
+        for (let i = 0; i < t; i++) {
+          const overtones = [1, 2, 3, 4, 5, 6, 8];
+          notes.push({ f: f * overtones[i % 7], d: i * 115, v: 0.09 - i / t * 0.04 });
+        } break;
+      case 13: // 梦幻涟漪
+        for (let i = 0; i < t; i++) {
+          notes.push({ f: f * p[i % 7] * (1 + Math.floor(i / 7)), d: i * 38, v: 0.03 + 0.02 * Math.sin(i * 0.8) });
+        } break;
+      case 14: // 进行曲 — 坚定均匀
+        for (let i = 0; i < t; i++) {
+          notes.push({ f: f * p[i % 7] * (1 + Math.floor(i / 7)), d: i * 125, v: 0.08 });
+        } break;
+      case 15: // 自由散板
+        for (let i = 0, acc = 0; i < t; i++) {
+          const gap = 38 + Math.random() * 135;
+          acc += gap;
+          notes.push({ f: f * p[i % 7] * (1 + Math.floor(i / 7)), d: acc, v: 0.04 + Math.random() * 0.07 });
+        } break;
+      case 16: // 滚奏连音
+        for (let i = 0; i < t; i++) {
+          notes.push({ f: f * p[Math.floor(i / 3) % 7] * (1 + Math.floor(i / 12)), d: i * 20, v: 0.025 + (i % 3 === 0 ? 0.05 : 0) });
+        } break;
+      case 17: // 问答对位
+        for (let i = 0; i < t; i++) {
+          const oct = i % 2 === 0 ? 2 : 1;
+          notes.push({ f: f * p[i % 7] * oct, d: i * 85, v: i % 2 === 0 ? 0.07 : 0.05 });
+        } break;
+      case 18: // 大跳炫技
+        for (let i = 0; i < t; i++) {
+          const leap = i % 3 === 0 ? 3 : (i % 3 === 1 ? 0.5 : 1);
+          notes.push({ f: f * p[i % 7] * leap, d: i * 72, v: 0.05 + (i % 3 === 0 ? 0.05 : 0) });
+        } break;
+      case 19: // 先慢后快再慢收 — 华彩
+        for (let i = 0; i < t; i++) {
+          const pos = i / t;
+          const spacing = pos < 0.2 ? 135 : (pos < 0.65 ? 55 : 95);
+          notes.push({ f: f * p[i % 7] * (1 + Math.floor(i / 5)), d: i * spacing, v: pos < 0.2 ? 0.05 : (pos < 0.7 ? 0.10 : 0.04) });
+        } break;
+    }
+    return notes;
+  },
+
+  cascade(count) {
+    if (!this.ctx || !this.enabled) return;
+    const totalNotes = Math.min(30, Math.max(2, count));
+    const startFreq = this._pickFreq();
+    const phrase = this._generatePhrase(totalNotes, startFreq);
+
+    phrase.forEach(note => {
+      setTimeout(() => this._pianoSoft(note.f, note.v, 0.28), note.d);
+    });
+
+    // 收尾和弦
+    const lastDelay = phrase.length > 0 ? phrase[phrase.length - 1].d : 0;
+    setTimeout(() => {
+      this._piano(startFreq, 0.18, 2.0);
+      setTimeout(() => this._piano(startFreq * 1.5, 0.14, 1.6), 100);
+      setTimeout(() => this._piano(startFreq * 2, 0.10, 1.8), 200);
+    }, lastDelay + 150);
+  },
+
+  // ── 新游戏开场 ──
+  newGame() {
+    if (!this.ctx || !this.enabled) return;
+    const ctx = this.ctx;
+    const t = ctx.currentTime;
+    const melody = [262, 330, 392, 523, 659, 523, 392, 330];
+    melody.forEach((freq, i) => {
+      setTimeout(() => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        g.gain.setValueAtTime(0.08, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+        osc.connect(g);
+        g.connect(this.masterGain);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+      }, i * 80);
+    });
+  },
+
+  // ── 胜利（20种随机）──
+  win() {
+    if (!this.ctx || !this.enabled) return;
+    const r = Math.random();
+    let melody;
+    if (r < 0.15) {
+      melody = [262, 330, 392, 523, 659, 784, 1047, 1319];
+    } else if (r < 0.30) {
+      melody = [392, 523, 659, 784, 1047, 1319, 1568, 2093];
+    } else if (r < 0.45) {
+      melody = [196, 262, 330, 392, 523, 659, 784, 523, 392];
+    } else if (r < 0.60) {
+      melody = [262, 392, 523, 330, 659, 392, 784, 523, 1047];
+    } else if (r < 0.72) {
+      // 琶音上行
+      melody = [262, 330, 392, 523, 659, 784, 880, 1047, 1319, 1568];
+    } else if (r < 0.83) {
+      // 凯旋进行曲
+      melody = [523, 523, 523, 659, 784, 784, 659, 784, 1047, 784];
+    } else if (r < 0.92) {
+      // 舒缓颂歌
+      melody = [262, 330, 262, 392, 330, 523, 392, 659, 523, 784, 1047];
+    } else {
+      // 华丽终曲
+      melody = [262, 392, 330, 523, 392, 659, 523, 784, 659, 1047, 784, 1319, 1047, 1568];
+    }
+    melody.forEach((freq, i) => {
+      const vel = 0.5 + (i / melody.length) * 0.35;
+      setTimeout(() => this._piano(freq, vel, 1.3), i * 80 + Math.random() * 15);
+    });
+  },
+
+  // ── 失败（20种随机）──
+  lose() {
+    if (!this.ctx || !this.enabled) return;
+    const r = Math.random();
+    let notes;
+    if (r < 0.25) {
+      notes = [[440, 0, 0.28, 0.8], [349, 140, 0.26, 0.7], [277, 280, 0.24, 0.8], [220, 430, 0.22, 1.1]];
+    } else if (r < 0.45) {
+      notes = [[523, 0, 0.26, 0.6], [392, 130, 0.25, 0.65], [294, 270, 0.24, 0.75], [196, 420, 0.22, 1.2]];
+    } else if (r < 0.63) {
+      notes = [[659, 0, 0.25, 0.5], [440, 120, 0.24, 0.6], [330, 250, 0.23, 0.7], [165, 400, 0.20, 1.4]];
+    } else if (r < 0.78) {
+      notes = [[330, 0, 0.24, 0.7], [294, 120, 0.22, 0.65], [262, 240, 0.20, 0.75], [220, 370, 0.18, 1.0], [175, 500, 0.15, 1.3]];
+    } else if (r < 0.90) {
+      notes = [[392, 0, 0.30, 0.55], [311, 100, 0.27, 0.6], [262, 200, 0.23, 0.7], [208, 320, 0.20, 0.9], [156, 440, 0.16, 1.2]];
+    } else {
+      // 半音阶下行
+      notes = [[466, 0, 0.22, 0.45], [440, 90, 0.21, 0.5], [415, 180, 0.20, 0.55], [392, 270, 0.19, 0.6], [370, 360, 0.17, 0.7], [349, 450, 0.15, 0.85]];
+    }
+    notes.forEach(([freq, delay, vel, dur]) => {
+      setTimeout(() => this._piano(freq, vel, dur), delay);
+    });
+  },
+
+  // ── 无效操作（20种随机趣味音）──
+  invalid() {
+    if (!this.ctx || !this.enabled) return;
+    const style = Math.floor(Math.random() * 20);
+    const ctx = this.ctx;
+    const t = ctx.currentTime;
+
+    switch (style) {
+      case 0: case 1: case 2: // 低沉短音
+        [110, 100, 90][style].forEach(f => {
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, t);
+          g.gain.setValueAtTime(0.07, t);
+          g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+          osc.connect(g);
+          g.connect(this.masterGain);
+          osc.start(t);
+          osc.stop(t + 0.15);
+        });
+        break;
+      case 3: case 4: // 木头敲击声 — 短促噪音
+        const bufSize = ctx.sampleRate * 0.08;
+        const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, 3);
+        const src = ctx.createBufferSource();
+        src.buffer = buffer;
+        const gf = ctx.createBiquadFilter();
+        gf.type = 'bandpass';
+        gf.frequency.setValueAtTime(style === 3 ? 400 : 600, t);
+        gf.Q.setValueAtTime(2, t);
+        const gn = ctx.createGain();
+        gn.gain.setValueAtTime(0.08, t);
+        gn.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+        src.connect(gf); gf.connect(gn); gn.connect(this.masterGain);
+        src.start(t); src.stop(t + 0.1);
+        break;
+      case 5: case 6: // 下滑音
+        const osc1 = ctx.createOscillator();
+        const g1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(style === 5 ? 200 : 150, t);
+        osc1.frequency.exponentialRampToValueAtTime(80, t + 0.15);
+        g1.gain.setValueAtTime(0.06, t);
+        g1.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        osc1.connect(g1); g1.connect(this.masterGain);
+        osc1.start(t); osc1.stop(t + 0.2);
+        break;
+      case 7: case 8: // 双音不和谐
+        this._pianoSoft(style === 7 ? 180 : 160, 0.06, 0.15);
+        setTimeout(() => this._pianoSoft(style === 7 ? 175 : 158, 0.05, 0.15), 40);
+        break;
+      case 9: case 10: // 极轻气声
+        this._pianoSoft(style === 9 ? 130 : 120, 0.03, 0.22);
+        break;
+      case 11: case 12: // 拨弦弹跳
+        this._ping(style === 11 ? 200 : 180, 0.05, 0.06);
+        break;
+      case 13: case 14: // 低音大提琴拨弦
+        this._piano(style === 13 ? 82 : 73, 0.12, 0.3);
+        break;
+      case 15: case 16: case 17: case 18: case 19: // 随机趣味音
+        const quirkFreqs = [95, 105, 115, 85, 75];
+        this._pianoSoft(quirkFreqs[style - 15], 0.04, 0.18);
+        break;
+    }
+  }
+};
+
+/* ============================================================
+   游戏核心
+   ============================================================ */
+const BEST_SCORE_KEY = '2048_best_score';
+const BEST_TILE_KEY = '2048_best_tile';
+const GAME_STATE_KEY = '2048_game_state';
+
+let grid = [];
+let score = 0;
+let bestScore = 0;
+let bestTile = 0;
+let moves = 0;
+let gameOver = false;
+let hasWon = false;
+let keepPlaying = false;
+let undoStack = [];
+const MAX_UNDO = 10;
+let newTilePos = null;      // [r, c] of the newly added tile
+let mergedPositions = [];   // [[r, c], ...] of tiles that just merged
+
+function loadBest() {
+  try {
+    bestScore = parseInt(localStorage.getItem(BEST_SCORE_KEY)) || 0;
+    bestTile = parseInt(localStorage.getItem(BEST_TILE_KEY)) || 0;
+  } catch (e) {
+    bestScore = 0;
+    bestTile = 0;
+  }
+}
+
+function saveBest() {
+  try {
+    localStorage.setItem(BEST_SCORE_KEY, bestScore);
+    localStorage.setItem(BEST_TILE_KEY, bestTile);
+  } catch (e) {}
+}
+
+function saveGameState() {
+  try {
+    const state = { grid, score, moves, gameOver, hasWon, keepPlaying };
+    localStorage.setItem(GAME_STATE_KEY, JSON.stringify(state));
+  } catch (e) {}
+}
+
+function loadGameState() {
+  try {
+    const raw = localStorage.getItem(GAME_STATE_KEY);
+    if (!raw) return false;
+    const state = JSON.parse(raw);
+    if (!state.grid || state.grid.length !== 4) return false;
+    grid = state.grid;
+    score = state.score || 0;
+    moves = state.moves || 0;
+    gameOver = state.gameOver || false;
+    hasWon = state.hasWon || false;
+    keepPlaying = state.keepPlaying || false;
+    newTilePos = null;
+    mergedPositions = [];
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function clearGameState() {
+  try { localStorage.removeItem(GAME_STATE_KEY); } catch (e) {}
+}
+
+function initGame() {
+  loadBest();
+  const restored = loadGameState();
+  if (!restored) {
+    grid = Array.from({ length: 4 }, () => Array(4).fill(0));
+    score = 0;
+    moves = 0;
+    gameOver = false;
+    hasWon = false;
+    keepPlaying = false;
+    undoStack = [];
+    newTilePos = null;
+    mergedPositions = [];
+    addRandomTile();
+    addRandomTile();
+    saveGameState();
+  }
+  newTilePos = null;
+  mergedPositions = [];
+  updateUI();
+  renderBoard();
+  hideOverlay();
+  // If restoring a won game, show overlay
+  if (hasWon && !keepPlaying) {
+    showOverlay('win');
+  }
+  if (gameOver) {
+    showOverlay('lose');
+  }
+}
+
+function addRandomTile() {
+  const empty = [];
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 4; c++) {
+      if (grid[r][c] === 0) empty.push([r, c]);
+    }
+  }
+  if (empty.length === 0) return false;
+  const [r, c] = empty[Math.floor(Math.random() * empty.length)];
+  grid[r][c] = Math.random() < 0.9 ? 2 : 4;
+  return true;
+}
+
+function getTileClass(value) {
+  if (value <= 0) return '';
+  if (value <= 2048) return `tile-${value}`;
+  if (value <= 8192) return `tile-${value}`;
+  return 'tile-super';
+}
+
+function getTileFontSize(value, cellSize) {
+  const digits = String(value).length;
+  const base = cellSize * 0.44;
+  if (digits <= 2) return base;
+  if (digits === 3) return base * 0.8;
+  if (digits === 4) return base * 0.65;
+  return base * 0.5;
+}
+
+function renderBoard() {
+  const boardEl = document.getElementById('board');
+  boardEl.innerHTML = '';
+
+  const container = document.getElementById('board-container');
+  const wrap = container.parentElement;
+  const maxDim = Math.min(wrap.clientWidth - 20, wrap.clientHeight - 20);
+  let cellSize = Math.floor((maxDim - 10 * 2 - 10 * 3) / 4);
+  cellSize = Math.max(50, Math.min(cellSize, 110));
+
+  boardEl.style.width = (cellSize * 4 + 10 * 3) + 'px';
+  boardEl.style.height = (cellSize * 4 + 10 * 3) + 'px';
+  boardEl.style.gridTemplateColumns = `repeat(4, ${cellSize}px)`;
+  boardEl.style.gridTemplateRows = `repeat(4, ${cellSize}px)`;
+
+  // Render background cells
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 4; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.style.width = cellSize + 'px';
+      cell.style.height = cellSize + 'px';
+      boardEl.appendChild(cell);
+    }
+  }
+
+  // Render tiles on top
+  const tileContainer = document.createElement('div');
+  tileContainer.className = 'tile-layer';
+  tileContainer.style.cssText = `
+    position: absolute; top: 0; left: 0;
+    width: ${cellSize * 4 + 10 * 3}px; height: ${cellSize * 4 + 10 * 3}px;
+    pointer-events: none; z-index: 2;
+  `;
+
+  // Track which positions are new or merged
+  const isNew = newTilePos ? `${newTilePos[0]},${newTilePos[1]}` : null;
+  const mergedSet = new Set(mergedPositions.map(p => `${p[0]},${p[1]}`));
+
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 4; c++) {
+      if (grid[r][c] === 0) continue;
+      const tile = document.createElement('div');
+      let tileClass = 'tile ' + getTileClass(grid[r][c]);
+      const posKey = `${r},${c}`;
+      if (posKey === isNew) tileClass += ' tile-new';
+      if (mergedSet.has(posKey)) tileClass += ' tile-merged';
+      tile.className = tileClass;
+      const x = c * (cellSize + 10);
+      const y = r * (cellSize + 10);
+      tile.style.cssText = `
+        width: ${cellSize}px; height: ${cellSize}px;
+        left: ${x}px; top: ${y}px;
+        font-size: ${getTileFontSize(grid[r][c], cellSize)}px;
+        line-height: ${cellSize}px;
+        text-align: center;
+      `;
+      tile.textContent = grid[r][c];
+      tileContainer.appendChild(tile);
+    }
+  }
+
+  // Remove old tile layer if exists
+  const oldLayer = boardEl.querySelector('.tile-layer');
+  if (oldLayer) oldLayer.remove();
+  boardEl.appendChild(tileContainer);
+
+  // Clear animation trackers after a short delay
+  setTimeout(() => {
+    newTilePos = null;
+    mergedPositions = [];
+  }, 250);
+}
+
+function updateUI() {
+  document.getElementById('score').textContent = score;
+  document.getElementById('best-score').textContent = bestScore;
+  document.getElementById('stat-moves').textContent = moves;
+  document.getElementById('stat-best-score').textContent = bestScore || '--';
+
+  const currentMax = getMaxTile();
+  document.getElementById('stat-max-tile').textContent = currentMax > 0 ? currentMax : '--';
+  document.getElementById('stat-best-tile').textContent = bestTile > 0 ? bestTile : '--';
+
+  const newGameBtn = document.getElementById('new-game-btn');
+  newGameBtn.classList.remove('won');
+  if (hasWon && !keepPlaying) {
+    newGameBtn.classList.add('won');
+  }
+
+  document.getElementById('continue-btn').disabled = !(hasWon && !keepPlaying);
+}
+
+// ── 青烟效果：在合并位置升起一缕禅烟
+function createZenSmoke(r, c) {
+  const boardEl = document.getElementById('board');
+  const container = document.getElementById('board-container');
+  const wrap = container.parentElement;
+
+  const maxDim = Math.min(wrap.clientWidth - 20, wrap.clientHeight - 20);
+  let cellSize = Math.floor((maxDim - 10 * 2 - 10 * 3) / 4);
+  cellSize = Math.max(50, Math.min(cellSize, 110));
+
+  const x = c * (cellSize + 10) + cellSize / 2;
+  const y = r * (cellSize + 10) + cellSize / 2;
+
+  // 创建烟容器
+  let smokeContainer = boardEl.querySelector('.smoke-container');
+  if (!smokeContainer) {
+    smokeContainer = document.createElement('div');
+    smokeContainer.className = 'smoke-container';
+    boardEl.appendChild(smokeContainer);
+  }
+
+  // 生成 14-22 个烟粒子，浓烟袅袅
+  const count = 14 + Math.floor(Math.random() * 9);
+  for (let i = 0; i < count; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'zen-smoke';
+
+    const dur = 1.8 + Math.random() * 1.8;
+    const delay = Math.random() * 0.5;
+    const dx = (Math.random() - 0.5) * 50;
+    const dy = -(80 + Math.random() * 110);
+    const scale = 2.0 + Math.random() * 4.0;
+    const size = 8 + Math.random() * 14;
+    const wobble = (Math.random() - 0.5) * 40;
+
+    particle.style.cssText = `
+      left: ${x - size / 2}px;
+      top: ${y - size / 2}px;
+      width: ${size}px;
+      height: ${size}px;
+      --smoke-dur: ${dur}s;
+      --smoke-delay: ${delay}s;
+      --smoke-dx: ${dx}px;
+      --smoke-dy: ${dy}px;
+      --smoke-scale: ${scale};
+      --smoke-rotate: ${wobble}deg;
+    `;
+
+    smokeContainer.appendChild(particle);
+
+    setTimeout(() => particle.remove(), (dur + delay) * 1000 + 200);
+  }
+}
+
+function getMaxTile() {
+  let max = 0;
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 4; c++) {
+      if (grid[r][c] > max) max = grid[r][c];
+    }
+  }
+  return max;
+}
+
+function canMove() {
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 4; c++) {
+      if (grid[r][c] === 0) return true;
+      if (c < 3 && grid[r][c] === grid[r][c + 1]) return true;
+      if (r < 3 && grid[r][c] === grid[r + 1][c]) return true;
+    }
+  }
+  return false;
+}
+
+function slide(row) {
+  // Remove zeros
+  const arr = row.filter(v => v !== 0);
+  const result = [];
+  let merged = [];
+  let mergedValues = [];
+  let scoreGain = 0;
+  let i = 0;
+  while (i < arr.length) {
+    if (i + 1 < arr.length && arr[i] === arr[i + 1]) {
+      const mergedVal = arr[i] * 2;
+      result.push(mergedVal);
+      merged.push(result.length - 1);
+      mergedValues.push(arr[i]);
+      scoreGain += mergedVal;
+      i += 2;
+    } else {
+      result.push(arr[i]);
+      i++;
+    }
+  }
+  while (result.length < 4) result.push(0);
+  return { result, merged, mergedValues, scoreGain };
+}
+
+function move(direction) {
+  if (gameOver) return false;
+  if (hasWon && !keepPlaying) return false;
+
+  // Save state for undo
+  const undoState = {
+    grid: grid.map(r => [...r]),
+    score: score,
+    moves: moves,
+    hasWon: hasWon,
+  };
+  undoStack.push(undoState);
+  if (undoStack.length > MAX_UNDO) undoStack.shift();
+
+  let moved = false;
+  let totalScoreGain = 0;
+  const newGrid = Array.from({ length: 4 }, () => Array(4).fill(0));
+  const allMerged = [];
+  const smokePositions = [];
+  let hasWoodenFish = false;
+
+  if (direction === 'left') {
+    for (let r = 0; r < 4; r++) {
+      const { result, merged, mergedValues, scoreGain } = slide(grid[r]);
+      newGrid[r] = result;
+      merged.forEach((idx, i) => {
+        allMerged.push([r, idx]);
+        if (mergedValues[i] === 2) { hasWoodenFish = true; }
+        if (mergedValues[i] >= 8) { smokePositions.push([r, idx]); }
+      });
+      totalScoreGain += scoreGain;
+      if (result.join(',') !== grid[r].join(',')) moved = true;
+    }
+  } else if (direction === 'right') {
+    for (let r = 0; r < 4; r++) {
+      const { result, merged, mergedValues, scoreGain } = slide([...grid[r]].reverse());
+      const finalResult = result.reverse();
+      newGrid[r] = finalResult;
+      merged.forEach((idx, i) => {
+        allMerged.push([r, 3 - idx]);
+        if (mergedValues[i] === 2) { hasWoodenFish = true; }
+        if (mergedValues[i] >= 8) { smokePositions.push([r, 3 - idx]); }
+      });
+      totalScoreGain += scoreGain;
+      if (finalResult.join(',') !== grid[r].join(',')) moved = true;
+    }
+  } else if (direction === 'up') {
+    for (let c = 0; c < 4; c++) {
+      const col = [grid[0][c], grid[1][c], grid[2][c], grid[3][c]];
+      const { result, merged, mergedValues, scoreGain } = slide(col);
+      merged.forEach((idx, i) => {
+        allMerged.push([idx, c]);
+        if (mergedValues[i] === 2) { hasWoodenFish = true; }
+        if (mergedValues[i] >= 8) { smokePositions.push([idx, c]); }
+      });
+      totalScoreGain += scoreGain;
+      for (let r = 0; r < 4; r++) {
+        newGrid[r][c] = result[r];
+        if (result[r] !== grid[r][c]) moved = true;
+      }
+    }
+  } else if (direction === 'down') {
+    for (let c = 0; c < 4; c++) {
+      const col = [grid[3][c], grid[2][c], grid[1][c], grid[0][c]];
+      const { result, merged, mergedValues, scoreGain } = slide(col);
+      merged.forEach((idx, i) => {
+        allMerged.push([3 - idx, c]);
+        if (mergedValues[i] === 2) { hasWoodenFish = true; }
+        if (mergedValues[i] >= 8) { smokePositions.push([3 - idx, c]); }
+      });
+      totalScoreGain += scoreGain;
+      for (let r = 0; r < 4; r++) {
+        newGrid[r][c] = result[3 - r];
+        if (result[3 - r] !== grid[r][c]) moved = true;
+      }
+    }
+  }
+
+  if (!moved) {
+    undoStack.pop();
+    Sound.invalid();
+    return false;
+  }
+
+  // Apply the move to grid first, then add a random tile
+  grid = newGrid;
+  score += totalScoreGain;
+  moves++;
+
+  // Track which cells were empty before adding the new tile
+  const emptyBefore = [];
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 4; c++) {
+      if (grid[r][c] === 0) emptyBefore.push([r, c]);
+    }
+  }
+
+  // Add new random tile and track its position
+  addRandomTile();
+  newTilePos = null;
+  for (const [r, c] of emptyBefore) {
+    if (grid[r][c] !== 0) {
+      newTilePos = [r, c];
+      break;
+    }
+  }
+
+  mergedPositions = allMerged;
+
+  // Update bests
+  let bestUpdated = false;
+  if (score > bestScore) {
+    bestScore = score;
+    bestUpdated = true;
+  }
+  const currentMax = getMaxTile();
+  if (currentMax > bestTile) {
+    bestTile = currentMax;
+    bestUpdated = true;
+  }
+  if (bestUpdated) saveBest();
+
+  // Check win
+  if (!hasWon && currentMax >= 2048) {
+    hasWon = true;
+    saveGameState();
+    updateUI();
+    renderBoard();
+    Sound.win();
+    showOverlay('win');
+    return true;
+  }
+
+  // Check game over
+  if (!canMove()) {
+    gameOver = true;
+    saveGameState();
+    updateUI();
+    renderBoard();
+    Sound.lose();
+    showOverlay('lose');
+    return true;
+  }
+
+  saveGameState();
+  updateUI();
+  renderBoard();
+
+  // Sound
+  if (totalScoreGain > 0) {
+    const mergeCount = allMerged.length;
+    if (mergeCount > 1) {
+      Sound.cascade(mergeCount);
+    } else {
+      Sound.merge(currentMax || 2);
+    }
+    // 木鱼声（2+2 合并时）
+    if (hasWoodenFish) {
+      Sound.woodenFish();
+    }
+    // 青烟效果（8+8 合并时）
+    if (smokePositions.length > 0) {
+      smokePositions.forEach(([r, c]) => createZenSmoke(r, c));
+    }
+  } else {
+    Sound.move();
+  }
+
+  return true;
+}
+
+function undo() {
+  if (gameOver) return;
+  if (undoStack.length === 0) {
+    showToast('无可悔之步');
+    return;
+  }
+  const prev = undoStack.pop();
+  grid = prev.grid;
+  score = prev.score;
+  moves = prev.moves;
+  hasWon = prev.hasWon;
+  if (hasWon) keepPlaying = true;
+  gameOver = false;
+  newTilePos = null;
+  mergedPositions = [];
+  hideOverlay();
+  saveGameState();
+  updateUI();
+  renderBoard();
+  showToast('已悔一步');
+  Sound.move();
+}
+
+function restart() {
+  grid = Array.from({ length: 4 }, () => Array(4).fill(0));
+  score = 0;
+  moves = 0;
+  gameOver = false;
+  hasWon = false;
+  keepPlaying = false;
+  undoStack = [];
+  newTilePos = null;
+  mergedPositions = [];
+  addRandomTile();
+  addRandomTile();
+  clearGameState();
+  saveGameState();
+  updateUI();
+  renderBoard();
+  hideOverlay();
+  document.getElementById('continue-btn').disabled = true;
+  Sound.newGame();
+}
+
+function continueGame() {
+  if (!hasWon || keepPlaying) return;
+  keepPlaying = true;
+  hideOverlay();
+  document.getElementById('continue-btn').disabled = true;
+  saveGameState();
+  updateUI();
+}
+
+function showOverlay(type) {
+  const overlay = document.getElementById('overlay');
+  overlay.classList.remove('win', 'lose');
+  if (type === 'win') {
+    overlay.classList.add('win');
+    document.getElementById('overlay-icon').textContent = '🎉';
+    document.getElementById('overlay-title').textContent = '功德圆满';
+    document.getElementById('overlay-subtitle').textContent = '你已参透二〇四八的禅机';
+    document.getElementById('overlay-score').textContent = score;
+    document.getElementById('overlay-continue').style.display = '';
+  } else {
+    overlay.classList.add('lose');
+    document.getElementById('overlay-icon').textContent = '😵';
+    document.getElementById('overlay-title').textContent = '修行未成';
+    document.getElementById('overlay-subtitle').textContent = '方格已满，无路可走';
+    document.getElementById('overlay-score').textContent = score;
+    document.getElementById('overlay-continue').style.display = 'none';
+  }
+  overlay.classList.add('show');
+}
+
+function hideOverlay() {
+  document.getElementById('overlay').classList.remove('show', 'win', 'lose');
+}
+
+let toastTimer = null;
+function showToast(msg, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast';
+  if (type) toast.classList.add(type);
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+/* ============================================================
+   输入处理
+   ============================================================ */
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'z') {
+    e.preventDefault();
+    undo();
+    return;
+  }
+
+  const keyMap = {
+    'ArrowLeft': 'left', 'ArrowRight': 'right', 'ArrowUp': 'up', 'ArrowDown': 'down',
+    'a': 'left', 'd': 'right', 'w': 'up', 's': 'down',
+    'A': 'left', 'D': 'right', 'W': 'up', 'S': 'down',
+    'h': 'left', 'l': 'right', 'k': 'up', 'j': 'down',
+    'H': 'left', 'L': 'right', 'K': 'up', 'J': 'down',
+  };
+
+  const dir = keyMap[e.key];
+  if (dir) {
+    e.preventDefault();
+    Sound.unlock();
+    move(dir);
+  }
+  if (e.key === 'h' || e.key === 'H') { window.open('index.html','_self'); return; }
+  if (e.key === '5') window.open('memory-game.html','_blank');
+  if (e.key === '6') window.open('poetry-chain.html','_blank');
+  if (e.key === '7') window.open('xiao-game.html','_blank');
+  if (e.key === '8') window.open('emoji-match.html','_blank');
+  if (e.key === '9') window.open('saolei.html','_blank');
+  if (e.key === '0') window.open('2048.html','_blank');
+});
+
+// Touch / swipe
+let touchStartX = 0;
+let touchStartY = 0;
+let touchStartTime = 0;
+const SWIPE_THRESHOLD = 30;
+
+const gameArea = document.getElementById('game-area');
+
+gameArea.addEventListener('touchstart', (e) => {
+  Sound.unlock();
+  if (e.touches.length === 1) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }
+}, { passive: false });
+
+gameArea.addEventListener('touchmove', (e) => {
+  if (e.touches.length === 1) {
+    const dx = e.touches[0].clientX - touchStartX;
+    const dy = e.touches[0].clientY - touchStartY;
+    const indicator = document.getElementById('swipe-indicator');
+    if (Math.abs(dx) > 15 || Math.abs(dy) > 15) {
+      indicator.classList.add('active');
+      if (Math.abs(dx) > Math.abs(dy)) {
+        indicator.textContent = dx > 0 ? '→' : '←';
+      } else {
+        indicator.textContent = dy > 0 ? '↓' : '↑';
+      }
+    }
+  }
+  e.preventDefault();
+}, { passive: false });
+
+gameArea.addEventListener('touchend', (e) => {
+  const indicator = document.getElementById('swipe-indicator');
+  indicator.classList.remove('active');
+
+  const dx = (e.changedTouches[0]?.clientX || touchStartX) - touchStartX;
+  const dy = (e.changedTouches[0]?.clientY || touchStartY) - touchStartY;
+  const dt = Date.now() - touchStartTime;
+
+  if (dt > 500) return;
+  if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
+
+  Sound.unlock();
+  if (Math.abs(dx) > Math.abs(dy)) {
+    move(dx > 0 ? 'right' : 'left');
+  } else {
+    move(dy > 0 ? 'down' : 'up');
+  }
+});
+
+// Mouse drag on desktop also works
+let mouseDown = false;
+let mouseStartX = 0, mouseStartY = 0;
+
+gameArea.addEventListener('mousedown', (e) => {
+  mouseDown = true;
+  mouseStartX = e.clientX;
+  mouseStartY = e.clientY;
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!mouseDown) return;
+  const dx = e.clientX - mouseStartX;
+  const dy = e.clientY - mouseStartY;
+  const indicator = document.getElementById('swipe-indicator');
+  if (Math.abs(dx) > 15 || Math.abs(dy) > 15) {
+    indicator.classList.add('active');
+    if (Math.abs(dx) > Math.abs(dy)) {
+      indicator.textContent = dx > 0 ? '→' : '←';
+    } else {
+      indicator.textContent = dy > 0 ? '↓' : '↑';
+    }
+  }
+});
+
+document.addEventListener('mouseup', (e) => {
+  if (!mouseDown) return;
+  mouseDown = false;
+  const indicator = document.getElementById('swipe-indicator');
+  indicator.classList.remove('active');
+
+  const dx = e.clientX - mouseStartX;
+  const dy = e.clientY - mouseStartY;
+  if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
+
+  Sound.unlock();
+  if (Math.abs(dx) > Math.abs(dy)) {
+    move(dx > 0 ? 'right' : 'left');
+  } else {
+    move(dy > 0 ? 'down' : 'up');
+  }
+});
+
+/* ============================================================
+   按钮事件
+   ============================================================ */
+document.getElementById('new-game-btn').addEventListener('click', () => {
+  Sound.unlock();
+  restart();
+});
+
+document.getElementById('overlay-restart').addEventListener('click', () => {
+  Sound.unlock();
+  restart();
+});
+
+document.getElementById('overlay-continue').addEventListener('click', () => {
+  Sound.unlock();
+  continueGame();
+});
+
+document.getElementById('continue-btn').addEventListener('click', () => {
+  Sound.unlock();
+  continueGame();
+});
+
+document.getElementById('undo-btn').addEventListener('click', () => {
+  Sound.unlock();
+  undo();
+});
+
+// Sound toggle
+const soundBtn = document.getElementById('sound-btn');
+const iconOn = soundBtn.querySelector('.icon-on');
+const iconOff = soundBtn.querySelector('.icon-off');
+soundBtn.addEventListener('click', () => {
+  Sound.unlock();
+  const enabled = Sound.toggle();
+  if (enabled) {
+    iconOn.style.display = '';
+    iconOff.style.display = 'none';
+    soundBtn.classList.remove('active');
+  } else {
+    iconOn.style.display = 'none';
+    iconOff.style.display = '';
+    soundBtn.classList.add('active');
+  }
+});
+
+/* ============================================================
+   窗口大小变化时重新渲染
+   ============================================================ */
+let resizeDebounce = null;
+window.addEventListener('resize', () => {
+  if (resizeDebounce) clearTimeout(resizeDebounce);
+  resizeDebounce = setTimeout(() => renderBoard(), 150);
+});
+
+/* ============================================================
+   启动
+   ============================================================ */
+loadBest();
+initGame();
+Sound.init();
+
+// Update best display
+document.getElementById('best-score').textContent = bestScore;
+document.getElementById('stat-best-score').textContent = bestScore || '--';
+document.getElementById('stat-best-tile').textContent = bestTile > 0 ? bestTile : '--';
+</script>
+<div style="text-align:center;padding:12px;opacity:0.25;font-size:0.7em;letter-spacing:0.1em;">扫地僧创作 · 二〇二六</div>
+<script>document.addEventListener("keydown",function(e){if(e.key==="?"||e.key==="/"){e.preventDefault();var p=document.getElementById("ksOverlay");p.style.display=p.style.display==="flex"?"none":"flex"}});</script>
+ <div class="ks-overlay" id="ksOverlay" onclick="if(event.target===this)this.classList.remove('show')" style="display:none;position:fixed;inset:0;background:rgba(20,16,10,0.85);z-index:200;align-items:center;justify-content:center;"> <div style="background:var(--card-bg,#faf7f2);border-radius:16px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);color:var(--text,#3b3223);font-family:inherit;"> <h3 style="text-align:center;margin-bottom:16px;font-size:1.1em;letter-spacing:2px;color:var(--accent,#8b4513);">⌨ 快捷键</h3> <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:0.85em;"> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">H</span><span style="opacity:0.7">回首页</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">1</span><span style="opacity:0.7">老子</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">2</span><span style="opacity:0.7">小学</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">3</span><span style="opacity:0.7">初中</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">4</span><span style="opacity:0.7">高中</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">5</span><span style="opacity:0.7">翻牌</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">6</span><span style="opacity:0.7">接龙</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">7</span><span style="opacity:0.7">消消乐</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">8</span><span style="opacity:0.7">连连看</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">9</span><span style="opacity:0.7">扫雷</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">0</span><span style="opacity:0.7">2048</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">T</span><span style="opacity:0.7">切换主题</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">-</span><span style="opacity:0.7">缩小字号</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">=</span><span style="opacity:0.7">放大字号</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">M</span><span style="opacity:0.7">放大镜</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">←↑</span><span style="opacity:0.7">上一篇</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">→↓</span><span style="opacity:0.7">下一篇</span> </div> <p style="margin-top:14px;text-align:center;font-size:0.75em;opacity:0.7;font-size:0.85em;">按 <b>?</b> 或 <b>/</b> 打开或关闭</p> </div> </div> 
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

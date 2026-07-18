@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">62=鹿儿</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">6像鹿角弯弯叉，2是小鹿乖乖立</text>
+  <ellipse cx="512" cy="830" rx="200" ry="30" fill="#AED581" opacity="0.3"/>
+  <!-- 身体 - 2形 -->
+  <ellipse cx="450" cy="620" rx="80" ry="90" fill="#D7CCC8"/>
+  <ellipse cx="440" cy="600" rx="60" ry="70" fill="#EFEBE9"/>
+  <!-- 脖子 -->
+  <path d="M400 560 Q370 480 380 420" fill="none" stroke="#D7CCC8" stroke-width="24" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <ellipse cx="375" cy="390" rx="35" ry="30" fill="#EFEBE9"/>
+  <!-- 鹿角 - 6形叉 -->
+  <path d="M355 365 Q340 340 330 320" fill="none" stroke="#795548" stroke-width="6" stroke-linecap="round"/>
+  <path d="M340 340 Q320 335 310 320" fill="none" stroke="#795548" stroke-width="5" stroke-linecap="round"/>
+  <path d="M365 360 Q380 330 390 310" fill="none" stroke="#795548" stroke-width="6" stroke-linecap="round"/>
+  <path d="M380 330 Q400 325 405 310" fill="none" stroke="#795548" stroke-width="5" stroke-linecap="round"/>
+  <!-- 眼睛 -->
+  <circle cx="395" cy="380" r="6" fill="#2C1810"/>
+  <circle cx="396" cy="379" r="2.5" fill="white"/>
+  <!-- 鼻子 -->
+  <circle cx="405" cy="400" r="5" fill="#3E2723"/>
+  <!-- 耳朵 -->
+  <ellipse cx="350" cy="380" rx="12" ry="6" fill="#BCAAA4" transform="rotate(-20 350 380)"/>
+  <!-- 尾巴 -->
+  <circle cx="530" cy="600" r="15" fill="#FFE082"/>
+  <!-- 腿 -->
+  <rect x="390" y="700" width="16" height="100" rx="6" fill="#D7CCC8"/>
+  <rect x="430" y="700" width="16" height="100" rx="6" fill="#D7CCC8"/>
+  <rect x="480" y="695" width="16" height="105" rx="6" fill="#D7CCC8"/>
+  <rect x="510" y="695" width="16" height="105" rx="6" fill="#D7CCC8"/>
+  <!-- 蹄 -->
+  <rect x="388" y="795" width="20" height="12" rx="4" fill="#795548"/>
+  <rect x="428" y="795" width="20" height="12" rx="4" fill="#795548"/>
+  <rect x="478" y="795" width="20" height="12" rx="4" fill="#795548"/>
+  <rect x="508" y="795" width="20" height="12" rx="4" fill="#795548"/>
+</svg>

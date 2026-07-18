@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E3F2FD"/><stop offset="100%" stop-color="#BBDEFB"/></linearGradient>
+    <radialGradient id="caveInner" cx="50%" cy="50%"><stop offset="0%" stop-color="#2C1810"/><stop offset="100%" stop-color="#5D4037"/></radialGradient>
+  </defs>
+  <!-- 卡片背景 -->
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">30=山洞</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">3像洞口弯弯嵌，0是山洞圆圆通</text>
+
+  <!-- 天空 -->
+  <rect x="60" y="200" width="904" height="150" rx="10" fill="url(#sky)" opacity="0.3"/>
+
+  <!-- 太阳 -->
+  <circle cx="800" cy="280" r="35" fill="#FFD54F" opacity="0.7"/>
+  <circle cx="800" cy="280" r="45" fill="#FFD54F" opacity="0.15"/>
+
+  <!-- 山体 - 左 -->
+  <path d="M60 400 L150 250 L300 380 L400 340 L460 400 L460 900 L60 900Z" fill="#8D6E63"/>
+  <path d="M60 420 L150 270 L300 400 L400 360 L460 400 L460 900 L60 900Z" fill="#795548"/>
+
+  <!-- 山体 - 右 -->
+  <path d="M964 400 L850 240 L720 370 L620 330 L560 400 L560 900 L964 900Z" fill="#8D6E63"/>
+  <path d="M964 420 L850 260 L720 390 L620 350 L560 400 L560 900 L964 900Z" fill="#795548"/>
+
+  <!-- 山洞 - 3形入口 -->
+  <ellipse cx="512" cy="530" rx="110" ry="140" fill="url(#caveInner)"/>
+  <ellipse cx="512" cy="530" rx="90" ry="120" fill="#1A0D08"/>
+  <!-- 山洞内部光泽 -->
+  <ellipse cx="490" cy="500" rx="30" ry="40" fill="#3E2723" opacity="0.5"/>
+
+  <!-- 洞口上方3形岩石纹理 -->
+  <path d="M412 440 Q430 400 450 430 Q470 400 490 430 Q510 400 530 430 Q550 400 570 430 Q590 400 612 440" fill="none" stroke="#6D4C41" stroke-width="4" opacity="0.6"/>
+
+  <!-- 洞口藤蔓 -->
+  <path d="M410 480 Q395 500 405 530 Q415 560 400 580" fill="none" stroke="#4CAF50" stroke-width="4"/>
+  <path d="M420 490 Q412 510 420 540" fill="none" stroke="#66BB6A" stroke-width="3"/>
+  <path d="M614 470 Q630 490 620 520 Q610 550 625 570" fill="none" stroke="#4CAF50" stroke-width="4"/>
+  <path d="M604 480 Q612 500 605 530" fill="none" stroke="#66BB6A" stroke-width="3"/>
+
+  <!-- 叶子 -->
+  <ellipse cx="405" cy="490" rx="10" ry="5" fill="#66BB6A" transform="rotate(-30 405 490)"/>
+  <ellipse cx="620" cy="480" rx="10" ry="5" fill="#66BB6A" transform="rotate(30 620 480)"/>
+
+  <!-- 洞口小径 - 0形圆形通道透视 -->
+  <ellipse cx="512" cy="650" rx="50" ry="30" fill="#3E2723" opacity="0.4"/>
+
+  <!-- 草地 -->
+  <ellipse cx="512" cy="720" rx="150" ry="25" fill="#81C784" opacity="0.3"/>
+
+  <!-- 山脚小树 -->
+  <circle cx="200" cy="380" r="28" fill="#66BB6A" opacity="0.5"/>
+  <rect x="196" y="380" width="8" height="30" fill="#6D4C41" opacity="0.6"/>
+  <circle cx="830" cy="370" r="25" fill="#66BB6A" opacity="0.5"/>
+  <rect x="826" y="370" width="8" height="28" fill="#6D4C41" opacity="0.6"/>
+
+  <!-- 小鸟 -->
+  <path d="M300 280 Q310 270 320 280 Q310 275 300 280Z" fill="#78909C" opacity="0.5"/>
+  <path d="M320 280 Q330 272 340 280" fill="none" stroke="#78909C" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- 光线从洞口射出 -->
+  <line x1="512" y1="430" x2="480" y2="380" stroke="#FFD54F" stroke-width="2" opacity="0.15"/>
+  <line x1="512" y1="430" x2="512" y2="370" stroke="#FFD54F" stroke-width="2" opacity="0.15"/>
+  <line x1="512" y1="430" x2="544" y2="380" stroke="#FFD54F" stroke-width="2" opacity="0.15"/>
+</svg>

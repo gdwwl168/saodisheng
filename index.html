@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="cangjingge-theme">
+<meta name="cjg-theme-light" content="dark">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="扫地僧 · 藏经阁 — 国学、英语、书法与益智游戏">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="藏经阁">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="icon-512.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<title>扫地僧 · 藏经阁</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --text: #3d3226;
+  --accent: #8b4513;
+  --gold: #c9a96e;
+  --card-bg: #faf7f2;
+  --border: #d4c5a9;
+  --shadow: 0 2px 16px rgba(0,0,0,0.08);
+  --tag-bg: #ede4d3;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a2e;
+  --text: #d4c5a9;
+  --accent: #c9a96e;
+  --gold: #c9a96e;
+  --card-bg: #252540;
+  --border: #3a3a55;
+  --shadow: 0 2px 16px rgba(0,0,0,0.3);
+  --tag-bg: #2a2a40;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", "STSong", "KaiTi", serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Header */
+.hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+}
+
+.hero .logo {
+  font-size: 4em;
+  margin-bottom: 10px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hero h1 {
+  font-size: 2.4em;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  font-weight: 700;
+}
+
+.hero .subtitle {
+  font-size: 0.95em;
+  color: var(--text);
+  opacity: 0.5;
+  margin-top: 8px;
+  letter-spacing: 0.3em;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  cursor: pointer;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 100;
+}
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow);
+}
+
+/* Grid */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--gold);
+}
+.card:hover::before { opacity: 1; }
+
+.card .icon {
+  font-size: 2.5em;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.card h2 {
+  font-size: 1.2em;
+  color: var(--accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.card .desc {
+  font-size: 0.85em;
+  opacity: 0.6;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.card .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  font-size: 0.7em;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--tag-bg);
+  color: var(--text);
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+}
+
+/* Categorized sections */
+.section-title {
+  font-size: 1.1em;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  margin: 40px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title:first-of-type { margin-top: 0; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px;
+  opacity: 0.4;
+  font-size: 0.75em;
+  letter-spacing: 0.1em;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero { padding: 40px 16px 24px; }
+  .hero .logo { font-size: 2.8em; }
+  .hero h1 { font-size: 1.6em; }
+  .cards { grid-template-columns: 1fr; gap: 16px; }
+  #helpBtn { top: 10px; right: auto; left: 8px; }
+  #themeBtn { top: 10px; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="helpBtn" title="快捷键" onclick="document.getElementById('ksOverlay').style.display='flex'" style="right:70px;">❓</button>
+<button class="theme-toggle" id="themeBtn" title="切换主题" onclick="toggleTheme()">🌓</button>
+<div class="hero">
+  <img src="12345.png" alt="logo" style="width:80px;height:80px;border-radius:16px;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;">
+  <h1>扫地僧 · 藏经阁</h1>
+  <div class="subtitle">扫 尽 尘 埃 · 方 见 本 心</div>
+</div>
+
+<div class="container">
+
+  <div class="section-title">📜 经 典</div>
+  <div class="cards">
+    <a href="daodejing.html" class="card">
+      <span class="icon">☯️</span>
+      <h2>道德经 · 八十一章节背诵</h2>
+      <div class="desc">老子五千言，逐章研读、背诵、默写，五种模式辅助记忆，掌握度追踪进退。</div>
+      <div class="tags">
+        <span class="tag">背诵</span>
+        <span class="tag">填空</span>
+        <span class="tag">默写</span>
+        <span class="tag">进度追踪</span>
+      </div>
+    </a>
+    <a href="sushi-works.html" class="card">
+      <span class="icon">📖</span>
+      <h2>苏轼主要作品集</h2>
+      <div class="desc">东坡居士诗词文赋精选，一窥千古文豪的才情与胸襟。</div>
+      <div class="tags">
+        <span class="tag">苏轼</span>
+        <span class="tag">诗词</span>
+        <span class="tag">散文</span>
+      </div>
+    </a>
+    <a href="789.html" class="card">
+      <span class="icon">🎓</span>
+      <h2>中考必背 · 六十篇</h2>
+      <div class="desc">新课标7-9年级必背古诗文60篇，诗词曲40+文言文20，助你轻松备考。</div>
+      <div class="tags">
+        <span class="tag">中考</span>
+        <span class="tag">必背</span>
+        <span class="tag">古诗文</span>
+      </div>
+    </a>
+    <a href="xiaoxue.html" class="card">
+      <span class="icon">🌟</span>
+      <h2>小学必背 · 七十五篇</h2>
+      <div class="desc">1-6年级必背优秀诗文75篇，诗词为主辅以古文名篇，童年国学启蒙。</div>
+      <div class="tags">
+        <span class="tag">小学</span>
+        <span class="tag">必背</span>
+        <span class="tag">古诗文</span>
+      </div>
+    </a>
+    <a href="gaokao.html" class="card">
+      <span class="icon">🏛️</span>
+      <h2>高考必背 · 七十二篇</h2>
+      <div class="desc">新课标高中必背古诗文72篇，文言文32+诗词曲40，助你决胜高考。</div>
+      <div class="tags">
+        <span class="tag">高考</span>
+        <span class="tag">必背</span>
+        <span class="tag">古诗文</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-title">📘 英 语</div>
+  <div class="cards">
+    <a href="english.html" class="card">
+      <span class="icon">7️⃣</span>
+      <h2>外研英语 · 七年级同步</h2>
+      <div class="desc">外研版（2024）七年级上下册，按 Unit 学单词、短语、句型与语法，支持闪卡、填空与 L1–L3 默写。</div>
+      <div class="tags">
+        <span class="tag">外研版</span>
+        <span class="tag">七年级</span>
+        <span class="tag">Unit</span>
+        <span class="tag">默写</span>
+      </div>
+    </a>
+    <a href="english-8.html" class="card">
+      <span class="icon">8️⃣</span>
+      <h2>外研英语 · 八年级同步</h2>
+      <div class="desc">外研版八年级上下册 Module 体系，单词、短语、句型与语法；闪卡、填空、L1–L3 默写，按模块整组计练习。</div>
+      <div class="tags">
+        <span class="tag">外研版</span>
+        <span class="tag">八年级</span>
+        <span class="tag">Module</span>
+        <span class="tag">默写</span>
+      </div>
+    </a>
+    <a href="english-9.html" class="card">
+      <span class="icon">9️⃣</span>
+      <h2>外研英语 · 九年级同步</h2>
+      <div class="desc">外研版九年级上下册 Module 体系，中考向词汇与语法；闪卡、填空、默写与单元进度追踪。</div>
+      <div class="tags">
+        <span class="tag">外研版</span>
+        <span class="tag">九年级</span>
+        <span class="tag">Module</span>
+        <span class="tag">中考</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-title">🖌️ 书 法</div>
+  <div class="cards">
+    <a href="lanting-xu.html" class="card">
+      <span class="icon">🏆</span>
+      <h2>兰亭序</h2>
+      <div class="desc">天下第一行书，王羲之会稽兰亭雅集所作，遒媚劲健，千古书圣之巅峰。</div>
+      <div class="tags">
+        <span class="tag">王羲之</span>
+        <span class="tag">行书</span>
+        <span class="tag">第一行书</span>
+      </div>
+    </a>
+    <a href="jizhi-wengao.html" class="card">
+      <span class="icon">🩸</span>
+      <h2>祭侄文稿</h2>
+      <div class="desc">天下第二行书，颜真卿泣血祭奠殉国侄儿，悲愤笔墨，忠义千古。</div>
+      <div class="tags">
+        <span class="tag">颜真卿</span>
+        <span class="tag">行书</span>
+        <span class="tag">第二行书</span>
+      </div>
+    </a>
+    <a href="hanshi-tie.html" class="card">
+      <span class="icon">✍️</span>
+      <h2>黄州寒食帖</h2>
+      <div class="desc">天下第三行书，苏轼谪居黄州所作，苍凉沉郁，笔墨间见心境。</div>
+      <div class="tags">
+        <span class="tag">苏轼</span>
+        <span class="tag">行书</span>
+        <span class="tag">第三行书</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-title">🎮 游 戏</div>
+  <div class="cards">
+    <a href="memory-game.html" class="card">
+      <span class="icon">🀄</span>
+      <h2>翻牌修心</h2>
+      <div class="desc">道德经字符记忆翻牌，翻牌间修心养性。三档难度，配经典名句。</div>
+      <div class="tags">
+        <span class="tag">记忆</span>
+        <span class="tag">翻牌</span>
+        <span class="tag">道德经</span>
+      </div>
+    </a>
+    <a href="bianmaka.html" class="card">
+      <span class="icon">🔢</span>
+      <h2>数字编码卡</h2>
+      <div class="desc">81张数字➜联想词编码闪卡，配记忆口诀与联想图，打造记忆宫殿数字桩。</div>
+      <div class="tags">
+        <span class="tag">记忆术</span>
+        <span class="tag">编码</span>
+        <span class="tag">闪卡</span>
+      </div>
+    </a>
+    <a href="lianxiang-story.html" class="card">
+      <span class="icon">📖</span>
+      <h2>编码故事</h2>
+      <div class="desc">数字联想词串成场景故事，一图一景串记 01–81，记忆宫殿更生动。</div>
+      <div class="tags">
+        <span class="tag">记忆术</span>
+        <span class="tag">编码</span>
+        <span class="tag">故事</span>
+      </div>
+    </a>
+    <a href="doodle.html" class="card">
+      <span class="icon">🎨</span>
+      <h2>十二生肖涂鸦</h2>
+      <div class="desc">十二生肖动物轮廓，随心涂鸦。</div>
+      <div class="tags">
+        <span class="tag">涂鸦</span>
+        <span class="tag">生肖</span>
+        <span class="tag">画画</span>
+      </div>
+    </a>
+    <a href="pindou.html" class="card">
+      <span class="icon">🫘</span>
+      <h2>拼豆工坊</h2>
+      <div class="desc">像素拼豆画板：选模板、点格子、拼出图案，支持撤销与保存。</div>
+      <div class="tags">
+        <span class="tag">拼豆</span>
+        <span class="tag">像素</span>
+        <span class="tag">动手</span>
+      </div>
+    </a>
+    <a href="music.html" class="card">
+      <span class="icon">🎹</span>
+      <h2>小小钢琴家</h2>
+      <div class="desc">彩色琴键、小动物认音、跟弹儿歌。激发兴趣为主，开心就好。</div>
+      <div class="tags">
+        <span class="tag">钢琴</span>
+        <span class="tag">儿歌</span>
+        <span class="tag">儿童</span>
+      </div>
+    </a>
+    <a href="emoji-study.html" class="card">
+      <span class="icon">📇</span>
+      <h2>Emoji 记忆卡</h2>
+      <div class="desc">81章 Emoji 与数字联想词对照闪卡，翻牌记忆后再战连连看。</div>
+      <div class="tags">
+        <span class="tag">记忆</span>
+        <span class="tag">闪卡</span>
+        <span class="tag">Emoji</span>
+      </div>
+    </a>
+    <a href="emoji-match.html" class="card">
+      <span class="icon">🔗</span>
+      <h2>Emoji 连连看</h2>
+      <div class="desc">左边 Emoji 图像，右边章节首句。将图像与对应章节连起来，八十一分慧眼识经。</div>
+      <div class="tags">
+        <span class="tag">连连看</span>
+        <span class="tag">Emoji</span>
+        <span class="tag">道德经</span>
+      </div>
+    </a>
+    <a href="xiao-game.html" class="card">
+      <span class="icon">🧘</span>
+      <h2>禅意消消乐</h2>
+      <div class="desc">道德经词组连连看——「上善」配「若水」、「大器」配「晚成」，消除即是悟道。</div>
+      <div class="tags">
+        <span class="tag">消除</span>
+        <span class="tag">配对</span>
+        <span class="tag">禅意</span>
+      </div>
+    </a>
+    <a href="poetry-chain.html" class="card">
+      <span class="icon">🐉</span>
+      <h2>诗词接龙</h2>
+      <div class="desc">上句出，下句对。道德经、苏轼、中考必背三大题库，考你诗词真功夫。</div>
+      <div class="tags">
+        <span class="tag">接龙</span>
+        <span class="tag">诗词</span>
+        <span class="tag">题库</span>
+      </div>
+    </a>
+    <a href="saolei.html" class="card">
+      <span class="icon">💣</span>
+      <h2>扫地僧无心扫雷</h2>
+      <div class="desc">经典扫雷，清扫的是地雷，修炼的是心性。无心中扫，扫中无心。</div>
+      <div class="tags">
+        <span class="tag">扫雷</span>
+        <span class="tag">休闲</span>
+      </div>
+    </a>
+    <a href="2048.html" class="card">
+      <span class="icon">🔢</span>
+      <h2>扫地僧推二〇四八</h2>
+      <div class="desc">二〇四八，数字归宗。滑动指尖，悟道于数。</div>
+      <div class="tags">
+        <span class="tag">2048</span>
+        <span class="tag">益智</span>
+      </div>
+    </a>
+    <a href="7749.html" class="card">
+      <span class="icon">🧱</span>
+      <h2>扫地僧无心俄罗斯方块</h2>
+      <div class="desc">经典俄罗斯方块，七种方块旋转下落消行。手机端触控按钮，长按连发操作自如。</div>
+      <div class="tags">
+        <span class="tag">Tetris</span>
+        <span class="tag">经典</span>
+        <span class="tag">触控</span>
+      </div>
+    </a>
+    <a href="snake.html" class="card">
+      <span class="icon">🐍</span>
+      <h2>扫地僧贪吃蛇</h2>
+      <div class="desc">经典贪吃蛇：方向键 / 滑动操控，越吃越快。别撞墙、别咬自己。</div>
+      <div class="tags">
+        <span class="tag">贪吃蛇</span>
+        <span class="tag">经典</span>
+        <span class="tag">触控</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-title">🪢 户 外</div>
+  <div class="cards">
+    <a href="SRT.html" class="card">
+      <span class="icon">🪢</span>
+      <h2>SRT 单绳技术</h2>
+      <div class="desc">探洞竖井单绳技术笔记：概述、装备、升降、安全与书目。专页结构便于持续增补。</div>
+      <div class="tags">
+        <span class="tag">SRT</span>
+        <span class="tag">探洞</span>
+        <span class="tag">笔记</span>
+      </div>
+    </a>
+    <a href="sea.html" class="card">
+      <span class="icon">🛶</span>
+      <h2>海洋舟</h2>
+      <div class="desc">海洋皮划艇知识专页：艇型装备、桨法救援、风浪潮汐、导航编队与出发清单。</div>
+      <div class="tags">
+        <span class="tag">海皮</span>
+        <span class="tag">救援</span>
+        <span class="tag">笔记</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-title">📐 数 学</div>
+  <div class="cards">
+    <a href="make-ten.html" class="card">
+      <span class="icon">🧮</span>
+      <h2>凑十法 · 快乐数学</h2>
+      <div class="desc">小朋友玩中学——看方块选数字，凑成 10 就对了。每连对 5 次得星星奖励！</div>
+      <div class="tags">
+        <span class="tag">小学数学</span>
+        <span class="tag">凑十法</span>
+        <span class="tag">启蒙</span>
+      </div>
+    </a>
+    <a href="make-ten-match.html" class="card">
+      <span class="icon">🔗</span>
+      <h2>凑数连连看</h2>
+      <div class="desc">进阶玩法：在棋盘上找出两个数相加等于 10 / 20 / 30，消完通关。比凑十法更考眼力！</div>
+      <div class="tags">
+        <span class="tag">连连看</span>
+        <span class="tag">凑十</span>
+        <span class="tag">进阶</span>
+      </div>
+    </a>
+    <a href="jiangjun-yinma.html" class="card">
+      <span class="icon">🐴</span>
+      <h2>将军饮马 · 最短路径</h2>
+      <div class="desc">交互式几何探究——拖动 A、B 两点，找河边最佳饮马点。轴对称变换可视化。</div>
+      <div class="tags">
+        <span class="tag">几何</span>
+        <span class="tag">最短路径</span>
+        <span class="tag">轴对称</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-title">⌨️ 打 字</div>
+  <div class="cards">
+    <a href="wubi-practice.html" class="card">
+      <span class="icon">🔤</span>
+      <h2>五笔字根练习 · 86版</h2>
+      <div class="desc">25键字根速记——看字根按对应键，五区分别练习。带虚拟键盘实时反馈。</div>
+      <div class="tags">
+        <span class="tag">五笔</span>
+        <span class="tag">字根</span>
+        <span class="tag">86版</span>
+      </div>
+    </a>
+    <a href="daociyiyou.html" class="card">
+      <span class="icon">📜</span>
+      <h2>到此一游</h2>
+      <div class="desc">扫码签到、留下足迹——访客签名留念，记录路过藏经阁的一刻。</div>
+      <div class="tags">
+        <span class="tag">签到</span>
+        <span class="tag">足迹</span>
+        <span class="tag">互动</span>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<div class="footer">
+  扫地僧创作 · 二〇二六
+</div>
+
+<script>
+// Theme
+const themeKey = 'cangjingge-theme';
+function getTheme() {
+  if (window.cjgResolveTheme) return cjgResolveTheme(themeKey, 'dark');
+  return localStorage.getItem(themeKey) || 'dark';
+}
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  const btn = document.getElementById('themeBtn');
+  btn.textContent = t === 'dark' ? '☀️' : '🌓';
+}
+function toggleTheme() {
+  const next = getTheme() === 'light' ? 'dark' : 'light';
+  localStorage.setItem(themeKey, next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+
+document.addEventListener('keydown', e => {
+  if (e.key === 't' || e.key === 'T') toggleTheme();
+});
+</script>
+<script src="pwa-register.js" defer></script>
+
+<script>document.addEventListener("keydown",function(e){if(e.key==="?"||e.key==="/"){e.preventDefault();var p=document.getElementById("ksOverlay");p.style.display=p.style.display==="flex"?"none":"flex"}});</script>
+ <div class="ks-overlay" id="ksOverlay" onclick="if(event.target===this)this.classList.remove('show')" style="display:none;position:fixed;inset:0;background:rgba(20,16,10,0.85);z-index:200;align-items:center;justify-content:center;"> <div style="background:var(--card-bg,#faf7f2);border-radius:16px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);color:var(--text,#3b3223);font-family:inherit;"> <h3 style="text-align:center;margin-bottom:16px;font-size:1.1em;letter-spacing:2px;color:var(--accent,#8b4513);">⌨ 快捷键</h3> <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:0.85em;"> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">H</span><span style="opacity:0.7">回首页</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">1</span><span style="opacity:0.7">老子</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">2</span><span style="opacity:0.7">小学</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">3</span><span style="opacity:0.7">初中</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">4</span><span style="opacity:0.7">高中</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">5</span><span style="opacity:0.7">翻牌</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">6</span><span style="opacity:0.7">接龙</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">7</span><span style="opacity:0.7">消消乐</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">8</span><span style="opacity:0.7">连连看</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">9</span><span style="opacity:0.7">扫雷</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">0</span><span style="opacity:0.7">2048</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">T</span><span style="opacity:0.7">切换主题</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">-</span><span style="opacity:0.7">缩小字号</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">=</span><span style="opacity:0.7">放大字号</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">M</span><span style="opacity:0.7">放大镜</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">←↑</span><span style="opacity:0.7">上一篇</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">→↓</span><span style="opacity:0.7">下一篇</span> </div> <p style="margin-top:14px;text-align:center;font-size:0.75em;opacity:0.7;font-size:0.85em;">按 <b>?</b> 或 <b>/</b> 打开或关闭</p> </div> </div> 
+</body>
+</html>

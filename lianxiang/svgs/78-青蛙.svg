@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">78=青蛙</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">7像蛙腿弯弯蹬，8是蛙眼圆圆鼓</text>
+  <!-- 荷叶 -->
+  <ellipse cx="512" cy="800" rx="250" ry="50" fill="#66BB6A" opacity="0.4"/>
+  <ellipse cx="512" cy="790" rx="220" ry="40" fill="#4CAF50" opacity="0.3"/>
+  <!-- 身体 - 8形圆 -->
+  <ellipse cx="512" cy="650" rx="80" ry="70" fill="#66BB6A"/>
+  <ellipse cx="512" cy="640" rx="60" ry="55" fill="#81C784"/>
+  <!-- 肚皮 -->
+  <ellipse cx="512" cy="660" rx="45" ry="40" fill="#C8E6C9"/>
+  <!-- 眼睛 - 8形鼓起 -->
+  <circle cx="470" cy="580" r="20" fill="#66BB6A"/>
+  <circle cx="554" cy="580" r="20" fill="#66BB6A"/>
+  <circle cx="470" cy="580" r="14" fill="white"/>
+  <circle cx="554" cy="580" r="14" fill="white"/>
+  <circle cx="474" cy="580" r="6" fill="#2C1810"/>
+  <circle cx="558" cy="580" r="6" fill="#2C1810"/>
+  <!-- 嘴 -->
+  <path d="M470 620 Q512 640 554 620" fill="none" stroke="#4CAF50" stroke-width="3"/>
+  <!-- 前腿 - 7形弯 -->
+  <path d="M440 660 Q400 680 380 720 Q370 740 390 750" fill="none" stroke="#66BB6A" stroke-width="12" stroke-linecap="round"/>
+  <path d="M584 660 Q624 680 644 720 Q654 740 634 750" fill="none" stroke="#66BB6A" stroke-width="12" stroke-linecap="round"/>
+  <!-- 后腿 -->
+  <path d="M460 700 Q420 740 400 780" fill="none" stroke="#66BB6A" stroke-width="14" stroke-linecap="round"/>
+  <path d="M564 700 Q604 740 624 780" fill="none" stroke="#66BB6A" stroke-width="14" stroke-linecap="round"/>
+  <!-- 脚蹼 -->
+  <path d="M370 755 L380 765 M390 750 L400 760 M400 745 L410 755" stroke="#66BB6A" stroke-width="3"/>
+</svg>

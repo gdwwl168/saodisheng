@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1a28"/><stop offset="100%" stop-color="#0a0a18"/></radialGradient>
+    <linearGradient id="scarf1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E870A0"/><stop offset="50%" stop-color="#C84880"/><stop offset="100%" stop-color="#A03060"/></linearGradient>
+    <linearGradient id="scarf2" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F090B8"/><stop offset="100%" stop-color="#D06088"/></linearGradient>
+    <linearGradient id="fold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFB8D0" stop-opacity="0.4"/><stop offset="100%" stop-color="#801040" stop-opacity="0.1"/></linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">43=丝巾</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">4方丝巾柔柔飘，3折系颈美美戴</text>
+
+  <!-- 主丝巾大面 飘逸4方+3折 -->
+  <path d="M280 430 Q260 360 340 310 Q430 260 512 290 Q594 320 660 340 Q730 360 740 430 Q750 520 700 580 Q640 660 540 680 Q440 700 350 660 Q280 620 260 530 Q240 460 280 430Z" fill="url(#scarf1)" opacity="0.65"/>
+  <path d="M300 440 Q285 375 355 328 Q435 278 512 304 Q589 330 648 352 Q710 370 718 435 Q728 510 682 565 Q630 635 542 656 Q450 674 368 640 Q305 604 285 528 Q268 465 300 440Z" fill="url(#scarf2)" opacity="0.4"/>
+
+  <!-- 三角飘角 - 4形 -->
+  <path d="M350 310 Q310 270 280 250 Q300 280 310 320Z" fill="#E870A0" opacity="0.7"/>
+  <path d="M660 340 Q700 310 730 300 Q710 325 700 350Z" fill="#F090B8" opacity="0.6"/>
+  <path d="M540 680 Q560 720 580 740 Q560 710 535 690Z" fill="#C84880" opacity="0.5"/>
+
+  <!-- 折痕纹理 3形弯 -->
+  <g stroke="#801040" stroke-width="1.8" opacity="0.3" fill="none">
+    <path d="M360 380 Q440 355 520 370 Q600 385 680 400"/>
+    <path d="M340 460 Q440 430 520 445 Q600 460 670 475"/>
+    <path d="M350 540 Q450 520 530 535 Q600 550 640 565"/>
+  </g>
+
+  <!-- 折痕高光 -->
+  <g stroke="#FFB8D0" stroke-width="1.2" opacity="0.2" fill="none">
+    <path d="M365 385 Q440 362 515 376 Q595 390 670 405"/>
+    <path d="M345 465 Q440 438 515 450 Q595 465 665 478"/>
+  </g>
+
+  <!-- 花纹 - 牡丹暗纹 -->
+  <g opacity="0.3">
+    <ellipse cx="460" cy="440" rx="14" ry="18" fill="#FFD0E0"/>
+    <ellipse cx="460" cy="440" rx="8" ry="12" fill="#FFE0EC" opacity="0.7"/>
+    <circle cx="460" cy="432" r="3" fill="#FFD540"/>
+    <ellipse cx="530" cy="450" rx="12" ry="16" fill="#FFD0E0" opacity="0.8"/>
+    <ellipse cx="530" cy="450" rx="6" ry="10" fill="#FFE0EC" opacity="0.6"/>
+    <circle cx="530" cy="443" r="2.5" fill="#FFD540"/>
+    <ellipse cx="495" cy="510" rx="16" ry="20" fill="#FFC8D8" opacity="0.7"/>
+    <ellipse cx="495" cy="510" rx="9" ry="13" fill="#FFDEE8" opacity="0.5"/>
+    <circle cx="495" cy="500" r="3.5" fill="#FFD540"/>
+  </g>
+
+  <!-- 系颈结 3形绕 -->
+  <path d="M535 678 Q520 695 500 698 Q478 700 465 688 Q452 674 460 660" fill="none" stroke="#C84880" stroke-width="10" stroke-linecap="round"/>
+  <path d="M535 678 Q520 695 500 698 Q478 700 465 688 Q452 674 460 660" fill="none" stroke="#E870A0" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+  <ellipse cx="500" cy="682" rx="12" ry="9" fill="#A03060" opacity="0.5"/>
+
+  <!-- 流苏 -->
+  <g stroke="#C87090" stroke-width="2" stroke-linecap="round" opacity="0.5">
+    <line x1="462" y1="665" x2="456" y2="710"/>
+    <line x1="468" y1="668" x2="463" y2="715"/>
+    <line x1="474" y1="670" x2="470" y2="718"/>
+    <line x1="480" y1="672" x2="477" y2="720"/>
+    <line x1="486" y1="674" x2="484" y2="721"/>
+    <line x1="492" y1="675" x2="490" y2="720"/>
+    <line x1="498" y1="675" x2="497" y2="719"/>
+    <line x1="504" y1="674" x2="504" y2="717"/>
+    <line x1="510" y1="673" x2="511" y2="714"/>
+    <line x1="516" y1="670" x2="518" y2="710"/>
+    <line x1="522" y1="667" x2="525" y2="705"/>
+    <line x1="528" y1="663" x2="532" y2="698"/>
+  </g>
+
+  <!-- 流苏珠饰 -->
+  <g fill="#FFD540" opacity="0.4">
+    <circle cx="463" cy="700" r="2.5"/>
+    <circle cx="475" cy="706" r="2.5"/>
+    <circle cx="487" cy="709" r="2.5"/>
+    <circle cx="498" cy="708" r="2.5"/>
+    <circle cx="509" cy="705" r="2.5"/>
+    <circle cx="520" cy="698" r="2.5"/>
+  </g>
+
+  <!-- 微光粒子 -->
+  <g fill="white" opacity="0.08">
+    <circle cx="400" cy="390" r="2"/>
+    <circle cx="620" cy="420" r="1.5"/>
+    <circle cx="480" cy="600" r="1.8"/>
+    <circle cx="580" cy="380" r="1.2"/>
+    <circle cx="380" cy="500" r="1.5"/>
+  </g>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="chopstick1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C4985A"/>
+      <stop offset="30%" stop-color="#DEB887"/>
+      <stop offset="70%" stop-color="#D4A868"/>
+      <stop offset="100%" stop-color="#A07838"/>
+    </linearGradient>
+    <linearGradient id="chopstick2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#A07838"/>
+      <stop offset="30%" stop-color="#D4A868"/>
+      <stop offset="70%" stop-color="#DEB887"/>
+      <stop offset="100%" stop-color="#C4985A"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="800" fill="#F5F0E8"/>
+  <rect x="20" y="20" width="760" height="760" rx="30" ry="30" fill="#FFF8F0"/>
+
+  <!-- Steam from dumpling -->
+  <g fill="none" stroke="#CCC" stroke-width="2" opacity="0.4">
+    <path d="M 400,320 Q 390,290 400,260 Q 410,230 400,200"/>
+    <path d="M 380,330 Q 370,300 378,275"/>
+    <path d="M 420,330 Q 430,300 422,275"/>
+  </g>
+
+  <!-- Small plate under dumpling -->
+  <ellipse cx="400" cy="500" rx="70" ry="15" fill="#EEE"/>
+  <ellipse cx="400" cy="498" rx="65" ry="12" fill="#F8F8F8"/>
+
+  <!-- Dumpling -->
+  <path d="M 355,450 Q 355,420 400,410 Q 445,420 445,450 Q 435,480 400,480 Q 365,480 355,450 Z"
+        fill="#F5F0E8" stroke="#D4C8B0" stroke-width="2"/>
+  <!-- Dumpling pleats -->
+  <g stroke="#D4C8B0" stroke-width="1.5" fill="none" opacity="0.7">
+    <path d="M 365,430 Q 370,450 380,450"/>
+    <path d="M 380,422 Q 385,450 395,450"/>
+    <path d="M 395,418 Q 400,450 410,450"/>
+    <path d="M 410,422 Q 415,450 425,450"/>
+    <path d="M 425,430 Q 430,450 440,450"/>
+  </g>
+
+  <!-- Left chopstick = first 1 -->
+  <g transform="translate(400, 500) rotate(-8)">
+    <rect x="-4" y="-280" width="8" height="270" rx="3" fill="url(#chopstick1)"/>
+    <rect x="-4" y="-280" width="3" height="270" fill="white" opacity="0.2"/>
+    <!-- Tapered tip -->
+    <polygon points="-3,-280 3,-280 1,-300 -1,-300" fill="#A07838"/>
+  </g>
+
+  <!-- Right chopstick = second 1 -->
+  <g transform="translate(400, 500) rotate(8)">
+    <rect x="-4" y="-280" width="8" height="270" rx="3" fill="url(#chopstick2)"/>
+    <rect x="-4" y="-280" width="3" height="270" fill="white" opacity="0.2"/>
+    <polygon points="-3,-280 3,-280 1,-300 -1,-300" fill="#A07838"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="90" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="44" font-weight="bold" fill="#333">11=筷子</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="760" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="26" fill="#888">1像筷子直直夹，1是筷子双双配</text>
+
+  <rect x="0" y="0" width="800" height="800" rx="28" ry="28" fill="none" stroke="#E8DDD0" stroke-width="4"/>
+</svg>

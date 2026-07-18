@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="emoji-study-theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>Emoji 记忆卡 · 扫地僧</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap');
+:root {
+  --bg: #f5efe0; --text: #3b3223; --accent: #8b4513;
+  --gold: #c4a97d; --card-bg: #faf7f2; --border: #d4c5a9;
+}
+[data-theme="dark"] {
+  --bg: #1a1610; --text: #d4c5a9; --accent: #c9a96e;
+  --gold: #c9a96e; --card-bg: #252018; --border: #3a3028;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Serif SC', serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.header { text-align: center; padding: 24px 20px 8px; }
+.header a { color: var(--accent); text-decoration: none; font-size: 14px; letter-spacing: 2px; }
+.header a:hover { color: var(--gold); }
+.header h1 { font-family: 'Ma Shan Zheng', cursive; font-size: 2em; color: var(--accent); letter-spacing: 0.15em; margin-top: 8px; }
+.tip { text-align: center; font-size: 0.78em; opacity: 0.5; padding: 4px 20px 12px; letter-spacing: 1px; }
+
+.controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 8px 20px; }
+.controls button {
+  padding: 7px 16px; border: 1px solid var(--border); border-radius: 16px;
+  background: var(--card-bg); color: var(--text); font-family: inherit;
+  font-size: 0.82em; cursor: pointer; transition: all 0.2s;
+}
+.controls button:hover { background: var(--border); }
+.controls button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; max-width: 1000px; margin: 0 auto; padding: 12px 20px 40px; }
+.card { perspective: 800px; aspect-ratio: 1; }
+.card-inner {
+  position: relative; width: 100%; height: 100%;
+  transition: transform 0.5s; transform-style: preserve-3d;
+  cursor: pointer;
+}
+.card.flipped .card-inner { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; inset: 0; border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border: 1px solid var(--border); padding: 14px 10px; text-align: center;
+  user-select: none;
+}
+.card-front { background: var(--card-bg); }
+.card-front .num { font-size: 0.7em; opacity: 0.4; }
+.card-front .hint { font-size: 0.95em; opacity: 0; font-weight: 600; transition: opacity 0.3s; }
+.card-front .emoji { font-size: 2.2em; margin-top: 4px; opacity: 0; transition: opacity 0.3s; }
+.card.revealed .hint { opacity: 0.8; }
+.card.revealed .emoji { opacity: 1; }
+.card-back {
+  background: rgba(139,69,19,0.04); border-color: var(--accent);
+  transform: rotateY(180deg); display: flex; align-items: center; justify-content: center;
+}
+.card-back .first { font-size: 1.05em; opacity: 0.8; line-height: 1.7; padding: 8px; text-align: left; }
+.card:hover .card-front { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+.theme-btn { position: fixed; top: 16px; right: 16px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border); background: var(--card-bg); cursor: pointer; font-size: 1.1em; z-index: 10; display: flex; align-items: center; justify-content: center; }
+.footer { text-align: center; padding: 12px; opacity: 0.35; font-size: 0.7em; letter-spacing: 0.1em; }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px 12px 40px; }
+  .card-front .num { font-size: 1em; }
+  .card-front .emoji { font-size: 2.4em; }
+  .card-front .hint { font-size: 1.1em; }
+  .card-back .first { font-size: 1.1em; }
+}
+</style>
+</head>
+<body>
+<button class="theme-btn" onclick="toggleTheme()">🌓</button>
+<div class="header">
+  <a href="index.html"><img src="12345.png" alt="logo" style="width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:6px;">← 返回藏经阁</a>
+  <span style="margin:0 8px;opacity:0.3;">|</span>
+  <a href="bianmaka.html">🔢 编码卡</a>
+  <span style="margin:0 8px;opacity:0.3;">|</span>
+  <a href="lianxiang-story.html">🏞️ 编码故事</a>
+  <h1>Emoji 记忆卡</h1>
+</div>
+<p class="tip">单击显 Emoji → 再单击翻面看原文 → 第三次单击回到正面 · 空格随机抽考</p>
+<div class="controls">
+  <button onclick="toggleAll()">👁️ 全部翻转</button>
+  <button onclick="shuffleOne()">🎲 随机抽考</button>
+  <button id="resetBtn" onclick="resetAll()">🔄 全部盖上</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">扫地僧创作 · 二〇二六</div>
+
+<script>
+const chapterEmoji = ['','🕯️','🦢','👂','⛵','🪝','⛰️','🧗','🤰','🦺','⚾','🥢','🪑','👨‍⚕️','🔑','🦜','🍑','🔬','🎒','🍶','🚬','🐊','🦆','🎧','⏰','🪕','🏞️','🎏','🪷','🏀','🕳️','🦈','🪭','🏔️','🌲','🪸','🪔','🐔','🛋️','📐','👨‍✈️','🎤','🍅','🧣','🦁','🫖','🥝','🚗','🥒','🐕','🏅','👘','🍄','☂️','⚔️','🥁','🐌','🐔','🦊','⭐','🥝','🦽','🦌','☂️','🌿','🏚️','🪀','💦','📣','🫎','🦄','✈️','🐧','🚩','🐴','🧱','🦏','♟️','🐸','🎈','🗼','🐜'];
+const chapterHint = ['','蜡烛','白鹅','耳朵','帆船','钩子','山谷','崖壁','孕妇','口哨','棒球','筷子','椅儿','医生','钥匙','鹦鹉','石榴','仪器','腰包','药酒','香烟','鳄鱼','鸳鸯','耳机','闹钟','二胡','河流','彩旗','荷花','篮球','山洞','鲨鱼','扇儿','山川','杉树','珊瑚','香炉','山鸡','沙发','三角尺','司令','司仪','柿饼','丝巾','石狮','水壶','榴莲','司机','丝瓜','石狗','五环','舞衣','木耳','舞伞','武士','锣鼓','蜗牛','母鸡','尾巴','五角星','榴莲','轮椅','鹿儿','绿伞','柳丝','老屋','溜溜球','油漆','喇叭','鹿角','麒麟','机翼','企鹅','旗杆','骑士','积木','犀牛','象棋','青蛙','气球','铁塔','白蚁'];
+const chapterFirst = [
+  '',
+  '道可道，非常道；名可名，非常名',
+  '天下皆知美之为美，斯恶已；皆知',
+  '不尚贤，使民不争；不贵难得之货',
+  '道冲，而用之或不盈。渊兮，似万',
+  '天地不仁，以万物为刍狗；圣人不',
+  '谷神不死，是谓玄牝。玄牝之门，',
+  '天长地久。天地所以能长且久者，',
+  '上善若水。水善利万物而不争，处',
+  '持而盈之，不如其已；揣而锐之，',
+  '载营魄抱一，能无离乎？专气致柔',
+  '三十辐共一毂，当其无，有车之用',
+  '五色令人目盲，五音令人耳聋，五',
+  '宠辱若惊，贵大患若身。何谓宠辱',
+  '视之不见名曰夷，听之不闻名曰希',
+  '古之善为士者，微妙玄通，深不可',
+  '致虚极，守静笃。万物并作，吾以',
+  '太上，下知有之；其次，亲而誉之',
+  '大道废，有仁义；智慧出，有大伪',
+  '绝圣弃智，民利百倍；绝仁弃义，',
+  '绝学无忧。唯之与阿，相去几何？',
+  '孔德之容，惟道是从。道之为物，',
+  '曲则全，枉则直，洼则盈，敝则新',
+  '希言自然。故飘风不终朝，骤雨不',
+  '企者不立，跨者不行。自见者不明',
+  '有物混成，先天地生。寂兮寥兮，',
+  '重为轻根，静为躁君。是以圣人终',
+  '善行无辙迹，善言无瑕谪，善数不',
+  '知其雄，守其雌，为天下谿。为天',
+  '将欲取天下而为之，吾见其不得已',
+  '以道佐人主者，不以兵强天下，其',
+  '夫佳兵者，不祥之器，物或恶之，',
+  '道常无名，朴虽小，天下莫能臣。',
+  '知人者智，自知者明。胜人者有力',
+  '大道泛兮，其可左右。万物恃之而',
+  '执大象，天下往。往而不害，安平',
+  '将欲歙之，必固张之；将欲弱之，',
+  '道常无为而无不为。侯王若能守之',
+  '上德不德，是以有德；下德不失德',
+  '昔之得一者：天得一以清，地得一',
+  '反者道之动，弱者道之用。天下万',
+  '上士闻道，勤而行之；中士闻道，',
+  '道生一，一生二，二生三，三生万',
+  '天下之至柔，驰骋天下之至坚。无',
+  '名与身孰亲？身与货孰多？得与亡',
+  '大成若缺，其用不弊。大盈若冲，',
+  '天下有道，却走马以粪。天下无道',
+  '不出户，知天下；不窥牖，见天道',
+  '为学日益，为道日损。损之又损，',
+  '圣人无常心，以百姓心为心。善者',
+  '出生入死。生之徒十有三，死之徒',
+  '道生之，德畜之，物形之，势成之',
+  '天下有始，以为天下母。既得其母',
+  '使我介然有知，行于大道，唯施是',
+  '善建者不拔，善抱者不脱，子孙以',
+  '含德之厚，比于赤子。毒虫不螫，',
+  '知者不言，言者不知。塞其兑，闭',
+  '以正治国，以奇用兵，以无事取天',
+  '其政闷闷，其民淳淳；其政察察，',
+  '治人事天，莫若啬。夫唯啬，是谓',
+  '治大国若烹小鲜。以道莅天下，其',
+  '大国者下流，天下之交，天下之牝',
+  '道者万物之奥，善人之宝，不善人',
+  '为无为，事无事，味无味。大小多',
+  '其安易持，其未兆易谋，其脆易泮',
+  '古之善为道者，非以明民，将以愚',
+  '江海所以能为百谷王者，以其善下',
+  '天下皆谓我道大，似不肖。夫唯大',
+  '善为士者不武，善战者不怒，善胜',
+  '用兵有言：吾不敢为主而为客，不',
+  '吾言甚易知，甚易行。天下莫能知',
+  '知不知，上；不知知，病。夫唯病',
+  '民不畏威，则大威至。无狎其所居',
+  '勇于敢则杀，勇于不敢则活。此两',
+  '民不畏死，奈何以死惧之？若使民',
+  '民之饥，以其上食税之多，是以饥',
+  '人之生也柔弱，其死也坚强。万物',
+  '天之道，其犹张弓与？高者抑之，',
+  '天下莫柔弱于水，而攻坚强者莫之',
+  '和大怨，必有余怨，安可以为善？',
+  '小国寡民。使有什伯之器而不用，',
+  '信言不美，美言不信。善者不辩，',
+];
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  let html = '';
+  for (let i = 1; i <= 81; i++) {
+    html += `<div class="card" id="c-${i}" onclick="flip(${i})">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="num">第${i}章</div>
+          <div class="emoji">${chapterEmoji[i]}</div>
+          <div class="hint">${chapterHint[i]}</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="first">${chapterFirst[i]}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function muyu() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, t);
+    osc.frequency.exponentialRampToValueAtTime(300, t + 0.08);
+    gain.gain.setValueAtTime(0.3, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(t); osc.stop(t + 0.15);
+  } catch(e) {}
+}
+
+function chordSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    const notes = [262, 330, 392, 523, 659];
+    notes.forEach((freq, i) => {
+      [1, 2, 3].forEach(m => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * m, t + i * 0.04);
+        gain.gain.setValueAtTime(0.12 / m, t + i * 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.04 + 1.5);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t + i * 0.04); osc.stop(t + i * 0.04 + 1.6);
+      });
+    });
+  } catch(e) {}
+}
+
+function randomNote() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    const notes = [262, 294, 330, 349, 392, 440, 523, 587, 659, 784, 880, 1047];
+    const freq = notes[Math.floor(Math.random() * notes.length)];
+    [1, 2, 3, 4].forEach((m, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq * m, t + i * 0.03);
+      gain.gain.setValueAtTime(0.15 / m, t + i * 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.03 + 0.4);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t + i * 0.03); osc.stop(t + i * 0.03 + 0.5);
+    });
+  } catch(e) {}
+}
+
+function puffSmoke(el) {
+  const rect = el.getBoundingClientRect();
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    const size = 4 + Math.random() * 8;
+    p.style.cssText = `position:fixed;z-index:999;pointer-events:none;width:${size}px;height:${size}px;border-radius:50%;background:rgba(160,140,120,0.5);left:${rect.left+rect.width/2+Math.random()*30-15}px;top:${rect.top+rect.height/2+Math.random()*16-8}px;transition:all 2s ease-out;`;
+    document.body.appendChild(p);
+    requestAnimationFrame(() => {
+      p.style.transform = `translate(${Math.random()*80-40}px,${-60-Math.random()*80}px) scale(2)`;
+      p.style.opacity = '0';
+    });
+    setTimeout(() => p.remove(), 2200);
+  }
+}
+
+function flip(i) {
+  const card = document.getElementById('c-' + i);
+  if (!card.classList.contains('revealed')) {
+    card.classList.add('revealed');
+    muyu();
+  } else if (!card.classList.contains('flipped')) {
+    card.classList.add('flipped');
+    randomNote();
+  } else {
+    card.classList.remove('flipped');
+    card.classList.remove('revealed');
+    puffSmoke(card);
+  }
+}
+
+function toggleAll() {
+  chordSound();
+  const allRevealed = document.querySelectorAll('.card.revealed').length > 40;
+  for (let i = 1; i <= 81; i++) {
+    const card = document.getElementById('c-' + i);
+    if (allRevealed) { card.classList.remove('revealed'); card.classList.remove('flipped'); }
+    else card.classList.add('revealed');
+  }
+}
+
+function resetAll() {
+  puffSmoke(document.getElementById('resetBtn'));
+  for (let i = 1; i <= 81; i++) {
+    const card = document.getElementById('c-' + i);
+    card.classList.remove('flipped');
+    card.classList.remove('revealed');
+  }
+}
+
+function shuffleOne() {
+  resetAll();
+  const r = Math.floor(Math.random() * 81) + 1;
+  const card = document.getElementById('c-' + r);
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function toggleTheme() {
+  const h = document.documentElement;
+  const next = h.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  h.setAttribute('data-theme', next);
+  localStorage.setItem('emoji-study-theme', next);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === ' ') { e.preventDefault(); shuffleOne(); }
+  if (e.key === 'a' || e.key === 'A') toggleAll();
+  if (e.key === 'r' || e.key === 'R') resetAll();
+  if (e.key === 't') toggleTheme();
+  if (e.key === 'h' || e.key === 'H') { e.preventDefault(); location.href = 'index.html'; }
+  if (e.key === '?') { e.preventDefault(); var p=document.getElementById('ksOverlay'); p.style.display=p.style.display==='flex'?'none':'flex'; }
+  if (e.key === '5') window.open('memory-game.html','_blank');
+  if (e.key === '6') window.open('poetry-chain.html','_blank');
+  if (e.key === '7') window.open('xiao-game.html','_blank');
+  if (e.key === '8') window.open('emoji-match.html','_blank');
+  if (e.key === '9') window.open('saolei.html','_blank');
+  if (e.key === '0') window.open('2048.html','_blank');
+});
+
+(function() {
+  const t = localStorage.getItem('emoji-study-theme');
+  if (t) document.documentElement.setAttribute('data-theme', t);
+  renderGrid();
+})();
+</script>
+<script>document.addEventListener("keydown",function(e){if(e.key==="?"||e.key==="/"){e.preventDefault();var p=document.getElementById("ksOverlay");p.style.display=p.style.display==="flex"?"none":"flex"}});</script>
+<div class="ks-overlay" id="ksOverlay" onclick="if(event.target===this)this.classList.remove('show')" style="display:none;position:fixed;inset:0;background:rgba(20,16,10,0.85);z-index:200;align-items:center;justify-content:center;"><div style="background:var(--card-bg,#faf7f2);border-radius:16px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);color:var(--text,#3b3223);font-family:inherit;"><h3 style="text-align:center;margin-bottom:16px;font-size:1.1em;letter-spacing:2px;color:var(--accent,#8b4513);">快捷键</h3><div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:0.85em;"><span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">空格</span><span style="opacity:0.7">随机抽考</span><span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">A</span><span style="opacity:0.7">全部翻转</span><span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">R</span><span style="opacity:0.7">全部盖上</span><span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">H</span><span style="opacity:0.7">回首页</span><span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">T</span><span style="opacity:0.7">切换主题</span><span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">5-0</span><span style="opacity:0.7">六个游戏</span></div><p style="margin-top:14px;text-align:center;font-size:0.75em;opacity:0.7;">键盘按 ? / 打开关闭</p></div></div>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

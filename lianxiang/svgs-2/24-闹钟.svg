@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a1a20"/><stop offset="100%" stop-color="#0a0a10"/></radialGradient>
+    <radialGradient id="clockBg" cx="50%" cy="50%"><stop offset="0%" stop-color="#F5F0E8"/><stop offset="100%" stop-color="#E0D8CA"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">24=闹钟</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">2个铃铛圆圆，4点准时叮铃铃</text>
+  <!-- 钟身 -->
+  <circle cx="512" cy="500" r="140" fill="url(#clockBg)"/>
+  <circle cx="512" cy="500" r="130" fill="#FFFAF5"/>
+  <circle cx="512" cy="500" r="130" fill="none" stroke="#C0B0A0" stroke-width="3"/>
+  <!-- 刻度 -->
+  <g stroke="#4A3728" stroke-width="2" opacity="0.4">
+    <line x1="512" y1="375" x2="512" y2="390"/>
+    <line x1="512" y1="610" x2="512" y2="625"/>
+    <line x1="387" y1="500" x2="402" y2="500"/>
+    <line x1="622" y1="500" x2="637" y2="500"/>
+  </g>
+  <!-- 指针 2+4形 -->
+  <line x1="512" y1="500" x2="470" y2="440" stroke="#3a1a1a" stroke-width="5" stroke-linecap="round"/>
+  <line x1="512" y1="500" x2="555" y2="460" stroke="#3a1a1a" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="512" cy="500" r="6" fill="#3a1a1a"/>
+  <!-- 数字 -->
+  <text x="512" y="405" text-anchor="middle" font-size="20" fill="#4A3728" font-family="sans-serif">12</text>
+  <text x="600" y="505" text-anchor="middle" font-size="20" fill="#4A3728" font-family="sans-serif">3</text>
+  <text x="512" y="610" text-anchor="middle" font-size="20" fill="#4A3728" font-family="sans-serif">6</text>
+  <text x="424" y="505" text-anchor="middle" font-size="20" fill="#4A3728" font-family="sans-serif">9</text>
+  <!-- 铃铛 2形圆 x2 -->
+  <circle cx="430" cy="350" r="30" fill="#C89830"/>
+  <circle cx="430" cy="350" r="22" fill="#D0A840"/>
+  <circle cx="430" cy="350" r="14" fill="#E0B850" opacity="0.6"/>
+  <circle cx="594" cy="350" r="30" fill="#C89830"/>
+  <circle cx="594" cy="350" r="22" fill="#D0A840"/>
+  <circle cx="594" cy="350" r="14" fill="#E0B850" opacity="0.6"/>
+  <!-- 铃铛连杆 -->
+  <line x1="440" y1="355" x2="460" y2="370" stroke="#A07820" stroke-width="5"/>
+  <line x1="584" y1="355" x2="564" y2="370" stroke="#A07820" stroke-width="5"/>
+  <!-- 锤子 -->
+  <circle cx="512" cy="290" r="8" fill="#A07820"/>
+  <line x1="512" y1="298" x2="512" y2="330" stroke="#A07820" stroke-width="3"/>
+  <!-- 支腿 -->
+  <rect x="470" y="635" width="12" height="30" rx="3" fill="#A07820"/>
+  <rect x="542" y="635" width="12" height="30" rx="3" fill="#A07820"/>
+  <!-- 振动线 -->
+  <g stroke="#E85D3A" stroke-width="1.5" opacity="0.25">
+    <line x1="400" y1="350" x2="385" y2="335"/>
+    <line x1="400" y1="360" x2="382" y2="352"/>
+    <line x1="624" y1="350" x2="639" y2="335"/>
+    <line x1="624" y1="360" x2="642" y2="352"/>
+  </g>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">57=母鸡</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">5像母鸡弯弯孵，7是脖子长长伸</text>
+  <!-- 巢 -->
+  <ellipse cx="420" cy="750" rx="140" ry="40" fill="#D7CCC8" opacity="0.6"/>
+  <ellipse cx="420" cy="740" rx="130" ry="35" fill="#FFE082" opacity="0.3"/>
+  <!-- 身体 - 5形弯 -->
+  <ellipse cx="420" cy="620" rx="100" ry="110" fill="#FFF9C4"/>
+  <ellipse cx="420" cy="620" rx="90" ry="100" fill="#FFF176"/>
+  <!-- 翅膀 -->
+  <ellipse cx="370" cy="600" rx="50" ry="70" fill="#FFD54F" transform="rotate(-10 370 600)"/>
+  <!-- 尾巴 -->
+  <path d="M500 580 Q560 560 580 610 Q590 640 570 660" fill="none" stroke="#F9A825" stroke-width="8" stroke-linecap="round"/>
+  <!-- 脖子 - 7形 -->
+  <path d="M350 560 Q300 500 280 450 Q260 400 270 360" fill="none" stroke="#FFF9C4" stroke-width="22" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <circle cx="270" cy="350" r="25" fill="#FFF176"/>
+  <!-- 鸡冠 -->
+  <path d="M260 325 Q252 300 270 305 Q280 290 290 310 Q295 295 300 315" fill="#F44336"/>
+  <!-- 眼睛 -->
+  <circle cx="285" cy="342" r="5" fill="#2C1810"/>
+  <circle cx="286" cy="341" r="2" fill="white"/>
+  <!-- 喙 -->
+  <path d="M295 350 L320 348 L300 358Z" fill="#FF9800"/>
+  <!-- 垂肉 -->
+  <path d="M282 370 Q280 385 290 390" fill="none" stroke="#F44336" stroke-width="3"/>
+  <!-- 蛋 -->
+  <ellipse cx="400" cy="735" rx="18" ry="22" fill="#FFE082"/>
+  <ellipse cx="440" cy="738" rx="16" ry="20" fill="#FFE082"/>
+  <ellipse cx="380" cy="730" rx="15" ry="19" fill="#FFE082"/>
+</svg>

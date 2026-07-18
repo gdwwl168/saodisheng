@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E3F2FD"/><stop offset="100%" stop-color="#BBDEFB"/></linearGradient>
+  </defs>
+  <!-- 卡片背景 -->
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">26=河流</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">2像河道弯弯绕，6是漩涡圆圆转</text>
+
+  <!-- 天空 -->
+  <rect x="60" y="200" width="904" height="200" rx="10" fill="url(#sky)" opacity="0.4"/>
+
+  <!-- 太阳 -->
+  <circle cx="200" cy="330" r="40" fill="#FFD54F" opacity="0.8"/>
+  <circle cx="200" cy="330" r="55" fill="#FFD54F" opacity="0.2"/>
+
+  <!-- 左岸（绿色山丘） -->
+  <path d="M60 500 Q150 360 250 420 Q350 360 420 460 Q450 500 460 520 L460 850 L60 850Z" fill="#81C784" opacity="0.5"/>
+  <path d="M60 520 Q180 430 300 480 Q380 440 420 500 L420 850 L60 850Z" fill="#66BB6A" opacity="0.4"/>
+
+  <!-- 右岸 -->
+  <path d="M964 500 Q850 370 750 420 Q670 370 600 450 Q580 500 560 520 L560 850 L964 850Z" fill="#81C784" opacity="0.5"/>
+  <path d="M964 520 Q840 440 720 480 Q640 450 600 500 L600 850 L964 850Z" fill="#66BB6A" opacity="0.4"/>
+
+  <!-- 河流 - 2形弯曲线 -->
+  <path d="M460 520 Q480 560 470 600 Q460 640 480 680 Q500 720 480 760 Q460 800 470 830" fill="none" stroke="#42A5F5" stroke-width="80" stroke-linecap="round" opacity="0.6"/>
+  <path d="M460 520 Q480 560 470 600 Q460 640 480 680 Q500 720 480 760 Q460 800 470 830" fill="none" stroke="#1E88E5" stroke-width="50" stroke-linecap="round" opacity="0.5"/>
+  <!-- 水面高光 -->
+  <path d="M460 520 Q480 560 470 600 Q460 640 480 680 Q500 720 480 760 Q460 800 470 830" fill="none" stroke="white" stroke-width="10" stroke-linecap="round" opacity="0.3"/>
+
+  <!-- 漩涡 - 6形螺旋 -->
+  <g transform="translate(460, 660)">
+    <ellipse cx="0" cy="0" rx="45" ry="30" fill="none" stroke="#1565C0" stroke-width="3" opacity="0.5"/>
+    <ellipse cx="0" cy="0" rx="25" ry="18" fill="none" stroke="#1565C0" stroke-width="2.5" opacity="0.5"/>
+    <ellipse cx="0" cy="0" rx="10" ry="8" fill="none" stroke="#1565C0" stroke-width="2" opacity="0.5"/>
+    <circle cx="0" cy="0" r="4" fill="#1565C0" opacity="0.6"/>
+  </g>
+
+  <!-- 岸边小树 -->
+  <circle cx="180" cy="430" r="25" fill="#4CAF50" opacity="0.6"/>
+  <rect x="177" y="430" width="6" height="25" fill="#795548" opacity="0.7"/>
+
+  <circle cx="820" cy="440" r="22" fill="#4CAF50" opacity="0.5"/>
+  <rect x="817" y="440" width="6" height="22" fill="#795548" opacity="0.7"/>
+
+  <!-- 小鱼 -->
+  <path d="M380 700 Q370 690 375 680 L395 690Z" fill="#FF8A65" opacity="0.6"/>
+  <path d="M530 750 Q540 740 535 730 L515 740Z" fill="#FF8A65" opacity="0.5"/>
+</svg>

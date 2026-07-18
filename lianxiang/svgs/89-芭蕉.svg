@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">89=芭蕉</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">8像蕉身弯弯挂，9是叶片长长展</text>
+  <!-- 树干 -->
+  <rect x="380" y="300" width="30" height="500" rx="6" fill="#558B2F"/>
+  <rect x="360" y="300" width="70" height="100" rx="10" fill="#66BB6A" opacity="0.5"/>
+  <!-- 叶片 - 9形长展 -->
+  <path d="M395 350 Q200 320 150 380 Q120 420 180 440 Q220 450 300 420" fill="#66BB6A" opacity="0.7"/>
+  <path d="M395 350 Q200 340 155 400" fill="none" stroke="#43A047" stroke-width="2" opacity="0.4"/>
+  <path d="M380 340 Q600 280 700 340 Q750 380 680 440" fill="#81C784" opacity="0.7"/>
+  <!-- 芭蕉串 - 8形弯挂 -->
+  <path d="M395 420 Q420 460 410 500 L395 420" fill="#FFC107" opacity="0.8"/>
+  <!-- 芭蕉果 -->
+  <path d="M380 500 Q360 540 375 580 Q400 620 410 600 Q420 580 405 540" fill="#FFC107"/>
+  <path d="M400 510 Q385 550 395 590 Q415 610 420 595 Q430 570 410 540" fill="#FFD54F"/>
+  <path d="M415 500 Q400 540 410 580 Q430 600 432 585 Q438 560 420 530" fill="#FFE082"/>
+  <path d="M420 490 Q410 530 415 570 Q430 590 432 575 Q436 550 425 520" fill="#FFF176"/>
+  <path d="M390 510 Q370 560 380 600" fill="none" stroke="#FF8F00" stroke-width="2" opacity="0.3"/>
+  <path d="M410 500 Q400 550 410 590" fill="none" stroke="#FF8F00" stroke-width="2" opacity="0.3"/>
+</svg>

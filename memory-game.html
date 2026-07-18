@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="memory-theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>翻牌修心 · 扫地僧记忆</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap');
+
+:root {
+  --bg: #f5efe0;
+  --text: #3b3223;
+  --accent: #8b4513;
+  --gold: #c4a97d;
+  --card-bg: #faf7f2;
+  --card-back: #5a3e2b;
+  --border: #d4c5a9;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"] {
+  --bg: #1a1610;
+  --text: #d4c5a9;
+  --accent: #c9a96e;
+  --gold: #c9a96e;
+  --card-bg: #252018;
+  --card-back: #3a2a1a;
+  --border: #3a3028;
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ── Header ──────────────────────────── */
+.header {
+  text-align: center;
+  padding: 28px 20px 12px;
+  width: 100%;
+  max-width: 800px;
+}
+.header .back-link {
+  display: inline-block; color: var(--accent); text-decoration: none;
+  font-size: 14px; letter-spacing: 2px; transition: color .2s;
+  margin-bottom: 12px;
+}
+.header .back-link:hover { color: var(--gold); }
+.header h1 {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 2em; color: var(--accent); letter-spacing: 0.15em;
+}
+
+/* ── Controls ────────────────────────── */
+.controls {
+  display: flex; gap: 12px; justify-content: center;
+  flex-wrap: wrap; padding: 12px 20px;
+}
+.controls button, .controls select {
+  padding: 8px 18px;
+  border: 1px solid var(--border); border-radius: 20px;
+  background: var(--card-bg); color: var(--text);
+  font-family: inherit; font-size: 0.85em;
+  cursor: pointer; transition: all 0.2s;
+  letter-spacing: 1px;
+}
+.controls button:hover, .controls select:hover { background: var(--border); }
+.controls button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── Stats bar ────────────────────────── */
+.stats {
+  display: flex; gap: 24px; justify-content: center;
+  flex-wrap: wrap; padding: 8px 20px;
+  font-size: 0.85em; opacity: 0.7; letter-spacing: 1px;
+}
+.stats span { display: flex; align-items: center; gap: 4px; }
+
+/* ── Board ───────────────────────────── */
+.tip {
+  text-align: center; font-size: 0.8em; opacity: 0.45;
+  padding: 0 20px 8px; letter-spacing: 1px; line-height: 1.7;
+}
+
+.main-area {
+  flex: 1; display: flex; align-items: flex-start; justify-content: center;
+  gap: 20px; padding: 16px 20px 40px; width: 100%; max-width: 900px;
+  margin: 0 auto;
+}
+
+.board-container {
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Leaderboard ───────────────────── */
+.lb-section {
+  width: 220px; min-width: 220px;
+  border: 1px solid var(--border); border-radius: 12px;
+  background: var(--card-bg); padding: 14px;
+  box-shadow: var(--shadow);
+}
+.lb-header-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.lb-header-row h3 {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 1.3em; color: var(--accent); letter-spacing: 0.1em;
+}
+.lb-toggle {
+  background: transparent; border: none; color: var(--text);
+  font-size: 1.1em; cursor: pointer; opacity: 0.5; transition: all 0.2s;
+}
+.lb-toggle:hover { opacity: 1; }
+.lb-body { transition: all 0.3s; }
+.lb-body.hidden { display: none; }
+
+.lb-name-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  font-size: 0.8em; opacity: 0.6;
+}
+.lb-name-row input {
+  flex: 1; max-width: 160px;
+  padding: 5px 10px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--card-bg); color: var(--text);
+  font-family: inherit; font-size: 0.9em; outline: none;
+}
+.lb-name-row input:focus { border-color: var(--accent); }
+
+.lb-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+.lb-tab {
+  padding: 5px 14px; border: 1px solid var(--border); border-radius: 14px;
+  background: transparent; color: var(--text); font-family: inherit;
+  font-size: 0.75em; cursor: pointer; transition: all 0.2s;
+}
+.lb-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.lb-table {
+  width: 100%; border-collapse: collapse; font-size: 0.82em;
+}
+.lb-table th {
+  text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border);
+  color: var(--text); opacity: 0.5; font-weight: 400; font-size: 0.85em;
+}
+.lb-table td {
+  padding: 7px 8px; border-bottom: 1px solid rgba(180,160,130,0.15);
+}
+.lb-table .rank { width: 32px; font-weight: 700; }
+.lb-table .rank.gold { color: #b8860b; }
+.lb-table .rank.silver { color: #8b8682; }
+.lb-table .rank.bronze { color: #b87333; }
+.lb-table .self td { background: rgba(139,69,19,0.06); }
+.lb-table .name-cell { font-weight: 500; }
+.lb-table .score-cell { font-family: 'JetBrains Mono', 'Noto Serif SC', monospace; text-align: right; }
+.lb-empty {
+  text-align: center; padding: 20px; opacity: 0.4; font-size: 0.85em;
+}
+.board {
+  display: grid; gap: 10px;
+  perspective: 1000px;
+}
+
+/* ── Card ────────────────────────────── */
+.card-wrapper {
+  perspective: 800px;
+}
+.card {
+  width: 100%; aspect-ratio: 1;
+  position: relative; cursor: pointer;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+.card.flipped { transform: rotateY(180deg); }
+.card.matched { transform: rotateY(180deg); pointer-events: none; }
+
+.card-face {
+  position: absolute; inset: 0;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-front {
+  background: var(--card-back);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  font-size: 2em; opacity: 0.8;
+}
+
+.card-back {
+  background: var(--card-bg);
+  border: 2px solid var(--gold);
+  box-shadow: var(--shadow);
+  transform: rotateY(180deg);
+  font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+  font-size: 2.2em; font-weight: 700;
+  color: var(--accent);
+}
+.card.matched .card-back {
+  border-color: #6b8e5a; color: #6b8e5a;
+  background: rgba(107,142,90,0.08);
+}
+
+/* ── Victory overlay ──────────────────── */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(20,16,10,0.85); z-index: 50;
+  flex-direction: column; align-items: center; justify-content: center;
+}
+.overlay.show { display: flex; }
+.overlay-card {
+  background: var(--card-bg); border-radius: 16px;
+  padding: 40px 48px; text-align: center;
+  max-width: 400px; width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.overlay-card .trophy { font-size: 4em; margin-bottom: 16px; }
+.overlay-card h2 {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 1.8em; color: var(--accent); margin-bottom: 12px;
+  letter-spacing: 0.1em;
+}
+.overlay-card .quote {
+  font-size: 0.95em; opacity: 0.7; line-height: 1.8;
+  margin-bottom: 20px; font-style: italic;
+}
+.overlay-card .score { font-size: 0.9em; opacity: 0.6; margin-bottom: 20px; }
+.overlay-card button {
+  padding: 10px 28px; border: none; border-radius: 20px;
+  background: var(--accent); color: #fff;
+  font-family: inherit; font-size: 0.95em;
+  cursor: pointer; letter-spacing: 2px;
+  transition: opacity 0.2s;
+}
+.overlay-card button:hover { opacity: 0.85; }
+
+/* ── Theme toggle ─────────────────────── */
+.theme-btn {
+  position: fixed; top: 16px; right: 16px;
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--card-bg);
+  cursor: pointer; font-size: 1.1em; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+}
+.theme-btn:hover { transform: scale(1.1); }
+
+/* ── Responsive ───────────────────────── */
+@media (max-width: 768px) {
+  .main-area { flex-direction: column; align-items: center; }
+  .lb-section { width: 100%; min-width: 0; max-width: 400px; }
+}
+@media (max-width: 480px) {
+  .board { gap: 6px; }
+  .card-front { font-size: 1.3em; }
+  .card-back { font-size: 1.5em; }
+  .header h1 { font-size: 1.5em; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-btn" onclick="toggleTheme()" title="切换主题">🌓</button>
+
+<div class="header">
+  <a href="index.html" class="back-link"><img src="12345.png" alt="logo" style="width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:6px;">← 返回藏经阁</a>
+  <h1>翻 牌 修 心</h1>
+  <p class="tip">翻开两张牌，若字相同则配对成功留下，不同则翻回。记住每个字的位置，用最少的步数让全部归位。</p>
+</div>
+
+<div class="controls">
+  <button class="active" data-level="easy" onclick="setLevel('easy')">道 · 4×4</button>
+  <button data-level="medium" onclick="setLevel('medium')">德 · 4×6</button>
+  <button data-level="hard" onclick="setLevel('hard')">经 · 5×6</button>
+  <button onclick="restart()">🔄 重新开始</button>
+  <button id="peekBtn" onclick="peek()">👁️ 扫一眼</button>
+</div>
+
+<div class="stats">
+  <span>🔄 步数：<strong id="moveCount">0</strong></span>
+  <span>✅ 配对：<strong id="pairCount">0</strong></span>
+  <span>⏱️ 时间：<strong id="timerDisplay">00:00</strong></span>
+</div>
+
+<div class="main-area">
+<div class="board-container">
+  <div class="board" id="board"></div>
+</div>
+
+<div class="lb-section">
+  <div class="lb-header-row">
+    <h3>📜 江湖榜</h3>
+    <button class="lb-toggle" onclick="toggleLB()" id="lbToggle">▼</button>
+  </div>
+  <div class="lb-body" id="lbBody">
+    <div class="lb-name-row">
+      <span>名号：</span>
+      <input type="text" id="lbName" maxlength="8" placeholder="扫地僧" onchange="saveName()">
+    </div>
+    <div class="lb-tabs">
+      <button class="lb-tab active" data-diff="easy" onclick="switchLBTab('easy')">道 4×4</button>
+      <button class="lb-tab" data-diff="medium" onclick="switchLBTab('medium')">德 4×6</button>
+      <button class="lb-tab" data-diff="hard" onclick="switchLBTab('hard')">经 5×6</button>
+    </div>
+    <table class="lb-table">
+      <thead><tr><th>#</th><th>名号</th><th>步数</th><th>用时</th><th>日期</th></tr></thead>
+      <tbody id="lbTbody"></tbody>
+    </table>
+    <div class="lb-empty" id="lbEmpty">暂无战绩，通关后自动上榜</div>
+    <button style="margin-top:10px;padding:5px 14px;border:1px solid rgba(184,84,80,0.25);border-radius:12px;background:transparent;color:var(--text);opacity:0.4;font-family:inherit;font-size:0.7em;cursor:pointer;" onclick="clearLB()">清空记录</button>
+  </div>
+</div>
+</div>
+
+<div style="text-align:center;padding:8px;opacity:0.35;font-size:0.7em;letter-spacing:0.1em;">扫地僧创作 · 二〇二六</div>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <div class="trophy">🎉</div>
+    <h2 id="winTitle">修心有成</h2>
+    <div class="quote" id="winQuote"></div>
+    <div class="score" id="winScore"></div>
+    <button onclick="restart()">🔄 再来一局</button>
+  </div>
+</div>
+
+<script>
+// ═══════ Data ═══════
+const charPool = '道德经名无天地有万物玄妙善美水柔静虚心知明光和大道一三生不为常奇上下左右中小仁义礼信智勇'.split('');
+
+const levels = {
+  easy:   { cols: 4, rows: 4, pairs: 8,  name: '道' },
+  medium: { cols: 4, rows: 6, pairs: 12, name: '德' },
+  hard:   { cols: 5, rows: 6, pairs: 15, name: '经' },
+};
+
+const taoQuotes = [
+  '上善若水，水善利万物而不争。',
+  '千里之行，始于足下。',
+  '知人者智，自知者明。',
+  '大直若屈，大巧若拙。',
+  '为学日益，为道日损。',
+  '道常无为，而无不为。',
+  '信言不美，美言不信。',
+];
+
+let currentLevel = 'easy';
+let cards = [];
+let flippedCards = [];
+let matchedPairs = 0;
+let moveCount = 0;
+let lockBoard = false;
+let peekUsed = false;
+let timerInterval = null;
+let secondsElapsed = 0;
+
+// ═══════ Theme ═══════
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('memory-theme', next);
+}
+
+// ═══════ Level ═══════
+function setLevel(level) {
+  currentLevel = level;
+  document.querySelectorAll('.controls button[data-level]').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.controls button[data-level="${level}"]`).classList.add('active');
+  restart();
+}
+
+// ═══════ Timer ═══════
+function startTimer() {
+  stopTimer();
+  secondsElapsed = 0;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function stopTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+  const s = (secondsElapsed % 60).toString().padStart(2, '0');
+  document.getElementById('timerDisplay').textContent = m + ':' + s;
+}
+
+// ═══════ Game ═══════
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function restart() {
+  stopTimer();
+  matchedPairs = 0;
+  moveCount = 0;
+  flippedCards = [];
+  lockBoard = false;
+  peekUsed = false;
+  document.getElementById('peekBtn').disabled = false;
+  document.getElementById('peekBtn').style.opacity = '1';
+  document.getElementById('moveCount').textContent = '0';
+  document.getElementById('pairCount').textContent = '0';
+  document.getElementById('overlay').classList.remove('show');
+  updateTimerDisplay();
+
+  const cfg = levels[currentLevel];
+  // Pick random chars for pairs
+  const picked = shuffle(charPool).slice(0, cfg.pairs);
+  // Create card pairs
+  cards = shuffle([...picked, ...picked].map((char, i) => ({ id: i, char, matched: false, flipped: false })));
+
+  renderBoard(cfg);
+  // Start timer on first move (handled in handleCardClick)
+}
+
+function renderBoard(cfg) {
+  const board = document.getElementById('board');
+  board.style.gridTemplateColumns = `repeat(${cfg.cols}, 1fr)`;
+  // Set card size based on columns
+  const cardSize = cfg.cols <= 4 ? '80px' : '72px';
+
+  board.innerHTML = cards.map((card, i) => `
+    <div class="card-wrapper" style="width:${cardSize};height:${cardSize};">
+      <div class="card" id="card-${i}" onclick="handleCardClick(${i})">
+        <div class="card-face card-front">🜲</div>
+        <div class="card-face card-back">${card.char}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function handleCardClick(idx) {
+  if (lockBoard) return;
+  const card = cards[idx];
+  if (card.matched || card.flipped) return;
+
+  // First move starts timer
+  if (moveCount === 0 && flippedCards.length === 0) {
+    startTimer();
+  }
+
+  // Flip card
+  card.flipped = true;
+  document.getElementById('card-' + idx).classList.add('flipped');
+  flippedCards.push(idx);
+  muyu();
+  speakChar(card.char);
+
+  if (flippedCards.length === 2) {
+    moveCount++;
+    document.getElementById('moveCount').textContent = moveCount;
+    lockBoard = true;
+
+    const [a, b] = flippedCards;
+    if (cards[a].char === cards[b].char) {
+      // Match!
+      cards[a].matched = true;
+      cards[b].matched = true;
+      matchedPairs++;
+      document.getElementById('pairCount').textContent = matchedPairs;
+      document.getElementById('card-' + a).classList.add('matched');
+      document.getElementById('card-' + b).classList.add('matched');
+      flippedCards = [];
+      lockBoard = false;
+      randomChord();
+
+      // Check win
+      const cfg = levels[currentLevel];
+      if (matchedPairs === cfg.pairs) {
+        stopTimer();
+        setTimeout(showVictory, 500);
+      }
+    } else {
+      // No match — flip back after delay
+      setTimeout(() => {
+        document.getElementById('card-' + a).classList.remove('flipped');
+        document.getElementById('card-' + b).classList.remove('flipped');
+        cards[a].flipped = false;
+        cards[b].flipped = false;
+        flippedCards = [];
+        lockBoard = false;
+      }, 700);
+    }
+  }
+}
+
+function peek() {
+  if (peekUsed || lockBoard) return;
+  peekUsed = true;
+  lockBoard = true;
+  const btn = document.getElementById('peekBtn');
+  btn.disabled = true;
+  btn.style.opacity = '0.4';
+
+  // Flip all unmatched cards face-up
+  cards.forEach((card, i) => {
+    if (!card.matched && !card.flipped) {
+      card.flipped = true;
+      document.getElementById('card-' + i).classList.add('flipped');
+    }
+  });
+
+  // Flip back after 6 seconds
+  setTimeout(() => {
+    cards.forEach((card, i) => {
+      if (!card.matched && card.flipped && !flippedCards.includes(i)) {
+        card.flipped = false;
+        document.getElementById('card-' + i).classList.remove('flipped');
+      }
+    });
+    lockBoard = false;
+  }, 6000);
+}
+
+function showVictory() {
+  const timeStr = document.getElementById('timerDisplay').textContent;
+  const quote = taoQuotes[Math.floor(Math.random() * taoQuotes.length)];
+  document.getElementById('winQuote').textContent = '「' + quote + '」';
+  document.getElementById('winScore').textContent =
+    '共翻 ' + moveCount + ' 步 · 用时 ' + timeStr;
+  document.getElementById('overlay').classList.add('show');
+  addScore(currentLevel, moveCount, timeStr);
+}
+
+// ═══════ Leaderboard ═══════
+let playerName = localStorage.getItem('memory-player') || '';
+let lbTab = 'easy';
+let lbData = { easy: [], medium: [], hard: [] };
+
+function loadLB() {
+  try { lbData = Object.assign({ easy: [], medium: [], hard: [] }, JSON.parse(localStorage.getItem('memory-lb'))); }
+  catch(e) {}
+}
+function saveLB() { localStorage.setItem('memory-lb', JSON.stringify(lbData)); }
+function saveName() {
+  playerName = document.getElementById('lbName').value.trim().slice(0, 8) || '扫地僧';
+  localStorage.setItem('memory-player', playerName);
+}
+function clearLB() { if (confirm('清空全部榜单？')) { lbData = { easy: [], medium: [], hard: [] }; saveLB(); renderLB(); } }
+
+function addScore(diff, moves, timeStr) {
+  const name = playerName || '扫地僧';
+  const entry = { name, moves, time: timeStr, date: new Date().toLocaleDateString('zh-CN') };
+  if (!lbData[diff]) lbData[diff] = [];
+  lbData[diff].push(entry);
+  lbData[diff].sort((a, b) => a.moves - b.moves || a.time.localeCompare(b.time));
+  if (lbData[diff].length > 20) lbData[diff] = lbData[diff].slice(0, 20);
+  saveLB();
+  renderLB();
+}
+
+function renderLB() {
+  const tbody = document.getElementById('lbTbody');
+  const empty = document.getElementById('lbEmpty');
+  const list = lbData[lbTab] || [];
+  if (list.length === 0) {
+    tbody.innerHTML = ''; empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    tbody.innerHTML = list.map((e, i) => {
+      const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+      const selfClass = e.name === playerName ? ' self' : '';
+      return `<tr class="${selfClass}">
+        <td class="rank ${rankClass}">${i + 1}</td>
+        <td class="name-cell">${e.name}</td>
+        <td class="score-cell">${e.moves} 步</td>
+        <td class="score-cell">${e.time}</td>
+        <td style="font-size:0.75em;opacity:0.5;">${e.date}</td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function switchLBTab(diff) {
+  lbTab = diff;
+  document.querySelectorAll('.lb-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lb-tab[data-diff="${diff}"]`).classList.add('active');
+  renderLB();
+}
+
+function toggleLB() {
+  const body = document.getElementById('lbBody');
+  const btn = document.getElementById('lbToggle');
+  body.classList.toggle('hidden');
+  btn.textContent = body.classList.contains('hidden') ? '▶' : '▼';
+}
+
+// ═══════ Sounds ═══════
+let _speakTimer = null;
+let _zhVoice = null;
+
+function pickZhVoice() {
+  if (!window.speechSynthesis) return null;
+  const voices = window.speechSynthesis.getVoices();
+  return (
+    voices.find(v => /zh[-_]CN/i.test(v.lang) && /female|女|Xiaoxiao|Xiaoyi|Huihui|Yaoyao/i.test(v.name)) ||
+    voices.find(v => /zh[-_]CN/i.test(v.lang)) ||
+    voices.find(v => /^zh/i.test(v.lang)) ||
+    null
+  );
+}
+
+if (window.speechSynthesis) {
+  _zhVoice = pickZhVoice();
+  window.speechSynthesis.onvoiceschanged = () => { _zhVoice = pickZhVoice(); };
+}
+
+/** 朗读汉字（翻牌时） */
+function speakChar(char) {
+  if (!char || !window.speechSynthesis) return;
+  try {
+    window.speechSynthesis.cancel();
+    clearTimeout(_speakTimer);
+    // Chrome：cancel 后立刻 speak 常会静音，需短暂延迟
+    _speakTimer = setTimeout(() => {
+      const u = new SpeechSynthesisUtterance(char);
+      u.lang = 'zh-CN';
+      u.rate = 0.9;
+      u.pitch = 1;
+      u.volume = 1;
+      if (!_zhVoice) _zhVoice = pickZhVoice();
+      if (_zhVoice) u.voice = _zhVoice;
+      window.speechSynthesis.speak(u);
+    }, 60);
+  } catch (e) {}
+}
+
+function muyu() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, t);
+    osc.frequency.exponentialRampToValueAtTime(300, t + 0.08);
+    gain.gain.setValueAtTime(0.25, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(t); osc.stop(t + 0.12);
+  } catch(e) {}
+}
+function randomChord() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
+    const pool = [262, 294, 330, 349, 392, 440, 523, 587, 659];
+    const root = pool[Math.floor(Math.random() * pool.length)];
+    [root, root * 1.25, root * 1.5].forEach((freq, i) => {
+      [1, 2].forEach(m => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * m, t + i * 0.05);
+        gain.gain.setValueAtTime(0.1 / m, t + i * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.05 + 1.2);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t + i * 0.05); osc.stop(t + i * 0.05 + 1.3);
+      });
+    });
+  } catch(e) {}
+}
+
+// ═══════ Keyboard ═══════
+document.addEventListener('keydown', e => {
+  if (e.key === 'r' || e.key === 'R') restart();
+  if (e.key === '1') setLevel('easy');
+  if (e.key === '2') setLevel('medium');
+  if (e.key === '3') setLevel('hard');
+  if (e.key === 't' || e.key === 'T') toggleTheme();
+  if (e.key === 'h' || e.key === 'H') window.open('index.html','_self');
+  if (e.key === '5') window.open('memory-game.html','_blank');
+  if (e.key === '6') window.open('poetry-chain.html','_blank');
+  if (e.key === '7') window.open('xiao-game.html','_blank');
+  if (e.key === '8') window.open('emoji-match.html','_blank');
+  if (e.key === '9') window.open('saolei.html','_blank');
+  if (e.key === '0') window.open('2048.html','_blank');
+});
+
+// ═══════ Init ═══════
+(function init() {
+  const saved = localStorage.getItem('memory-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  loadLB();
+  document.getElementById('lbName').value = playerName;
+  renderLB();
+  restart();
+})();
+</script>
+<script>document.addEventListener("keydown",function(e){if(e.key==="?"||e.key==="/"){e.preventDefault();var p=document.getElementById("ksOverlay");p.style.display=p.style.display==="flex"?"none":"flex"}});</script>
+ <div class="ks-overlay" id="ksOverlay" onclick="if(event.target===this)this.classList.remove('show')" style="display:none;position:fixed;inset:0;background:rgba(20,16,10,0.85);z-index:200;align-items:center;justify-content:center;"> <div style="background:var(--card-bg,#faf7f2);border-radius:16px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);color:var(--text,#3b3223);font-family:inherit;"> <h3 style="text-align:center;margin-bottom:16px;font-size:1.1em;letter-spacing:2px;color:var(--accent,#8b4513);">⌨ 快捷键</h3> <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:0.85em;"> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">H</span><span style="opacity:0.7">回首页</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">1</span><span style="opacity:0.7">老子</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">2</span><span style="opacity:0.7">小学</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">3</span><span style="opacity:0.7">初中</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">4</span><span style="opacity:0.7">高中</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">5</span><span style="opacity:0.7">翻牌</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">6</span><span style="opacity:0.7">接龙</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">7</span><span style="opacity:0.7">消消乐</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">8</span><span style="opacity:0.7">连连看</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">9</span><span style="opacity:0.7">扫雷</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">0</span><span style="opacity:0.7">2048</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">T</span><span style="opacity:0.7">切换主题</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">-</span><span style="opacity:0.7">缩小字号</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">=</span><span style="opacity:0.7">放大字号</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">M</span><span style="opacity:0.7">放大镜</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">←↑</span><span style="opacity:0.7">上一篇</span> <span style="display:inline-block;padding:2px 8px;border:1px solid var(--border,#d4c5a9);border-radius:6px;font-family:monospace;font-weight:700;text-align:center">→↓</span><span style="opacity:0.7">下一篇</span> </div> <p style="margin-top:14px;text-align:center;font-size:0.75em;opacity:0.7;font-size:0.85em;">按 <b>?</b> 或 <b>/</b> 打开或关闭</p> </div> </div> 
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

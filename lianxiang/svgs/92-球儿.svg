@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">92=球儿</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">9像弹球弯弯跳，2是球影圆圆跟</text>
+  <!-- 弹球 - 9形弯弧轨迹 -->
+  <path d="M250 700 Q300 400 512 350 Q724 400 774 700" fill="none" stroke="#78909C" stroke-width="3" stroke-dasharray="8,6" opacity="0.3"/>
+  <!-- 球1（高点）- 9形 -->
+  <circle cx="512" cy="350" r="55" fill="url(#bg)"/>
+  <circle cx="512" cy="350" r="50" fill="#F44336"/>
+  <circle cx="512" cy="350" r="45" fill="#EF5350"/>
+  <ellipse cx="495" cy="330" rx="15" ry="10" fill="white" opacity="0.25"/>
+  <!-- 球2（落地）- 2形影 -->
+  <ellipse cx="280" cy="720" rx="50" ry="15" fill="#BDBDBD" opacity="0.3"/>
+  <circle cx="280" cy="690" r="45" fill="#2196F3"/>
+  <circle cx="280" cy="690" r="40" fill="#42A5F5"/>
+  <!-- 球3 -->
+  <circle cx="744" cy="700" r="45" fill="#4CAF50"/>
+  <circle cx="744" cy="700" r="40" fill="#66BB6A"/>
+  <ellipse cx="728" cy="682" r="12" ry="8" fill="white" opacity="0.2"/>
+  <!-- 弹跳线 -->
+  <path d="M250 740 Q280 750 300 740" fill="none" stroke="#90A4AE" stroke-width="2" opacity="0.3"/>
+  <path d="M700 750 Q744 760 780 750" fill="none" stroke="#90A4AE" stroke-width="2" opacity="0.3"/>
+</svg>

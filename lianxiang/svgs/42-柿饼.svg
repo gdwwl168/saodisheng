@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">42=柿饼</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">4像柿蒂三角翘，2是饼身圆圆扁</text>
+  <!-- 盘子 -->
+  <ellipse cx="512" cy="760" rx="180" ry="35" fill="#ECEFF1" stroke="#CFD8DC" stroke-width="2"/>
+  <!-- 柿饼身 - 2形圆扁 -->
+  <ellipse cx="512" cy="620" rx="140" ry="110" fill="#FF8F00"/>
+  <ellipse cx="512" cy="620" rx="130" ry="100" fill="#FFA726"/>
+  <ellipse cx="490" cy="590" rx="60" ry="40" fill="#FFB74D" opacity="0.4"/>
+  <!-- 柿蒂 - 4形三角 -->
+  <path d="M462 520 L512 460 L562 520Z" fill="#4E342E"/>
+  <path d="M472 520 L512 475 L552 520Z" fill="#5D4037"/>
+  <!-- 柿蒂叶片 -->
+  <ellipse cx="470" cy="525" rx="18" ry="8" fill="#5D4037" transform="rotate(-30 470 525)"/>
+  <ellipse cx="554" cy="525" rx="18" ry="8" fill="#5D4037" transform="rotate(30 554 525)"/>
+  <ellipse cx="512" cy="510" rx="16" ry="7" fill="#5D4037"/>
+  <!-- 白霜 -->
+  <ellipse cx="460" cy="640" rx="30" ry="15" fill="white" opacity="0.2"/>
+  <ellipse cx="550" cy="610" rx="25" ry="12" fill="white" opacity="0.15"/>
+  <!-- 装饰 -->
+  <text x="300" y="500" font-size="22" opacity="0.2">🍂</text>
+</svg>

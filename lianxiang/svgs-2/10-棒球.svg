@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#1a2820"/><stop offset="100%" stop-color="#0a140e"/></radialGradient>
+    <linearGradient id="bat" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8B6A4A"/><stop offset="100%" stop-color="#C0A080"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">10=棒球</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">1是球棒直直立，0是棒球圆圆滚</text>
+  <!-- 地面 -->
+  <ellipse cx="512" cy="720" rx="300" ry="30" fill="#2a3a20" opacity="0.4"/>
+  <!-- 球棒 1形 -->
+  <rect x="340" y="300" width="16" height="220" rx="4" fill="url(#bat)"/>
+  <rect x="344" y="300" width="5" height="220" fill="#D0B898" opacity="0.3"/>
+  <!-- 棒头粗 -->
+  <path d="M330 290 Q320 280 330 260 Q348 240 356 260 Q366 280 356 300Z" fill="#A08060"/>
+  <rect x="332" y="260" width="24" height="40" rx="8" fill="#B89870"/>
+  <!-- 握把 -->
+  <rect x="340" y="480" width="16" height="40" rx="3" fill="#6a4020" opacity="0.6"/>
+  <line x1="340" y1="490" x2="356" y2="490" stroke="#4a2810" stroke-width="1" opacity="0.4"/>
+  <line x1="340" y1="500" x2="356" y2="500" stroke="#4a2810" stroke-width="1" opacity="0.4"/>
+  <line x1="340" y1="510" x2="356" y2="510" stroke="#4a2810" stroke-width="1" opacity="0.4"/>
+  <!-- 棒球 0形 -->
+  <circle cx="660" cy="620" r="55" fill="white"/>
+  <circle cx="660" cy="620" r="55" fill="none" stroke="#DDD" stroke-width="1"/>
+  <!-- 缝线 -->
+  <path d="M620 590 Q640 620 620 650" fill="none" stroke="#E85D3A" stroke-width="2.5"/>
+  <path d="M700 590 Q680 620 700 650" fill="none" stroke="#E85D3A" stroke-width="2.5"/>
+  <!-- 缝线针脚 -->
+  <g stroke="#E85D3A" stroke-width="1.2" opacity="0.6">
+    <line x1="625" y1="600" x2="618" y2="598"/>
+    <line x1="628" y1="610" x2="620" y2="608"/>
+    <line x1="629" y1="620" x2="622" y2="618"/>
+    <line x1="627" y1="630" x2="620" y2="628"/>
+    <line x1="695" y1="600" x2="702" y2="598"/>
+    <line x1="692" y1="610" x2="700" y2="608"/>
+    <line x1="691" y1="620" x2="698" y2="618"/>
+    <line x1="693" y1="630" x2="700" y2="628"/>
+  </g>
+  <!-- 球阴影 -->
+  <ellipse cx="660" cy="680" rx="45" ry="10" fill="#0a0a08" opacity="0.3"/>
+</svg>

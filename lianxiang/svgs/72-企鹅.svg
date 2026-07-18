@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">72=企鹅</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">7像翅膀弯弯摆，2是小企鹅摇摇摆</text>
+  <ellipse cx="512" cy="830" rx="220" ry="35" fill="#B3E5FC" opacity="0.3"/>
+  <!-- 身体 - 2形 -->
+  <ellipse cx="512" cy="620" rx="100" ry="150" fill="#263238"/>
+  <!-- 白肚子 -->
+  <ellipse cx="512" cy="640" rx="70" ry="120" fill="#ECEFF1"/>
+  <!-- 头部 -->
+  <circle cx="512" cy="440" r="60" fill="#263238"/>
+  <!-- 脸部白斑 -->
+  <ellipse cx="485" cy="440" rx="25" ry="30" fill="#ECEFF1"/>
+  <ellipse cx="539" cy="440" rx="25" ry="30" fill="#ECEFF1"/>
+  <!-- 眼睛 -->
+  <circle cx="485" cy="435" r="6" fill="#2C1810"/>
+  <circle cx="539" cy="435" r="6" fill="#2C1810"/>
+  <circle cx="486" cy="434" r="2.5" fill="white"/>
+  <circle cx="540" cy="434" r="2.5" fill="white"/>
+  <!-- 喙 -->
+  <path d="M500 465 L524 460 L500 475Z" fill="#FF9800"/>
+  <!-- 翅膀 - 7形弯 -->
+  <path d="M412 520 Q380 600 400 700 Q420 760 460 770" fill="#37474F"/>
+  <path d="M612 520 Q644 600 624 700 Q604 760 564 770" fill="#37474F"/>
+  <!-- 脚 -->
+  <ellipse cx="470" cy="780" rx="25" ry="12" fill="#FF9800"/>
+  <ellipse cx="554" cy="780" rx="25" ry="12" fill="#FF9800"/>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#2a1a2e"/><stop offset="100%" stop-color="#0f0a14"/></radialGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#F5D5B8"/><stop offset="100%" stop-color="#E8C0A0"/></linearGradient>
+    <linearGradient id="inner" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#F0B8A0"/><stop offset="100%" stop-color="#E89880"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">03=耳朵</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">0像耳廓圆，3是耳垂弯弯挂</text>
+  <!-- 头部轮廓 -->
+  <ellipse cx="580" cy="480" rx="140" ry="180" fill="#F0C8A8" opacity="0.3"/>
+  <circle cx="620" cy="420" r="100" fill="#F0C8A8" opacity="0.2"/>
+  <!-- 外耳廓 0+3形 -->
+  <path d="M380 350 Q340 420 350 520 Q360 600 420 640 Q460 665 500 640 Q540 615 520 560 Q500 510 460 490 Q430 475 420 440 Q405 390 380 350Z" fill="url(#skin)" stroke="#D4A080" stroke-width="2"/>
+  <!-- 内耳廓 -->
+  <path d="M400 380 Q368 440 376 510 Q384 565 425 600 Q455 618 482 598 Q503 580 490 545 Q475 512 445 495 Q420 480 412 450 Q400 408 400 380Z" fill="url(#inner)" opacity="0.6"/>
+  <!-- 耳垂 - 3形弯 -->
+  <ellipse cx="430" cy="615" rx="35" ry="28" fill="#F0C0A0"/>
+  <ellipse cx="432" cy="612" rx="28" ry="20" fill="#F5D0B5" opacity="0.5"/>
+  <!-- 耳轮线条 -->
+  <path d="M390 400 Q370 460 380 530" fill="none" stroke="#D4A080" stroke-width="1.5" opacity="0.5"/>
+  <path d="M470 480 Q485 510 478 540" fill="none" stroke="#D4A080" stroke-width="1.5" opacity="0.4"/>
+  <!-- 耳洞暗示 -->
+  <ellipse cx="435" cy="500" rx="10" ry="14" fill="#C89070" opacity="0.4"/>
+  <!-- 小光点 -->
+  <circle cx="405" cy="430" r="4" fill="white" opacity="0.3"/>
+</svg>

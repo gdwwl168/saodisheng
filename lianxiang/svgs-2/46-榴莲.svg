@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#1a2810"/><stop offset="100%" stop-color="#0a1404"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">46=榴莲</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">4月开花圆圆长，6月熟透刺刺香</text>
+  <ellipse cx="512" cy="550" rx="100" ry="85" fill="#8B7A20"/>
+  <ellipse cx="512" cy="545" rx="88" ry="72" fill="#A09030" opacity="0.6"/>
+  <ellipse cx="490" cy="520" rx="20" ry="35" fill="#C0A840" opacity="0.25" transform="rotate(-10 490 520)"/>
+  <g fill="none" stroke="#6B5A10" stroke-width="3" stroke-linecap="round" opacity="0.6">
+    <path d="M415 530 Q430 515 445 540"/><path d="M430 500 Q445 485 455 505"/>
+    <path d="M460 475 Q478 460 485 480"/><path d="M500 465 Q515 450 525 472"/>
+    <path d="M540 470 Q558 458 562 480"/><path d="M575 485 Q590 472 595 495"/>
+    <path d="M600 515 Q615 505 608 530"/><path d="M590 555 Q608 555 600 578"/>
+    <path d="M560 590 Q575 595 565 615"/><path d="M520 610 Q530 625 515 632"/>
+    <path d="M475 610 Q478 628 460 628"/><path d="M435 590 Q425 608 415 595"/>
+    <path d="M410 560 Q395 568 402 545"/>
+  </g>
+  <rect x="498" y="455" width="28" height="20" rx="4" fill="#5a4a08"/>
+  <ellipse cx="512" cy="455" rx="4" ry="8" fill="#4a3a04"/>
+</svg>

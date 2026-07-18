@@ -1,0 +1,2164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="doodle_theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<title>十二生肖涂鸦 · Kids Doodle</title>
+<style>
+:root {
+  --bg: #fef9f0;
+  --card: #fffdf8;
+  --text: #4a3728;
+  --accent: #d4843a;
+  --border: #e0d5c1;
+  --tool-bg: #fff8f0;
+}
+[data-theme="dark"] {
+  --bg: #1e1b18;
+  --card: #2a2520;
+  --text: #d4c5a9;
+  --accent: #e8a860;
+  --border: #4a3f35;
+  --tool-bg: #2a2520;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: "Noto Serif SC","PingFang SC","Microsoft YaHei",sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* 左侧动物面板 */
+.animal-panel {
+  width: 260px; min-width: 260px;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  transition: background 0.3s;
+  z-index: 10;
+}
+.panel-header {
+  padding: 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.panel-header h1 {
+  font-size: 1.2em; color: var(--accent);
+  letter-spacing: 2px; margin-bottom: 2px;
+}
+.panel-header .sub {
+  font-size: 0.7em; opacity: 0.5;
+}
+.animal-grid {
+  flex: 1; overflow-y: auto;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-content: start;
+}
+.animal-grid::-webkit-scrollbar { width:4px; }
+.animal-grid::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+.animal-card {
+  padding: 8px 6px; border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  background: var(--tool-bg);
+}
+.animal-card:hover { border-color: var(--accent); background: rgba(212,132,58,0.08); }
+.animal-card.active { border-color: var(--accent); background: rgba(212,132,58,0.15); }
+.animal-card .zodiac-emoji { font-size: 2em; display: block; }
+.animal-card .zodiac-name { font-size: 0.75em; font-weight: 600; margin-top: 2px; }
+
+.panel-footer {
+  padding: 10px; border-top: 1px solid var(--border);
+  text-align: center;
+}
+.panel-footer a {
+  color: var(--accent); text-decoration: none;
+  font-size: 0.75em; font-weight: 600;
+}
+
+/* 主区域 */
+.main {
+  flex: 1; display: flex; flex-direction: column;
+}
+
+/* 工具栏 */
+.toolbar {
+  display: flex; align-items: center;
+  padding: 10px 16px; gap: 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  flex-wrap: wrap;
+  transition: background 0.3s;
+}
+.toolbar button {
+  padding: 8px 16px; border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--tool-bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.8em; cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.toolbar button:hover { background: rgba(212,132,58,0.12); border-color: var(--accent); }
+.toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.toolbar input[type="color"] {
+  width: 32px; height: 32px; border: 2px solid var(--border);
+  border-radius: 50%; cursor: pointer; padding: 0;
+  background: transparent;
+}
+.toolbar input[type="range"] {
+  width: 80px; accent-color: var(--accent);
+}
+.toolbar .sep { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+.toolbar .spacer { flex: 1; }
+
+/* 画布区域 */
+.canvas-wrap {
+  flex: 1; display: flex; align-items: center;
+  justify-content: center; padding: 0;
+  background: #faf5ef;
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="dark"] .canvas-wrap { background: #1a1814; }
+
+#drawCanvas {
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  cursor: crosshair;
+  background: #fffef9;
+  border: 1px solid #d0c8b8;
+}
+[data-theme="dark"] #drawCanvas { background: #f5f0e5; border-color: #5a4f42; }
+
+/* 全屏模式 - 工具栏移到右侧 */
+.main.is-fullscreen,
+.main:fullscreen,
+.main:-webkit-full-screen {
+  flex-direction: row !important;
+  background: var(--bg);
+}
+.main.is-fullscreen .toolbar,
+.main:fullscreen .toolbar,
+.main:-webkit-full-screen .toolbar {
+  flex-direction: column;
+  width: 340px;
+  min-width: 340px;
+  padding: 20px 14px;
+  gap: 10px;
+  border-bottom: none;
+  border-left: 1px solid var(--border);
+  border-radius: 20px 0 0 20px;
+  overflow-y: auto;
+  max-height: 100vh;
+  order: 2;
+  margin-right: 50px;
+}
+.main.is-fullscreen .toolbar button,
+.main:fullscreen .toolbar button,
+.main:-webkit-full-screen .toolbar button {
+  padding: 14px 12px;
+  font-size: 1em;
+  border-radius: 16px;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.4;
+  width: 100%;
+}
+.main.is-fullscreen .toolbar .sep,
+.main:fullscreen .toolbar .sep,
+.main:-webkit-full-screen .toolbar .sep {
+  width: 100%;
+  height: 1px;
+  margin: 6px 0;
+}
+.main.is-fullscreen .toolbar .spacer,
+.main:fullscreen .toolbar .spacer,
+.main:-webkit-full-screen .toolbar .spacer { display: none; }
+.main.is-fullscreen .toolbar input[type="range"],
+.main:fullscreen .toolbar input[type="range"],
+.main:-webkit-full-screen .toolbar input[type="range"] {
+  width: 280px;
+  height: auto;
+  margin: 8px auto;
+}
+.main.is-fullscreen .toolbar #colorPalette,
+.main:fullscreen .toolbar #colorPalette,
+.main:-webkit-full-screen .toolbar #colorPalette {
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+.main.is-fullscreen .toolbar #colorPalette span,
+.main:fullscreen .toolbar #colorPalette span,
+.main:-webkit-full-screen .toolbar #colorPalette span {
+  width: 70px !important;
+  height: 70px !important;
+  line-height: 70px !important;
+  font-size: 16px !important;
+}
+.main.is-fullscreen .toolbar .action-group,
+.main:fullscreen .toolbar .action-group,
+.main:-webkit-full-screen .toolbar .action-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  width: 100%;
+}
+.main.is-fullscreen .toolbar .action-group .sep,
+.main:fullscreen .toolbar .action-group .sep,
+.main:-webkit-full-screen .toolbar .action-group .sep { display: none; }
+.main.is-fullscreen .toolbar .tool-group,
+.main:fullscreen .toolbar .tool-group,
+.main:-webkit-full-screen .toolbar .tool-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  width: 100%;
+}
+.main.is-fullscreen .canvas-wrap,
+.main:fullscreen .canvas-wrap,
+.main:-webkit-full-screen .canvas-wrap {
+  flex: 1;
+  padding: 12px;
+  background: #faf5ef;
+  order: 1;
+}
+.main.is-fullscreen #drawCanvas,
+.main:fullscreen #drawCanvas,
+.main:-webkit-full-screen #drawCanvas {
+  border-radius: 12px;
+  max-width: calc(100vw - 440px);
+  max-height: 100vh;
+}
+[data-theme="dark"] .main.is-fullscreen,
+[data-theme="dark"] .main:fullscreen,
+[data-theme="dark"] .main:-webkit-full-screen { background: #1e1b18; }
+[data-theme="dark"] .main.is-fullscreen .canvas-wrap,
+[data-theme="dark"] .main:fullscreen .canvas-wrap,
+[data-theme="dark"] .main:-webkit-full-screen .canvas-wrap { background: #1a1814; }
+
+/* 缩放提示 */
+.zoom-hint {
+  position: absolute; bottom: 20px; right: 24px;
+  font-size: 0.7em; opacity: 0.4;
+}
+
+/* 模板面板遮罩（移动端） */
+.panel-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 15;
+}
+.panel-backdrop.show { display: block; }
+#panelToggleBtn { display: none; }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .animal-panel {
+    position: fixed; left:0; top:0; bottom:0;
+    transform: translateX(-100%);
+    z-index: 20;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+    transition: transform 0.25s ease;
+  }
+  .animal-panel.open { transform: translateX(0); }
+  #panelToggleBtn { display: inline-block; }
+  .canvas-wrap { padding: 8px; }
+  #drawCanvas { border-radius: 4px; }
+  .toolbar { padding: 6px 8px; gap: 4px; }
+  .toolbar button { padding: 6px 10px; font-size: 0.7em; }
+}
+
+/* Toast */
+.toast {
+  position: fixed; top: 20px; left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px; border-radius: 20px;
+  background: var(--accent); color: #fff;
+  font-size: 0.85em; z-index: 100;
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- 动物面板 -->
+<div class="animal-panel" id="animalPanel">
+  <div class="panel-header">
+    <h1 id="panelTitle">🐉 十二生肖</h1>
+    <div class="sub" id="panelSub">选一个动物开始涂鸦吧</div>
+    <div style="display:flex;gap:6px;margin-top:8px;justify-content:center;">
+      <button onclick="switchCategory('zodiac')" id="catZodiac" style="padding:4px 12px;border-radius:12px;border:1px solid var(--border);background:var(--accent);color:#fff;font-family:inherit;font-size:0.7em;cursor:pointer;">🐉 生肖</button>
+      <button onclick="switchCategory('landscape')" id="catLandscape" style="padding:4px 12px;border-radius:12px;border:1px solid var(--border);background:var(--tool-bg);color:var(--text);font-family:inherit;font-size:0.7em;cursor:pointer;">⛰️ 山川</button>
+      <button onclick="switchCategory('plant')" id="catPlant" style="padding:4px 12px;border-radius:12px;border:1px solid var(--border);background:var(--tool-bg);color:var(--text);font-family:inherit;font-size:0.7em;cursor:pointer;">🌱 植物</button>
+      <button onclick="switchCategory('food')" id="catFood" style="padding:4px 12px;border-radius:12px;border:1px solid var(--border);background:var(--tool-bg);color:var(--text);font-family:inherit;font-size:0.7em;cursor:pointer;">🍔 食品</button>
+    </div>
+  </div>
+  <div class="animal-grid" id="animalGrid"></div>
+  <div class="panel-footer">
+    <a href="index.html">🏠 回首页</a>
+  </div>
+</div>
+
+<!-- 移动端模板面板遮罩 -->
+<div class="panel-backdrop" id="panelBackdrop" onclick="closePanel()"></div>
+
+<!-- 主区域 -->
+<div class="main">
+  <div class="toolbar" id="toolbar">
+    <button id="panelToggleBtn" onclick="togglePanel()" title="选择模板">🎨 模板</button>
+    <button onclick="newCanvas()" title="新建画布">📄 新建</button>
+    <span class="sep"></span>
+    <span class="tool-group">
+    <button class="active" data-tool="pen" onclick="setTool('pen', this)" id="penBtn">🖊️ 圆头</button>
+    <button data-tool="texture" onclick="setTool('texture', this)" id="textureBtn">✏️ 铅笔</button>
+    <button data-tool="brush" onclick="setTool('brush', this)" id="brushBtn">💨 喷枪</button>
+    <button data-tool="shape" onclick="setTool('shape', this)" id="shapeBtn" title="点击切换：直线 / 圆圈 / 矩形 / 椭圆">📏 直线</button>
+    <button data-tool="bucket" onclick="setTool('bucket', this)">🪣 油漆桶</button>
+    <button data-tool="eraser" onclick="setTool('eraser', this)">🧽 橡皮</button>
+    <button data-tool="stamp" onclick="setTool('stamp', this)">🔴 印章</button>
+    </span>
+    <input type="range" id="sizeSlider" min="2" max="80" value="25" oninput="setSize(this.value)" title="粗细">
+    <span class="sep"></span>
+    <span id="colorPalette" style="display:grid;grid-template-columns:repeat(8,1fr);gap:3px;align-items:center;"></span>
+    <span class="sep"></span>
+    <span class="action-group">
+    <button onclick="undo()" title="撤销">↩ 撤销</button>
+    <button onclick="clearCanvas()" title="清空">🗑 清空</button>
+    <span class="sep"></span>
+    <button onclick="toggleOutline()" id="outlineBtn" title="显示/隐藏轮廓">👁️ 轮廓</button>
+    <button onclick="toggleTheme()" title="切换主题">🌓</button>
+    <button onclick="toggleFullscreen()" id="fullscreenBtn" title="全屏">📺 全屏</button>
+    <button onclick="saveDoodle()" title="保存作品">💾 保存</button>
+    </span>
+  </div>
+
+  <div class="canvas-wrap" id="canvasWrap">
+    <canvas id="drawCanvas"></canvas>
+    <div class="zoom-hint">滚轮缩放 | 空格/中键平移 | 0 重置视图 | F 全屏</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ 十二生肖 SVG 轮廓（儿童涂色线稿，0–100 坐标） ============
+const zodiacData = [
+  // 鼠：圆耳尖嘴、胡须、圆身体、长卷尾
+  { name:'鼠', emoji:'🐭', bg:'#607d8b', svg:`
+    <ellipse cx="48" cy="58" rx="22" ry="18"/>
+    <circle cx="42" cy="36" r="16"/>
+    <ellipse cx="30" cy="18" rx="9" ry="11"/>
+    <ellipse cx="54" cy="16" rx="9" ry="11"/>
+    <ellipse cx="30" cy="18" rx="4" ry="5"/>
+    <ellipse cx="54" cy="16" rx="4" ry="5"/>
+    <path d="M30 40 Q18 42 12 48"/>
+    <path d="M70 58 Q88 50 92 32 Q90 22 82 28 Q78 40 70 50"/>
+    <circle cx="36" cy="34" r="2.2"/>
+    <circle cx="50" cy="34" r="2.2"/>
+    <path d="M42 40 Q44 44 42 46 Q40 44 42 40"/>
+    <path d="M22 36 L8 32 M22 40 L6 42 M22 44 L10 50"/>
+    <path d="M58 36 L72 30 M58 40 L74 40 M58 44 L70 50"/>
+    <ellipse cx="36" cy="74" rx="5" ry="3"/>
+    <ellipse cx="52" cy="74" rx="5" ry="3"/>
+  ` },
+  // 牛：侧身、双角、宽鼻、粗腿、尾巴
+  { name:'牛', emoji:'🐮', bg:'#795548', svg:`
+    <ellipse cx="52" cy="52" rx="28" ry="20"/>
+    <path d="M24 48 Q14 40 12 28 Q14 18 24 22 Q32 28 34 40"/>
+    <path d="M18 24 Q10 10 18 8 Q26 10 24 22"/>
+    <path d="M28 22 Q34 6 44 10 Q42 20 34 28"/>
+    <ellipse cx="16" cy="34" rx="4" ry="5"/>
+    <circle cx="18" cy="36" r="1.5"/>
+    <ellipse cx="10" cy="42" rx="6" ry="4"/>
+    <path d="M6 42 L4 44 M8 44 L6 46 M12 44 L12 46"/>
+    <path d="M78 48 Q92 42 94 30"/>
+    <path d="M34 70 L30 90 M28 90 L36 90"/>
+    <path d="M48 72 L48 92 M44 92 L52 92"/>
+    <path d="M60 70 L64 90 M60 90 L68 90"/>
+    <path d="M72 68 L78 88 M74 88 L82 88"/>
+    <ellipse cx="42" cy="50" rx="3" ry="2"/>
+  ` },
+  // 虎：圆脸尖耳、额纹、胡须、条纹身、长尾
+  { name:'虎', emoji:'🐯', bg:'#a04000', svg:`
+    <ellipse cx="46" cy="58" rx="24" ry="18"/>
+    <circle cx="42" cy="36" r="18"/>
+    <path d="M28 22 L24 8 L34 18 Z"/>
+    <path d="M50 20 L58 6 L60 20 Z"/>
+    <path d="M42 22 L42 32 M36 26 L42 32 L48 26"/>
+    <path d="M30 28 L34 34 M50 28 L46 34"/>
+    <circle cx="34" cy="36" r="2.5"/>
+    <circle cx="50" cy="36" r="2.5"/>
+    <path d="M42 42 Q44 46 42 48 Q40 46 42 42"/>
+    <path d="M28 40 L14 36 M28 44 L12 44 M28 48 L16 52"/>
+    <path d="M56 40 L70 36 M56 44 L72 44 M56 48 L68 52"/>
+    <path d="M30 56 L38 56 M34 64 L42 64 M52 56 L60 56 M48 66 L56 66"/>
+    <path d="M68 52 Q88 40 90 58 Q86 72 70 68"/>
+    <path d="M76 48 L80 54 M82 52 L84 60 M78 62 L84 66"/>
+    <ellipse cx="34" cy="74" rx="6" ry="3"/>
+    <ellipse cx="54" cy="74" rx="6" ry="3"/>
+  ` },
+  // 兔：长耳、圆脸、小身体、短尾、前爪
+  { name:'兔', emoji:'🐰', bg:'#880e4f', svg:`
+    <ellipse cx="50" cy="68" rx="20" ry="22"/>
+    <circle cx="50" cy="42" r="18"/>
+    <ellipse cx="38" cy="16" rx="7" ry="20" transform="rotate(-12 38 16)"/>
+    <ellipse cx="62" cy="16" rx="7" ry="20" transform="rotate(12 62 16)"/>
+    <ellipse cx="38" cy="16" rx="3" ry="12" transform="rotate(-12 38 16)"/>
+    <ellipse cx="62" cy="16" rx="3" ry="12" transform="rotate(12 62 16)"/>
+    <circle cx="42" cy="40" r="2.5"/>
+    <circle cx="58" cy="40" r="2.5"/>
+    <path d="M50 46 Q52 50 50 52 Q48 50 50 46"/>
+    <path d="M44 54 Q50 58 56 54"/>
+    <ellipse cx="36" cy="48" rx="5" ry="3"/>
+    <ellipse cx="64" cy="48" rx="5" ry="3"/>
+    <ellipse cx="70" cy="72" rx="8" ry="7"/>
+    <path d="M38 78 Q32 86 36 90"/>
+    <path d="M50 80 Q50 90 54 92"/>
+    <path d="M42 62 L34 70 M58 62 L66 70"/>
+  ` },
+  // 龙：闭合龙头/龙身/腹甲/角/爪/背鳍，便于分区填色
+  { name:'龙', emoji:'🐲', bg:'#6b4c00', svg:`
+    <!-- 龙头外轮廓 -->
+    <path d="M8 40 Q4 28 12 18 Q22 10 34 16 Q42 22 40 34 Q44 40 40 48 Q32 56 18 52 Q8 48 8 40 Z"/>
+    <!-- 角（闭合） -->
+    <path d="M18 18 L14 4 L24 16 Z"/>
+    <path d="M28 14 L30 2 L36 16 Z"/>
+    <path d="M34 18 L42 6 L40 20 Z"/>
+    <!-- 眼、鼻、嘴 -->
+    <circle cx="22" cy="28" r="3.5"/>
+    <circle cx="22" cy="28" r="1.5"/>
+    <ellipse cx="12" cy="36" rx="5" ry="3.5"/>
+    <path d="M14 42 Q22 48 30 44 Q28 50 18 50 Q12 48 14 42 Z"/>
+    <!-- 须（闭合飘带） -->
+    <path d="M10 32 Q4 26 2 18 Q6 22 10 28 Q6 24 10 32 Z"/>
+    <path d="M12 44 Q4 48 2 56 Q8 52 12 46 Q8 50 12 44 Z"/>
+    <!-- 龙身外轮廓（闭合） -->
+    <path d="M38 40 Q52 30 66 36 Q80 44 88 34 Q96 26 98 38 Q100 52 90 60 Q78 70 64 64 Q50 56 42 62 Q30 70 26 58 Q24 48 38 40 Z"/>
+    <!-- 腹甲分区（闭合格） -->
+    <path d="M42 46 Q52 40 60 44 Q56 50 48 52 Q42 50 42 46 Z"/>
+    <path d="M56 48 Q66 44 74 48 Q70 56 62 56 Q56 54 56 48 Z"/>
+    <path d="M70 50 Q80 46 86 50 Q84 58 76 58 Q70 56 70 50 Z"/>
+    <!-- 背鳍（闭合三角） -->
+    <path d="M50 36 L54 26 L58 38 Z"/>
+    <path d="M62 38 L68 26 L72 42 Z"/>
+    <path d="M76 40 L84 28 L86 44 Z"/>
+    <!-- 前爪、后爪（闭合） -->
+    <path d="M46 58 L40 72 L48 70 L46 80 L54 68 L50 66 L56 60 Z"/>
+    <path d="M72 60 L68 76 L76 74 L74 84 L82 70 L78 68 L84 62 Z"/>
+    <!-- 尾端 -->
+    <ellipse cx="94" cy="48" rx="5" ry="4"/>
+    <path d="M96 44 L100 36 L99 48 Z"/>
+    <path d="M96 50 L100 56 L97 56 Z"/>
+  ` },
+  // 蛇：闭合头/身管/鳞节/尾，便于分区填色
+  { name:'蛇', emoji:'🐍', bg:'#1a6e3e', svg:`
+    <!-- 头（闭合） -->
+    <path d="M62 8 Q78 6 86 18 Q90 28 82 36 Q70 40 60 32 Q54 22 62 8 Z"/>
+    <circle cx="70" cy="18" r="2.8"/>
+    <circle cx="78" cy="16" r="2.8"/>
+    <circle cx="70" cy="18" r="1"/>
+    <circle cx="78" cy="16" r="1"/>
+    <!-- 信子（闭合分叉） -->
+    <path d="M60 30 L48 34 L54 28 L46 24 L58 28 Z"/>
+    <!-- 身体粗管外轮廓（闭合 S） -->
+    <path d="M78 34 Q92 42 94 56 Q96 70 84 78 Q70 86 66 96 Q60 104 46 100 Q32 96 28 84 Q24 70 36 64 Q50 56 52 44 Q54 32 66 28 Q72 26 78 34 Z"/>
+    <!-- 身体内腹线区（闭合） -->
+    <path d="M70 40 Q80 46 82 56 Q84 66 74 72 Q64 78 62 86 Q60 92 52 90 Q44 88 42 80 Q40 70 48 66 Q58 60 58 50 Q58 42 66 40 Q68 39 70 40 Z"/>
+    <!-- 鳞片节（闭合椭圆环带） -->
+    <ellipse cx="80" cy="48" rx="10" ry="7" transform="rotate(25 80 48)"/>
+    <ellipse cx="78" cy="62" rx="10" ry="7" transform="rotate(10 78 62)"/>
+    <ellipse cx="68" cy="74" rx="9" ry="7" transform="rotate(-15 68 74)"/>
+    <ellipse cx="54" cy="84" rx="9" ry="7" transform="rotate(-30 54 84)"/>
+    <ellipse cx="40" cy="80" rx="8" ry="7" transform="rotate(-50 40 80)"/>
+    <!-- 鳞纹菱形（闭合） -->
+    <path d="M76 46 L80 50 L76 54 L72 50 Z"/>
+    <path d="M74 60 L78 64 L74 68 L70 64 Z"/>
+    <path d="M64 72 L68 76 L64 80 L60 76 Z"/>
+    <path d="M52 82 L56 86 L52 90 L48 86 Z"/>
+    <!-- 尾端闭合 -->
+    <ellipse cx="30" cy="76" rx="7" ry="6"/>
+    <path d="M24 76 L16 72 L18 78 L16 84 L24 80 Z"/>
+  ` },
+  // 马：侧身、鬃毛、长脸、四腿、尾
+  { name:'马', emoji:'🐴', bg:'#8b6914', svg:`
+    <ellipse cx="52" cy="50" rx="26" ry="16"/>
+    <path d="M28 48 Q18 42 14 28 Q12 16 22 14 Q32 14 36 26 L38 42"/>
+    <path d="M22 16 Q20 6 28 4 Q34 8 32 16"/>
+    <path d="M26 8 Q32 2 40 8 Q36 14 30 14"/>
+    <path d="M30 12 L28 4 M34 10 L36 2"/>
+    <circle cx="18" cy="24" r="1.8"/>
+    <path d="M12 30 Q6 32 8 36 Q14 36 16 32"/>
+    <ellipse cx="12" cy="34" rx="3" ry="2"/>
+    <path d="M78 46 Q92 40 94 54 Q90 62 78 56"/>
+    <path d="M36 64 L32 90 M28 90 L36 90"/>
+    <path d="M48 66 L48 92 M44 92 L52 92"/>
+    <path d="M60 64 L64 90 M60 90 L68 90"/>
+    <path d="M70 62 L76 88 M72 88 L80 88"/>
+    <path d="M34 44 Q40 40 46 44"/>
+  ` },
+  // 羊：卷角、蓬松身、小脸、四蹄
+  { name:'羊', emoji:'🐑', bg:'#9b59b6', svg:`
+    <path d="M28 48 Q20 36 28 26 Q38 20 48 24 Q58 18 68 24 Q78 28 80 40 Q86 50 78 60 Q70 70 56 72 Q40 76 30 68 Q20 60 28 48 Z"/>
+    <circle cx="36" cy="40" r="12"/>
+    <path d="M28 30 Q20 18 28 14 Q36 16 34 28"/>
+    <path d="M40 28 Q44 14 54 16 Q52 28 44 32"/>
+    <ellipse cx="30" cy="34" rx="3" ry="4"/>
+    <circle cx="32" cy="38" r="1.6"/>
+    <circle cx="40" cy="38" r="1.6"/>
+    <ellipse cx="34" cy="46" rx="5" ry="3"/>
+    <path d="M32 46 L30 48 M36 46 L36 48 M38 46 L40 48"/>
+    <path d="M36 64 L34 88 M30 88 L38 88"/>
+    <path d="M48 68 L48 90 M44 90 L52 90"/>
+    <path d="M60 66 L62 88 M58 88 L66 88"/>
+    <path d="M70 62 L74 84 M70 84 L78 84"/>
+    <path d="M78 48 Q88 44 86 54"/>
+  ` },
+  // 猴：圆脸大耳、笑脸、身体、长尾、手脚
+  { name:'猴', emoji:'🐵', bg:'#7b241c', svg:`
+    <ellipse cx="50" cy="62" rx="18" ry="20"/>
+    <circle cx="50" cy="34" r="18"/>
+    <circle cx="30" cy="32" r="8"/>
+    <circle cx="70" cy="32" r="8"/>
+    <circle cx="30" cy="32" r="4"/>
+    <circle cx="70" cy="32" r="4"/>
+    <ellipse cx="50" cy="40" rx="12" ry="10"/>
+    <circle cx="42" cy="36" r="2.2"/>
+    <circle cx="58" cy="36" r="2.2"/>
+    <path d="M50 40 Q52 44 50 46 Q48 44 50 40"/>
+    <path d="M42 48 Q50 54 58 48"/>
+    <path d="M34 58 Q20 52 16 64 Q20 72 32 68"/>
+    <path d="M66 58 Q80 52 84 64 Q80 72 68 68"/>
+    <path d="M40 78 Q34 90 38 94"/>
+    <path d="M60 78 Q66 90 62 94"/>
+    <path d="M66 70 Q86 78 90 60 Q88 48 78 54"/>
+    <circle cx="44" cy="42" r="1"/>
+    <circle cx="56" cy="42" r="1"/>
+  ` },
+  // 鸡：鸡冠、尖喙、圆身、翅膀、尾羽、爪
+  { name:'鸡', emoji:'🐔', bg:'#4e342e', svg:`
+    <ellipse cx="48" cy="58" rx="20" ry="18"/>
+    <circle cx="44" cy="34" r="14"/>
+    <path d="M40 22 Q38 10 44 8 Q48 12 48 20"/>
+    <path d="M46 20 Q50 8 56 10 Q54 18 50 22"/>
+    <path d="M50 22 Q58 12 62 18 Q56 24 50 24"/>
+    <path d="M32 36 Q24 34 22 38 Q26 42 34 40"/>
+    <circle cx="40" cy="32" r="2"/>
+    <path d="M38 42 Q40 46 36 48"/>
+    <path d="M42 48 Q48 52 44 56"/>
+    <path d="M54 50 Q70 42 74 54 Q68 64 54 60"/>
+    <path d="M62 46 L72 36 M66 50 L78 44 M64 56 L76 56"/>
+    <path d="M38 74 L34 90 M30 90 L38 90"/>
+    <path d="M54 74 L58 90 M54 90 L62 90"/>
+    <path d="M32 90 L28 94 M34 90 L34 96 M38 90 L42 94"/>
+    <path d="M56 90 L52 94 M58 90 L58 96 M62 90 L66 94"/>
+    <ellipse cx="48" cy="58" rx="8" ry="6"/>
+  ` },
+  // 狗：立耳、口鼻、身体、摇尾、四肢
+  { name:'狗', emoji:'🐶', bg:'#4a3728', svg:`
+    <ellipse cx="50" cy="58" rx="24" ry="18"/>
+    <circle cx="40" cy="36" r="16"/>
+    <path d="M28 24 L22 8 L34 20 Z"/>
+    <path d="M48 22 L56 6 L58 22 Z"/>
+    <ellipse cx="32" cy="42" rx="8" ry="6"/>
+    <circle cx="34" cy="34" r="2.2"/>
+    <circle cx="46" cy="34" r="2.2"/>
+    <ellipse cx="28" cy="44" rx="5" ry="3"/>
+    <path d="M26 44 L24 46 M28 46 L28 48 M30 44 L32 46"/>
+    <path d="M36 48 Q42 52 46 48"/>
+    <path d="M72 52 Q90 44 92 58 Q88 68 74 62"/>
+    <path d="M36 74 L32 92 M28 92 L36 92"/>
+    <path d="M48 76 L48 94 M44 94 L52 94"/>
+    <path d="M60 74 L64 92 M60 92 L68 92"/>
+    <path d="M28 58 Q18 54 16 62 Q20 68 30 64"/>
+    <path d="M40 40 L48 40"/>
+  ` },
+  // 猪：肥圆身、大耳、拱嘴、小眼、卷尾、蹄
+  { name:'猪', emoji:'🐷', bg:'#1a5276', svg:`
+    <ellipse cx="50" cy="56" rx="28" ry="22"/>
+    <circle cx="36" cy="40" r="16"/>
+    <path d="M26 28 Q20 14 30 12 Q36 18 34 28"/>
+    <path d="M40 26 Q48 12 56 18 Q52 28 44 30"/>
+    <ellipse cx="24" cy="46" rx="10" ry="7"/>
+    <circle cx="20" cy="46" r="1.8"/>
+    <circle cx="28" cy="46" r="1.8"/>
+    <circle cx="32" cy="36" r="2"/>
+    <circle cx="42" cy="36" r="2"/>
+    <path d="M34 50 Q40 54 44 50"/>
+    <path d="M76 50 Q90 42 88 56 Q84 64 76 58"/>
+    <path d="M82 52 Q90 48 92 40 Q86 38 84 46"/>
+    <path d="M34 76 L30 92 M26 92 L34 92"/>
+    <path d="M46 78 L46 94 M42 94 L50 94"/>
+    <path d="M58 76 L62 92 M58 92 L66 92"/>
+    <path d="M68 72 L74 88 M70 88 L78 88"/>
+    <ellipse cx="36" cy="56" rx="4" ry="3"/>
+  ` },
+];
+
+// ============ 山川大科 SVG 轮廓（儿童涂色线稿，0–100 坐标） ============
+const landscapeData = [
+  // 太阳：圆盘 + 一圈光芒
+  { name:'太阳', emoji:'☀️', bg:'#8b0000', svg:`
+    <circle cx="50" cy="50" r="16"/>
+    <circle cx="50" cy="50" r="10"/>
+    <path d="M50 28 L50 12 M50 72 L50 88 M28 50 L12 50 M72 50 L88 50"/>
+    <path d="M34 34 L22 22 M66 34 L78 22 M34 66 L22 78 M66 66 L78 78"/>
+    <path d="M38 28 L32 16 M62 28 L68 16 M38 72 L32 84 M62 72 L68 84"/>
+    <path d="M28 38 L16 32 M72 38 L84 32 M28 62 L16 68 M72 62 L84 68"/>
+    <circle cx="44" cy="46" r="1.5"/>
+    <circle cx="56" cy="46" r="1.5"/>
+    <path d="M42 56 Q50 62 58 56"/>
+  ` },
+  // 月亮：弯月 + 环形山
+  { name:'月亮', emoji:'🌙', bg:'#34495e', svg:`
+    <path d="M58 18 C38 18 22 36 22 54 C22 76 40 90 60 88 C48 80 42 66 44 50 C46 34 54 24 58 18 Z"/>
+    <circle cx="48" cy="40" r="4"/>
+    <circle cx="40" cy="58" r="6"/>
+    <circle cx="54" cy="64" r="3"/>
+    <circle cx="36" cy="44" r="2"/>
+    <path d="M70 22 L74 14 M76 28 L84 24 M72 36 L82 38"/>
+  ` },
+  // 山峰：连绵山峦 + 雪顶
+  { name:'山峰', emoji:'⛰️', bg:'#607d8b', svg:`
+    <path d="M4 82 L28 28 L42 48 L58 18 L96 82 Z"/>
+    <path d="M28 28 L34 40 L24 38 Z"/>
+    <path d="M58 18 L66 34 L50 32 Z"/>
+    <path d="M14 70 L28 48 L36 58 L48 40 L56 52 L70 36 L88 70"/>
+    <path d="M4 82 Q30 88 50 84 Q72 90 96 82"/>
+    <ellipse cx="22" cy="22" rx="3" ry="2"/>
+    <ellipse cx="78" cy="26" rx="2.5" ry="1.5"/>
+  ` },
+  // 大树：树干 + 分层树冠 + 草地
+  { name:'大树', emoji:'🌳', bg:'#1b5e20', svg:`
+    <path d="M46 92 L46 58 Q46 52 50 52 Q54 52 54 58 L54 92"/>
+    <path d="M46 72 L36 66 M54 68 L64 62"/>
+    <ellipse cx="50" cy="42" rx="26" ry="22"/>
+    <ellipse cx="34" cy="50" rx="16" ry="14"/>
+    <ellipse cx="66" cy="48" rx="15" ry="13"/>
+    <ellipse cx="50" cy="28" rx="14" ry="12"/>
+    <ellipse cx="40" cy="36" rx="10" ry="8"/>
+    <ellipse cx="60" cy="34" rx="10" ry="8"/>
+    <path d="M20 92 Q50 86 80 92"/>
+    <path d="M30 88 Q28 94 34 94 M70 88 Q72 94 66 94"/>
+  ` },
+  // 河流：两岸 + 弯曲水道 + 浪花
+  { name:'河流', emoji:'🌊', bg:'#3498db', svg:`
+    <path d="M8 28 Q30 20 50 32 Q70 44 92 30"/>
+    <path d="M8 72 Q28 84 50 70 Q72 56 92 74"/>
+    <path d="M12 36 Q32 28 52 40 Q72 52 88 38"/>
+    <path d="M12 64 Q32 76 52 62 Q72 50 88 66"/>
+    <path d="M18 48 Q35 40 50 50 Q65 60 82 48"/>
+    <path d="M24 44 Q28 48 24 52 M40 52 Q44 56 40 60 M60 48 Q64 52 60 56 M76 54 Q80 58 76 62"/>
+    <circle cx="30" cy="50" r="2"/>
+    <circle cx="55" cy="54" r="1.5"/>
+    <circle cx="72" cy="50" r="2"/>
+  ` },
+  // 花朵：五瓣花 + 花心 + 茎叶
+  { name:'花朵', emoji:'🌺', bg:'#6a1b3a', svg:`
+    <ellipse cx="50" cy="28" rx="10" ry="14"/>
+    <ellipse cx="50" cy="28" rx="10" ry="14" transform="rotate(72 50 46)"/>
+    <ellipse cx="50" cy="28" rx="10" ry="14" transform="rotate(144 50 46)"/>
+    <ellipse cx="50" cy="28" rx="10" ry="14" transform="rotate(216 50 46)"/>
+    <ellipse cx="50" cy="28" rx="10" ry="14" transform="rotate(288 50 46)"/>
+    <circle cx="50" cy="46" r="9"/>
+    <circle cx="50" cy="46" r="4"/>
+    <circle cx="46" cy="44" r="1"/>
+    <circle cx="54" cy="44" r="1"/>
+    <circle cx="50" cy="50" r="1"/>
+    <path d="M50 55 L50 92"/>
+    <path d="M50 72 Q34 64 28 74 Q40 80 50 76"/>
+    <path d="M50 80 Q66 72 72 82 Q60 88 50 84"/>
+  ` },
+  // 房子：屋顶烟囱门窗小路
+  { name:'房子', emoji:'🏠', bg:'#7b5e3b', svg:`
+    <path d="M18 48 L50 18 L82 48 Z"/>
+    <path d="M26 42 L26 30 L36 30 L36 34"/>
+    <rect x="26" y="48" width="48" height="36"/>
+    <rect x="42" y="60" width="16" height="24"/>
+    <circle cx="54" cy="72" r="1.5"/>
+    <rect x="30" y="56" width="10" height="10"/>
+    <rect x="60" y="56" width="10" height="10"/>
+    <path d="M30 61 L40 61 M35 56 L35 66"/>
+    <path d="M60 61 L70 61 M65 56 L65 66"/>
+    <path d="M50 84 L50 96 M42 96 Q50 92 58 96"/>
+    <path d="M14 84 Q50 90 86 84"/>
+  ` },
+  // 云朵：蓬松多层云
+  { name:'云朵', emoji:'☁️', bg:'#95a5a6', svg:`
+    <ellipse cx="50" cy="52" rx="30" ry="16"/>
+    <ellipse cx="28" cy="50" rx="16" ry="12"/>
+    <ellipse cx="72" cy="50" rx="16" ry="12"/>
+    <ellipse cx="40" cy="40" rx="14" ry="12"/>
+    <ellipse cx="60" cy="38" rx="15" ry="13"/>
+    <ellipse cx="50" cy="36" rx="12" ry="10"/>
+    <path d="M20 66 Q30 72 40 66 M50 70 Q60 76 70 70 M75 64 Q85 70 90 64"/>
+  ` },
+  // 星星：大五角星 + 小星
+  { name:'星星', emoji:'⭐', bg:'#616161', svg:`
+    <path d="M50 12 L56 36 L82 36 L62 52 L70 78 L50 62 L30 78 L38 52 L18 36 L44 36 Z"/>
+    <path d="M22 70 L24 78 L32 78 L26 84 L28 92 L22 87 L16 92 L18 84 L12 78 L20 78 Z"/>
+    <path d="M78 66 L80 72 L86 72 L81 76 L83 82 L78 78 L73 82 L75 76 L70 72 L76 72 Z"/>
+    <circle cx="16" cy="24" r="1.5"/>
+    <circle cx="86" cy="28" r="1.5"/>
+    <circle cx="70" cy="16" r="1"/>
+  ` },
+  // 火山：山体 + 火山口 + 岩浆 + 烟雾
+  { name:'火山', emoji:'🌋', bg:'#111111', svg:`
+    <path d="M8 88 L30 40 L42 40 L50 18 L58 40 L70 40 L92 88 Z"/>
+    <path d="M30 40 L42 40 L50 18 L58 40 L70 40 L62 40 L50 28 L38 40 Z"/>
+    <path d="M36 56 L42 44 L46 54 L50 40 L54 54 L58 46 L64 58"/>
+    <path d="M40 70 L44 60 L48 72 L52 58 L56 72 L60 62 L66 74"/>
+    <ellipse cx="50" cy="20" rx="8" ry="4"/>
+    <path d="M46 16 Q40 6 44 2 M50 14 Q50 2 54 0 M54 16 Q60 6 58 2"/>
+    <path d="M8 88 Q30 94 50 90 Q72 96 92 88"/>
+  ` },
+  // 岛屿：小岛 + 椰子树 + 海浪
+  { name:'岛屿', emoji:'🏝️', bg:'#0d3b36', svg:`
+    <ellipse cx="50" cy="68" rx="36" ry="14"/>
+    <path d="M20 68 Q30 58 42 62 Q50 54 60 62 Q72 56 80 68"/>
+    <path d="M48 62 L50 30"/>
+    <path d="M50 34 Q32 28 18 36 Q30 40 48 36"/>
+    <path d="M50 32 Q36 20 24 18 Q34 28 48 32"/>
+    <path d="M50 30 Q50 14 46 8 Q48 20 50 28"/>
+    <path d="M50 32 Q64 20 76 18 Q66 28 52 32"/>
+    <path d="M50 34 Q68 28 82 36 Q70 40 52 36"/>
+    <circle cx="44" cy="40" r="3"/>
+    <circle cx="54" cy="42" r="2.5"/>
+    <path d="M8 82 Q25 76 40 82 Q55 88 70 80 Q85 74 96 82"/>
+    <path d="M12 90 Q30 84 50 90 Q70 96 90 88"/>
+  ` },
+  // 彩虹：多层弧 + 两端云
+  { name:'彩虹', emoji:'🌈', bg:'#9b59b6', svg:`
+    <path d="M12 78 Q50 10 88 78"/>
+    <path d="M18 78 Q50 20 82 78"/>
+    <path d="M24 78 Q50 30 76 78"/>
+    <path d="M30 78 Q50 40 70 78"/>
+    <path d="M36 78 Q50 50 64 78"/>
+    <ellipse cx="16" cy="78" rx="10" ry="6"/>
+    <ellipse cx="10" cy="74" rx="6" ry="5"/>
+    <ellipse cx="22" cy="74" rx="6" ry="5"/>
+    <ellipse cx="84" cy="78" rx="10" ry="6"/>
+    <ellipse cx="78" cy="74" rx="6" ry="5"/>
+    <ellipse cx="90" cy="74" rx="6" ry="5"/>
+    <circle cx="50" cy="18" r="2"/>
+  ` },
+];
+
+// ============ 植物大科 SVG 轮廓（儿童涂色线稿，0–100 坐标） ============
+const plantData = [
+  // 仙人掌：柱体双臂 + 刺 + 顶花
+  { name:'仙人掌', emoji:'🌵', bg:'#2e7d32', svg:`
+    <path d="M38 94 L38 34 Q38 18 50 18 Q62 18 62 34 L62 94"/>
+    <path d="M38 58 Q18 58 18 40 Q18 26 28 26 Q38 26 38 40 L38 52"/>
+    <path d="M62 52 Q82 52 82 34 Q82 20 72 20 Q62 20 62 34 L62 46"/>
+    <path d="M44 24 L44 90 M50 20 L50 90 M56 24 L56 90"/>
+    <path d="M24 34 L24 50 M76 28 L76 44"/>
+    <circle cx="44" cy="36" r="1.2"/><circle cx="50" cy="32" r="1.2"/><circle cx="56" cy="36" r="1.2"/>
+    <circle cx="44" cy="52" r="1.2"/><circle cx="50" cy="48" r="1.2"/><circle cx="56" cy="52" r="1.2"/>
+    <circle cx="44" cy="68" r="1.2"/><circle cx="50" cy="64" r="1.2"/><circle cx="56" cy="68" r="1.2"/>
+    <circle cx="44" cy="82" r="1.2"/><circle cx="50" cy="78" r="1.2"/><circle cx="56" cy="82" r="1.2"/>
+    <circle cx="24" cy="38" r="1"/><circle cx="24" cy="46" r="1"/>
+    <circle cx="76" cy="30" r="1"/><circle cx="76" cy="38" r="1"/>
+    <circle cx="50" cy="12" r="5"/>
+    <circle cx="50" cy="12" r="2"/>
+    <path d="M28 94 Q50 88 72 94"/>
+  ` },
+  // 向日葵：花瓣环 + 籽盘 + 茎叶
+  { name:'向日葵', emoji:'🌻', bg:'#f9a825', svg:`
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(0 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(30 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(60 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(90 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(120 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(150 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(180 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(210 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(240 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(270 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(300 50 40)"/>
+    <ellipse cx="50" cy="16" rx="5" ry="13" transform="rotate(330 50 40)"/>
+    <circle cx="50" cy="40" r="14"/>
+    <circle cx="50" cy="40" r="9"/>
+    <circle cx="46" cy="36" r="1"/><circle cx="50" cy="34" r="1"/><circle cx="54" cy="36" r="1"/>
+    <circle cx="44" cy="40" r="1"/><circle cx="50" cy="40" r="1"/><circle cx="56" cy="40" r="1"/>
+    <circle cx="46" cy="44" r="1"/><circle cx="50" cy="46" r="1"/><circle cx="54" cy="44" r="1"/>
+    <path d="M50 54 L50 94"/>
+    <path d="M50 72 Q32 64 26 76 Q40 82 50 76"/>
+    <path d="M50 68 Q68 60 74 74 Q60 80 50 72"/>
+  ` },
+  // 蘑菇：伞盖斑点 + 菌柄 + 底座
+  { name:'蘑菇', emoji:'🍄', bg:'#bf360c', svg:`
+    <path d="M42 48 L40 80 Q40 90 50 90 Q60 90 60 80 L58 48"/>
+    <path d="M14 46 Q14 16 50 14 Q86 16 86 46 Q86 52 78 52 L22 52 Q14 52 14 46 Z"/>
+    <circle cx="32" cy="30" r="5"/>
+    <circle cx="54" cy="24" r="6"/>
+    <circle cx="70" cy="34" r="4"/>
+    <circle cx="44" cy="40" r="3"/>
+    <ellipse cx="50" cy="52" rx="16" ry="3"/>
+    <ellipse cx="50" cy="90" rx="18" ry="4"/>
+    <path d="M24 52 L28 58 M36 52 L38 60 M50 52 L50 60 M62 52 L64 58 M74 52 L72 58"/>
+  ` },
+  // 樱花：五瓣 + 花蕊
+  { name:'樱花', emoji:'🌸', bg:'#f8bbd0', svg:`
+    <path d="M50 48 C40 42 34 30 40 20 Q46 14 50 26 Q54 14 60 20 C66 30 60 42 50 48 Z" transform="rotate(0 50 48)"/>
+    <path d="M50 48 C40 42 34 30 40 20 Q46 14 50 26 Q54 14 60 20 C66 30 60 42 50 48 Z" transform="rotate(72 50 48)"/>
+    <path d="M50 48 C40 42 34 30 40 20 Q46 14 50 26 Q54 14 60 20 C66 30 60 42 50 48 Z" transform="rotate(144 50 48)"/>
+    <path d="M50 48 C40 42 34 30 40 20 Q46 14 50 26 Q54 14 60 20 C66 30 60 42 50 48 Z" transform="rotate(216 50 48)"/>
+    <path d="M50 48 C40 42 34 30 40 20 Q46 14 50 26 Q54 14 60 20 C66 30 60 42 50 48 Z" transform="rotate(288 50 48)"/>
+    <circle cx="50" cy="48" r="6"/>
+    <path d="M50 48 L50 36 M50 48 L60 40 M50 48 L62 50 M50 48 L58 60 M50 48 L50 62 M50 48 L42 60 M50 48 L38 50 M50 48 L40 40"/>
+    <circle cx="50" cy="34" r="1.2"/><circle cx="61" cy="39" r="1.2"/><circle cx="63" cy="50" r="1.2"/>
+    <circle cx="59" cy="61" r="1.2"/><circle cx="50" cy="64" r="1.2"/><circle cx="41" cy="61" r="1.2"/>
+    <circle cx="37" cy="50" r="1.2"/><circle cx="39" cy="39" r="1.2"/>
+  ` },
+  // 四叶草：四心形叶 + 茎
+  { name:'四叶草', emoji:'🍀', bg:'#1b5e20', svg:`
+    <path d="M50 50 C40 44 30 36 34 22 C36 12 46 12 50 24 C54 12 64 12 66 22 C70 36 60 44 50 50 Z"/>
+    <path d="M50 50 C40 44 30 36 34 22 C36 12 46 12 50 24 C54 12 64 12 66 22 C70 36 60 44 50 50 Z" transform="rotate(90 50 50)"/>
+    <path d="M50 50 C40 44 30 36 34 22 C36 12 46 12 50 24 C54 12 64 12 66 22 C70 36 60 44 50 50 Z" transform="rotate(180 50 50)"/>
+    <path d="M50 50 C40 44 30 36 34 22 C36 12 46 12 50 24 C54 12 64 12 66 22 C70 36 60 44 50 50 Z" transform="rotate(270 50 50)"/>
+    <circle cx="50" cy="50" r="3"/>
+    <path d="M50 52 L50 94"/>
+    <path d="M50 78 Q38 70 32 78 Q40 86 50 80"/>
+  ` },
+  // 玫瑰：螺旋花瓣 + 带刺茎 + 叶
+  { name:'玫瑰', emoji:'🌹', bg:'#6b0f0f', svg:`
+    <circle cx="50" cy="36" r="4"/>
+    <path d="M50 36 C44 32 38 34 40 40 C42 46 48 44 50 40"/>
+    <path d="M50 36 C56 32 62 34 60 40 C58 46 52 44 50 40"/>
+    <path d="M50 38 C40 28 26 28 24 40 C22 52 36 56 44 48"/>
+    <path d="M50 38 C60 28 74 28 76 40 C78 52 64 56 56 48"/>
+    <path d="M50 40 C42 44 30 52 36 64 C42 72 50 66 50 54"/>
+    <path d="M50 40 C58 44 70 52 64 64 C58 72 50 66 50 54"/>
+    <path d="M50 44 L50 92"/>
+    <path d="M50 58 L46 56 M50 70 L54 68 M50 82 L46 80"/>
+    <path d="M50 66 Q36 58 30 68 Q40 76 50 70"/>
+    <path d="M50 78 Q64 70 70 80 Q60 88 50 82"/>
+  ` },
+  // 南瓜：棱瓣 + 藤蔓
+  { name:'南瓜', emoji:'🎃', bg:'#7a2e00', svg:`
+    <path d="M16 54 Q16 32 50 28 Q84 32 84 54 Q84 78 50 82 Q16 78 16 54 Z"/>
+    <path d="M28 34 Q26 54 30 78"/>
+    <path d="M38 30 Q36 54 40 80"/>
+    <path d="M50 28 L50 82"/>
+    <path d="M62 30 Q64 54 60 80"/>
+    <path d="M72 34 Q74 54 70 78"/>
+    <path d="M46 28 Q44 16 50 12 Q56 16 54 28"/>
+    <path d="M54 18 Q70 12 74 22 Q64 28 56 24"/>
+    <ellipse cx="50" cy="54" rx="6" ry="4"/>
+  ` },
+  // 苹果：果形 + 叶梗
+  { name:'苹果', emoji:'🍎', bg:'#b71c1c', svg:`
+    <path d="M50 30 C34 28 18 40 18 56 C18 74 32 88 46 88 C49 88 50 86 50 86 C50 86 51 88 54 88 C68 88 82 74 82 56 C82 40 66 28 50 30 Z"/>
+    <path d="M42 32 Q50 24 58 32"/>
+    <path d="M50 30 L50 16"/>
+    <path d="M50 22 Q64 12 72 20 Q64 28 52 24"/>
+    <path d="M32 50 Q28 58 32 68"/>
+    <ellipse cx="42" cy="48" rx="3" ry="2"/>
+  ` },
+  // 棕榈树：树干纹理 + 羽状叶 + 椰子
+  { name:'棕榈树', emoji:'🌴', bg:'#33691e', svg:`
+    <path d="M48 94 Q46 70 50 42 Q52 28 50 20"/>
+    <path d="M46 82 L54 82 M46 72 L54 72 M47 62 L53 62 M48 52 L54 52 M49 42 L53 42"/>
+    <circle cx="44" cy="28" r="3.5"/>
+    <circle cx="56" cy="28" r="3.5"/>
+    <circle cx="50" cy="32" r="2.5"/>
+    <path d="M50 22 Q28 16 12 26 Q24 32 48 26"/>
+    <path d="M50 20 Q34 8 16 6 Q28 18 48 22"/>
+    <path d="M50 20 Q48 4 42 0 Q42 12 49 20"/>
+    <path d="M50 20 Q66 8 84 6 Q72 18 52 22"/>
+    <path d="M50 22 Q72 16 88 26 Q76 32 52 26"/>
+    <path d="M50 24 Q62 32 70 42 Q56 34 50 28"/>
+    <path d="M20 94 Q50 88 80 94"/>
+  ` },
+  // 葡萄：串状圆果 + 叶藤
+  { name:'葡萄', emoji:'🍇', bg:'#4a148c', svg:`
+    <path d="M50 24 L50 12"/>
+    <path d="M50 20 Q32 10 24 18 Q34 28 48 22"/>
+    <path d="M54 22 Q66 14 64 8 Q58 12 58 20"/>
+    <circle cx="40" cy="34" r="6"/><circle cx="50" cy="32" r="6"/><circle cx="60" cy="34" r="6"/>
+    <circle cx="34" cy="46" r="6"/><circle cx="46" cy="44" r="6"/><circle cx="56" cy="44" r="6"/><circle cx="66" cy="46" r="6"/>
+    <circle cx="30" cy="58" r="6"/><circle cx="42" cy="56" r="6"/><circle cx="52" cy="56" r="6"/><circle cx="62" cy="56" r="6"/><circle cx="72" cy="58" r="6"/>
+    <circle cx="36" cy="70" r="6"/><circle cx="48" cy="68" r="6"/><circle cx="58" cy="68" r="6"/><circle cx="68" cy="70" r="6"/>
+    <circle cx="42" cy="80" r="6"/><circle cx="54" cy="80" r="6"/><circle cx="64" cy="82" r="5"/>
+    <circle cx="50" cy="90" r="5"/>
+  ` },
+  // 玉米：穗芯网格 + 苞叶 + 穗须
+  { name:'玉米', emoji:'🌽', bg:'#6b4c00', svg:`
+    <ellipse cx="50" cy="58" rx="16" ry="30"/>
+    <path d="M34 36 Q26 50 30 76 Q36 88 42 90"/>
+    <path d="M66 36 Q74 50 70 76 Q64 88 58 90"/>
+    <path d="M38 38 L62 38 M36 48 L64 48 M36 58 L64 58 M36 68 L64 68 M38 78 L62 78"/>
+    <path d="M42 32 L42 84 M50 30 L50 88 M58 32 L58 84"/>
+    <path d="M50 30 Q48 18 42 10 M50 30 Q50 16 50 6 M50 30 Q52 18 58 10"/>
+    <path d="M50 30 Q44 20 36 14 M50 30 Q56 20 64 14"/>
+  ` },
+  // 草莓：心形果 + 籽 + 萼叶
+  { name:'草莓', emoji:'🍓', bg:'#d32f2f', svg:`
+    <path d="M16 44 C12 30 26 24 40 26 C46 22 50 26 50 26 C50 26 54 22 60 26 C74 24 88 30 84 44 C80 68 70 84 50 96 C30 84 20 68 16 44 Z"/>
+    <path d="M50 24 L22 12 Q34 24 48 26"/>
+    <path d="M50 22 L34 4 Q44 16 50 22"/>
+    <path d="M50 20 L50 2 Q56 14 52 22"/>
+    <path d="M50 22 L66 4 Q56 16 50 22"/>
+    <path d="M50 24 L78 12 Q66 24 52 26"/>
+    <path d="M50 20 L50 8"/>
+    <ellipse cx="34" cy="42" rx="1.5" ry="2.5" transform="rotate(20 34 42)"/>
+    <ellipse cx="50" cy="40" rx="1.5" ry="2.5"/>
+    <ellipse cx="66" cy="42" rx="1.5" ry="2.5" transform="rotate(-20 66 42)"/>
+    <ellipse cx="28" cy="56" rx="1.5" ry="2.5" transform="rotate(25 28 56)"/>
+    <ellipse cx="42" cy="52" rx="1.5" ry="2.5"/>
+    <ellipse cx="58" cy="52" rx="1.5" ry="2.5"/>
+    <ellipse cx="72" cy="56" rx="1.5" ry="2.5" transform="rotate(-25 72 56)"/>
+    <ellipse cx="34" cy="68" rx="1.5" ry="2.5"/>
+    <ellipse cx="50" cy="66" rx="1.5" ry="2.5"/>
+    <ellipse cx="66" cy="68" rx="1.5" ry="2.5"/>
+    <ellipse cx="42" cy="80" rx="1.4" ry="2.2"/>
+    <ellipse cx="58" cy="80" rx="1.4" ry="2.2"/>
+  ` },
+];
+
+// ============ 食品大科 SVG 轮廓（儿童涂色线稿，0–100 坐标） ============
+const foodData = [
+  // 披萨：大三角片 + 边缘 + 配料
+  { name:'披萨', emoji:'🍕', bg:'#e67e22', svg:`
+    <path d="M50 10 L12 86 Q50 78 88 86 Z"/>
+    <path d="M18 78 Q50 88 82 78"/>
+    <path d="M50 10 Q48 20 46 30 M50 10 Q52 20 54 30"/>
+    <circle cx="40" cy="48" r="5"/>
+    <circle cx="58" cy="42" r="4"/>
+    <circle cx="48" cy="60" r="4.5"/>
+    <circle cx="62" cy="62" r="3.5"/>
+    <circle cx="36" cy="68" r="3"/>
+    <ellipse cx="54" cy="72" rx="4" ry="2.5" transform="rotate(-20 54 72)"/>
+    <path d="M30 52 Q34 56 30 60 M66 50 Q70 54 66 58"/>
+  ` },
+  // 汉堡：顶层面包芝麻 + 生菜 + 肉饼 + 底包
+  { name:'汉堡', emoji:'🍔', bg:'#c0392b', svg:`
+    <path d="M20 28 Q20 12 50 10 Q80 12 80 28"/>
+    <ellipse cx="50" cy="28" rx="30" ry="6"/>
+    <circle cx="36" cy="20" r="1.5"/><circle cx="50" cy="16" r="1.5"/><circle cx="64" cy="20" r="1.5"/>
+    <circle cx="42" cy="24" r="1"/><circle cx="58" cy="22" r="1"/>
+    <path d="M20 34 Q30 28 40 34 Q50 28 60 34 Q70 28 80 34"/>
+    <rect x="22" y="38" width="56" height="14" rx="3"/>
+    <path d="M24 44 L76 44"/>
+    <path d="M20 56 L30 50 L38 56 L46 50 L54 56 L62 50 L70 56 L80 50 L80 58 L20 58 Z"/>
+    <path d="M20 62 Q20 82 50 86 Q80 82 80 62"/>
+    <ellipse cx="50" cy="62" rx="30" ry="4"/>
+  ` },
+  // 甜甜圈：圆环 + 糖霜 + 糖针
+  { name:'甜甜圈', emoji:'🍩', bg:'#e91e63', svg:`
+    <ellipse cx="50" cy="50" rx="30" ry="28"/>
+    <ellipse cx="50" cy="50" rx="10" ry="9"/>
+    <path d="M22 44 Q32 30 50 28 Q68 30 78 44"/>
+    <path d="M26 48 Q34 38 50 36 Q66 38 74 48"/>
+    <path d="M30 40 L28 48 M40 34 L38 46 M50 32 L50 44 M60 34 L62 46 M70 40 L72 48"/>
+    <path d="M34 36 L36 28 M48 32 L52 24 M62 34 L66 26 M72 42 L80 38"/>
+  ` },
+  // 蛋糕：三层 + 奶油 + 蜡烛
+  { name:'蛋糕', emoji:'🎂', bg:'#f8bbd0', svg:`
+    <ellipse cx="50" cy="86" rx="36" ry="6"/>
+    <path d="M14 66 L14 86 Q50 94 86 86 L86 66 Q50 74 14 66 Z"/>
+    <path d="M20 50 L20 68 Q50 76 80 68 L80 50 Q50 58 20 50 Z"/>
+    <path d="M28 34 L28 52 Q50 60 72 52 L72 34 Q50 42 28 34 Z"/>
+    <path d="M20 52 Q32 48 40 52 Q50 48 60 52 Q68 48 80 52"/>
+    <path d="M28 36 Q38 32 44 36 Q50 32 56 36 Q64 32 72 36"/>
+    <path d="M38 34 L38 18 M50 34 L50 14 M62 34 L62 18"/>
+    <ellipse cx="38" cy="15" rx="3" ry="5"/>
+    <ellipse cx="50" cy="11" rx="3" ry="5"/>
+    <ellipse cx="62" cy="15" rx="3" ry="5"/>
+    <path d="M38 10 Q42 4 44 8 M50 6 Q54 0 56 4 M62 10 Q66 4 68 8"/>
+  ` },
+  // 冰淇淋：甜筒网格 + 三球 + 樱桃
+  { name:'冰淇淋', emoji:'🍦', bg:'#81d4fa', svg:`
+    <path d="M38 58 L50 96 L62 58 Z"/>
+    <path d="M42 66 L48 90 M48 62 L50 90 M52 66 L52 90 M56 66 L54 90"/>
+    <path d="M40 72 L60 72 M42 82 L58 82"/>
+    <circle cx="50" cy="52" r="13"/>
+    <circle cx="40" cy="42" r="11"/>
+    <circle cx="60" cy="42" r="11"/>
+    <circle cx="50" cy="30" r="12"/>
+    <circle cx="50" cy="16" r="5"/>
+    <path d="M50 11 Q56 4 62 8"/>
+  ` },
+  // 西瓜：半圆片 + 瓜皮 + 籽
+  { name:'西瓜', emoji:'🍉', bg:'#4caf50', svg:`
+    <path d="M16 70 C16 36 34 18 50 18 C66 18 84 36 84 70 Z"/>
+    <path d="M20 68 C22 40 36 26 50 26 C64 26 78 40 80 68"/>
+    <path d="M16 70 Q50 62 84 70"/>
+    <path d="M16 70 Q50 78 84 70"/>
+    <ellipse cx="36" cy="46" rx="2.2" ry="4" transform="rotate(-25 36 46)"/>
+    <ellipse cx="50" cy="40" rx="2.2" ry="4"/>
+    <ellipse cx="64" cy="46" rx="2.2" ry="4" transform="rotate(25 64 46)"/>
+    <ellipse cx="42" cy="56" rx="2" ry="3.5" transform="rotate(-10 42 56)"/>
+    <ellipse cx="58" cy="56" rx="2" ry="3.5" transform="rotate(10 58 56)"/>
+  ` },
+  // 香蕉：弯月形 + 分瓣线
+  { name:'香蕉', emoji:'🍌', bg:'#fff176', svg:`
+    <path d="M28 28 Q22 12 42 10 Q70 10 80 30 Q84 42 78 52 Q68 66 48 70 Q30 72 24 58 Q20 46 28 28 Z"/>
+    <path d="M32 24 Q28 40 36 58 Q44 68 56 66"/>
+    <path d="M42 16 Q40 36 48 58 Q54 66 64 62"/>
+    <path d="M54 14 Q56 34 62 54 Q66 62 72 56"/>
+    <path d="M28 28 Q22 30 20 36"/>
+    <ellipse cx="78" cy="34" rx="3" ry="2"/>
+    <path d="M24 54 Q30 60 28 66"/>
+  ` },
+  // 饼干：圆饼 + 巧克力豆 + 边缘齿
+  { name:'饼干', emoji:'🍪', bg:'#a1887f', svg:`
+    <circle cx="50" cy="50" r="32"/>
+    <circle cx="50" cy="50" r="28"/>
+    <path d="M50 18 Q54 22 50 26 Q46 22 50 18 M74 30 Q76 36 70 36 Q72 30 74 30 M82 50 Q78 54 74 50 Q78 46 82 50 M74 70 Q76 64 70 64 Q72 70 74 70 M50 82 Q54 78 50 74 Q46 78 50 82 M26 70 Q24 64 30 64 Q28 70 26 70 M18 50 Q22 54 26 50 Q22 46 18 50 M26 30 Q24 36 30 36 Q28 30 26 30"/>
+    <circle cx="38" cy="38" r="5"/>
+    <circle cx="60" cy="34" r="5.5"/>
+    <circle cx="40" cy="58" r="4.5"/>
+    <circle cx="64" cy="56" r="5"/>
+    <circle cx="50" cy="48" r="4"/>
+    <circle cx="32" cy="48" r="3"/>
+    <circle cx="68" cy="44" r="3.5"/>
+    <circle cx="52" cy="66" r="4"/>
+  ` },
+  // 棒棒糖：螺旋糖球 + 杆 + 包装尾
+  { name:'棒棒糖', emoji:'🍭', bg:'#ff5252', svg:`
+    <circle cx="50" cy="38" r="26"/>
+    <path d="M50 38 Q56 32 60 40 Q62 50 52 54 Q40 56 34 46 Q30 36 40 28 Q52 22 62 30 Q68 40 60 50"/>
+    <path d="M50 12 L50 20 M76 38 L68 38 M50 64 L50 56 M24 38 L32 38"/>
+    <path d="M50 64 L50 96"/>
+    <path d="M44 64 L40 74 L50 70 L60 74 L56 64"/>
+  ` },
+  // 杯子蛋糕：纸托褶皱 + 奶油漩 + 樱桃
+  { name:'杯子蛋糕', emoji:'🧁', bg:'#ffab91', svg:`
+    <path d="M30 64 L36 88 L64 88 L70 64 Z"/>
+    <path d="M34 70 L66 70 M33 76 L67 76 M34 82 L66 82"/>
+    <path d="M28 64 Q22 48 34 36 Q42 26 50 24 Q58 26 66 36 Q78 48 72 64"/>
+    <path d="M34 52 Q44 40 50 36 Q56 40 66 52"/>
+    <path d="M38 58 Q46 48 50 44 Q54 48 62 58"/>
+    <circle cx="50" cy="22" r="6"/>
+    <path d="M50 16 Q56 8 62 12"/>
+  ` },
+  // 面包：长条吐司形 + 裂缝
+  { name:'面包', emoji:'🍞', bg:'#ffcc02', svg:`
+    <path d="M16 52 Q14 30 30 20 Q44 12 50 12 Q56 12 70 20 Q86 30 84 52 Q82 72 50 78 Q18 72 16 52 Z"/>
+    <path d="M28 34 Q40 24 50 22 Q60 24 72 34"/>
+    <path d="M32 44 Q42 34 50 32 Q58 34 68 44"/>
+    <path d="M36 54 Q44 46 50 44 Q56 46 64 54"/>
+    <path d="M26 58 Q30 64 28 70 M50 60 Q52 68 50 74 M72 56 Q76 64 74 70"/>
+  ` },
+  // 奶酪：三角楔 + 气孔
+  { name:'奶酪', emoji:'🧀', bg:'#ffb300', svg:`
+    <path d="M14 42 L50 16 L86 42 L72 88 L28 88 Z"/>
+    <path d="M14 42 L28 88"/>
+    <path d="M50 16 L40 88 M50 16 L60 88"/>
+    <circle cx="40" cy="48" r="6"/>
+    <circle cx="58" cy="40" r="5"/>
+    <circle cx="50" cy="64" r="5"/>
+    <circle cx="64" cy="62" r="7"/>
+    <circle cx="34" cy="68" r="3.5"/>
+    <circle cx="36" cy="34" r="3"/>
+    <circle cx="68" cy="50" r="2.5"/>
+  ` },
+];
+
+// ============ 状态 ============
+const CAT_META = {
+  zodiac:    { data: zodiacData,    btn: 'catZodiac',    title: '🐉 十二生肖', sub: '选一个动物开始涂鸦吧' },
+  landscape: { data: landscapeData, btn: 'catLandscape', title: '⛰️ 山川大地', sub: '选一个场景开始涂鸦吧' },
+  plant:     { data: plantData,     btn: 'catPlant',     title: '🌱 植物王国', sub: '选一种植物开始涂鸦吧' },
+  food:      { data: foodData,      btn: 'catFood',      title: '🍔 美味食品', sub: '选一种食品开始涂鸦吧' },
+};
+let currentCategory = 'zodiac';
+let currentAnimal = 0;
+let tool = 'pen';
+let color = '#e74c3c';
+let size = 25;
+function randomHex() { return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6,'0'); }
+let randomColor = randomHex();
+const COLORS = ['#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c','#3498db','#9b59b6','#e91e63','#673ab7','#795548','#607d8b','#4a3728','#34495e','#95a5a6','#f39c12',randomColor];
+let showOutline = true;
+let canvas, ctx, wrap;
+let isDrawing = false;
+let hasMoved = false;
+let drawStartPos = null;
+let shapeSnap = null; // 直线/圆圈/矩形拖拽预览用快照
+let lastDrawPos = null;
+let lastWaterPos = null;
+let waterPath = null;
+let highPath = null; // 荧光笔整段路径（避免自重叠发黑）
+let dashTravel = 0;  // 虚线模式：累计路程，保证虚线连续
+let sprayRaf = null;
+let sprayPos = { x: 0, y: 0 };
+let brushMode = 0; // 0=喷枪 1=荧光 2=粗圆 3=方头
+let penMode = 0; // 0=圆头 1=细线 2=粗线 3=虚线
+let shapeMode = 0; // 0=直线 1=圆圈 2=矩形 3=椭圆
+const BRUSH_NAMES = ['💨 喷枪','🖍️ 荧光','🖌️ 粗圆','▪️ 方头'];
+const PEN_NAMES = ['🖊️ 圆头','✒️ 细线','🖋️ 粗线','➖ 虚线'];
+const TEXTURE_NAMES = ['✏️ 铅笔','🖍️ 蜡笔','🎨 油画','🖌️ 水彩'];
+const SHAPE_TOOLS = ['line', 'circle', 'rect', 'ellipse'];
+const SHAPE_NAMES = ['📏 直线', '⭕ 圆圈', '▭ 矩形', '⬭ 椭圆'];
+const SHAPE_SET = new Set(SHAPE_TOOLS);
+let textureMode = 0;
+let undoStack = [];
+let maxUndo = 10; // 1000²×4×10 ≈ 40MB，远低于原先 991²×30 ≈ 117MB
+const CANVAS_SIZE = 1000; // 绘制分辨率（接近原 991，避免导出发糊）
+const EXPORT_SIZE = 2000; // 保存时放大导出，打印/分享更清晰
+let currentBg = '#fffef9';
+let scale = 1;
+let panX = 0, panY = 0;
+let isPanning = false;
+let panStart = { x: 0, y: 0 };
+let spaceDown = false;
+let outlineCache = new Map(); // key → HTMLImageElement
+let audioCtx = null;
+
+// ============ 初始化 ============
+function init() {
+  canvas = document.getElementById('drawCanvas');
+  ctx = canvas.getContext('2d', { willReadFrequently: true });
+  wrap = document.getElementById('canvasWrap');
+  canvas.width = CANVAS_SIZE;
+  canvas.height = CANVAS_SIZE;
+  resizeCanvas();
+  makeWhite();
+  renderAnimalGrid();
+  selectAnimal(0);
+  renderPalette();
+  loadTheme();
+
+  window.addEventListener('resize', resizeCanvas);
+
+  canvas.addEventListener('mousedown', onPointerDown);
+  canvas.addEventListener('mousemove', onPointerMove);
+  canvas.addEventListener('mouseup', onPointerUp);
+  canvas.addEventListener('mouseleave', onPointerUp);
+  canvas.addEventListener('touchstart', handleTouch, { passive: false });
+  canvas.addEventListener('touchmove', handleTouch, { passive: false });
+  canvas.addEventListener('touchend', onPointerUp);
+  canvas.addEventListener('wheel', handleWheel, { passive: false });
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+  // 中键默认会触发自动滚动，平移时禁掉
+  canvas.addEventListener('auxclick', e => { if (e.button === 1) e.preventDefault(); });
+
+  document.addEventListener('keydown', handleKey);
+  document.addEventListener('keyup', e => {
+    if (e.code === 'Space') {
+      spaceDown = false;
+      if (!isPanning && !isDrawing) updateCursor();
+    }
+  });
+}
+
+function applyViewTransform() {
+  canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+}
+
+function resetView() {
+  scale = 1;
+  panX = 0;
+  panY = 0;
+  applyViewTransform();
+  showToast('视图已重置');
+}
+
+function resizeCanvas() {
+  const w = wrap.clientWidth;
+  const h = wrap.clientHeight;
+  const size = Math.min(w, h);
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+}
+
+function makeWhite() {
+  currentBg = getComputedStyle(canvas).backgroundColor || '#fffef9';
+  ctx.fillStyle = currentBg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+// ============ 动物面板 ============
+function currentData() { return CAT_META[currentCategory].data; }
+
+function updateCategoryUI(cat) {
+  const m = CAT_META[cat];
+  document.getElementById('panelTitle').innerHTML = m.title;
+  document.getElementById('panelSub').textContent = m.sub;
+  Object.keys(CAT_META).forEach(k => {
+    const el = document.getElementById(CAT_META[k].btn);
+    if (!el) return;
+    const active = k === cat;
+    el.style.background = active ? 'var(--accent)' : 'var(--tool-bg)';
+    el.style.color = active ? '#fff' : 'var(--text)';
+  });
+}
+
+function switchCategory(cat) {
+  currentCategory = cat;
+  currentAnimal = 0;
+  updateCategoryUI(cat);
+  renderAnimalGrid();
+  selectAnimal(0);
+}
+
+function renderAnimalGrid() {
+  const grid = document.getElementById('animalGrid');
+  const data = currentData();
+  grid.innerHTML = data.map((z, i) => `
+    <div class="animal-card${i === currentAnimal ? ' active' : ''}" onclick="selectAnimal(${i})">
+      <span class="zodiac-emoji">${z.emoji}</span>
+      <span class="zodiac-name">${z.name}</span>
+    </div>
+  `).join('');
+}
+
+function selectAnimal(idx) {
+  currentAnimal = idx;
+  clearStep = 0;
+  renderAnimalGrid();
+  undoStack = [];
+  const data = currentData();
+  const bg = data[idx].bg;
+  currentBg = bg;
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  redrawOutline();
+  closePanel();
+}
+
+let outlineId = 0;
+function outlineCacheKey(cat, idx, level, s) {
+  return `${cat}|${idx}|${level}|${s}`;
+}
+function loadOutlineImage(cat, idx, level, s) {
+  const key = outlineCacheKey(cat, idx, level, s);
+  if (outlineCache.has(key)) return Promise.resolve(outlineCache.get(key));
+  const z = CAT_META[cat].data[idx];
+  // 全部类目统一 0–100 线稿坐标系
+  const vb = '0 0 110 110';
+  const tr = 'translate(5,5)';
+  const baseSw = 1.4;
+  const sw = (baseSw * [0, 1, 1.8, 3][level]).toFixed(1);
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${s}" height="${s}"><style>path,circle,ellipse,line,rect{fill:none;stroke:#5a4a3a;stroke-width:${sw};stroke-linecap:round;stroke-linejoin:round;opacity:0.65;}</style><g transform="${tr}">${z.svg}</g></svg>`;
+  const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      outlineCache.set(key, img);
+      // 简单上限，避免无限增长
+      if (outlineCache.size > 80) {
+        const first = outlineCache.keys().next().value;
+        outlineCache.delete(first);
+      }
+      resolve(img);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('outline load fail')); };
+    img.src = url;
+  });
+}
+function redrawOutline() {
+  if (!showOutline) return;
+  const s = canvas.width;
+  const cat = currentCategory;
+  const idx = currentAnimal;
+  const level = outlineLevel;
+  const id = ++outlineId;
+  loadOutlineImage(cat, idx, level, s).then(img => {
+    if (id !== outlineId || cat !== currentCategory || idx !== currentAnimal) return;
+    ctx.drawImage(img, 0, 0, s, s);
+    pushUndo();
+  }).catch(() => {});
+}
+
+let outlineLevel = 1; // 0=隐藏 1=细 2=中 3=粗
+function toggleOutline() {
+  outlineLevel = (outlineLevel + 1) % 4;
+  const btn = document.getElementById('outlineBtn');
+  const labels = ['👁️ 隐藏', '👁️ 细线', '👁️ 中线', '👁️ 粗线'];
+  btn.textContent = labels[outlineLevel];
+  btn.classList.toggle('active', outlineLevel > 0);
+  showOutline = outlineLevel > 0;
+  if (showOutline) {
+    redrawOutline();
+  } else {
+    clearCanvas(true);
+    if (undoStack.length > 0) {
+      const last = undoStack[undoStack.length - 1];
+      if (last.isOutline) undoStack.pop();
+    }
+    if (undoStack.length > 0) {
+      ctx.putImageData(undoStack[undoStack.length - 1], 0, 0);
+    }
+  }
+}
+
+// ============ 绘制 / 平移 ============
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (e.clientX - rect.left) * (canvas.width / rect.width),
+    y: (e.clientY - rect.top) * (canvas.height / rect.height)
+  };
+}
+
+function startPan(clientX, clientY) {
+  isPanning = true;
+  panStart = { x: clientX - panX, y: clientY - panY };
+  canvas.style.cursor = 'grabbing';
+}
+
+function onPointerDown(e) {
+  // 中键，或空格+左键：平移
+  if (e.button === 1 || (e.button === 0 && spaceDown)) {
+    e.preventDefault();
+    startPan(e.clientX, e.clientY);
+    return;
+  }
+  startDraw(e);
+}
+
+function onPointerMove(e) {
+  if (isPanning) {
+    panX = e.clientX - panStart.x;
+    panY = e.clientY - panStart.y;
+    applyViewTransform();
+    return;
+  }
+  draw(e);
+}
+
+function onPointerUp() {
+  if (isPanning) {
+    isPanning = false;
+    updateCursor();
+  }
+  stopDraw();
+}
+
+function startDraw(e) {
+  clearStep = 0;
+  if (e.button !== undefined && e.button !== 0) return;
+  const pos = getPos(e.touches ? e.touches[0] : e);
+  if (tool === 'bucket') {
+    floodFill(Math.round(pos.x), Math.round(pos.y));
+    return;
+  }
+  if (tool === 'stamp') {
+    pushUndo();
+    stampCircle(pos.x, pos.y);
+    isDrawing = true;
+    return;
+  }
+  // 直线 / 圆圈 / 矩形 / 椭圆：按下定起点，拖拽预览，松手定稿
+  if (SHAPE_SET.has(tool)) {
+    isDrawing = true;
+    hasMoved = false;
+    drawStartPos = pos;
+    lastDrawPos = pos;
+    pushUndo();
+    shapeSnap = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    return;
+  }
+  isDrawing = true;
+  hasMoved = false;
+  drawStartPos = pos;
+  lastDrawPos = pos;
+  lastWaterPos = (tool === 'watercolor') ? pos : null;
+  waterPath = (tool === 'watercolor') ? [pos] : null;
+  highPath = null;
+  dashTravel = 0;
+  if (tool === 'brush' && brushMode === 0) {
+    // 喷枪：rAF 持续喷洒，与屏幕刷新同步
+    sprayPos = pos;
+    pushUndo();
+    if (sprayRaf) cancelAnimationFrame(sprayRaf);
+    const loop = () => {
+      if (!isDrawing) { sprayRaf = null; return; }
+      sprayAt(sprayPos.x, sprayPos.y);
+      sprayRaf = requestAnimationFrame(loop);
+    };
+    sprayRaf = requestAnimationFrame(loop);
+    return;
+  }
+  // 荧光：记录路径，拖动时整段重画（均匀半透明、像马克笔）
+  if (tool === 'brush' && brushMode === 1) {
+    highPath = [pos];
+    pushUndo();
+    return;
+  }
+  applyStyle();
+  pushUndo();
+  // 自由线只画「上一点→当前点」小段，避免整路径反复 stroke（细线发糊/虚线错乱）
+}
+
+/** 荧光笔：宽扁半透明、多层叠色，单笔内不发黑 */
+function drawHighlighterStroke(points) {
+  if (!points || points.length < 1) return;
+  const w = Math.max(10, size * 3.4);
+  ctx.save();
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'square'; // 扁头马克笔感
+  ctx.strokeStyle = color;
+  ctx.setLineDash([]);
+  ctx.globalCompositeOperation = 'source-over';
+
+  const stroke = (width, alpha) => {
+    ctx.lineWidth = width;
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    if (points.length === 1) {
+      // 单击：画一小段扁头点
+      ctx.lineTo(points[0].x + 0.01, points[0].y);
+    } else {
+      for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.stroke();
+  };
+
+  // 外缘轻晕 → 主体 → 中心略浓（模拟笔芯）
+  stroke(w * 1.2, 0.10);
+  stroke(w, 0.22);
+  ctx.lineCap = 'round';
+  stroke(w * 0.42, 0.16);
+  ctx.restore();
+}
+
+function stampCircle(x, y) {
+  const r = size / 2;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function sprayAt(x, y) {
+  const r = size * 1.5;
+  for (let i = 0; i < size; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = Math.random() * r;
+    const dx = x + Math.cos(angle) * dist;
+    const dy = y + Math.sin(angle) * dist;
+    ctx.beginPath();
+    ctx.arc(dx, dy, Math.random() * 3 + 1, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+}
+
+function drawShapePreview(from, to) {
+  if (!shapeSnap || !from || !to) return;
+  ctx.putImageData(shapeSnap, 0, 0);
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = size;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.globalAlpha = 1;
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  if (tool === 'line') {
+    ctx.moveTo(from.x, from.y);
+    ctx.lineTo(to.x, to.y);
+    ctx.stroke();
+  } else if (tool === 'circle') {
+    const r = Math.hypot(to.x - from.x, to.y - from.y);
+    if (r > 0.5) {
+      ctx.arc(from.x, from.y, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  } else if (tool === 'rect') {
+    const x = Math.min(from.x, to.x);
+    const y = Math.min(from.y, to.y);
+    const w = Math.abs(to.x - from.x);
+    const h = Math.abs(to.y - from.y);
+    if (w > 0.5 || h > 0.5) {
+      ctx.rect(x, y, w, h);
+      ctx.stroke();
+    }
+  } else if (tool === 'ellipse') {
+    const x = Math.min(from.x, to.x);
+    const y = Math.min(from.y, to.y);
+    const w = Math.abs(to.x - from.x);
+    const h = Math.abs(to.y - from.y);
+    if (w > 0.5 || h > 0.5) {
+      const cx = x + w / 2, cy = y + h / 2;
+      ctx.ellipse(cx, cy, w / 2, h / 2, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  hasMoved = true;
+  e.preventDefault();
+  const pos = getPos(e.touches ? e.touches[0] : e);
+  if (tool === 'stamp') {
+    stampCircle(pos.x, pos.y);
+    return;
+  }
+  if (SHAPE_SET.has(tool)) {
+    lastDrawPos = pos;
+    drawShapePreview(drawStartPos, pos);
+    return;
+  }
+  if (tool === 'brush' && brushMode === 0) {
+    sprayPos = pos;
+  } else if (tool === 'brush' && brushMode === 1) {
+    // 荧光：整段重画，笔迹均匀半透明
+    if (undoStack.length > 0) {
+      ctx.putImageData(undoStack[undoStack.length - 1], 0, 0);
+      if (!highPath) highPath = [drawStartPos];
+      highPath.push(pos);
+      drawHighlighterStroke(highPath);
+    }
+    lastDrawPos = pos;
+  } else {
+    // 水彩：先擦掉上一段，重画整条路径，避免自重叠
+    if (tool === 'watercolor' && undoStack.length > 0) {
+      ctx.putImageData(undoStack[undoStack.length - 1], 0, 0);
+      ctx.beginPath();
+      ctx.moveTo(drawStartPos.x, drawStartPos.y);
+      // 用保存的路径点重画
+      if (!waterPath) waterPath = [drawStartPos];
+      waterPath.push(pos);
+      ctx.moveTo(waterPath[0].x, waterPath[0].y);
+      for (let i = 1; i < waterPath.length; i++) ctx.lineTo(waterPath[i].x, waterPath[i].y);
+      ctx.stroke();
+    } else {
+      // 只 stroke 当前小段（细线/虚线/圆头等都依赖此逻辑）
+      applyStyle();
+      if (tool === 'pen' && penMode === 3) {
+        ctx.lineDashOffset = -dashTravel;
+      }
+      ctx.beginPath();
+      ctx.moveTo(lastDrawPos.x, lastDrawPos.y);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      dashTravel += Math.hypot(pos.x - lastDrawPos.x, pos.y - lastDrawPos.y);
+    }
+    // 蜡笔：蜡质刮擦感
+    if (tool === 'crayon') {
+      const dx = pos.x - lastDrawPos.x, dy = pos.y - lastDrawPos.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      // 粗蜡芯：宽而不均匀的核心线条
+      for (let i = 0; i < 8; i++) {
+        const ox = (Math.random() - 0.5) * size * 0.6;
+        const oy = (Math.random() - 0.5) * size * 0.6;
+        ctx.beginPath();
+        ctx.moveTo(lastDrawPos.x + ox, lastDrawPos.y + oy);
+        ctx.lineTo(pos.x + ox, pos.y + oy);
+        ctx.strokeStyle = color;
+        const pressure = Math.random();
+        ctx.globalAlpha = 0.02 + pressure * 0.12;
+        ctx.lineWidth = size * (0.3 + pressure * 0.5);
+        ctx.stroke();
+      }
+      // 蜡屑：边缘碎粒
+      const crumbs = Math.floor(dist * 0.8);
+      for (let i = 0; i < crumbs; i++) {
+        const t = Math.random();
+        const edge = (Math.random() - 0.5) * size * 0.9;
+        const px = lastDrawPos.x + dx * t + edge + (Math.random() - 0.5) * size * 0.3;
+        const py = lastDrawPos.y + dy * t + edge + (Math.random() - 0.5) * size * 0.3;
+        ctx.beginPath();
+        ctx.arc(px, py, Math.random() * size * 0.3 + 1, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.01 + Math.random() * 0.04;
+        ctx.fill();
+      }
+      applyStyle();
+    } else if (tool === 'oil') {
+      // 油画：厚重湿叠，大块涂抹感
+      const dx = pos.x - drawStartPos.x, dy = pos.y - drawStartPos.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      // 少量大块偏移 → 浓厚堆叠
+      for (let i = 0; i < 3; i++) {
+        const ox = (Math.random() - 0.5) * size * 0.4;
+        const oy = (Math.random() - 0.5) * size * 0.4;
+        ctx.beginPath();
+        ctx.moveTo(lastDrawPos.x + ox, lastDrawPos.y + oy);
+        ctx.lineTo(pos.x + ox, pos.y + oy);
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = 0.25 + Math.random() * 0.15;
+        ctx.lineWidth = size * (1.5 + Math.random() * 0.8);
+        ctx.stroke();
+      }
+      // 少量大颗粒 → 油画肌理
+      const blobs = Math.floor(dist * 0.15);
+      for (let i = 0; i < blobs; i++) {
+        const t = Math.random();
+        const px = lastDrawPos.x + dx * t + (Math.random() - 0.5) * size * 0.3;
+        const py = lastDrawPos.y + dy * t + (Math.random() - 0.5) * size * 0.3;
+        ctx.beginPath();
+        ctx.arc(px, py, Math.random() * size * 0.5 + size * 0.2, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.1 + Math.random() * 0.1;
+        ctx.fill();
+      }
+      applyStyle();
+    }
+    lastDrawPos = pos;
+  }
+}
+
+function stopDraw() {
+  if (sprayRaf) { cancelAnimationFrame(sprayRaf); sprayRaf = null; }
+  if (!isDrawing) return;
+  isDrawing = false;
+  if (tool === 'stamp') return;
+  if (SHAPE_SET.has(tool)) {
+    // 拖过才留下图形；单击无位移则不画
+    if (hasMoved && drawStartPos && lastDrawPos) {
+      drawShapePreview(drawStartPos, lastDrawPos);
+    } else if (shapeSnap) {
+      ctx.putImageData(shapeSnap, 0, 0);
+    }
+    shapeSnap = null;
+    drawStartPos = null;
+    return;
+  }
+  if (waterPath) waterPath = null;
+  // 荧光单击：留下一个扁头色点
+  if (tool === 'brush' && brushMode === 1) {
+    if (!hasMoved && highPath && highPath.length && undoStack.length > 0) {
+      ctx.putImageData(undoStack[undoStack.length - 1], 0, 0);
+      drawHighlighterStroke(highPath);
+    }
+    highPath = null;
+    drawStartPos = null;
+    return;
+  }
+  if (highPath) highPath = null;
+  // 橡皮单击（未拖动）：擦出一个圆
+  if (tool === 'eraser' && !hasMoved && drawStartPos) {
+    const pos = drawStartPos;
+    const r = size / 2;
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = currentBg;
+    ctx.fill();
+  }
+  // 笔类单击：留下一个圆点
+  if (tool === 'pen' && !hasMoved && drawStartPos) {
+    applyStyle();
+    const r = Math.max(0.6, (ctx.lineWidth || size) / 2);
+    ctx.beginPath();
+    ctx.arc(drawStartPos.x, drawStartPos.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 1;
+    ctx.fill();
+  }
+  dashTravel = 0;
+  drawStartPos = null;
+}
+
+function handleTouch(e) {
+  e.preventDefault();
+  if (e.type === 'touchstart') {
+    // 双指：准备平移（记录中心）
+    if (e.touches.length === 2) {
+      isDrawing = false;
+      if (sprayRaf) { cancelAnimationFrame(sprayRaf); sprayRaf = null; }
+      const t0 = e.touches[0], t1 = e.touches[1];
+      startPan((t0.clientX + t1.clientX) / 2, (t0.clientY + t1.clientY) / 2);
+      return;
+    }
+    startDraw(e);
+  } else if (e.type === 'touchmove') {
+    if (isPanning && e.touches.length >= 1) {
+      const t = e.touches.length >= 2
+        ? { x: (e.touches[0].clientX + e.touches[1].clientX) / 2, y: (e.touches[0].clientY + e.touches[1].clientY) / 2 }
+        : { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      panX = t.x - panStart.x;
+      panY = t.y - panStart.y;
+      applyViewTransform();
+      return;
+    }
+    draw(e);
+  }
+}
+
+function applyStyle() {
+  ctx.strokeStyle = tool === 'eraser' ? currentBg : (tool === 'pencil' ? '#000000' : color);
+  ctx.globalAlpha = 1;
+  ctx.setLineDash([]);
+  ctx.lineDashOffset = 0;
+  ctx.globalCompositeOperation = 'source-over';
+  if (tool === 'brush') {
+    ctx.lineWidth = size * 1.5;
+    if (brushMode === 0) { ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.globalAlpha = 0.6; }
+    else if (brushMode === 1) { ctx.lineCap = 'square'; ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(10, size * 3.4); ctx.globalAlpha = 0.22; }
+    else if (brushMode === 2) { ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.globalAlpha = 0.7; }
+    else if (brushMode === 3) { ctx.lineCap = 'square'; ctx.lineJoin = 'miter'; ctx.globalAlpha = 0.8; }
+  } else if (tool === 'pencil') {
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.lineWidth = Math.max(1, size * 0.3);
+    ctx.globalAlpha = 0.85;
+  } else if (tool === 'crayon') {
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.lineWidth = size * 0.7;
+    ctx.globalAlpha = 0.65;
+  } else if (tool === 'oil') {
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.lineWidth = size * 1.2;
+    ctx.globalAlpha = 0.45;
+  } else if (tool === 'watercolor') {
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.lineWidth = size * 2;
+    ctx.globalAlpha = 0.3;
+  } else if (tool === 'pen') {
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    if (penMode === 0) {
+      // 圆头
+      ctx.lineWidth = size;
+      ctx.globalAlpha = 1;
+    } else if (penMode === 1) {
+      // 细线：真正细、实线、不沿用虚线状态
+      ctx.lineWidth = Math.max(1, size * 0.22);
+      ctx.globalAlpha = 1;
+      ctx.setLineDash([]);
+      ctx.lineDashOffset = 0;
+    } else if (penMode === 2) {
+      // 粗线
+      ctx.lineWidth = size * 2;
+      ctx.globalAlpha = 0.85;
+    } else if (penMode === 3) {
+      // 虚线
+      ctx.lineWidth = Math.max(1, size * 0.9);
+      ctx.globalAlpha = 1;
+      const dash = Math.max(4, size * 1.2);
+      const gap = Math.max(4, size * 1.4);
+      ctx.setLineDash([dash, gap]);
+      ctx.lineDashOffset = -dashTravel;
+    }
+  } else {
+    ctx.lineWidth = size;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  }
+}
+
+// ============ 油漆桶（scanline + Uint8Array，避免字符串 Set 卡顿） ============
+function floodFill(x, y) {
+  const w = canvas.width, h = canvas.height;
+  x = Math.max(0, Math.min(w - 1, x | 0));
+  y = Math.max(0, Math.min(h - 1, y | 0));
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const data = imgData.data;
+  const idx = (y * w + x) * 4;
+  const tr = data[idx], tg = data[idx + 1], tb = data[idx + 2], ta = data[idx + 3];
+
+  const fillC = hexToRgb(color);
+  if (tr === fillC.r && tg === fillC.g && tb === fillC.b && ta === fillC.a) return;
+
+  pushUndo();
+
+  const match = (i) =>
+    Math.abs(data[i] - tr) <= 1 &&
+    Math.abs(data[i + 1] - tg) <= 1 &&
+    Math.abs(data[i + 2] - tb) <= 1 &&
+    Math.abs(data[i + 3] - ta) <= 1;
+
+  const paint = (i) => {
+    data[i] = fillC.r;
+    data[i + 1] = fillC.g;
+    data[i + 2] = fillC.b;
+    data[i + 3] = fillC.a;
+  };
+
+  const visited = new Uint8Array(w * h);
+  const stack = [x, y];
+
+  while (stack.length > 0) {
+    const cy = stack.pop();
+    let cx = stack.pop();
+    // 向左扩展到区段起点
+    while (cx > 0 && !visited[cy * w + cx - 1] && match((cy * w + cx - 1) * 4)) cx--;
+    let spanUp = false, spanDown = false;
+    while (cx < w) {
+      const p = cy * w + cx;
+      const i = p * 4;
+      if (visited[p] || !match(i)) break;
+      visited[p] = 1;
+      paint(i);
+      if (cy > 0) {
+        const up = p - w;
+        if (!visited[up] && match(i - w * 4)) {
+          if (!spanUp) { stack.push(cx, cy - 1); spanUp = true; }
+        } else spanUp = false;
+      }
+      if (cy < h - 1) {
+        const dn = p + w;
+        if (!visited[dn] && match(i + w * 4)) {
+          if (!spanDown) { stack.push(cx, cy + 1); spanDown = true; }
+        } else spanDown = false;
+      }
+      cx++;
+    }
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
+
+function hexToRgb(hex) {
+  const c = hex.replace('#', '');
+  return {
+    r: parseInt(c.substring(0, 2), 16),
+    g: parseInt(c.substring(2, 4), 16),
+    b: parseInt(c.substring(4, 6), 16),
+    a: 255
+  };
+}
+
+// ============ 撤销栈 ============
+function pushUndo(data) {
+  const d = data || ctx.getImageData(0, 0, canvas.width, canvas.height);
+  undoStack.push(d);
+  while (undoStack.length > maxUndo) {
+    undoStack.shift(); // 丢弃最旧快照，便于 GC 回收 ~2MB/张
+  }
+}
+
+function undo() {
+  if (undoStack.length <= 1) return;
+  undoStack.pop();
+  const prev = undoStack[undoStack.length - 1];
+  ctx.putImageData(prev, 0, 0);
+  showToast('已撤销 ↩');
+}
+
+let clearStep = 0;
+function clearCanvas(silent) {
+  if (silent) { makeWhite(); clearStep = 0; return; }
+  clearStep++;
+  pushUndo();
+  if (clearStep >= 3) {
+    makeWhite();
+    clearStep = 0;
+    showToast('已清空 🗑');
+  } else {
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    showToast(`淡出 ${clearStep}/3 🌫️`);
+  }
+}
+
+function newCanvas() {
+  const all = [];
+  Object.keys(CAT_META).forEach(cat => {
+    CAT_META[cat].data.forEach((d, i) => all.push({ ...d, cat, idx: i }));
+  });
+  const pick = all[Math.floor(Math.random() * all.length)];
+  currentCategory = pick.cat;
+  currentAnimal = pick.idx;
+  undoStack = [];
+  updateCategoryUI(pick.cat);
+  renderAnimalGrid();
+  currentBg = pick.bg;
+  ctx.fillStyle = pick.bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  redrawOutline();
+  if (isMobilePanel()) openPanel();
+  showToast(`随机模板：${pick.emoji} ${pick.name} 📄`);
+}
+
+// ============ 工具 ============
+function setTool(t, btn) {
+  if (t === 'brush') {
+    if (tool === 'brush') brushMode = (brushMode + 1) % 4; else brushMode = 0;
+    document.getElementById('brushBtn').textContent = BRUSH_NAMES[brushMode];
+  }
+  if (t === 'pen') {
+    if (tool === 'pen') penMode = (penMode + 1) % 4; else penMode = 0;
+    document.getElementById('penBtn').textContent = PEN_NAMES[penMode];
+  }
+  if (t === 'texture') {
+    if (tool === 'pencil' || tool === 'crayon' || tool === 'oil' || tool === 'watercolor') {
+      textureMode = (textureMode + 1) % 4;
+    } else {
+      textureMode = 0;
+    }
+    document.getElementById('textureBtn').textContent = TEXTURE_NAMES[textureMode];
+    t = ['pencil','crayon','oil','watercolor'][textureMode];
+  }
+  if (t === 'shape') {
+    if (SHAPE_SET.has(tool)) {
+      shapeMode = (shapeMode + 1) % SHAPE_TOOLS.length;
+    } else {
+      shapeMode = 0;
+    }
+    document.getElementById('shapeBtn').textContent = SHAPE_NAMES[shapeMode];
+    t = SHAPE_TOOLS[shapeMode];
+  }
+  tool = t;
+  document.querySelectorAll('[data-tool]').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // 形状子工具时保持「形状」按钮高亮
+  if (SHAPE_SET.has(tool)) {
+    const shapeBtn = document.getElementById('shapeBtn');
+    if (shapeBtn) shapeBtn.classList.add('active');
+  }
+  updateCursor();
+}
+
+function updateCursor() {
+  if (isPanning) { canvas.style.cursor = 'grabbing'; return; }
+  if (spaceDown) { canvas.style.cursor = 'grab'; return; }
+  if (tool === 'eraser' || tool === 'stamp') {
+    const d = Math.max(10, size);
+    const pad = 3;
+    const sz = d + pad * 2;
+    const c = document.createElement('canvas');
+    c.width = c.height = sz;
+    const cx = c.getContext('2d');
+    cx.beginPath();
+    cx.arc(sz / 2, sz / 2, d / 2, 0, Math.PI * 2);
+    cx.fillStyle = tool === 'eraser' ? 'rgba(255,255,255,0.85)' : color;
+    cx.fill();
+    cx.strokeStyle = '#999';
+    cx.lineWidth = 1;
+    cx.stroke();
+    canvas.style.cursor = `url(${c.toDataURL()}) ${sz / 2} ${sz / 2}, auto`;
+  } else {
+    canvas.style.cursor = 'crosshair';
+  }
+}
+
+const NOTES = [523,587,659,698,784,880,988,1047,1175,1319,1397,1568,1760,1976,2093,2349]; // C5-E7 两八度
+function playMuyu(idx) {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    if (!audioCtx) audioCtx = new AC();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'triangle';
+    o.frequency.value = NOTES[idx] || 800;
+    const t0 = audioCtx.currentTime;
+    g.gain.setValueAtTime(0.25, t0);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.3);
+    o.start(t0);
+    o.stop(t0 + 0.3);
+  } catch (_) { /* 静默忽略音频限制 */ }
+}
+
+function setColor(c, noteIdx) {
+  color = c;
+  if (tool === 'eraser') setTool('pen', document.querySelector('[data-tool="pen"]'));
+  updateCursor();
+  renderPalette();
+  if (noteIdx != null) playMuyu(noteIdx);
+}
+
+function renderPalette() {
+  const p = document.getElementById('colorPalette');
+  const selR = color === randomColor ? '3px solid var(--accent)' : '2px solid var(--border)';
+  // 随机色放第一位→音符0，固定色→音符1-14，红色→音符15
+  const randSpan = `<span onclick="randomColor=randomHex();COLORS[15]=randomColor;setColor(randomColor,0);renderPalette();" style="display:inline-block;width:22px;height:22px;background:${randomColor};border:${selR};border-radius:4px;cursor:pointer;flex-shrink:0;position:relative;line-height:22px;text-align:center;font-size:7px;color:rgba(255,255,255,0.6);text-shadow:0 0 2px rgba(0,0,0,0.4);font-weight:700;" title="随机色 · 点击换色">100+</span>`;
+  const fixedSpans = COLORS.slice(1, 15).map((c, i) => {
+    const sel = color === c ? '3px solid var(--accent)' : '2px solid var(--border)';
+    return `<span onclick="setColor('${c}',${i+1})" style="display:inline-block;width:22px;height:22px;background:${c};border:${sel};border-radius:4px;cursor:pointer;flex-shrink:0;"></span>`;
+  });
+  const sel0 = color === COLORS[0] ? '3px solid var(--accent)' : '2px solid var(--border)';
+  const redSpan = `<span onclick="setColor('${COLORS[0]}',15)" style="display:inline-block;width:22px;height:22px;background:${COLORS[0]};border:${sel0};border-radius:4px;cursor:pointer;flex-shrink:0;"></span>`;
+  p.innerHTML = [randSpan, ...fixedSpans, redSpan].join('');
+}
+
+function setSize(s) {
+  size = parseInt(s);
+  updateCursor();
+}
+
+// ============ 缩放 / 视图 ============
+function handleWheel(e) {
+  e.preventDefault();
+  // 滚轮直接缩放；ctrl/meta 时步长稍大（触控板捏合常带 ctrl）
+  const step = (e.ctrlKey || e.metaKey) ? 0.002 : 0.0012;
+  const next = Math.max(0.5, Math.min(3, scale - e.deltaY * step));
+  scale = next;
+  applyViewTransform();
+}
+
+// ============ 保存（高分辨率导出） ============
+function saveDoodle() {
+  // 工作画布 CANVAS_SIZE；导出时放大到 EXPORT_SIZE，避免「保存后图片很小」
+  const out = document.createElement('canvas');
+  out.width = EXPORT_SIZE;
+  out.height = EXPORT_SIZE;
+  const octx = out.getContext('2d');
+  octx.imageSmoothingEnabled = true;
+  octx.imageSmoothingQuality = 'high';
+  // 铺底，防止透明区域在部分查看器里发灰
+  octx.fillStyle = currentBg || '#fffef9';
+  octx.fillRect(0, 0, EXPORT_SIZE, EXPORT_SIZE);
+  octx.drawImage(canvas, 0, 0, EXPORT_SIZE, EXPORT_SIZE);
+
+  const name = (currentData()[currentAnimal].name || 'doodle').replace(/[\\/:*?"<>|]/g, '');
+  // 文件名勿用 toLocaleDateString（会带 /，Windows 无法保存）
+  const stamp = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const fileName = `doodle-${name}-${stamp.getFullYear()}${pad(stamp.getMonth() + 1)}${pad(stamp.getDate())}-${pad(stamp.getHours())}${pad(stamp.getMinutes())}${pad(stamp.getSeconds())}.png`;
+
+  const triggerDownload = (href, revoke) => {
+    const a = document.createElement('a');
+    a.download = fileName;
+    a.href = href;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    if (revoke) setTimeout(() => URL.revokeObjectURL(href), 2500);
+    showToast(`已保存 ${EXPORT_SIZE}×${EXPORT_SIZE} · 见下载文件夹 💾`);
+  };
+
+  // 优先 toBlob（大图更稳，避免 dataURL 过长失败）
+  if (out.toBlob) {
+    out.toBlob(blob => {
+      if (blob) {
+        triggerDownload(URL.createObjectURL(blob), true);
+      } else {
+        try {
+          triggerDownload(out.toDataURL('image/png'), false);
+        } catch (e) {
+          showToast('保存失败，请再试一次');
+        }
+      }
+    }, 'image/png');
+  } else {
+    try {
+      triggerDownload(out.toDataURL('image/png'), false);
+    } catch (e) {
+      showToast('保存失败，请再试一次');
+    }
+  }
+}
+
+// ============ 主题 ============
+function toggleTheme() {
+  const html = document.documentElement;
+  const cur = html.getAttribute('data-theme');
+  const next = cur === 'dark' ? '' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('doodle_theme', next);
+}
+
+function loadTheme() {
+  const t = localStorage.getItem('doodle_theme');
+  document.documentElement.setAttribute('data-theme', t || 'dark');
+}
+
+// ============ 全屏 ============
+function toggleFullscreen() {
+  const el = document.querySelector('.main');
+  if (!document.fullscreenElement) {
+    el.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  const main = document.querySelector('.main');
+  const btn = document.getElementById('fullscreenBtn');
+  if (document.fullscreenElement) {
+    main.classList.add('is-fullscreen');
+    btn.textContent = '📺 退出';
+    btn.classList.add('active');
+  } else {
+    main.classList.remove('is-fullscreen');
+    btn.textContent = '📺 全屏';
+    btn.classList.remove('active');
+  }
+  // 全屏只改布局尺寸，像素缓冲与笔迹保留，不重画轮廓
+  setTimeout(resizeCanvas, 200);
+});
+
+// ============ 面板切换（移动端侧栏 + 遮罩） ============
+function isMobilePanel() {
+  return window.matchMedia('(max-width: 768px)').matches;
+}
+function openPanel() {
+  document.getElementById('animalPanel').classList.add('open');
+  document.getElementById('panelBackdrop').classList.add('show');
+}
+function closePanel() {
+  document.getElementById('animalPanel').classList.remove('open');
+  document.getElementById('panelBackdrop').classList.remove('show');
+}
+function togglePanel() {
+  const panel = document.getElementById('animalPanel');
+  if (panel.classList.contains('open')) closePanel();
+  else openPanel();
+}
+
+// ============ 键盘快捷键 ============
+function handleKey(e) {
+  if (e.code === 'Space' && !e.repeat) {
+    // 输入框内不抢空格
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+      spaceDown = true;
+      e.preventDefault();
+      if (!isDrawing && !isPanning) canvas.style.cursor = 'grab';
+    }
+  }
+  if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveDoodle(); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); const n=currentData().length; selectAnimal((currentAnimal - 1 + n) % n); }
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); selectAnimal((currentAnimal + 1) % currentData().length); }
+  if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && document.activeElement === document.body) { e.preventDefault(); toggleFullscreen(); }
+  if ((e.key === '0' || e.code === 'Digit0' || e.code === 'Numpad0') && !e.ctrlKey && !e.metaKey) {
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); resetView(); }
+  }
+  if ((e.key === 'h' || e.key === 'H') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+      e.preventDefault();
+      window.open('index.html', '_self');
+    }
+  }
+}
+
+// ============ Toast ============
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// ============ 启动 ============
+// init → selectAnimal 已画轮廓，勿再 redrawOutline 以免叠线
+init();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

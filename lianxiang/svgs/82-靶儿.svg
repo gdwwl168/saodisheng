@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">82=靶儿</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">8像靶环弯弯套，2是靶心圆圆中</text>
+  <!-- 靶架 -->
+  <line x1="250" y1="650" x2="250" y2="850" stroke="#795548" stroke-width="8"/>
+  <line x1="774" y1="650" x2="774" y2="850" stroke="#795548" stroke-width="8"/>
+  <!-- 靶面 - 8形圆环 -->
+  <circle cx="512" cy="520" r="200" fill="#ECEFF1" stroke="#90A4AE" stroke-width="4"/>
+  <circle cx="512" cy="520" r="170" fill="#CFD8DC"/>
+  <circle cx="512" cy="520" r="140" fill="#B0BEC5"/>
+  <circle cx="512" cy="520" r="110" fill="#90A4AE"/>
+  <circle cx="512" cy="520" r="85" fill="#78909C"/>
+  <circle cx="512" cy="520" r="60" fill="#F44336"/>
+  <circle cx="512" cy="520" r="40" fill="#E53935"/>
+  <circle cx="512" cy="520" r="20" fill="#FFD54F"/>
+  <circle cx="512" cy="520" r="8" fill="#F44336"/>
+  <!-- 箭 -->
+  <line x1="512" y1="520" x2="635" y2="330" stroke="#8D6E63" stroke-width="4"/>
+  <path d="M635 330 L640 320 L645 332Z" fill="#B0BEC5"/>
+  <path d="M625 340 L630 350 L635 342" fill="none" stroke="#4CAF50" stroke-width="3"/>
+  <path d="M615 355 L620 365 L625 357" fill="none" stroke="#4CAF50" stroke-width="3"/>
+</svg>

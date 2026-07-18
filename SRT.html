@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="srt-theme">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="SRT 单绳技术知识专页 · 探洞、SRT 溪降、装备架绳、泥水预案、团队复盘（持续增补）">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="12345.png" type="image/png">
+<link rel="apple-touch-icon" href="12345.png">
+<title>SRT 单绳技术 · 藏经阁</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --text: #3d3226;
+  --accent: #8b4513;
+  --gold: #c9a96e;
+  --card: #faf7f2;
+  --border: #d4c5a9;
+  --muted: rgba(61,50,38,0.55);
+  --sidebar: #ede4d3;
+  --warn-bg: #fdf2e9;
+  --warn-border: #e8b86d;
+  --code-bg: #efe8dc;
+  --shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+[data-theme="dark"] {
+  --bg: #1a1a2e;
+  --text: #d4c5a9;
+  --accent: #c9a96e;
+  --gold: #c9a96e;
+  --card: #252540;
+  --border: #3a3a55;
+  --muted: rgba(212,197,169,0.55);
+  --sidebar: #1f1f35;
+  --warn-bg: #2a2418;
+  --warn-border: #6b5420;
+  --code-bg: #2a2a40;
+  --shadow: 0 2px 16px rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", "STSong", serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  overflow: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* 侧栏目录 */
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  transition: transform 0.25s ease, background 0.3s;
+}
+.side-head {
+  padding: 20px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.side-head img {
+  width: 48px; height: 48px; border-radius: 10px;
+  margin: 0 auto 8px; display: block;
+}
+.side-head h1 {
+  font-size: 1.15em;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+}
+.side-head .sub {
+  font-size: 0.72em;
+  opacity: 0.55;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.nav-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 8px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-list::-webkit-scrollbar { width: 4px; }
+.nav-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.nav-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 11px 14px;
+  margin-bottom: 3px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88em;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.nav-item:hover { background: rgba(139,69,19,0.08); }
+.nav-item.active {
+  background: var(--accent);
+  color: #fff;
+}
+.nav-item .num {
+  opacity: 0.55;
+  font-size: 0.85em;
+  margin-right: 6px;
+}
+.nav-item.active .num { opacity: 0.85; }
+
+.side-foot {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.78em;
+}
+.side-foot a {
+  color: var(--accent);
+  text-decoration: none;
+  margin: 0 8px;
+}
+
+/* 主区 */
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.topbar button, .topbar a.btn {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.8em;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.topbar button:hover, .topbar a.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.topbar .spacer { flex: 1; }
+.topbar .title-now {
+  font-size: 0.9em;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-weight: 700;
+}
+#menuBtn { display: none; }
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 28px 36px 60px;
+}
+.article {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.article h2 {
+  font-size: 1.45em;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.article .meta {
+  font-size: 0.78em;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+.article h3 {
+  font-size: 1.08em;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  margin: 26px 0 10px;
+}
+.article p {
+  font-size: 0.98em;
+  line-height: 1.9;
+  margin-bottom: 12px;
+  text-align: justify;
+}
+.article ul, .article ol {
+  margin: 8px 0 16px 1.4em;
+  line-height: 1.85;
+  font-size: 0.95em;
+}
+.article li { margin-bottom: 6px; }
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 20px;
+  font-size: 0.9em;
+}
+.article th, .article td {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.article th {
+  background: var(--card);
+  color: var(--accent);
+  letter-spacing: 0.06em;
+}
+.article code {
+  font-family: ui-monospace, Consolas, monospace;
+  background: var(--code-bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.article .callout {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 18px 0;
+  font-size: 0.9em;
+  line-height: 1.75;
+}
+.article .callout strong { color: var(--accent); }
+.article .todo-tag {
+  display: inline-block;
+  font-size: 0.72em;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--code-bg);
+  color: var(--muted);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.article a { color: var(--accent); }
+.article blockquote {
+  border-left: 3px solid var(--gold);
+  padding: 4px 0 4px 14px;
+  margin: 12px 0 16px;
+  opacity: 0.9;
+  line-height: 1.8;
+}
+.srt-diagram {
+  margin: 16px 0 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 12px 12px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.srt-diagram svg {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin: 0 auto;
+}
+.srt-diagram .cap {
+  font-size: 0.82em;
+  color: var(--muted);
+  margin-top: 10px;
+  line-height: 1.65;
+  text-align: left;
+}
+.srt-diagram .legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  justify-content: center;
+  margin-top: 10px;
+  font-size: 0.8em;
+  color: var(--muted);
+}
+.srt-diagram .legend i {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+.footer-note {
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.78em;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 15;
+}
+.backdrop.show { display: block; }
+
+@media (max-width: 800px) {
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    transform: translateX(-105%);
+    z-index: 20;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.25);
+  }
+  .sidebar.open { transform: translateX(0); }
+  #menuBtn { display: inline-block; }
+  .content { padding: 18px 16px 48px; }
+  .topbar { padding: 8px 12px; }
+  .topbar .title-now { font-size: 0.82em; }
+}
+</style>
+</head>
+<body>
+
+<div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="side-head">
+    <img src="12345.png" alt="">
+    <h1>SRT 单绳</h1>
+    <div class="sub">Single Rope Technique<br>探洞 · 溪降 · 持续增补</div>
+  </div>
+  <nav class="nav-list" id="navList"></nav>
+  <div class="side-foot">
+    <a href="index.html">🏠 首页</a>
+    <a href="#" onclick="toggleTheme();return false;">🌓 主题</a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <button type="button" id="menuBtn" onclick="toggleSidebar()">☰ 目录</button>
+    <span class="title-now" id="titleNow">概述</span>
+    <span class="spacer"></span>
+    <a class="btn" href="index.html" title="回首页 (H)">🏠</a>
+    <button type="button" onclick="toggleTheme()" title="主题 (T)">🌓</button>
+  </header>
+  <div class="content" id="content"></div>
+</div>
+
+<script>
+/**
+ * SRT 知识库条目
+ * 新增内容：在 ARTICLES 数组末尾 push 一节即可，侧栏自动生成
+ * id: 唯一标识（用于 hash）
+ * title: 标题
+ * status: draft | stable（草稿会显示「待补」标签）
+ * html: 正文 HTML
+ */
+const ARTICLES = [
+  {
+    id: 'overview',
+    title: '概述：什么是 SRT',
+    status: 'stable',
+    html: `
+<p><strong>SRT</strong> 全称 <em>Single Rope Technique</em>（单绳技术），是一套在<strong>同一根固定绳</strong>上完成下降与上升的方法体系。</p>
+<p>核心：在<strong>一根固定的低延伸绳（静力绳 / 半静力绳）</strong>上，借助上升器、下降器、牛尾绳等，完成<strong>下降、上升、过点、转换</strong>，在竖井、陡壁等垂直空间移动。</p>
+<blockquote>探洞竖井里，现代几乎都以 SRT 为主，而不是背梯子硬爬。维基百科亦将 SRT 描述为「在同一根绳上既下又上」的整套技法。</blockquote>
+<h3>SRT 与 DRT</h3>
+<p>与 SRT 相对的是 <strong>DRT</strong>（<em>Double-rope technique</em> / 双绳技术，攀树界亦称 <em>moving-rope technique</em> 动绳技术）：</p>
+<table>
+  <tr><th></th><th>SRT（单绳 / 静绳）</th><th>DRT（双绳 / 动绳）</th></tr>
+  <tr><td>绳的状态</td><td>绳固定在锚上，人沿绳移动</td><td>绳可随人移动（环绕树枝等）</td></tr>
+  <tr><td>典型场景</td><td>探洞竖井、峡谷、部分高空作业</td><td>攀树、部分救援/作业</td></tr>
+  <tr><td>探洞主流</td><td>是</td><td>一般不用作竖井主体系</td></tr>
+</table>
+<p>攀树社群为避免与探洞用语混淆，常把单绳固定体系称作 <strong>Stationary Rope Technique</strong>（固定绳技术），缩写仍可能写作 SRT。</p>
+<h3>不只是「一绳到底」</h3>
+<ul>
+  <li>自行或协作<strong>架设绳索线路</strong>（锚点、备份、保护点、Y 挂）</li>
+  <li>在中间锚点（<strong>re-belay</strong>）与<strong>偏导（deviation）</strong>上过点、换绳</li>
+  <li><strong>上升 ⇄ 下降</strong>的安全转换</li>
+  <li>避开落石、瀑布、磨绳点；必要时安装绳护</li>
+  <li>纠错、自救、协助同伴（进阶，另篇）</li>
+</ul>
+<h3>常见应用领域</h3>
+<table>
+  <tr><th>领域</th><th>说明</th></tr>
+  <tr><td>洞穴探险 / 竖洞（potholing）</td><td>竖井、天井、多层竖井（本页重点）</td></tr>
+  <tr><td>攀岩 / 登山相关</td><td>部分场景用到单绳上下，装备与探洞不完全相同</td></tr>
+  <tr><td>溯溪 / 溪降（canyoning）</td><td>单绳下降为主，叠加水力与暴涨风险；详见「<a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a>」</td></tr>
+  <tr><td>工业绳索接近 / 高空维护</td><td>思路相关，标准、认证与探洞不同</td></tr>
+  <tr><td>攀树（arborist）</td><td>有 SRT/「固定绳」体系，器材与打法不同</td></tr>
+</table>
+<div class="callout">
+  <strong>⚠️ 安全声明：</strong>本页为自学笔记与概念整理（部分整理自英文维基 <em>Single-rope technique</em> 等公开资料），<strong>不能替代</strong>有资质教练、俱乐部课程与现场实践。竖井绳索操作有生命危险，请勿仅凭文字下井。
+</div>
+`
+  },
+  {
+    id: 'history',
+    title: '历史发展',
+    status: 'stable',
+    html: `
+<p>以下时间线主要依据英文维基百科 <a href="https://en.wikipedia.org/wiki/Single-rope_technique" target="_blank" rel="noopener">Single-rope technique</a> 及探洞史常见叙述，便于建立「装备从哪来」的背景感。</p>
+<table>
+  <tr><th>时期</th><th>事件</th></tr>
+  <tr><td>1930 年代</td><td>法国阿尔卑斯一带洞穴俱乐部兴起，竖井探洞逐渐成为户外运动。</td></tr>
+  <tr><td>约 1934</td><td>Henri Brenot 的机械上升装置（俗称 “monkeys”）与 prusik 思路，被 Pierre Chevalier 等用于洞穴；单绳技法雏形可追溯至此。</td></tr>
+  <tr><td>二战前后</td><td>Chevalier、Fernand Petzl、Charles Petit-Didier 等探索格勒诺布尔附近的 <strong>Dent de Crolles</strong> 洞穴系统，一度成为当时世界最深探索记录（约 −658 m）。物资匮乏倒逼自制装备与技术革新。</td></tr>
+  <tr><td>1950 年代末</td><td>美国洞穴人 <strong>Bill Cuddington</strong>（“Vertical Bill”）在美国发展与推广单绳技术。</td></tr>
+  <tr><td>1958</td><td>瑞士人 Juesi 与 Marti 合作，推出首款商业机械上升器 <strong>Jumar</strong>（抓升器）。</td></tr>
+  <tr><td>1960 年代末</td><td>美国阿拉巴马 Huntsville 洞穴俱乐部发展 <strong>rappel rack</strong>（下降架/摩擦架），利于<strong>超长竖井</strong>平稳下降。</td></tr>
+  <tr><td>1968 起</td><td>Bruno Dressler 请金属加工出身的 Petzl 按其对 Jumar 的洞穴化改进制作上升器，即今日 <strong>Petzl Croll</strong>（胸式上升器）一脉的源头。Petzl 日后成为探洞、攀登与高空安全装备重要厂商。</td></tr>
+</table>
+<blockquote>机械上升系统的成熟，显著扩展了深竖井探索的可行性与安全性——从「能下能上」变成「更稳、更快、更可重复」。</blockquote>
+<h3>中国相关时间线（公开报道整理）</h3>
+<p>现代探洞 SRT 在中国起步相对较晚，公开资料中常被提及的节点如下（细节因来源而异，作背景备忘）：</p>
+<table>
+  <tr><th>时期</th><th>事件</th></tr>
+  <tr><td>1980 年代</td><td>地质勘测等专业人员已开始使用 SRT；社会向探险队普及仍有限。</td></tr>
+  <tr><td>约 1984</td><td>桂林等地<strong>中外联合洞穴科考</strong>常被记为把较成体系的 SRT 装备与技术带入国内现代探洞语境的重要节点之一。</td></tr>
+  <tr><td>1986 起</td><td>法国洞穴探险家 <strong>让·波塔西（Jean Bottazzi）</strong> 参与中法洞穴活动，此后长期在中国西南（如贵州绥阳双河洞一带）参与科考、培训与推广。</td></tr>
+  <tr><td>2005</td><td><strong>中法洞穴培训基地</strong>在贵州<strong>绥阳</strong>设立；公开资料称已多届举办国际洞穴探测及 SRT 培训（报道曾写十余届、受训两百余人量级，以当时最新统计为准）。</td></tr>
+  <tr><td>2010–2020s</td><td>俱乐部、高校社团、地方科考与景区体验并存；消防/社会救援亦有 SRT 类培训报道（标准与探洞运动不完全等同）。</td></tr>
+  <tr><td>约 2024</td><td>中文译著 <strong>《洞穴探险技术手册》</strong>（对应法式/阿尔卑斯探洞技术体系，与 <em>Alpine Caving Techniques</em> 一脉）由中国大百科全书出版社出版，便于系统自学对照。</td></tr>
+</table>
+<p>绳与织带的检查退役见「<a href="#rope-care" onclick="showArticle('rope-care');return false;">绳与织带维护</a>」；锚点概念见「<a href="#anchors" onclick="showArticle('anchors');return false;">锚点类型</a>」。国内教学风格整体更接近<strong>欧式多 rebely、轻绳、frog</strong> 体系（受法式培训影响深），具体以你所在俱乐部为准。</p>
+`
+  },
+  {
+    id: 'canyon',
+    title: 'SRT 溪降',
+    status: 'stable',
+    html: `
+<p><strong>SRT 溪降</strong>指在峡谷、溪谷中，用<strong>单绳技术（Single Rope Technique）</strong>完成垂直段落，并结合涉水、泳渡、攀爬、偶尔跳跃等方式通过整条线路。英文常见 <em>canyoning</em>（欧）/ <em>canyoneering</em>（美）。</p>
+<p>垂直段的核心仍是：在<strong>固定主绳</strong>上可控下降，配合锚点、牛尾保护、站与转换；单向线路上还常涉及<strong>拉绳带走</strong>，以便继续下行。</p>
+<blockquote>会下降 ≠ 会溪降。水力、暴涨、湿绳与瀑顶纪律，是这条线路的必修课。</blockquote>
+
+<div class="srt-diagram" aria-label="SRT 溪降能力构成">
+  <svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg" role="img">
+    <title>SRT 溪降：绳 · 水 · 队</title>
+    <rect x="24" y="28" width="112" height="100" rx="10" fill="currentColor" opacity="0.08" stroke="var(--accent,#8b4513)" stroke-width="1.2"/>
+    <text x="80" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">绳</text>
+    <text x="80" y="96" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.75">下降·锚·拉绳</text>
+    <rect x="154" y="28" width="112" height="100" rx="10" fill="currentColor" opacity="0.08" stroke="var(--gold,#c9a96e)" stroke-width="1.2"/>
+    <text x="210" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">水</text>
+    <text x="210" y="96" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.75">流态·暴涨·温</text>
+    <rect x="284" y="28" width="112" height="100" rx="10" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.2"/>
+    <text x="340" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">队</text>
+    <text x="340" y="96" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.75">口令·顺序·撤</text>
+    <text x="210" y="155" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.7">三块都过关，再谈难度与流量</text>
+  </svg>
+  <p class="cap">溪降 SRT 不是「只练下降器」：绳技、读水、团队缺一就会在瀑顶或水潭出问题。</p>
+</div>
+
+<h3>技术重点</h3>
+<ol>
+  <li><strong>下降控制</strong>：湿绳、喷瀑中手感变重；匀速、随时能停</li>
+  <li><strong>站与转换</strong>：瀑顶/小平台湿滑拥挤；先牛尾保护再作业</li>
+  <li><strong>拉绳与收绳</strong>：单向通过后常把绳拉下带走——卡绳、磨棱、绳袋被冲走是高频麻烦</li>
+  <li><strong>导向 / 牵引下降（guided rappel）</strong>：辅绳把下降路线拉离主水舌或危险落点（须专项学）</li>
+  <li><strong>可释放 / 可逃逸思路</strong>：部分体系强调异常时可从上方处理绳（高度依赖训练与架法，本页不写步骤）</li>
+  <li><strong>上升能力</strong>：日常以下降为主，但卡绳、上错线、撤退时仍可能要上——完全不会会很被动</li>
+</ol>
+
+<h3>装备侧重（概念）</h3>
+<table>
+  <tr><th>项目</th><th>溪降常见考量</th></tr>
+  <tr><td>绳</td><td>半静/静力；长度按瀑段；拉绳策略；吸水后明显变重</td></tr>
+  <tr><td>下降器</td><td>湿绳可调摩擦；跟教练体系选型</td></tr>
+  <tr><td>安全带</td><td>耐湿、档位；与攀岩座带侧重点可能不同</td></tr>
+  <tr><td>头盔</td><td>瀑击与落石；常见排水孔设计</td></tr>
+  <tr><td>衣着</td><td>湿衣保温；防割手套；防滑鞋</td></tr>
+  <tr><td>浮力 / 包</td><td>绳袋、可漂浮管理；电子设备防水</td></tr>
+  <tr><td>刀具</td><td>部分队伍强调可及（缠绕等）；用法与法规跟教练</td></tr>
+</table>
+<p>是否背全套上升系统（胸式+手式等）按线路等级与队规；「会不会」与「今日带不带」分开评估。</p>
+
+<h3>水相关风险</h3>
+<ul>
+  <li><strong>暴雨与上游泄水</strong>：水位可短时间暴涨封谷；行前看预报、流域与季节</li>
+  <li><strong>水力特征</strong>：底洞、卷浪、虹吸、栅栏状卡物——不是「会游泳就没事」</li>
+  <li><strong>瀑布落点</strong>：绳摆进主水舌；落池过浅或有沉木</li>
+  <li><strong>低体温</strong>：长时间湿冷会让判断力下降</li>
+  <li><strong>跳跃</strong>：很多队伍<strong>禁止盲目跳</strong>；深度与落点必须确认</li>
+</ul>
+<div class="callout">
+  <strong>红线：</strong>水性未评估、暴雨预警、陌生峡谷无向导、只在岩馆练过下降就进野谷——都不要进。
+</div>
+
+<h3>团队与口令</h3>
+<ul>
+  <li>瀑顶控制人数：平台挤、踩滑与落石风险高</li>
+  <li>下方「绳 / 落石 / 水况」回报更密；水声大时口哨与手势备用</li>
+  <li>明确：谁先下探水、谁拉绳、谁最后、绳卡了的预案</li>
+  <li>峡谷常无手机信号——地面联系人与返回逾期规则要事先说清</li>
+</ul>
+
+<h3>学习路径建议</h3>
+<ol>
+  <li>游泳与基础水域舒适度（能自浮、冷静即可，不必竞技）</li>
+  <li>馆内/矮崖：湿绳下降、停稳、简单拉绳概念</li>
+  <li>正规溪降课：读水、锚与单向通过、团队节奏</li>
+  <li>简单已知峡谷跟有经验队；再谈流量与难度</li>
+</ol>
+
+<h3>本站可配合阅读</h3>
+<table>
+  <tr><th>章节</th><th>在溪降里怎么用</th></tr>
+  <tr><td><a href="#descent" onclick="showArticle('descent');return false;">下降</a></td><td>核心技能；叠加湿绳与水线</td></tr>
+  <tr><td><a href="#ascent" onclick="showArticle('ascent');return false;">上升</a></td><td>备用与撤退</td></tr>
+  <tr><td><a href="#rigging" onclick="showArticle('rigging');return false;">架绳</a> · <a href="#anchors" onclick="showArticle('anchors');return false;">锚点</a></td><td>原则可参考；水旁锚与拉绳法以溪降课为准</td></tr>
+  <tr><td><a href="#mud-slip" onclick="showArticle('mud-slip');return false;">泥水打滑</a></td><td>湿滑手感部分相通</td></tr>
+  <tr><td><a href="#signals" onclick="showArticle('signals');return false;">口令</a> · <a href="#roles" onclick="showArticle('roles');return false;">角色</a></td><td>直接适用；瀑顶纪律更严</td></tr>
+  <tr><td><a href="#navigation" onclick="showArticle('navigation');return false;">导航</a></td><td>换成峡谷地形、退出点与暴涨改线</td></tr>
+</table>
+
+<div class="callout">
+  <strong>⚠️ 安全声明：</strong>本节为概念笔记，<strong>不提供</strong>可照抄的架绳/可释放系统步骤。水域垂直活动风险高，请参加有资质的溪降课程与向导活动。
+</div>
+`
+  },
+  {
+    id: 'gear',
+    title: '基本装备',
+    status: 'stable',
+    html: `
+<p>探洞 SRT <strong>个人系统</strong>常见配置如下（各国俱乐部细则会有差异）。现代体系多用<strong>专用下降器 + 机械上升器</strong>，配合直径约 <strong>8–11 mm</strong> 的低延伸芯皮绳（kernmantel）。</p>
+<table>
+  <tr><th>装备</th><th>作用</th></tr>
+  <tr><td><strong>静力绳 / 半静力绳</strong></td><td>主绳，低延伸。探洞主绳一般<strong>不用</strong>登山动力绳替代。欧式多段架绳常用更轻的 8–9 mm；美式「一长段」常偏粗、耐磨。</td></tr>
+  <tr><td><strong>坐式安全带</strong></td><td>受力主体，连接上升/下降系统与牛尾。</td></tr>
+  <tr><td><strong>下降器</strong></td><td>控制下降速度。常见：自锁型（如 Stop 类思路）、Bobbin 类、下降架（rack）等。</td></tr>
+  <tr><td><strong>手式上升器</strong></td><td>手持沿绳上推，配合脚踏；需能在<strong>不脱离身体连接</strong>的前提下从绳上取下（过点关键）。</td></tr>
+  <tr><td><strong>胸式上升器</strong></td><td>如 Croll 类，挂于胸前/安全带，坐回时承重。</td></tr>
+  <tr><td><strong>脚踏环</strong></td><td>站立把身体顶起；绳走式系统还会把上升器直接/间接连到脚上。</td></tr>
+  <tr><td><strong>牛尾绳 cow's tails</strong></td><td>过点、井口、中间锚处的临时保护；末端锁扣。关键时刻的备份连接。</td></tr>
+  <tr><td>锁扣、扁带、锚具</td><td>连接与架绳；欧式多段线路常依赖膨胀栓孔 + 自带眼螺钉等。</td></tr>
+  <tr><td>头盔、头灯</td><td>洞内防护与照明；光源务必<strong>冗余</strong>。</td></tr>
+</table>
+<h3>下降器选型要点（概念）</h3>
+<ul>
+  <li><strong>自锁型（Stop 类）</strong>：松手可停，利于新手与复杂过点；以说明书与训练为准。</li>
+  <li><strong>Bobbin 类</strong>：欧式多 rebely 时换绳较快、较轻；超长粗绳上可能偏热、手感顿挫。</li>
+  <li><strong>下降架（rappel rack）</strong>：散热与调速裕量大，适合美式超长竖井；偏重。</li>
+  <li><strong>8 字环</strong>：结构简单，但常需从安全带完全卸下才能离绳，不利于复杂中间锚；且易拧绳。维基特别提醒：有 rebely 时拧绳更麻烦。架与 8 字的优点之一是可在<strong>双绳</strong>上使用。</li>
+</ul>
+<h3>原则（先记这几条）</h3>
+<ul>
+  <li>装备认证与使用年限；定期检查磨损、裂纹、腐蚀、缝线</li>
+  <li>泥、水、结冰会显著改变上升器/下降器表现</li>
+  <li>「双重保护」思路：牛尾、自锁、备份锚</li>
+  <li>下降器应能在<strong>不从安全带卸下装置</strong>的情况下从绳上取下（复杂架绳过点所必需）</li>
+</ul>
+<p>常见型号对照见专节「<a href="#models" onclick="showArticle('models');return false;">常见型号对照</a>」；术语见「术语速查」。</p>
+
+<p>穿戴与背负分层见「<a href="#packing" onclick="showArticle('packing');return false;">装备打包示意</a>」。</p>
+
+<p>溪降衣着与下降器侧重点见「<a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a>」装备表。</p>
+`
+  },
+  {
+    id: 'models',
+    title: '常见型号对照',
+    status: 'stable',
+    html: `
+<p>探洞界器材品牌很多（Petzl、CT、Kong、ISC 等均有合规产品）。下表以<strong>概念角色 + 常见代表型号</strong>对照，便于读说明书/听课对照，<strong>不是购物推荐</strong>，也不是「只能用某牌」。</p>
+<h3>上升侧（Frog 个人系统）</h3>
+<table>
+  <tr><th>角色</th><th>常见代表（举例）</th><th>备注</th></tr>
+  <tr><td>胸式上升器</td><td>Petzl <strong>Croll</strong>（另有 Croll S / L 等尺寸）</td><td>贴胸、坐回承重；与坐带/胸带系统配合。尺寸按绳径与体型选，以说明书为准。</td></tr>
+  <tr><td>手式 / 无柄上升器</td><td>Petzl <strong>Basic</strong>；有柄如 <strong>Ascension</strong></td><td>Frog 脚踏侧常用 Basic（轻、可抓握）；有柄更利单手推高。需能<strong>不卸身</strong>离绳。</td></tr>
+  <tr><td>脚上升器（可选）</td><td>Petzl <strong>Pantin</strong> 等</td><td>辅助绳走感、省力；不是 frog 最低配置必需，泥水中维护要勤。</td></tr>
+  <tr><td>应急抓结</td><td>Prusik / Klemheist / Bachmann</td><td>机械器失效或救援场景；慢，泥冰效率差，需专门练。</td></tr>
+</table>
+<h3>下降侧</h3>
+<table>
+  <tr><th>类型</th><th>常见代表（举例）</th><th>更贴合的场景</th></tr>
+  <tr><td>自锁/辅助制动</td><td>Petzl <strong>Stop</strong></td><td>探洞入门与复杂过点很常见；松手停（以现行产品与训练为准）</td></tr>
+  <tr><td>Bobbin 类</td><td>Petzl <strong>Simple</strong> 等</td><td>轻、过 rebely 快；欧式多段井；超长粗绳可能偏热、手感顿</td></tr>
+  <tr><td>下降架</td><td><strong>Rappel rack</strong>（多品牌）</td><td>美式超长井、散热与调速裕量大；偏重</td></tr>
+  <tr><td>其他</td><td>8 字环、部分工业下降器</td><td>8 字不利于复杂中间锚且易拧绳；工业器标准与探洞不同，勿混用场景</td></tr>
+</table>
+<p>Stop / Simple 等可配合带摩擦刺的锁扣（如 Freino 类思路）改善制动，是否采用看教学体系。</p>
+<h3>连接与保护</h3>
+<table>
+  <tr><th>角色</th><th>说明</th></tr>
+  <tr><td>牛尾 cow's tails</td><td>通常一长一短两根动力绳/缝制牛尾 + 锁扣；井口与过点临时保护。长度与打结方式跟教练，勿自行「随便短一点」。</td></tr>
+  <tr><td>锁扣</td><td>丝扣/自动锁各有习惯；关键连接用锁门可靠的锁扣。泥沙环境要勤清理。</td></tr>
+  <tr><td>安全带</td><td>探洞坐带（可配合胸带/肩带固定 Croll）；与登山座带在绑点、耐磨、泥水维护上常有差异。</td></tr>
+  <tr><td>主绳</td><td>半静/静力 8–11 mm 级；欧式多段常见 8–9 mm，美式长井常更粗耐磨。认证、磨损、落水后干燥与退役周期都要管。</td></tr>
+</table>
+<div class="callout">
+  <strong>选型原则：</strong>先定<strong>你跟谁学、洞怎样架绳</strong>，再买能匹配该体系的全套，而不是东拼西凑「最贵单件」。不同品牌同角色产品可以混用，但必须各自按说明书、且兼容绳径与认证场景。
+</div>
+<p class="todo-tag">待补：示意图、国内易购型号备注（非广告）</p>
+`
+  },
+  {
+    id: 'packing',
+    title: '装备打包示意',
+    status: 'stable',
+    html: `
+<p>同样一堆装备，<strong>放哪里</strong>决定你冷不冷、慌不慌、灯灭了能不能 10 秒内摸到备份。下面是个人探洞日的<strong>分层示意</strong>（非强制品牌清单）。</p>
+
+<div class="srt-diagram" aria-label="个人探洞装备分层打包示意">
+  <svg viewBox="0 0 440 360" xmlns="http://www.w3.org/2000/svg" role="img">
+    <title>个人装备分层：身上 / 随手 / 包内</title>
+    <!-- body zone -->
+    <rect x="24" y="20" width="180" height="150" rx="12" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+    <text x="114" y="44" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">① 穿在身上</text>
+    <text x="114" y="68" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">随时可用 · 生命连接</text>
+    <text x="40" y="96" font-size="12" fill="currentColor">头盔 + 主头灯</text>
+    <text x="40" y="116" font-size="12" fill="currentColor">坐带 + 胸带系统</text>
+    <text x="40" y="136" font-size="12" fill="currentColor">牛尾 + 升降器组</text>
+    <text x="40" y="156" font-size="12" fill="currentColor">主连接锁扣</text>
+    <!-- hand zone -->
+    <rect x="236" y="20" width="180" height="150" rx="12" fill="currentColor" opacity="0.08" stroke="var(--gold,#c9a96e)" stroke-width="1.5"/>
+    <text x="326" y="44" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">② 随手可及</text>
+    <text x="326" y="68" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">腰挂 / 腿侧 / 胸前袋</text>
+    <text x="252" y="96" font-size="12" fill="currentColor">备份灯（易够到）</text>
+    <text x="252" y="116" font-size="12" fill="currentColor">手套 · 口哨</text>
+    <text x="252" y="136" font-size="12" fill="currentColor">备用锁 1–2 枚</text>
+    <text x="252" y="156" font-size="12" fill="currentColor">小刀/剪（队规）</text>
+    <!-- pack zone -->
+    <rect x="24" y="190" width="392" height="140" rx="12" fill="currentColor" opacity="0.06" stroke="var(--accent,#8b4513)" stroke-width="1.5"/>
+    <text x="220" y="216" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">③ 包内分层（由上到下建议）</text>
+    <text x="40" y="248" font-size="12" fill="currentColor">上层：保温层 · 零食 · 水（中途要拿）</text>
+    <text x="40" y="270" font-size="12" fill="currentColor">中层：备份照明全套 · 电池 · 薄手套</text>
+    <text x="40" y="292" font-size="12" fill="currentColor">下层/湿袋：备用袜 · 应急毯 · 药包（防湿）</text>
+    <text x="40" y="314" font-size="12" fill="currentColor">外挂：绳袋/垫子按任务；重物靠近背板</text>
+  </svg>
+  <p class="cap"><strong>逻辑：</strong>身上 = 过点保命；随手 = 灯灭/临时连接；包内 = 撑过低温与延误。顺序可按俱乐部调整，但不要把唯一备份灯压在包底最深处。</p>
+</div>
+<h3>三层原则</h3>
+<table>
+  <tr><th>层</th><th>放什么</th><th>检验问题</th></tr>
+  <tr><td><strong>身上</strong></td><td>头盔灯、安全带、全套 SRT（升降器、牛尾、主锁）</td><td>闭眼能否摸到主连接？牛尾有没有拖地震脚？</td></tr>
+  <tr><td><strong>随手</strong></td><td>备份灯、口哨、少量备用锁、手套</td><td>不脱包能否开第二光源？</td></tr>
+  <tr><td><strong>包内</strong></td><td>水、热量、保暖、电池、药、应急</td><td>湿与干是否隔离？药包谁知道在哪？</td></tr>
+</table>
+<h3>SRT 金属件「串挂」备忘</h3>
+<ul>
+  <li>常用：下降器、手式、胸式、脚踏在<strong>可快速展开</strong>的位置，避免铁锁缠成鸟巢</li>
+  <li>过窄缝前：收紧拖挂件，防卡岩、防丢</li>
+  <li>泥洞：齿朝向少刮岩；出洞后按「绳维护」清洗</li>
+</ul>
+<h3>过夜 / 长线路加码（概念）</h3>
+<ul>
+  <li>更多热量与水、干衣策略、团队绳袋分工</li>
+  <li>个人仍保留<strong>独立备份照明与保暖底线</strong>，不把生存 100% 托给公共包</li>
+</ul>
+<div class="callout">
+  <strong>出门前 2 分钟：</strong>穿戴完成 → 自检 → 互检 → 跳两下听响（有无松锁）→ 再背大包。清单见「出发检查清单」。
+</div>
+<p>相关：<a href="#gear" onclick="showArticle('gear');return false;">装备</a> · <a href="#models" onclick="showArticle('models');return false;">型号</a> · <a href="#checklist" onclick="showArticle('checklist');return false;">清单</a> · <a href="#roles" onclick="showArticle('roles');return false;">角色</a></p>
+
+<p>溪降日常改「湿衣 + 绳袋 + 防水舱」逻辑，保温与漂浮优先，见「<a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a>」。</p>
+`
+  },
+  {
+    id: 'rope-care',
+    title: '绳与织带维护',
+    status: 'stable',
+    html: `
+<p>主绳、牛尾、扁带、缝制环都是<strong>生命支撑纺织品</strong>。泥、水、摩擦热、紫外线、化学污染和「看似还能用」是主要敌人。以下为通用备忘，<strong>最终以制造商说明书与退役表为准</strong>。</p>
+<h3>每次用后 / 用前</h3>
+<ul>
+  <li><strong>目视 + 手捋整根绳</strong>：起毛、局部变细/变硬、扁瘪、鼓包、芯皮滑动、焦痕（融光）、变色、不明油污</li>
+  <li>检查<strong>绳端处理</strong>、中间是否有不明结或夹伤</li>
+  <li>织带/牛尾：缝线是否开裂、磨损到芯、熔斑、硬折死弯</li>
+  <li>金属器上的泥会加速磨绳——上升器齿、下降器槽要清洁；打滑场景见「<a href="#mud-slip" onclick="showArticle('mud-slip');return false;">泥水打滑预案</a>」</li>
+</ul>
+<h3>清洗与干燥</h3>
+<ul>
+  <li>洞泥尽量在<strong>冷清水</strong>中漂洗；可用软刷轻刷外皮，勿用强力洗涤剂/漂白/溶剂</li>
+  <li>部分厂家允许专用绳用洗涤产品——只使用说明书认可的</li>
+  <li><strong>阴凉通风晾干</strong>，避免暖气片、车内暴晒、烘干机高温</li>
+  <li>完全干燥前不要长期闷在密封袋里（发霉与气味是警告信号）</li>
+</ul>
+<h3>存放</h3>
+<ul>
+  <li>远离电瓶、燃油、溶剂、强酸强碱、汽车尾气长时间环境</li>
+  <li>避免尖锐钩挂与重物长期压折同一位置</li>
+  <li>记录<strong>启用日期、重大坠落/大摩擦事件、清洗次数</strong>（简单本子或标签即可）</li>
+</ul>
+<h3>何时考虑退役（示意）</h3>
+<table>
+  <tr><th>信号</th><th>含义</th></tr>
+  <tr><td>外皮磨穿、芯可见</td><td>立即停用</td></tr>
+  <tr><td>明显融光、硬结、烧痕</td><td>摩擦过热损伤，停用</td></tr>
+  <tr><td>局部直径异常、软塌、芯皮分离</td><td>结构可疑，停用</td></tr>
+  <tr><td>不明化学品接触</td><td>按厂家意见，多数情况直接退役</td></tr>
+  <tr><td>承受过未知大冲击</td><td>生命绳偏保守处理</td></tr>
+  <tr><td>达到厂家年限/使用强度上限</td><td>即使「看起来还好」也退役</td></tr>
+</table>
+<blockquote>经验法则：<strong>怀疑就换下</strong>。绳的价格换不回事故。</blockquote>
+<h3>金属件简述</h3>
+<ul>
+  <li>裂纹、永久变形、闸门卡滞、丝扣滑牙 → 停用</li>
+  <li>上升器齿过度磨圆导致打滑 → 维修/更换策略看厂家</li>
+  <li>盐雾/洞穴化学环境后淡水冲洗、干燥，再上极少量厂家允许的维护（很多探洞器<strong>禁止乱喷润滑</strong>）</li>
+</ul>
+<div class="callout">
+  <strong>注意：</strong>不同品牌的「最长存放年限 / 使用年限」不同。买来就在本子上抄下型号与日期；本页不替代具体产品的退役表。
+</div>
+`
+  },
+  {
+    id: 'descent',
+    title: '下降（沿绳往下）',
+    status: 'stable',
+    html: `
+<p>下降（abseiling / rappelling）是沿主绳<strong>可控下滑</strong>。现代 SRT 用专用下降器控制速度，而不是徒手握绳。</p>
+<h3>概念步骤</h3>
+<p>（以常见自锁下降器思路为例，具体以器材说明书与教练为准。）</p>
+<ol>
+  <li>在需要处，用<strong>牛尾</strong>先挂好保护点（井口/锚站）</li>
+  <li>下降器<strong>正确上绳</strong>，并处于<strong>自锁</strong>或可控状态</li>
+  <li>确认体重可交给下降器后，再整理/解除不再需要的连接</li>
+  <li>双手协调，尽量<strong>匀速</strong>下降；随时可停</li>
+  <li>遇到中间锚（rebely）或偏导时，按训练流程过点（见「架绳与过点」）</li>
+</ol>
+<blockquote>口诀感：<strong>先锁后动，随时能停；过点不脱开保护。</strong></blockquote>
+<h3>与器材相关的注意点</h3>
+<ul>
+  <li>超长、粗硬绳上，Bobbin 类可能下降偏慢、顿挫，且摩擦发热；美式长井更常选 rack。</li>
+  <li>过热可能损伤绳表——控制速度、必要时分段休息。</li>
+  <li>下方若有 rebely，拧绳的下降器会带来额外麻烦。</li>
+  <li>过中间锚时，有时也需要<strong>上升器</strong>辅助完成转换（不仅是下降器）。</li>
+</ul>
+<div class="callout">
+  <strong>练习建议：</strong>先在低处、教练监护下练「上绳—自锁—受力—下降—再锁」。高度从低到高，切忌第一次就大落差。
+</div>
+
+<p>泥水导致阻力突变时，见「<a href="#mud-slip" onclick="showArticle('mud-slip');return false;">泥水打滑预案</a>」下降侧注意。</p>
+
+<p>溪降中的湿绳、瀑降与拉绳场景见「<a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a>」。</p>
+`
+  },
+  {
+    id: 'ascent',
+    title: '上升系统',
+    status: 'stable',
+    html: `
+<p>上升常称 <strong>prusiking</strong> 或 <strong>jugging</strong>。原理：用「只能上、不能下」的装置或绳结，沿绳交替承重上移。</p>
+<h3>机械上升器 vs 绳结</h3>
+<p>凸轮类上升器（Jumar、Croll 等）可沿绳上推，向下受力即锁住；且应能在<strong>仍连着身体</strong>时从绳上取下。攀登/登山应急仍可能用 prusik、Bachmann、Klemheist 等<strong>抓结</strong>，但在探洞 SRT 主体系中已少作日常主上升方式——慢，且泥、冰会严重降低效率。</p>
+<h3>1. Frog / 青蛙式（坐站式）</h3>
+<p>世界探洞最常用个人系统之一（维基配图亦以 frog 为例）：</p>
+<ul>
+  <li><strong>胸式上升器</strong>：连安全带，坐回时承重</li>
+  <li><strong>手式上升器</strong>：手上推，下挂<strong>脚踏</strong></li>
+</ul>
+<p><strong>动作循环（概念）</strong></p>
+<ol>
+  <li>胸式、手式都挂在绳上，收紧上方松弛绳段</li>
+  <li><strong>手脚同时用力站直</strong> → 身体上升，胸式被带高（动作像蛙泳夹腿）</li>
+  <li>体重轻轻交给胸式，坐下</li>
+  <li>手式上移，脚踏上提</li>
+  <li>重复：站 → 坐 → 移 → 站</li>
+</ol>
+<p>优点：结构简单、过 rebely 相对灵活、装备轻。缺点：超长无障碍竖井上不如「绳走式」快。</p>
+<p>新手易犯：耸肩、撑直不充分、手式推得不够高。</p>
+<h3>2. Rope-walking / 绳走式</h3>
+<ul>
+  <li>一脚直接连上升器，另一脚经绳段连更高处的上升器，避免两器互撞</li>
+  <li>用近似<strong>交替迈步</strong>的方式上绳</li>
+</ul>
+<p>优点：长直井效率高。缺点：在狭窄、曲折通道与<strong>频繁中间锚</strong>时不够灵活——这也是欧式复杂架绳更偏爱 frog 的原因之一。</p>
+<h3>系统怎么选？（概念）</h3>
+<table>
+  <tr><th>场景</th><th>更常见倾向</th></tr>
+  <tr><td>多 rebely、有偏导、通道别扭</td><td>Frog 更灵活</td></tr>
+  <tr><td>超长、通畅的单段竖井</td><td>绳走式效率更高</td></tr>
+  <tr><td>应急、无机械上升器</td><td>抓结体系（慢，需专门练）</td></tr>
+</table>
+<p>另有 <strong>Mitchell</strong> 等混合/历史系统（一手上升器 + 脚系统组合变体），现已较少作为入门主推；效率与能耗对比因人而异，以俱乐部教学系统为准。</p>
+
+<div class="callout">
+  <strong>泥水环境：</strong>齿槽进泥会导致打滑。预防与原则级处置见「<a href="#mud-slip" onclick="showArticle('mud-slip');return false;">泥水打滑预案</a>」。
+</div>
+`
+  },
+  {
+    id: 'mud-slip',
+    title: '泥水打滑预案',
+    status: 'stable',
+    html: `
+<p>洞泥、淤泥水、湿泥皮会让上升器<strong>咬不住绳</strong>、下降器手感发黏或过滑。这是探洞相对攀岩馆最「真实」的差异之一。本节是<strong>预案意识</strong>，不是让你在井上临场发明新系统——能练的都在低处、泥绳上练过。</p>
+<h3>为什么会打滑</h3>
+<ul>
+  <li>泥填满凸轮/齿槽，绳与齿之间变成「泥膜」</li>
+  <li>绳皮吸水变滑、外皮起球夹泥</li>
+  <li>冰泥、石灰质乳状沉积（视洞而异）</li>
+  <li>器型磨损：齿磨圆后更易在脏绳上打滑</li>
+</ul>
+<h3>预防（比抢救重要）</h3>
+<table>
+  <tr><th>做法</th><th>说明</th></tr>
+  <tr><td>选对洞日与线路</td><td>暴雨后、以「泥瀑布」著称的竖井，提高等级要求</td></tr>
+  <tr><td>保持齿槽清洁</td><td>进洞前干净；中途能刷则刷（软刷/水），勿硬抠损坏凸轮</td></tr>
+  <tr><td>节奏与体重交接</td><td>站坐清晰，让胸器真正吃上体重再移手器；半悬垂抖绳易打滑</td></tr>
+  <tr><td>手套与握法</td><td>湿泥时按教学握下降器；勿因滑就「多绕一圈乱法」除非训练过</td></tr>
+  <tr><td>装备状态</td><td>齿过度磨圆、弹簧弱的上升器，脏绳上先退役或降级用途</td></tr>
+</table>
+<h3>上升器打滑时的原则级处置</h3>
+<ol>
+  <li><strong>停、稳住</strong>——不要连续猛站猛坐把泥磨成更滑的浆</li>
+  <li><strong>保持保护</strong>——牛尾、另一只器、脚踏系统，始终至少一可靠连接（以你的系统训练为准）</li>
+  <li><strong>清理再试</strong>——在安全姿势下尽量清齿、挤绳泥；有时换一段相对干净的绳皮方位</li>
+  <li><strong>降级目标</strong>——能到最近 rebely/站就到站，不要坚持「一鼓作气顶」</li>
+  <li><strong>呼叫</strong>——按口令要协助；上方勿盲目猛拉，防二次事故</li>
+</ol>
+<div class="callout">
+  <strong>禁止临场发明：</strong>用铁锁乱半扣当上升器、解开唯一保护去「整理」、疲劳时摘掉胸器等。脏绳救援是专项课内容。
+</div>
+<h3>下降侧泥水注意</h3>
+<ul>
+  <li>泥进下降器：阻力突变，可能<strong>突然变涩或突然变飞</strong>——速度保守，随时可停</li>
+  <li>自锁型也要按说明书验证泥污下是否仍可靠；有疑虑就缩短单段、增加检查</li>
+  <li>底端溅泥池：解绳前站稳，防脚下滑摔</li>
+</ul>
+<h3>训练建议</h3>
+<ul>
+  <li>馆内干净绳会了 ≠ 泥绳会了；条件允许时在<strong>可控脏绳</strong>上体验手感</li>
+  <li>把「打滑」列入行前 briefing：谁带刷、谁收尾、撤退条件</li>
+  <li>个人系统里预留<strong>教练教过的</strong>冗余手段（如训练过的抓结备份），未练过的不算预案</li>
+</ul>
+<p>相关：<a href="#ascent" onclick="showArticle('ascent');return false;">上升系统</a> · <a href="#rope-care" onclick="showArticle('rope-care');return false;">绳维护</a> · <a href="#signals" onclick="showArticle('signals');return false;">口令</a></p>
+`
+  },
+  {
+    id: 'rigging',
+    title: '架绳：美式与欧式',
+    status: 'stable',
+    html: `
+<p>「绳子怎么挂下去」很大程度上决定了你该用哪种上升/下降习惯。维基将探洞架绳习惯粗分为<strong>北美风格</strong>与<strong>欧洲风格</strong>（现实中会混合，以当地洞穴与俱乐部为准）。</p>
+<h3>北美常见思路</h3>
+<ul>
+  <li>常以<strong>较少锚点</strong>把竖井拉成<strong>很长的单段</strong>（可超过 100 m）</li>
+  <li>绳偏<strong>粗、耐磨</strong>，允许绳在井沿与岩石接触（有人戏称 <em>Indestructible Rope Technique</em>「不坏绳技术」）</li>
+  <li>下降偏好 <strong>rack</strong>：散热好、超长井更顺；Bobbin 在粗硬绳上可能慢、顿、易过热</li>
+  <li>上升偏好<strong>绳走式</strong>：长井 frog 太耗时</li>
+</ul>
+<h3>欧洲常见思路</h3>
+<ul>
+  <li>竖井更常<strong>拆成多段</strong>；大量使用 <strong>re-belay（中间重锚）</strong> 与 <strong>deviation（偏导）</strong></li>
+  <li>目标：让绳<strong>尽量不磨岩</strong>、避开松石与<strong>瀑布/水线</strong></li>
+  <li>无法避磨处装<strong>绳护</strong>；也常用横移（traverse）把架绳人送到「可干净悬挂」的位置</li>
+  <li>主绳更轻，常见 <strong>8–9 mm</strong>——深洞、长线路背负更省</li>
+  <li>下降多用 Bobbin 类：过 rebely 换绳快、器材轻</li>
+  <li>上升以 <strong>frog</strong> 更适配别扭通道与频繁过点</li>
+</ul>
+<h3>中间锚与偏导（概念）</h3>
+<table>
+  <tr><th>术语</th><th>含义</th></tr>
+  <tr><td><strong>Re-belay（中间锚 / 重锚）</strong></td><td>绳在中途重新固定到锚上，把长井拆成数段；过点需转换装置，是事故高发环节。</td></tr>
+  <tr><td><strong>Deviation（偏导）</strong></td><td>用短扁带/短绳 + 锁扣把主绳<strong>拉向一侧</strong>，改变绳线，通常不必把主绳在该点「重新承重固定」。通过时往往可摘开再挂回（按训练流程）。</td></tr>
+  <tr><td><strong>Y 挂</strong></td><td>两锚对拉成 Y 形悬挂：减少贴岩、负荷分担，且一锚失效时冲击往往小于松弛备份绳方案（仍须正确架设）。</td></tr>
+  <tr><td><strong>绳护 / 横移</strong></td><td>避磨与选位工具；干净的绳线是安全与省绳径的前提。</td></tr>
+</table>
+<blockquote>许多欧洲洞穴预留了内螺纹金属锚孔，后来者自带眼螺钉旋入即可——锚位选择极讲究，目标常是「无磨、可分享负荷、失效后果可控」。</blockquote>
+<p>锚点材质与冗余思路见专节「<a href="#anchors" onclick="showArticle('anchors');return false;">锚点类型</a>」。</p>
+<div class="callout">
+  <strong>提醒：</strong>架绳是独立高风险技能。本节只讲<strong>风格与术语</strong>，不提供可照抄的架绳步骤。务必跟当地有经验者与标准课程学习。
+</div>
+`
+  },
+  {
+    id: 'anchors',
+    title: '锚点类型（概念）',
+    status: 'stable',
+    html: `
+<p>架绳的起点是<strong>锚点</strong>：把人与绳的负荷可靠传到岩体（或结构）上。本节只讲<strong>类型与原则</strong>，不教如何打膨胀栓或如何独自架设——那是高风险专项。</p>
+<h3>常见类别</h3>
+<table>
+  <tr><th>类型</th><th>说明</th><th>注意</th></tr>
+  <tr><td><strong>天然锚</strong></td><td>岩柱、溶蚀窗、可靠岩角、粗大钟乳（极少作为唯一生命锚且需极谨慎）等</td><td>会判断岩性与方向；常需垫护减少磨绳</td></tr>
+  <tr><td><strong>人工栓 + 挂片</strong></td><td>膨胀栓/化学锚 + hanger，锁扣挂入</td><td>看锈蚀、松动、岩体裂纹；不认识的旧栓勿盲信</td></tr>
+  <tr><td><strong>预留内螺纹孔</strong></td><td>欧式洞常见：后来者自带眼螺钉旋入</td><td>螺牙与长度匹配；旋紧力矩与检查习惯跟教练</td></tr>
+  <tr><td><strong>临时机械件</strong></td><td>岩塞、临时支架等（场景少、专业性强）</td><td>非入门内容</td></tr>
+  <tr><td><strong>树木等洞外锚</strong></td><td>训练场或洞口有时使用</td><td>活树健康、保护树皮、方向与备份</td></tr>
+</table>
+<h3>系统原则（比「单点很牢」更重要）</h3>
+<ul>
+  <li><strong>冗余</strong>：关键站尽量避免不可接受的单点失效（Y 挂、备份锚等思路）</li>
+  <li><strong>方向</strong>：锚与预期受力方向一致；避免撬撬板式扭矩</li>
+  <li><strong>均等/可控延伸</strong>：多锚连接方式影响一锚失效时的冲击（正确 Y 挂 vs 松弛备份）</li>
+  <li><strong>绳线干净</strong>：锚位服务于「少磨、避水、避落石」，见「架绳」一节</li>
+  <li><strong>可检查</strong>：每次使用前看挂片、栓头、岩体、连接锁</li>
+</ul>
+<h3>与个人 SRT 的交界</h3>
+<ul>
+  <li>个人到站：用<strong>牛尾</strong>挂到可靠锚/绳环，再操作上升下降器</li>
+  <li>不要把「看起来有个铁疙瘩」当成已检查锚</li>
+  <li>领队架绳时，队员有权询问：主锚在哪、备份在哪、磨点如何处理</li>
+</ul>
+<div class="callout">
+  <strong>红线：</strong>未受训不要在野外打永久栓；不要拆除或改动你不理解的既有探洞线路；保护洞穴与下一批人的安全同样重要。
+</div>
+
+<h3>Y 挂概念图</h3>
+<p>欧式架绳里常见：两锚对拉成 <strong>Y</strong>，主绳从汇合点下去——减少贴岩、分担负荷，并改善单锚失效时的后果（相对于某些松弛备份接法）。</p>
+
+<div class="srt-diagram" aria-label="Y挂概念示意图">
+  <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" role="img">
+    <title>Y 挂概念：两锚分担负荷</title>
+    <!-- rock -->
+    <rect x="20" y="18" width="380" height="36" rx="6" fill="currentColor" opacity="0.12"/>
+    <text x="210" y="42" text-anchor="middle" font-size="13" fill="currentColor" opacity="0.7">岩壁 / 洞顶</text>
+    <!-- anchors A B -->
+    <circle cx="110" cy="70" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <circle cx="110" cy="70" r="3.5" fill="currentColor"/>
+    <text x="110" y="98" text-anchor="middle" font-size="13" fill="currentColor">锚 A</text>
+    <circle cx="310" cy="70" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <circle cx="310" cy="70" r="3.5" fill="currentColor"/>
+    <text x="310" y="98" text-anchor="middle" font-size="13" fill="currentColor">锚 B</text>
+    <!-- Y arms -->
+    <line x1="110" y1="79" x2="210" y2="150" stroke="var(--gold,#c9a96e)" stroke-width="4" stroke-linecap="round"/>
+    <line x1="310" y1="79" x2="210" y2="150" stroke="var(--gold,#c9a96e)" stroke-width="4" stroke-linecap="round"/>
+    <!-- master point -->
+    <circle cx="210" cy="150" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <circle cx="210" cy="150" r="4" fill="currentColor"/>
+    <text x="248" y="154" font-size="12" fill="currentColor" opacity="0.85">主挂点</text>
+    <!-- main rope down -->
+    <line x1="210" y1="160" x2="210" y2="250" stroke="var(--accent,#8b4513)" stroke-width="4" stroke-linecap="round"/>
+    <text x="228" y="220" font-size="12" fill="currentColor" opacity="0.85">主绳 ↓</text>
+    <!-- load arrow -->
+    <path d="M210 255 L202 242 L218 242 Z" fill="currentColor" opacity="0.55"/>
+    <text x="210" y="272" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.7">负荷（人/装备）</text>
+    <!-- force labels -->
+    <text x="145" y="120" font-size="11" fill="currentColor" opacity="0.55" transform="rotate(-38 145 120)">分力</text>
+    <text x="265" y="120" font-size="11" fill="currentColor" opacity="0.55" transform="rotate(38 265 120)">分力</text>
+  </svg>
+  <div class="legend">
+    <span><i style="background:var(--gold,#c9a96e)"></i>两腿扁带/绳（Y 臂）</span>
+    <span><i style="background:var(--accent,#8b4513)"></i>主绳向下</span>
+    <span><i style="background:currentColor;opacity:.35"></i>锚与主挂点</span>
+  </div>
+  <p class="cap"><strong>概念：</strong>两锚经两臂汇到主挂点，负荷被分担；夹角过大时各锚受力会显著增加。正确架设时，一锚失效的后果通常优于「一根松弛备份绳突然吃满冲击」的糟糕接法——但<strong>必须</strong>按所在体系训练，图不能当施工图。</p>
+</div>
+
+<div class="srt-diagram" aria-label="Y挂夹角示意">
+  <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" role="img">
+    <title>夹角与负荷关系（定性）</title>
+    <!-- small angle -->
+    <text x="100" y="22" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">夹角较小</text>
+    <circle cx="55" cy="50" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <circle cx="145" cy="50" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="55" y1="56" x2="100" y2="120" stroke="var(--gold,#c9a96e)" stroke-width="3"/>
+    <line x1="145" y1="56" x2="100" y2="120" stroke="var(--gold,#c9a96e)" stroke-width="3"/>
+    <line x1="100" y1="120" x2="100" y2="175" stroke="var(--accent,#8b4513)" stroke-width="3"/>
+    <text x="100" y="195" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.65">各锚分力相对温和</text>
+    <!-- large angle -->
+    <text x="310" y="22" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">夹角过大</text>
+    <circle cx="230" cy="50" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <circle cx="390" cy="50" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="230" y1="56" x2="310" y2="100" stroke="var(--gold,#c9a96e)" stroke-width="3"/>
+    <line x1="390" y1="56" x2="310" y2="100" stroke="var(--gold,#c9a96e)" stroke-width="3"/>
+    <line x1="310" y1="100" x2="310" y2="175" stroke="var(--accent,#8b4513)" stroke-width="3"/>
+    <text x="310" y="195" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.65">水平分力变大，锚更「吃力」</text>
+  </svg>
+  <p class="cap">定性示意，非精确力学计算。教学中常强调控制 Y 臂夹角、选好锚位方向；具体数字与接法以教材/教练为准。</p>
+</div>
+<h3>读图时记住</h3>
+<ul>
+  <li>两臂应尽量<strong>受力明确、长度匹配</strong>（具体打法课堂教）</li>
+  <li>夹角越大，锚上分力往往越大——别为了「够得着」硬拉成近乎一条直线</li>
+  <li>Y 挂<strong>不是</strong>「两个坏锚凑成一个好锚」；每个锚本身都要可靠</li>
+  <li>个人到站仍用牛尾挂可靠点，再操作升降器</li>
+</ul>
+<div class="callout">
+  <strong>图仅供建立空间感。</strong>真实岩性、挂片方向、锁扣、缓冲与备份组合，必须面授。
+</div>
+`
+  },
+  {
+    id: 'rebelay',
+    title: '过点与转换',
+    status: 'draft',
+    html: `
+<p>竖井很少是「一根绳通天」。中间常有 <strong>re-belay</strong>：绳在中途重新固定，避免摩擦岩棱、缩短自由摆荡、拆分落差、避开水线等。</p>
+<p>另有 <strong>deviation（偏导）</strong>：不把主绳在该点完全改锚承重，而是用侧向拉力改变绳线——过法与 rebely 不同，训练时会分开练。</p>
+<h3>过点时通常要做的事（原则级）</h3>
+<ul>
+  <li>用<strong>牛尾</strong>保护自己（井口与中间锚同理）</li>
+  <li>在下降器 / 上升器之间<strong>安全转换</strong></li>
+  <li>保证<strong>始终</strong>至少有一个可靠连接在绳或锚上</li>
+  <li>装置应能在<strong>不从安全带卸下</strong>的情况下离绳、上绳</li>
+</ul>
+<div class="callout">
+  <strong>这是事故高发环节。</strong>务必在教练指导下练；本页<strong>不展开逐步操作细则</strong>，避免「看起来会了」造成误用。
+</div>
+<p class="todo-tag">待补：过点原则图、上升⇄下降转换示意（仍须面授）</p>
+`
+  },
+  {
+    id: 'signals',
+    title: '口令与呼叫',
+    status: 'stable',
+    html: `
+<p>洞内嘈杂、拐弯多、视线差，<strong>事先约定口令</strong>比临场喊「啊啊啊」有用。下表是常见<strong>备忘模板</strong>——以你俱乐部/领队当日约定为准，进洞前复述一遍。</p>
+<h3>绳上 / 竖井常用（语音）</h3>
+<table>
+  <tr><th>口令示例</th><th>含义</th></tr>
+  <tr><td><strong>绳！</strong> / 下方注意</td><td>可能有落石、掉物或绳索扰动，下方停靠边缘</td></tr>
+  <tr><td><strong>落石！</strong></td><td>明确有石块掉落，贴壁、护头、勿抬头看</td></tr>
+  <tr><td><strong>绳自由</strong> / 绳清空</td><td>本段绳已无人使用，下一人可上绳（定义要统一）</td></tr>
+  <tr><td><strong>上绳</strong> / 开始下降/上升</td><td>本人开始占用绳；可报名字：「小王，下降」</td></tr>
+  <tr><td><strong>到达</strong> / 脚底</td><td>已到站/底，正在解绳或让出主绳</td></tr>
+  <tr><td><strong>卡住了</strong> / 需要协助</td><td>停止盲目加力，保持保护，等领队指示</td></tr>
+  <tr><td><strong>停！</strong></td><td>全体立即停止当前危险动作</td></tr>
+</table>
+<h3>口哨（嘈杂 / 距离远）</h3>
+<p>不少队伍用<strong>短长音</strong>编码。下面是一种<strong>示例</strong>（非国际统一标准，用前必须全队确认）：</p>
+<table>
+  <tr><th>信号示例</th><th>可约定含义</th></tr>
+  <tr><td>一声短</td><td>注意 / 我在这里</td></tr>
+  <tr><td>两声短</td><td>上升 / 拉绳（若队伍这样定义）</td></tr>
+  <tr><td>三声短</td><td>下降 / 放绳</td></tr>
+  <tr><td>一长声</td><td>停 / 危险</td></tr>
+  <tr><td>连续乱吹</td><td>紧急求助</td></tr>
+</table>
+<blockquote>关键：<strong>全队同一套</strong>；与山区救援或其他运动的口哨码可能不同，不要想当然。</blockquote>
+<h3>纪律建议</h3>
+<ul>
+  <li>竖井下方尽量<strong>不站在落石线</strong>内闲聊；一人一绳段，避免拥堵</li>
+  <li>喊口令：<strong>大声、短促、朝向同伴</strong>；没回音就再喊或改用口哨/通讯</li>
+  <li>报名字 + 动作，减少「谁在绳上」的误会</li>
+  <li>头灯勿长时间直射对方面部；约定「灭灯/红光」时段（观景、摄影、保护夜视）</li>
+  <li>紧急时：先保证自身保护，再呼叫；领队统一指挥</li>
+</ul>
+<div class="callout">
+  <strong>进洞前 30 秒：</strong>复述今日口令表 + 撤退条件 + 预计出洞时间。比多带一根能量棒还便宜。
+</div>
+
+<p>口令由领队在 briefing 敲定；角色分工见「<a href="#roles" onclick="showArticle('roles');return false;">团队角色</a>」。</p>
+`
+  },
+  {
+    id: 'roles',
+    title: '团队角色',
+    status: 'stable',
+    html: `
+<p>探洞小队不是「一群各自玩绳的人」，而是临时<strong>作业组织</strong>。角色可一人多兼，但<strong>责任必须说清</strong>。下表为常见分工备忘，名称因俱乐部而异。</p>
+<h3>核心角色</h3>
+<table>
+  <tr><th>角色</th><th>主要责任</th><th>不该是</th></tr>
+  <tr>
+    <td><strong>领队 / 当日决策</strong></td>
+    <td>线路与难度匹配；进撤决策；节奏与安全一票；对外联系人信息</td>
+    <td>只顾自己打头阵却不看队尾；把新手丢在难点</td>
+  </tr>
+  <tr>
+    <td><strong>架绳手</strong>（若今日架绳）</td>
+    <td>选锚、Y 挂/偏导/rebely、绳线干净；向全队说明线路特征</td>
+    <td>不报磨点与水线；收工不交代绳况</td>
+  </tr>
+  <tr>
+    <td><strong>收绳 / 最后一人</strong></td>
+    <td>确认无人在下；按计划撤绳或保留；与领队核对「最后一人是谁」</td>
+    <td>以为别人会收；未清点人数就拆关键绳</td>
+  </tr>
+  <tr>
+    <td><strong>前卫</strong></td>
+    <td>探路、简单导航提示、发现落石与水情回传</td>
+    <td>把全队甩开半小时；擅自进未计划支洞</td>
+  </tr>
+  <tr>
+    <td><strong>后卫 / 收尾</strong></td>
+    <td>盯新手与疲劳队员；清点人数；拾遗；确保无掉队</td>
+    <td>只催促「快点」而不协助难点</td>
+  </tr>
+  <tr>
+    <td><strong>新手机 / 照护</strong></td>
+    <td>指定一人（或轮换）在井口与难点旁<strong>监护提示</strong>；控制信息量，一次一个动作</td>
+    <td>七嘴八舌指挥；新人独自在井口摸索</td>
+  </tr>
+  <tr>
+    <td><strong>装备 / 绳包</strong></td>
+    <td>绳袋、备用件、集体装备清单；出洞清点</td>
+    <td>绳丢洞里不知道谁的责任</td>
+  </tr>
+  <tr>
+    <td><strong>医疗 / 药品</strong>（可兼）</td>
+    <td>知道谁有过敏/慢病；药包位置；小伤处理</td>
+    <td>药包埋在最重的包底且无人知晓</td>
+  </tr>
+</table>
+<h3>竖井边的典型节奏</h3>
+<ol>
+  <li>Briefing：口令、顺序、难度、撤退时间、谁最后</li>
+  <li>先上绳者：通常熟练者探路或领队指定；下方站位避开落石线</li>
+  <li>新手：中间段，上下均有熟练者；井口有人盯挂接</li>
+  <li>绳清空信号明确后下一人上绳；禁止「以为到底了」重叠占用</li>
+  <li>收绳前：口头 + 清点 = 全员出段</li>
+</ol>
+<h3>新手（被照护者）义务</h3>
+<ul>
+  <li>诚实报告体感、恐惧与装备不熟——硬撑是事故温床</li>
+  <li>只接受<strong>当日指定照护/领队</strong>的操作指令，避免多人同时指挥</li>
+  <li>未练过的动作：说「不会」，要求地面或低处再练</li>
+  <li>保管好自己的备份灯与保暖，不把生存外包给「好像有人带着」</li>
+</ul>
+<div class="callout">
+  <strong>最小编制意识：</strong>再小的队也要能回答四句话——谁决策？谁最后？新手谁盯？几点必须往回走？
+</div>
+<p>相关：<a href="#signals" onclick="showArticle('signals');return false;">口令</a> · <a href="#navigation" onclick="showArticle('navigation');return false;">导航</a> · <a href="#training" onclick="showArticle('training');return false;">学习路径</a> · <a href="#checklist" onclick="showArticle('checklist');return false;">清单</a></p>
+
+<p>活动结束建议花 10 分钟做队内复盘，模板见「<a href="#debrief" onclick="showArticle('debrief');return false;">课后复盘模板</a>」。</p>
+
+<p>溪降队同样需要领队、先下探水、拉绳与最后一人；水力与天气一票否决权在领队。见「<a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a>」。</p>
+`
+  },
+  {
+    id: 'navigation',
+    title: '洞内导航与迷路',
+    status: 'stable',
+    html: `
+<p>竖井 SRT 只是探洞的一部分；水平段迷路、走错支洞、体力耗尽找不到回程，同样危险。原则：<strong>进去能复述怎么出来</strong>。</p>
+<h3>导航基本原则</h3>
+<ul>
+  <li><strong>跟队与领队</strong>：新手不单独脱离视线；岔路等人、清点人数</li>
+  <li><strong>回头看</strong>：关键岔口转过身，记住「返回时的模样」（岩形、坡度、水声）</li>
+  <li><strong>单一主线意识</strong>：先走勘探好的线路；不随意钻未知支洞「顺便看看」</li>
+  <li><strong>标记</strong>：仅使用队伍允许、可逆、不破坏洞穴的方式（如可回收反光点、旗标）；许多重要洞穴<strong>禁止乱画、乱堆石</strong></li>
+  <li><strong>时间预算</strong>：设定强制返回时间；超时无条件撤，不谈「再看一个厅」</li>
+  <li><strong>光源</strong>：主灯 + 备份；电量按「最坏回程」估算，勿用到灭</li>
+</ul>
+<h3>容易走错的地方</h3>
+<table>
+  <tr><th>场景</th><th>风险</th><th>习惯</th></tr>
+  <tr><td>多岔厅堂</td><td>返回时镜像混淆</td><td>进岔口前统一「左数第几」或明显特征</td></tr>
+  <tr><td>爬升/下降交界</td><td>回程变成难点</td><td>记下是否需绳、是否有绳已架</td></tr>
+  <tr><td>水边/脚泥</td><td>足迹混乱</td><td>不依赖脚印；靠岩性与标记</td></tr>
+  <tr><td>风口/水声</td><td>误判「出口就在前方」</td><td>以地图/领队路线为准</td></tr>
+  <tr><td>竖井底多出口</td><td>上错绳或进错巷</td><td>绳根做约定识别；口头确认</td></tr>
+</table>
+<h3>若怀疑迷路</h3>
+<ol>
+  <li><strong>停</strong>——停止加深错误；坐下保暖、喝水、开备份灯评估</li>
+  <li><strong>想</strong>——最后确认正确的点在哪里？还有多少电？还有绳技难点吗？</li>
+  <li><strong>退</strong>——退回最后一个全队确认点，而不是继续「碰运气」</li>
+  <li><strong>呼</strong>——按约定口哨/语音；听回声与水声，但不反向乱钻</li>
+  <li><strong>守</strong>——若彻底失去主线且无力安全移动：在相对安全处保存体力，便于搜索（具体应急以训练与当地救援体系为准）</li>
+</ol>
+<div class="callout">
+  <strong>预防 > 自救：</strong>行程告知地面联系人、不超能力进复杂洞、保持队伍间距「能看见或能应答」。迷路预案不能替代向导与经验。
+</div>
+<h3>与 SRT 的衔接</h3>
+<ul>
+  <li>下井前确认：回程是否<strong>同一根绳</strong>、是否有人收绳、最后一人是谁</li>
+  <li>多段 rebely：记住段数与特征，避免「以为到底了」</li>
+  <li>体力在回程上升段见真章——导航失误会叠加在长上升之后</li>
+</ul>
+
+<p>峡谷溪降的「迷路」常表现为走错退出点或水位改变通路，专节对照见「<a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a>」。</p>
+`
+  },
+  {
+    id: 'glossary',
+    title: '术语速查',
+    status: 'stable',
+    html: `
+<p>中英混用在探洞圈很常见。下表便于听课/读书时对词（不完全标准译名，俱乐部内部用语可能不同）。</p>
+<table>
+  <tr><th>术语</th><th>说明</th></tr>
+  <tr><td><strong>SRT</strong></td><td>Single Rope Technique，单绳技术；攀树界或称 Stationary Rope Technique（固定绳）</td></tr>
+  <tr><td><strong>DRT</strong></td><td>Double-rope / moving-rope technique，双绳/动绳技术</td></tr>
+  <tr><td><strong>Frog / 青蛙式</strong></td><td>坐站式上升：胸式 + 手式脚踏，交替站坐上绳</td></tr>
+  <tr><td><strong>Rope-walking / 绳走</strong></td><td>双脚交替迈步式上升，长直井效率高</td></tr>
+  <tr><td><strong>Prusik / jugging</strong></td><td>沿绳上升的泛称；prusik 亦特指一种抓结</td></tr>
+  <tr><td><strong>Abseil / rappel</strong></td><td>沿绳下降（英/美习惯用词差异）</td></tr>
+  <tr><td><strong>Descender</strong></td><td>下降器</td></tr>
+  <tr><td><strong>Ascender / jammer</strong></td><td>上升器 / 抓绳器</td></tr>
+  <tr><td><strong>Croll</strong></td><td>常特指贴胸使用的胸式上升器（亦是 Petzl 型号名）</td></tr>
+  <tr><td><strong>Cow's tails / 牛尾</strong></td><td>连在安全带上的短保护绳，过点与井口挂点用</td></tr>
+  <tr><td><strong>Re-belay / rebely</strong></td><td>中间重锚：绳在中途重新固定，把竖井分段</td></tr>
+  <tr><td><strong>Deviation / 偏导</strong></td><td>侧向拉绳改变绳线，通常不在该点完全改锚承重</td></tr>
+  <tr><td><strong>Y-hang / Y 挂</strong></td><td>两锚成 Y 形分担负荷、改善绳线</td></tr>
+  <tr><td><strong>Traverse / 横移</strong></td><td>水平或近水平的绳线移动，常为到达好挂点</td></tr>
+  <tr><td><strong>Rope protector / 绳护</strong></td><td>垫在磨点保护主绳</td></tr>
+  <tr><td><strong>Pitch / 竖井段</strong></td><td>一段需要绳索通过的垂直落差</td></tr>
+  <tr><td><strong>Rebelay loop / 锚环</strong></td><td>中间锚处可供挂牛尾/转换的绳环或锚站结构（叫法因地而异）</td></tr>
+  <tr><td><strong>Changeover</strong></td><td>上升⇄下降或过点时的系统转换</td></tr>
+  <tr><td><strong>Self-belay</strong></td><td>自我保护（如牛尾挂点）</td></tr>
+  <tr><td><strong>Static / low-stretch rope</strong></td><td>静力/低延伸绳，SRT 主绳常用</td></tr>
+  <tr><td><strong>Kernmantel</strong></td><td>芯皮绳结构（内芯+外皮）</td></tr>
+  <tr><td><strong>Rack</strong></td><td>下降架，多摩擦棒调速</td></tr>
+  <tr><td><strong>Bobbin</strong></td><td>双轴/线轴型下降器一类的统称</td></tr>
+  <tr><td><strong>Potholing</strong></td><td>英式用语，偏竖向洞穴探险</td></tr>
+  <tr><td><strong>Alpine caving</strong></td><td>阿尔卑斯式探洞：轻装、复杂垂直、欧式架绳传统</td></tr>
+  <tr><td><strong>Hanger / 挂片</strong></td><td>固定在膨胀栓上的金属连接片，供锁扣挂入</td></tr>
+  <tr><td><strong>Bolt / 膨胀栓</strong></td><td>打入基岩的锚栓；探洞常用机械栓或化学锚（以当地与教练为准）</td></tr>
+  <tr><td><strong>Natural anchor</strong></td><td>天然锚：岩柱、溶蚀孔、可靠岩体等（需会判断）</td></tr>
+  <tr><td><strong>Backup / 备份锚</strong></td><td>主锚之外的冗余连接，降低单点失效后果</td></tr>
+  <tr><td><strong>Sheath / core</strong></td><td>绳的外皮与内芯；芯皮绳结构检查重点</td></tr>
+  <tr><td><strong>Glazing / 融光</strong></td><td>摩擦过热导致绳表发亮变硬，损伤信号</td></tr>
+  <tr><td><strong>Retirement / 退役</strong></td><td>装备达到寿命/损伤标准后停止生命支撑用途</td></tr>
+  <tr><td><strong>EN 1891</strong></td><td>低延伸绳常见欧标类型参考（具体型号看铭牌）</td></tr>
+  <tr><td><strong>绳自由 / rope free</strong></td><td>该段绳已无人占用，下一人可上绳（定义须全队统一）</td></tr>
+  <tr><td><strong>Buddy check / 互检</strong></td><td>同伴互相检查穿戴与连接</td></tr>
+  <tr><td><strong>Call-out / 口令</strong></td><td>约定语音或口哨信号</td></tr>
+  <tr><td><strong>Survey / 测图</strong></td><td>洞穴测绘；业余探洞也可能简单草图辅助返回</td></tr>
+  <tr><td><strong>Belay station / 锚站</strong></td><td>锚与连接构成的站立/转换位置</td></tr>
+  <tr><td><strong>收绳 / derig</strong></td><td>活动结束按计划撤除绳索与部分锚连接</td></tr>
+  <tr><td><strong>架绳 / rig</strong></td><td>设置锚与绳线供通行</td></tr>
+  <tr><td><strong>Briefing</strong></td><td>出发前简报：口令、顺序、时间、角色</td></tr>
+  <tr><td><strong>泥绳 / muddy rope</strong></td><td>粘泥主绳，上升器易打滑</td></tr>
+  <tr><td><strong>Near miss / 近失</strong></td><td>未造成伤害但几乎失控的事件，复盘重点</td></tr>
+  <tr><td><strong>Debrief / 复盘</strong></td><td>活动后结构化回顾</td></tr>
+  <tr><td><strong>Rope bag / 绳袋</strong></td><td>装主绳的袋，架收绳常用</td></tr>
+  <tr><td><strong>Canyoning / Canyoneering</strong></td><td>溪降 / 峡谷穿越（欧/美用词习惯不同）</td></tr>
+  <tr><td><strong>溪降 / 溯降</strong></td><td>沿峡谷以绳降、涉水等通过；非单纯向上溯溪</td></tr>
+  <tr><td><strong>Guided rappel</strong></td><td>导向/牵引下降：辅绳改变下降路线，常为避主水流</td></tr>
+  <tr><td><strong>Pull-down / 拉绳</strong></td><td>单向通过后将绳拉下带走</td></tr>
+  <tr><td><strong>Hydraulic / 水力障碍</strong></td><td>卷浪、底洞等水流结构风险</td></tr>
+  <tr><td><strong>Rope bag</strong></td><td>绳袋；溪降中常配合投放与漂浮管理</td></tr>
+</table>
+`
+  },
+  {
+    id: 'training',
+    title: '学习路径建议',
+    status: 'stable',
+    html: `
+<p>SRT 是<strong>运动技能 + 判断力</strong>，不能靠文章「学会」。下面是一条常见的<strong>由浅入深顺序</strong>（各俱乐部课表不同，仅供规划参考）。</p>
+<h3>阶段 0：行前心态</h3>
+<ul>
+  <li>接受：地下湿冷、脏、慢、沟通困难；安全优先于「打卡深度」</li>
+  <li>体检与基础体能：核心、肩背、持续中等强度优于纯爆发</li>
+  <li>找<strong>有口碑的俱乐部/教练</strong>，问清保险、师生比、是否只练馆不进洞</li>
+</ul>
+<h3>阶段 1：地面 / 岩馆低空</h3>
+<ol>
+  <li>认识装备：名称、穿戴、锁门方向、绳径匹配</li>
+  <li>下降：上绳、自锁、匀速、停止、在低处反复</li>
+  <li>Frog 上升：站坐节奏、推高手式、呼吸</li>
+  <li>牛尾挂摘：始终有保护的习惯动作</li>
+  <li>简单<strong>上升⇄下降转换</strong>（仍在低处）</li>
+</ol>
+<blockquote>标准感：加权绳上也能锁停；动作不靠「别人帮一把」才能完成。</blockquote>
+<h3>阶段 2：结构训练（仍常在可控场地）</h3>
+<ul>
+  <li>模拟 <strong>rebely / 偏导</strong> 过点（重点课，事故高发）</li>
+  <li>井口边缘意识：松石、摆荡、先保护后操作</li>
+  <li>泥绳、湿绳上的手感差异；打滑预案（「<a href="#mud-slip" onclick="showArticle('mud-slip');return false;">泥水打滑</a>」）</li>
+  <li>小队呼叫、绳上排队、下方落石喊话习惯（详见「<a href="#signals" onclick="showArticle('signals');return false;">口令与呼叫</a>」）</li>
+</ul>
+<h3>阶段 2.5：角色演练</h3>
+<ul>
+  <li>轮流当「井口照护 / 模拟最后一人」口述检查项（「<a href="#roles" onclick="showArticle('roles');return false;">团队角色</a>」）</li>
+</ul>
+<h3>阶段 3：简单真洞</h3>
+<ul>
+  <li>短 pitch、架绳良好、有经验领队</li>
+  <li>光源冗余、保暖、时间管理；岔路<strong>回头看</strong>（「<a href="#navigation" onclick="showArticle('navigation');return false;">洞内导航</a>」）</li>
+  <li>事后复盘：用「<a href="#debrief" onclick="showArticle('debrief');return false;">课后复盘模板</a>」写三件可练改进</li>
+</ul>
+<h3>阶段 4：进阶（按需）</h3>
+<ul>
+  <li>复杂多 rebely、长井、水线旁、窄缝</li>
+  <li>架绳与选线（独立高风险技能，另开课）</li>
+  <li>基础自救/协助（仅训练环境下学）</li>
+  <li>救援体系、工业绳索——证书与探洞运动<strong>不要混为一谈</strong></li>
+</ul>
+<div class="callout">
+  <strong>警惕：</strong>只看视频就买全套进野洞；把工业证等同探洞经验；在无人知悉行程时单独深竖井。本页任何章节都<strong>不能</strong>替代面授与陪练。
+</div>
+
+<p>装备怎么穿、怎么背：见「<a href="#packing" onclick="showArticle('packing');return false;">装备打包示意</a>」。</p>
+
+<h3>分支：溪降</h3>
+<p>溪降是独立课轨。路径概要见「<a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a>」——水性 + 湿绳下降 + 正规课，不可跳步。</p>
+`
+  },
+  {
+    id: 'checklist',
+    title: '出发检查清单',
+    status: 'stable',
+    html: `
+<p>每次训练或进洞前可过一遍。按你的俱乐部清单增删；此处是个人 SRT 向备忘。</p>
+<h3>个人绳索系统</h3>
+<ul>
+  <li>□ 坐式安全带（磨损、缝线、主连接点）</li>
+  <li>□ 胸式上升器 + 手式上升器 + 脚踏（齿/凸轮、外壳裂纹）</li>
+  <li>□ 下降器（开合、制动、绳径匹配）</li>
+  <li>□ 牛尾 ×2 + 锁扣（锁门、丝扣能拧到底）</li>
+  <li>□ 备用锁扣、短扁带/绳环（按队规）</li>
+  <li>□ 手套（可选但湿泥洞常很有用）</li>
+</ul>
+<h3>洞内生存与导航</h3>
+<ul>
+  <li>□ 头盔</li>
+  <li>□ 主头灯 + <strong>至少一套备份照明</strong>（电池充满/新电池）</li>
+  <li>□ 洞内衣物层：排汗 / 保暖 / 外层耐磨；备用保温</li>
+  <li>□ 水、高热量食物、个人药品</li>
+  <li>□ 口哨、手表/时间意识、（队规要求的）地图笔记</li>
+</ul>
+<h3>绳与金属（快速）</h3>
+<ul>
+  <li>□ 主绳：无严重起毛、扁瘪、芯皮分离、融光、不明化学品污染</li>
+  <li>□ 牛尾/扁带：缝线完整、无熔斑与严重磨损</li>
+  <li>□ 上升器齿/凸轮干净可动；下降器开合正常</li>
+  <li>□ 锁扣闸口无泥卡死，丝扣能完全拧上</li>
+</ul>
+<h3>出发前非装备</h3>
+<ul>
+  <li>□ 今日<strong>口令/口哨</strong>已复述（见「口令与呼叫」）</li>
+  <li>□ <strong>角色</strong>已明确：决策 / 最后一人 / 新手照护（见「团队角色」）</li>
+  <li>□ 若预期泥大：上升器清洁、打滑预案已口头过一遍</li>
+  <li>□ 撤退时间、迷路原则已明确（见「洞内导航」）</li>
+
+  <li>□ 行程与返回时间已告知地面可靠联系人</li>
+  <li>□ 身体状态：无严重睡眠不足、酒精、急性病</li>
+  <li>□ 知道今日领队、撤退条件、绳上纪律</li>
+  <li>□ 新手已在低处练过今日会用到的动作</li>
+</ul>
+<div class="callout">
+  <strong>习惯：</strong>穿戴完成后做一次「全身镜检」或同伴互检——锁门、主锁、上升器方向、下降器是否在锁位。
+</div>
+
+<p>打包分层逻辑见「<a href="#packing" onclick="showArticle('packing');return false;">装备打包示意</a>」。出洞后可用「<a href="#debrief" onclick="showArticle('debrief');return false;">课后复盘模板</a>」。</p>
+
+<h3>若今日是溪降（追加）</h3>
+<ul>
+  <li>□ 天气预报 + 流域/ upstream 状况已看</li>
+  <li>□ 全员水性与湿衣/保暖匹配水温</li>
+  <li>□ 拉绳方案、最后一人、绳卡预案已说清</li>
+  <li>□ 退出点与逾期地面联系已约定</li>
+  <li>□ 详见「<a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a>」</li>
+</ul>
+`
+  },
+  {
+    id: 'debrief',
+    title: '课后复盘模板',
+    status: 'stable',
+    html: `
+<p>练完或出洞后 15–30 分钟热乎着复盘，比过一周再回忆有用。可复制到笔记软件；队内也可轮流主持 10 分钟站会。</p>
+<h3>A. 基本信息</h3>
+<table>
+  <tr><th>项</th><th>填写</th></tr>
+  <tr><td>日期 / 地点</td><td></td></tr>
+  <tr><td>类型</td><td>□ 馆训　□ 户外低空　□ 真洞　□ 其他</td></tr>
+  <tr><td>队友 / 教练</td><td></td></tr>
+  <tr><td>个人角色</td><td>□ 学员　□ 照护　□ 架/收绳　□ 领队　□ 其他</td></tr>
+  <tr><td>时长 / 最大落差</td><td></td></tr>
+</table>
+<h3>B. 技术（只写观察到的事实）</h3>
+<ul>
+  <li>今天练了：下降 / 上升 / 转换 / 过点 / 架绳概念 / 其他：________</li>
+  <li>最顺的一次动作：________________________________</li>
+  <li>最卡的一次（何时、何器、何环境）：________________</li>
+  <li>泥水/疲劳/紧张有无出现：________________________</li>
+  <li>若溪降：水位、水力、拉绳、低体温信号：____________</li>
+  <li>装备问题（磨、卡、不适）：______________________</li>
+</ul>
+<h3>C. 决策与团队</h3>
+<ul>
+  <li>Briefing 是否说清口令、顺序、返回时间？</li>
+  <li>有无角色空窗（没人盯新手 / 没人确认收绳）？</li>
+  <li>沟通：谁的口令有效？哪里吵、听不清？</li>
+  <li>若重来一次，会改的一个决定：____________________</li>
+</ul>
+<h3>D. 安全近失（Near miss）</h3>
+<div class="callout">
+  <strong>近失 = 差点出事但没出事。</strong>值得写，不羞耻。无则写「无」。
+</div>
+<ul>
+  <li>描述：__________________________________________</li>
+  <li>当时缺了哪一环（检查 / 口令 / 保护 / 判断）：________</li>
+  <li>已采取的纠正：__________________________________</li>
+</ul>
+<h3>E. 身体与恢复</h3>
+<ul>
+  <li>疼痛/摩擦点（腰、腿、虎口）：____________________</li>
+  <li>冷、饿、脱水信号出现过吗？</li>
+  <li>睡眠与下次训练间隔计划：________________________</li>
+</ul>
+<h3>F. 下次只改三件事</h3>
+<table>
+  <tr><th>#</th><th>具体、可练、可检查</th></tr>
+  <tr><td>1</td><td></td></tr>
+  <tr><td>2</td><td></td></tr>
+  <tr><td>3</td><td></td></tr>
+</table>
+<blockquote>例子：「手式每次站直前先推高 15 cm」比「上升练好」有用。</blockquote>
+<h3>G. 队内 10 分钟流程（可选）</h3>
+<ol>
+  <li>每人 30 秒：一个亮点 + 一个改进（不打断）</li>
+  <li>领队汇总：口令/顺序有无修改建议</li>
+  <li>装备员：遗失与损伤登记</li>
+  <li>约定下次课目标（只订 1–2 个）</li>
+</ol>
+<div class="callout">
+  <strong>复盘禁忌：</strong>当众羞辱、只骂不给改法、把近失当段子传出队外（涉及他人隐私与形象时更要克制）。
+</div>
+<p>相关：<a href="#training" onclick="showArticle('training');return false;">学习路径</a> · <a href="#mistakes" onclick="showArticle('mistakes');return false;">常见失误</a> · <a href="#roles" onclick="showArticle('roles');return false;">团队角色</a> · <a href="#checklist" onclick="showArticle('checklist');return false;">清单</a></p>
+`
+  },
+  {
+    id: 'mistakes',
+    title: '常见失误备忘',
+    status: 'stable',
+    html: `
+<p>下列为教学中<strong>高频概念级失误</strong>（非完整事故库）。用来自检「有没有坏习惯」，细节纠正必须当面练。</p>
+<table>
+  <tr><th>环节</th><th>常见问题</th><th>更好的意识</th></tr>
+  <tr><td>井口</td><td>未挂牛尾就探身；踩松石；装备散落边沿</td><td>先保护后作业；边沿干净；下方无人时再丢绳/作业</td></tr>
+  <tr><td>下降</td><td>上绳错误仍受力；速度失控；松手不会停</td><td>低处验证自锁；匀速；随时能停再往深走</td></tr>
+  <tr><td>上升</td><td>只掰手腕不站直；手式推太低；坐回砸进胸器</td><td>站坐节奏；推高；体重平稳交接</td></tr>
+  <tr><td>过点</td><td>某一刻全身只靠一只未确认的锁；手忙脚乱摘保护</td><td>始终至少一可靠连接；慢即是快</td></tr>
+  <tr><td>器材</td><td>泥齿不清理仍硬推；绳径与器不配；过期织带</td><td>维护与退役制度；说明书绳径范围</td></tr>
+  <tr><td>团队</td><td>绳上拥堵；下方不喊落石；超时不撤</td><td>呼叫约定；时间预算；撤退比深度光荣</td></tr>
+  <tr><td>学习</td><td>视频自学进野洞；装备买最全却未练过点</td><td>面授顺序：低处 → 结构 → 简单洞</td></tr>
+  <tr><td>通讯</td><td>口令不统一；下方不喊落石</td><td>进洞前对齐信号表</td></tr>
+  <tr><td>导航</td><td>岔路不回头看；超时仍向前</td><td>强制返回时间；退回确认点</td></tr>
+  <tr><td>Y 挂误解</td><td>两烂锚拼一好锚；夹角拉成平角</td><td>每锚可靠；控制夹角</td></tr>
+  <tr><td>泥绳</td><td>打滑仍猛站；临场乱改系统</td><td>停、保护、清齿、到站；只用练过的手段</td></tr>
+  <tr><td>团队</td><td>角色混乱；七人同时指挥新手</td><td>指定照护；领队统一口令</td></tr>
+  <tr><td>收绳</td><td>未清点就撤关键绳</td><td>最后一人 + 口头确认全员</td></tr>
+  <tr><td>打包</td><td>唯一备份灯在包底；铁锁缠死</td><td>随手层放备份灯；串挂可展开</td></tr>
+  <tr><td>复盘</td><td>不写近失；目标假大空</td><td>用模板写 3 件可练改进</td></tr>
+  <tr><td>溪降</td><td>探洞会下降就进野峡谷；忽视预报与水位</td><td>专门学溪降；暴雨与水况一票否决</td></tr>
+  <tr><td>拉绳</td><td>未确认可拉、磨棱卡绳强扯</td><td>架法与检查按溪降课；卡绳有预案</td></tr>
+  <tr><td>跳跃</td><td>未测深跟跳</td><td>默认不跳，确认前禁止</td></tr>
+</table>
+<div class="callout">
+  <strong>再次强调：</strong>过点与架绳是重灾区。本页故意不写逐步「教程化」操作，避免错误自信。
+</div>
+`
+  },
+  {
+    id: 'safety',
+    title: '安全要点',
+    status: 'stable',
+    html: `
+<ol>
+  <li><strong>跟人学，别只靠网文/视频/本页就下井</strong></li>
+  <li>告诉地面可靠联系人：进洞计划、预计返回时间</li>
+  <li>光源冗余（头灯 + 备份）、食物、保暖、急救意识</li>
+  <li>绳、锁、安全带：认证、寿命、检查制度</li>
+  <li>泥水环境：上升器打滑、下降器进沙都要有预案</li>
+  <li>团队纪律：绳上人数、呼叫、等待，避免同时挤在危险点</li>
+  <li>架绳质量决定整条线路安全：磨绳、落石、水线、锚点冗余</li>
+  <li>个人系统与当地架绳风格匹配（长井 rack / 多 rebely frog 等）</li>
+  <li>绳与织带：检查、清洗、干燥、年限与退役（见「绳与织带维护」）</li>
+  <li>不盲信旧锚：松动、锈蚀、岩体裂纹时重新评估线路</li>
+  <li>统一<strong>口令/口哨</strong>，竖井下方避开落石线</li>
+  <li>导航：回头看、清点人数、强制返回时间；怀疑迷路先停再退</li>
+  <li>明确<strong>团队角色</strong>：谁决策、谁最后、谁盯新手（见专节）</li>
+  <li>泥水竖井：按「泥水打滑预案」预防与处置，禁止临场发明</li>
+  <li>若涉及<strong>溪降/峡谷</strong>：额外评估水位、暴雨、水力与低体温（见专节）</li>
+</ol>
+<div class="callout">
+  <strong>本页立场：</strong>知识归档与备忘。任何操作以<strong>现场教学与现行标准</strong>为准。
+</div>
+`
+  },
+  {
+    id: 'handbook',
+    title: '手册章节对照',
+    status: 'stable',
+    html: `
+<p>系统学习建议以纸书/正规课为主。下表把<strong>本站笔记</strong>与常见经典结构做对照，方便「读到哪一章就回看本站哪一节」。</p>
+<h3>《洞穴探险技术手册》（中文，约 2024）</h3>
+<p>中国大百科全书出版社 · 常见 ISBN 978-7-5202-1543-5 · 译自法式探洞技术体系（与 <em>Alpine Caving Techniques</em> 传统相关；让·波塔西等参与中文推广语境）。</p>
+<p>精确目录以你手中纸书为准。阅读时建议按下面主题检索目录/索引：</p>
+<table>
+  <tr><th>主题关键词（在书中查找）</th><th>本站对应</th></tr>
+  <tr><td>单绳、SRT、垂直技术总论</td><td><a href="#overview" onclick="showArticle('overview');return false;">概述</a></td></tr>
+  <tr><td>绳索、安全带、上升器、下降器、牛尾</td><td><a href="#gear" onclick="showArticle('gear');return false;">基本装备</a> · <a href="#models" onclick="showArticle('models');return false;">型号对照</a> · <a href="#rope-care" onclick="showArticle('rope-care');return false;">绳维护</a></td></tr>
+  <tr><td>下降、制动、Stop/Simple 类</td><td><a href="#descent" onclick="showArticle('descent');return false;">下降</a></td></tr>
+  <tr><td>上升、青蛙式、脚踏</td><td><a href="#ascent" onclick="showArticle('ascent');return false;">上升系统</a></td></tr>
+  <tr><td>架绳、锚点、Y 挂、偏导、中间站</td><td><a href="#rigging" onclick="showArticle('rigging');return false;">架绳</a> · <a href="#anchors" onclick="showArticle('anchors');return false;">锚点</a> · <a href="#rebelay" onclick="showArticle('rebelay');return false;">过点</a></td></tr>
+  <tr><td>安全、通讯、装备检查</td><td><a href="#safety" onclick="showArticle('safety');return false;">安全要点</a> · <a href="#checklist" onclick="showArticle('checklist');return false;">清单</a></td></tr>
+  <tr><td>训练、教学进阶</td><td><a href="#training" onclick="showArticle('training');return false;">学习路径</a></td></tr>
+  <tr><td>通讯、口令、口哨</td><td><a href="#signals" onclick="showArticle('signals');return false;">口令与呼叫</a></td></tr>
+  <tr><td>定向、标记、迷路、回程</td><td><a href="#navigation" onclick="showArticle('navigation');return false;">洞内导航</a></td></tr>
+  <tr><td>泥泞、器械失灵、故障</td><td><a href="#mud-slip" onclick="showArticle('mud-slip');return false;">泥水打滑预案</a></td></tr>
+  <tr><td>团队、领队、收绳、教学</td><td><a href="#roles" onclick="showArticle('roles');return false;">团队角色</a></td></tr>
+  <tr><td>装备携带、背包、个人系统整理</td><td><a href="#packing" onclick="showArticle('packing');return false;">装备打包示意</a></td></tr>
+  <tr><td>训练笔记、复盘、近失</td><td><a href="#debrief" onclick="showArticle('debrief');return false;">课后复盘模板</a></td></tr>
+  <tr><td>峡谷、溪降、瀑布、水流</td><td><a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a></td></tr>
+  
+  
+  
+  
+</table>
+<h3><em>Alpine Caving Techniques</em>（Marbach &amp; Tourte，英译 2002）</h3>
+<p>欧式探洞经典。公开书评/介绍常将其结构概括为四大块：</p>
+<table>
+  <tr><th>原书板块（概括）</th><th>内容方向</th><th>本站</th></tr>
+  <tr><td><strong>Equipment</strong></td><td>绳、带、上升下降器、滑轮等选型与原则</td><td>装备 · 型号 · 绳维护 · 术语</td></tr>
+  <tr><td><strong>Physical and Mental Aspects</strong></td><td>体能、效率、地下心理与消耗</td><td>学习路径 · 安全</td></tr>
+  <tr><td><strong>Underground</strong></td><td>架绳、行进、垂直段落实际操作环境</td><td>架绳 · 锚点 · 过点 · 升降</td></tr>
+  <tr><td><strong>Conclusion</strong> 等</td><td>综合与延伸</td><td>资源书目</td></tr>
+</table>
+<p>细目示例（英译目录中曾出现的主题，便于检索 PDF/纸书）：滑轮 Pulleys、路标 Marking the Way、以及大量垂直与装备章节——以你手头版本目录页为准。</p>
+<h3><em>On Rope</em>（北美竖井）</h3>
+<table>
+  <tr><th>倾向</th><th>本站哪里对照</th></tr>
+  <tr><td>长单段、耐磨粗绳、rack、绳走式</td><td><a href="#rigging" onclick="showArticle('rigging');return false;">架绳：美式与欧式</a> · 上升/下降器材表</td></tr>
+  <tr><td>与法式多 rebely 对照阅读收益最大</td><td>先读本站「架绳」再读原书，不易混风格</td></tr>
+</table>
+<div class="callout">
+  <strong>用法：</strong>本站 = 索引与中文备忘；纸书与教练 = 权威与细节。若书中图示与俱乐部教法冲突，以<strong>你当面所学问的体系</strong>为准。
+</div>
+`
+  },
+  {
+    id: 'resources',
+    title: '书目与资源',
+    status: 'stable',
+    html: `
+<h3>中文纸书</h3>
+<ul>
+  <li><strong>《洞穴探险技术手册》</strong>（原书第 3 版）<br>
+    编著：法国洞穴学院相关体系 · 译：李萌、吴琦、杨卉、让·波塔西 等<br>
+    出版社：中国大百科全书出版社 · 约 2024<br>
+    ISBN 常见标注：978-7-5202-1543-5<br>
+    内容侧重探洞技术（含 SRT 单绳体系），建议购正版或图书馆借阅。
+  </li>
+</ul>
+<h3>英文经典（维基条目参考文献）</h3>
+<ul>
+  <li>Sparrow, Andy. <em>The Complete Caving Manual</em>. Crowood, 1996. ISBN 978-1-86126-022-2</li>
+  <li>Smith, Bruce &amp; Padgett, Allen. <em>On Rope: North American Vertical Rope Techniques</em>. NSS Vertical Section, 1996. ISBN 1-879961-05-9（偏北美竖井）</li>
+  <li>Marbach, Georges &amp; Tourte, Bernard. <em>Alpine Caving Techniques</em>. Speleo Projects, 2002. ISBN 3-908495-10-5（欧式探洞/架绳经典，中译体系多与此脉相关）</li>
+  <li>Lyon, Ben. <em>Venturing Underground: the new speleo's guide</em>. EP Pub, 1983</li>
+  <li>Elliot, Dave. <em>Single Rope Technique: a training manual</em>. Troll Safety Equipment, 1986</li>
+</ul>
+<h3>在线百科与索引</h3>
+<ul>
+  <li>英文维基：<a href="https://en.wikipedia.org/wiki/Single-rope_technique" target="_blank" rel="noopener">Single-rope technique</a>（中文维基暂无对应专文）</li>
+  <li>相关：<a href="https://en.wikipedia.org/wiki/Pit_cave" target="_blank" rel="noopener">Pit cave</a> · <a href="https://en.wikipedia.org/wiki/Ascender_(climbing)" target="_blank" rel="noopener">Ascender</a> · <a href="https://en.wikipedia.org/wiki/Abseiling" target="_blank" rel="noopener">Abseiling</a></li>
+  <li>垂直器材博物馆（外部链接，维基列出）：<a href="http://www.verticalmuseum.com/" target="_blank" rel="noopener">verticalmuseum.com</a></li>
+</ul>
+<h3>播客</h3>
+<ul>
+  <li><strong>Climber老聂</strong> — <em>No.94 聊聊新书《洞穴探险技术手册》</em><br>
+    小宇宙搜「Climber老聂」或打开：<br>
+    <a href="https://www.xiaoyuzhoufm.com/episode/6662c65163c334a2fb050212" target="_blank" rel="noopener">小宇宙单集链接</a><br>
+    苹果播客亦可搜节目名 +「94」。
+  </li>
+</ul>
+<h3>本站相关专节</h3>
+<p>
+  <a href="#canyon" onclick="showArticle('canyon');return false;">SRT 溪降</a> ·
+  <a href="#packing" onclick="showArticle('packing');return false;">打包示意</a> ·
+  <a href="#debrief" onclick="showArticle('debrief');return false;">复盘模板</a> ·
+  <a href="#mud-slip" onclick="showArticle('mud-slip');return false;">泥水打滑</a> ·
+  <a href="#roles" onclick="showArticle('roles');return false;">团队角色</a> ·
+  <a href="#signals" onclick="showArticle('signals');return false;">口令</a> ·
+  <a href="#navigation" onclick="showArticle('navigation');return false;">导航</a> ·
+  <a href="#anchors" onclick="showArticle('anchors');return false;">锚点/Y挂</a> ·
+  <a href="#rope-care" onclick="showArticle('rope-care');return false;">绳维护</a> ·
+  <a href="#checklist" onclick="showArticle('checklist');return false;">清单</a>
+</p>
+<h3>溪降延伸检索词</h3>
+<p><code>canyoning</code> · <code>canyoneering</code> · <code>溪降</code> · <code>峡谷绳降</code> · <code>guided rappel</code> · <code>pull down</code> · <code>hydraulic</code> · <code>canyon rope bag</code></p>
+<h3>关键词（便于继续检索）</h3>
+<p><code>SRT</code> · <code>单绳技术</code> · <code>Stationary Rope Technique</code> · <code>DRT</code> · <code>frog system</code> · <code>rope-walking</code> · <code>re-belay</code> · <code>deviation</code> · <code>cowstails</code> · <code>Croll</code> · <code>Jumar</code> · <code>rappel rack</code> · <code>Alpine Caving Techniques</code> · <code>On Rope</code> · <code>中法洞穴培训基地</code> · <code>让·波塔西</code></p>
+<p class="todo-tag">待补：国内俱乐部/课程入口（合法、非广告）、公开讲义链接</p>
+`
+  },
+  {
+    id: 'changelog',
+    title: '专页说明 · 如何增补',
+    status: 'stable',
+    html: `
+<p>本页用于在藏经阁内<strong>慢慢积累</strong> SRT 相关笔记，结构刻意简单：</p>
+<ul>
+  <li>所有章节写在 <code>SRT.html</code> 的 <code>ARTICLES</code> 数组里</li>
+  <li>新增一节：复制一节对象，改 <code>id</code> / <code>title</code> / <code>html</code> 即可，侧栏自动出现</li>
+  <li><code>status: 'draft'</code> 会在目录显示「待补」</li>
+  <li>地址支持 hash：如 <code>SRT.html#ascent</code> 直接打开「上升」一节</li>
+</ul>
+<h3>增补记录</h3>
+<ul>
+  <li><strong>2026-07-13（维基）</strong>：对照英文维基 <em>Single-rope technique</em>——历史、SRT/DRT、下降器类型、Frog/绳走、美欧架绳、rebely/偏导/Y 挂、英文书目。</li>
+  <li><strong>2026-07-13（续补）</strong>：中国引进时间线（1980s 勘测、中法科考、绥阳培训基地、波塔西、中文手册）；常见型号对照；术语速查；学习路径；手册/ACT/On Rope 章节对照；出发检查清单；常见失误备忘。</li>
+  <li><strong>2026-07-13（再续）</strong>：绳与织带维护/退役；锚点类型概念；清单与术语同步增补。</li>
+  <li><strong>2026-07-16</strong>：移除站内视频播放与「视频笔记」专节。</li>
+  <li><strong>2026-07-13（三合一）</strong>：口令与呼叫；洞内导航与迷路原则；锚点节内 Y 挂 / 夹角概念 SVG 示意图。</li>
+  <li><strong>2026-07-13（进阶）</strong>：泥水上升器/下降器打滑预案；团队角色（领队、架绳、收绳、前后卫、新手机照护等）。</li>
+  <li><strong>2026-07-13（打包+复盘）</strong>：个人装备分层打包 SVG 示意；课后/出洞复盘模板（近失、下次三件事、队内 10 分钟流程）。</li>
+  <li><strong>2026-07-13（溪降）</strong>：新增「SRT 溪降」——与探洞差异表、湿绳/拉绳/水力风险、装备侧重、学习路径与全站交叉链接。</li>
+  <li><strong>2026-07-13</strong>：章节更名「SRT 溪降」；正文改为溪降专述，去掉与探洞的对照表与对比叙述。</li>
+</ul>
+<p>快捷键：<strong>H</strong> 回首页 · <strong>T</strong> 切换主题 · 手机点「目录」切换侧栏。</p>
+`
+  }
+];
+
+// ===== UI =====
+const navList = document.getElementById('navList');
+const content = document.getElementById('content');
+const titleNow = document.getElementById('titleNow');
+const sidebar = document.getElementById('sidebar');
+const backdrop = document.getElementById('backdrop');
+
+function renderNav() {
+  navList.innerHTML = ARTICLES.map((a, i) => {
+    const tag = a.status === 'draft' ? ' <span style="opacity:.7;font-size:.75em">·待补</span>' : '';
+    return `<button type="button" class="nav-item" data-id="${a.id}" onclick="showArticle('${a.id}')">
+      <span class="num">${String(i + 1).padStart(2, '0')}</span>${a.title}${tag}
+    </button>`;
+  }).join('');
+}
+
+function showArticle(id) {
+  const a = ARTICLES.find(x => x.id === id) || ARTICLES[0];
+  titleNow.textContent = a.title.replace(/：.*/, '');
+  content.innerHTML = `<article class="article">
+    <h2>${a.title}${a.status === 'draft' ? '<span class="todo-tag">待补</span>' : ''}</h2>
+    <div class="meta">SRT · Single Rope Technique · 藏经阁笔记</div>
+    ${a.html}
+    <div class="footer-note">扫地僧 · 藏经阁 · SRT 专页 · 仅供学习备忘，操作请跟专业训练</div>
+  </article>`;
+  content.scrollTop = 0;
+  navList.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === a.id);
+  });
+  history.replaceState(null, '', '#' + a.id);
+  closeSidebar();
+}
+
+function toggleSidebar() {
+  sidebar.classList.toggle('open');
+  backdrop.classList.toggle('show');
+}
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  backdrop.classList.remove('show');
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('srt-theme', next); } catch (e) {}
+}
+
+document.addEventListener('keydown', e => {
+  const tag = (document.activeElement && document.activeElement.tagName) || '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  if (e.key === 'h' || e.key === 'H') { e.preventDefault(); location.href = 'index.html'; }
+  if (e.key === 't' || e.key === 'T') { e.preventDefault(); toggleTheme(); }
+  if (e.key === 'Escape') closeSidebar();
+});
+
+// init theme
+(function () {
+  try {
+    const s = localStorage.getItem('srt-theme');
+    if (s !== null) document.documentElement.setAttribute('data-theme', s);
+    else if (window.cjgResolveTheme) document.documentElement.setAttribute('data-theme', cjgResolveTheme('srt-theme', ''));
+  } catch (e) {}
+  renderNav();
+  const hash = (location.hash || '').replace(/^#/, '');
+  showArticle(hash && ARTICLES.some(a => a.id === hash) ? hash : ARTICLES[0].id);
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

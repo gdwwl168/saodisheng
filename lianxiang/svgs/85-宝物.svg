@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">85=宝物</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">8像宝箱弯弯扣，5是宝石闪闪亮</text>
+  <!-- 宝箱身 -->
+  <rect x="250" y="580" width="524" height="220" rx="15" fill="#8D6E63"/>
+  <rect x="260" y="590" width="504" height="200" rx="10" fill="#A1887F"/>
+  <!-- 箱盖 - 5形弯 -->
+  <path d="M240 580 Q512 480 784 580 L785 600 Q512 520 239 600Z" fill="#6D4C41"/>
+  <!-- 金属边 -->
+  <rect x="260" y="640" width="504" height="8" rx="3" fill="#FFD54F"/>
+  <rect x="280" y="590" width="8" height="200" rx="3" fill="#FFD54F"/>
+  <rect x="736" y="590" width="8" height="200" rx="3" fill="#FFD54F"/>
+  <!-- 锁 - 8形 -->
+  <circle cx="512" cy="620" rx="20" ry="18" fill="#FFD54F" stroke="#F9A825" stroke-width="2"/>
+  <rect x="506" y="635" width="12" height="15" fill="#F9A825"/>
+  <!-- 宝石 - 5形 -->
+  <polygon points="400,480 420,440 440,460 460,430 480,480" fill="#F44336" opacity="0.8"/>
+  <polygon points="420,440 430,410 440,460" fill="#EF5350" opacity="0.6"/>
+  <!-- 金币 -->
+  <circle cx="370" cy="550" r="12" fill="#FFD54F"/>
+  <circle cx="430" cy="570" r="10" fill="#FFD54F"/>
+  <circle cx="650" cy="550" r="12" fill="#FFD54F"/>
+  <circle cx="600" cy="570" r="10" fill="#FFD54F"/>
+  <!-- 珍珠 -->
+  <circle cx="350" cy="520" r="8" fill="#E0E0E0"/>
+  <circle cx="400" cy="530" r="7" fill="#E0E0E0"/>
+  <circle cx="680" cy="530" r="8" fill="#E0E0E0"/>
+  <circle cx="630" cy="520" r="7" fill="#E0E0E0"/>
+  <!-- 光芒 -->
+  <text x="460" y="400" font-size="30" fill="#FFD54F" opacity="0.4">✨</text>
+</svg>

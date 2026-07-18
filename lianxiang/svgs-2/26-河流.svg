@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#1a2838"/><stop offset="100%" stop-color="#0a1018"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">26=河流</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">2是两岸对望，6是河湾绕绕流</text>
+  <!-- 左岸 2形 -->
+  <path d="M80 600 Q120 500 180 420 Q220 360 280 350 Q320 340 360 400 Q400 460 380 550 Q360 650 200 700Z" fill="#3a4a2a"/>
+  <path d="M100 590 Q140 500 190 430 Q230 370 275 360 Q310 352 340 405 Q370 460 355 540 Q340 640 200 680Z" fill="#4a5a3a" opacity="0.5"/>
+  <!-- 右岸 2形 -->
+  <path d="M944 580 Q900 480 840 400 Q800 340 740 330 Q700 320 660 390 Q620 460 640 550 Q660 660 800 700Z" fill="#3a4a2a"/>
+  <path d="M920 575 Q880 480 830 410 Q790 355 745 345 Q715 338 675 395 Q645 460 660 540 Q675 645 790 680Z" fill="#4a5a3a" opacity="0.5"/>
+  <!-- 河流 6形弯 -->
+  <path d="M512 320 Q480 380 440 420 Q380 480 340 540 Q300 600 350 660 Q400 700 500 710 Q600 720 700 700 Q780 680 750 620 Q720 560 640 520 Q560 480 540 420 Q520 360 512 320Z" fill="#4a80b0" opacity="0.6"/>
+  <path d="M512 330 Q482 385 445 422 Q388 478 352 535 Q318 590 365 645 Q410 685 500 695 Q595 705 688 688 Q755 670 732 618 Q706 565 635 528 Q560 490 542 432 Q524 375 512 330Z" fill="#5a90c0" opacity="0.3"/>
+  <!-- 水波 -->
+  <g stroke="white" fill="none" opacity="0.12">
+    <path d="M430 500 Q460 495 490 502"/>
+    <path d="M550 620 Q580 615 610 622"/>
+    <path d="M380 580 Q410 575 440 582"/>
+  </g>
+  <!-- 树 -->
+  <circle cx="200" cy="380" r="20" fill="#2a5020" opacity="0.5"/>
+  <circle cx="800" cy="370" r="22" fill="#2a5020" opacity="0.5"/>
+  <!-- 桥 -->
+  <path d="M420 450 Q512 420 604 450" fill="none" stroke="#6a5040" stroke-width="6"/>
+</svg>

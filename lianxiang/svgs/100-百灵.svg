@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">100=百灵</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">1像树枝直直立，0是鸟巢圆圆卧，0是鸟蛋圆圆孵</text>
+  <!-- 树枝 - 1形直 -->
+  <line x1="300" y1="650" x2="724" y2="640" stroke="#6D4C41" stroke-width="12" stroke-linecap="round"/>
+  <path d="M680 640 L700 620" stroke="#6D4C41" stroke-width="6" stroke-linecap="round"/>
+  <path d="M320 645 L300 625" stroke="#6D4C41" stroke-width="6" stroke-linecap="round"/>
+  <!-- 叶子 -->
+  <ellipse cx="310" cy="610" rx="15" ry="6" fill="#66BB6A" transform="rotate(-40 310 610)"/>
+  <ellipse cx="690" cy="610" rx="15" ry="6" fill="#66BB6A" transform="rotate(40 690 610)"/>
+  <!-- 鸟巢 - 0形圆 -->
+  <ellipse cx="512" cy="550" rx="65" ry="25" fill="#A1887F"/>
+  <ellipse cx="512" cy="540" rx="60" ry="22" fill="#BCAAA4"/>
+  <!-- 巢中蛋 - 0形圆 -->
+  <ellipse cx="490" cy="535" rx="14" ry="17" fill="#E0E0E0"/>
+  <ellipse cx="490" cy="535" rx="10" ry="13" fill="#EEEEEE"/>
+  <ellipse cx="520" cy="533" rx="13" ry="16" fill="#E0E0E0"/>
+  <ellipse cx="520" cy="533" rx="9" ry="12" fill="#EEEEEE"/>
+  <ellipse cx="505" cy="520" rx="12" ry="15" fill="#E0E0E0"/>
+  <ellipse cx="505" cy="520" rx="8" ry="11" fill="#EEEEEE"/>
+  <!-- 树枝嫩芽 -->
+  <ellipse cx="360" cy="640" rx="8" ry="4" fill="#81C784" transform="rotate(-20 360 640)"/>
+  <ellipse cx="660" cy="635" rx="8" ry="4" fill="#81C784" transform="rotate(20 660 635)"/>
+  <!-- 百灵鸟 -->
+  <ellipse cx="420" cy="470" rx="25" ry="20" fill="#8D6E63"/>
+  <circle cx="435" cy="455" r="14" fill="#A1887F"/>
+  <circle cx="442" cy="452" r="3" fill="#2C1810"/>
+  <circle cx="443" cy="451" r="1.5" fill="white"/>
+  <path d="M448 457 L462 455 L448 462Z" fill="#FF9800"/>
+  <!-- 翅膀 -->
+  <ellipse cx="410" cy="475" rx="15" ry="8" fill="#6D4C41" transform="rotate(-20 410 475)"/>
+  <!-- 音符 -->
+  <text x="460" y="440" font-size="18" fill="#E85D3A" opacity="0.5">♪</text>
+  <text x="470" y="420" font-size="16" fill="#E85D3A" opacity="0.35">♫</text>
+  <!-- 太阳 -->
+  <circle cx="780" cy="300" r="30" fill="#FFD54F" opacity="0.6"/>
+  <circle cx="780" cy="300" r="40" fill="#FFD54F" opacity="0.15"/>
+  <!-- 完成装饰 -->
+  <text x="512" y="780" text-anchor="middle" font-size="22" fill="#8BC34A" opacity="0.4">✦ 100张完成 ✦</text>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">36=香炉</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">3像炉身弯弯鼓，6是青烟缕缕绕</text>
+  <!-- 炉身 - 3形弯曲 -->
+  <path d="M380 500 Q370 550 380 620 Q390 700 450 750 Q512 780 574 750 Q634 700 644 620 Q654 550 644 500" fill="#8D6E63" stroke="#5D4037" stroke-width="4"/>
+  <path d="M400 520 Q392 560 400 610 Q408 670 460 720 Q512 745 564 720 Q616 670 624 610 Q632 560 624 520" fill="#A1887F" opacity="0.5"/>
+  <!-- 炉耳 - 3形 -->
+  <path d="M370 530 Q340 530 340 560 Q340 590 370 590" fill="none" stroke="#5D4037" stroke-width="8" stroke-linecap="round"/>
+  <path d="M654 530 Q684 530 684 560 Q684 590 654 590" fill="none" stroke="#5D4037" stroke-width="8" stroke-linecap="round"/>
+  <!-- 炉脚 -->
+  <rect x="430" y="750" width="20" height="40" rx="6" fill="#5D4037"/>
+  <rect x="502" y="755" width="20" height="35" rx="6" fill="#5D4037"/>
+  <rect x="574" y="750" width="20" height="40" rx="6" fill="#5D4037"/>
+  <!-- 炉口 -->
+  <ellipse cx="512" cy="500" rx="120" ry="25" fill="#5D4037"/>
+  <ellipse cx="512" cy="500" rx="100" ry="18" fill="#2C1810"/>
+  <!-- 青烟 - 6形缭绕 -->
+  <path d="M512 490 Q500 440 520 400 Q540 360 510 330 Q480 300 510 260 Q540 220 512 180" fill="none" stroke="#90A4AE" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+  <path d="M512 490 Q530 430 500 390 Q470 350 510 310 Q550 270 510 230" fill="none" stroke="#B0BEC5" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+  <path d="M512 490 Q490 450 515 410 Q540 370 505 340" fill="none" stroke="#CFD8DC" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+  <!-- 烟雾 -->
+  <ellipse cx="512" cy="170" rx="20" ry="12" fill="#CFD8DC" opacity="0.2"/>
+  <ellipse cx="500" cy="200" rx="15" ry="8" fill="#CFD8DC" opacity="0.15"/>
+  <!-- 装饰纹 -->
+  <rect x="420" y="600" width="184" height="6" rx="3" fill="#F9A825" opacity="0.4"/>
+  <rect x="440" y="640" width="144" height="6" rx="3" fill="#F9A825" opacity="0.4"/>
+</svg>

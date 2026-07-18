@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">99=舅舅</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">9像弯腰弯弯抱，9是亲人久久亲</text>
+  <!-- 大人 - 9形弯腰抱 -->
+  <circle cx="400" cy="340" r="45" fill="#FFCCBC"/>
+  <ellipse cx="400" cy="300" rx="35" ry="18" fill="#3E2723"/>
+  <circle cx="415" cy="335" r="5" fill="#2C1810"/>
+  <circle cx="395" cy="335" r="5" fill="#2C1810"/>
+  <path d="M392 355 Q400 365 415 355" fill="none" stroke="#BF6A4D" stroke-width="2.5"/>
+  <!-- 大人身 -->
+  <path d="M360 390 Q340 450 360 520 Q400 600 460 630" fill="none" stroke="#1565C0" stroke-width="35" stroke-linecap="round"/>
+  <!-- 小孩 - 9形圆 -->
+  <circle cx="480" cy="460" r="35" fill="#FFCCBC"/>
+  <ellipse cx="480" cy="430" rx="28" ry="14" fill="#3E2723"/>
+  <circle cx="493" cy="455" r="4" fill="#2C1810"/>
+  <circle cx="475" cy="455" r="4" fill="#2C1810"/>
+  <path d="M472 475 Q480 482 493 475" fill="none" stroke="#BF6A4D" stroke-width="2"/>
+  <rect x="458" y="495" width="44" height="60" rx="8" fill="#4CAF50"/>
+  <!-- 手臂环抱 -->
+  <path d="M380 470 Q430 520 480 510" fill="none" stroke="#FFCCBC" stroke-width="12" stroke-linecap="round"/>
+  <!-- 爱心 -->
+  <text x="512" y="580" text-anchor="middle" font-size="28" fill="#F44336" opacity="0.5">♥</text>
+</svg>

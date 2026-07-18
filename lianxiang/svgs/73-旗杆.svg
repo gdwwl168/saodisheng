@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">73=旗杆</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">7像旗帜弯弯扬，3是旗杆高高立</text>
+  <!-- 旗杆 - 3形直 -->
+  <rect x="300" y="200" width="14" height="700" rx="4" fill="#795548"/>
+  <circle cx="307" cy="195" r="12" fill="#FFD54F"/>
+  <!-- 旗帜 - 7形弯飘 -->
+  <path d="M307 250 Q420 220 460 280 Q500 340 420 370 Q340 400 307 340" fill="#F44336" opacity="0.8"/>
+  <path d="M307 260 Q410 240 440 280 Q470 320 410 350 Q350 380 307 320" fill="#EF5350" opacity="0.5"/>
+  <!-- 星 -->
+  <text x="360" y="310" font-size="28" fill="#FFD54F">★</text>
+  <!-- 旗杆底座 -->
+  <rect x="270" y="890" width="88" height="40" rx="10" fill="#9E9E9E"/>
+  <rect x="280" y="900" width="68" height="25" rx="6" fill="#BDBDBD"/>
+  <!-- 背景云 -->
+  <ellipse cx="700" cy="300" rx="50" ry="18" fill="white" opacity="0.3"/>
+</svg>

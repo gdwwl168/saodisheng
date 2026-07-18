@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#2a1a28"/><stop offset="100%" stop-color="#100a14"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">51=舞衣</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">5像舞者旋转转，1是舞衣飘飘扬</text>
+  <path d="M330 460 Q340 380 400 350 Q460 340 512 360 Q564 340 624 350 Q684 380 694 460 L694 640 Q624 680 512 690 Q400 680 330 640Z" fill="#C86080" opacity="0.5"/>
+  <path d="M350 460 Q358 390 410 364 Q462 352 512 370 Q562 352 614 364 Q666 390 674 460 L674 630 Q614 665 512 674 Q410 665 350 630Z" fill="#E880A0" opacity="0.35"/>
+  <path d="M512 360 Q530 380 530 420 Q530 470 512 500 Q494 470 494 420 Q494 380 512 360Z" fill="#F0A0C0" opacity="0.4"/>
+  <g stroke="#C86080" stroke-width="1.5" opacity="0.4">
+    <path d="M380 500 Q430 490 480 505"/><path d="M544 505 Q594 490 644 500"/>
+    <path d="M360 550 Q430 540 500 555"/><path d="M524 555 Q594 540 664 550"/>
+  </g>
+  <circle cx="460" cy="640" r="4" fill="#FFD540" opacity="0.5"/><circle cx="564" cy="640" r="4" fill="#FFD540" opacity="0.5"/>
+  <circle cx="430" cy="660" r="3.5" fill="#FFD540" opacity="0.4"/><circle cx="594" cy="660" r="3.5" fill="#FFD540" opacity="0.4"/>
+  <circle cx="512" cy="660" r="4.5" fill="#FFD540" opacity="0.5"/>
+</svg>

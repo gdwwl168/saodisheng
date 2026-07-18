@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="cliffSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6CB4EE"/>
+      <stop offset="100%" stop-color="#D4E8F8"/>
+    </linearGradient>
+    <linearGradient id="cliffGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8A8A7A"/>
+      <stop offset="30%" stop-color="#A0A090"/>
+      <stop offset="70%" stop-color="#707060"/>
+      <stop offset="100%" stop-color="#5A5A4A"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="800" fill="#F5F0E8"/>
+  <rect x="20" y="20" width="760" height="760" rx="30" ry="30" fill="url(#cliffSky)"/>
+
+  <!-- Clouds -->
+  <g fill="white" opacity="0.85">
+    <ellipse cx="200" cy="160" rx="60" ry="22"/>
+    <ellipse cx="245" cy="150" rx="45" ry="28"/>
+    <ellipse cx="580" cy="180" rx="50" ry="20"/>
+    <ellipse cx="620" cy="170" rx="40" ry="25"/>
+  </g>
+
+  <!-- Sea/ocean at the base -->
+  <path d="M 20,620 Q 200,600 400,620 Q 600,640 780,620 L 780,780 L 20,780 Z" fill="#2A6496"/>
+  <path d="M 20,640 Q 200,625 400,640 Q 600,655 780,640 L 780,780 L 20,780 Z" fill="#1E5080"/>
+  <!-- Waves -->
+  <g fill="none" stroke="#3A84B6" stroke-width="2" opacity="0.4">
+    <path d="M 40,660 Q 120,650 200,660 Q 280,670 360,660 Q 440,650 520,660 Q 600,670 680,660 Q 740,655 780,660"/>
+    <path d="M 60,690 Q 140,680 220,690 Q 300,700 380,690 Q 460,680 540,690 Q 620,700 700,690 Q 750,685 780,690"/>
+  </g>
+
+  <!-- Cliff Wall = number 7 -->
+  <g>
+    <!-- Main cliff body -->
+    <polygon points="250,220 320,220 420,640 250,640" fill="url(#cliffGrad)" stroke="#4A4A3A" stroke-width="2"/>
+    <!-- Cliff face texture -->
+    <g stroke="#6A6A58" stroke-width="1.5" opacity="0.4" fill="none">
+      <line x1="270" y1="260" x2="300" y2="300"/>
+      <line x1="290" y1="300" x2="340" y2="380"/>
+      <line x1="310" y1="340" x2="370" y2="460"/>
+      <line x1="280" y1="400" x2="350" y2="500"/>
+      <line x1="260" y1="480" x2="330" y2="560"/>
+    </g>
+    <!-- Cliff horizontal lines (strata) -->
+    <g stroke="#5A5A48" stroke-width="1" opacity="0.3">
+      <line x1="255" y1="350" x2="405" y2="350"/>
+      <line x1="255" y1="430" x2="415" y2="430"/>
+      <line x1="250" y1="510" x2="420" y2="510"/>
+      <line x1="250" y1="590" x2="420" y2="590"/>
+    </g>
+  </g>
+
+  <!-- Cliff cave opening = number 0 -->
+  <ellipse cx="335" cy="420" rx="45" ry="60" fill="#1A1A1A"/>
+  <ellipse cx="335" cy="420" rx="35" ry="50" fill="#0A0A0A"/>
+  <!-- Cave darkness gradient -->
+  <ellipse cx="335" cy="420" rx="20" ry="35" fill="#000000"/>
+
+  <!-- Pine tree on cliff top -->
+  <g transform="translate(310, 210)">
+    <rect x="-4" y="-20" width="8" height="25" rx="2" fill="#5A4020"/>
+    <polygon points="0,-55 -30,-15 30,-15" fill="#3D6B3D"/>
+    <polygon points="0,-45 -25,-5 25,-5" fill="#4A8040"/>
+    <polygon points="0,-35 -20,5 20,5" fill="#5A9050"/>
+  </g>
+
+  <!-- Small grass on cliff edge -->
+  <g fill="#4A8040">
+    <path d="M 260,220 Q 255,200 250,210 Q 255,220 260,220 Z"/>
+    <path d="M 270,220 Q 265,195 260,210 Q 265,220 270,220 Z"/>
+    <path d="M 400,220 Q 395,198 390,210 Q 395,220 400,220 Z"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="95" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="42" font-weight="bold" fill="#1a1a2e">07=崖壁</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="760" text-anchor="middle" font-family="'Microsoft YaHei','SimHei',sans-serif" font-size="26" fill="#2a3a4a">0像崖洞圆圆深，7是峭壁直直立</text>
+
+  <rect x="0" y="0" width="800" height="800" rx="28" ry="28" fill="none" stroke="#E8DDD0" stroke-width="4"/>
+</svg>

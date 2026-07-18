@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">97=酒器</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">9像酒爵弯弯饮，7是器皿直直立</text>
+  <!-- 酒爵 - 9形弯三足 -->
+  <path d="M380 520 Q380 450 420 420 Q460 390 500 420 Q540 450 520 500 L480 550 L440 550Z" fill="#8D6E63" stroke="#6D4C41" stroke-width="3"/>
+  <path d="M400 520 Q400 460 430 435 Q460 410 500 435 Q530 460 520 500" fill="#A1887F" opacity="0.4"/>
+  <!-- 爵口 -->
+  <ellipse cx="460" cy="420" rx="60" ry="12" fill="#6D4C41"/>
+  <!-- 爵柱 -->
+  <rect x="440" y="395" width="6" height="25" rx="2" fill="#6D4C41"/>
+  <rect x="480" y="400" width="6" height="20" rx="2" fill="#6D4C41"/>
+  <!-- 三足 -->
+  <line x1="430" y1="550" x2="400" y2="650" stroke="#6D4C41" stroke-width="8" stroke-linecap="round"/>
+  <line x1="460" y1="555" x2="460" y2="660" stroke="#6D4C41" stroke-width="8" stroke-linecap="round"/>
+  <line x1="490" y1="550" x2="520" y2="650" stroke="#6D4C41" stroke-width="8" stroke-linecap="round"/>
+  <!-- 把手 -->
+  <path d="M380 520 Q350 540 355 560" fill="none" stroke="#6D4C41" stroke-width="6" stroke-linecap="round"/>
+  <!-- 酒液 -->
+  <ellipse cx="460" cy="440" rx="30" ry="8" fill="#FFD54F" opacity="0.3"/>
+</svg>

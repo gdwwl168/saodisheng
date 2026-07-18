@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">44=石狮</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">4像狮身三角稳，4是坐姿四方蹲</text>
+  <!-- 底座 -->
+  <rect x="300" y="720" width="424" height="80" rx="10" fill="#9E9E9E"/>
+  <rect x="310" y="730" width="404" height="60" rx="8" fill="#BDBDBD"/>
+  <!-- 身体 -->
+  <rect x="360" y="580" width="304" height="140" rx="20" fill="#9E9E9E"/>
+  <rect x="370" y="600" width="284" height="110" rx="15" fill="#B0BEC5"/>
+  <!-- 前腿 - 4形直 -->
+  <rect x="370" y="690" width="40" height="50" rx="8" fill="#8D8D8D"/>
+  <rect x="614" y="690" width="40" height="50" rx="8" fill="#8D8D8D"/>
+  <!-- 头部 -->
+  <circle cx="512" cy="520" r="70" fill="#9E9E9E"/>
+  <circle cx="512" cy="520" r="60" fill="#B0BEC5"/>
+  <!-- 鬃毛 -->
+  <circle cx="440" cy="480" r="15" fill="#8D8D8D"/>
+  <circle cx="450" cy="460" r="12" fill="#8D8D8D"/>
+  <circle cx="570" cy="480" r="15" fill="#8D8D8D"/>
+  <circle cx="560" cy="460" r="12" fill="#8D8D8D"/>
+  <circle cx="470" cy="450" r="13" fill="#8D8D8D"/>
+  <circle cx="550" cy="450" r="13" fill="#8D8D8D"/>
+  <!-- 眼睛 -->
+  <circle cx="485" cy="500" r="10" fill="white"/>
+  <circle cx="540" cy="500" r="10" fill="white"/>
+  <circle cx="488" cy="500" r="5" fill="#2C1810"/>
+  <circle cx="543" cy="500" r="5" fill="#2C1810"/>
+  <!-- 鼻子 -->
+  <ellipse cx="512" cy="525" rx="14" ry="10" fill="#616161"/>
+  <!-- 嘴 -->
+  <path d="M490 545 Q512 560 534 545" fill="none" stroke="#616161" stroke-width="3"/>
+  <!-- 尾巴 -->
+  <path d="M664 620 Q720 640 710 680 Q700 710 680 700" fill="none" stroke="#9E9E9E" stroke-width="12" stroke-linecap="round"/>
+</svg>

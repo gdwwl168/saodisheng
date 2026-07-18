@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#1a1e28"/><stop offset="100%" stop-color="#0a0c14"/></radialGradient>
+    <radialGradient id="ball" cx="40%" cy="35%"><stop offset="0%" stop-color="#FF8830"/><stop offset="100%" stop-color="#D05018"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">29=篮球</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">2号球员投进9号篮筐</text>
+  <!-- 球场地面 -->
+  <ellipse cx="512" cy="680" rx="250" ry="30" fill="#3a3020" opacity="0.3"/>
+  <!-- 篮球架 -->
+  <line x1="700" y1="350" x2="700" y2="680" stroke="#606870" stroke-width="14" stroke-linecap="round"/>
+  <line x1="600" y1="350" x2="800" y2="350" stroke="#707880" stroke-width="10" stroke-linecap="round"/>
+  <!-- 篮板 -->
+  <rect x="670" y="280" width="8" height="70" rx="4" fill="#505860"/>
+  <rect x="660" y="270" width="90" height="8" rx="4" fill="#404850"/>
+  <!-- 篮筐 0形 -->
+  <ellipse cx="720" cy="420" rx="30" ry="10" fill="none" stroke="#E85D3A" stroke-width="5"/>
+  <!-- 网 -->
+  <path d="M690 420 L695 460 M705 424 L705 460 M720 426 L720 465 M735 424 L735 460 M750 420 L745 460" stroke="white" stroke-width="1" opacity="0.2"/>
+  <!-- 球 2形弧线 + 0形圆 -->
+  <circle cx="420" cy="500" r="55" fill="url(#ball)"/>
+  <circle cx="420" cy="500" r="55" fill="none" stroke="#B04010" stroke-width="1.5"/>
+  <!-- 球线 -->
+  <line x1="420" y1="445" x2="420" y2="555" stroke="#3a1a08" stroke-width="2.5" opacity="0.5"/>
+  <path d="M370 480 Q420 460 470 480" fill="none" stroke="#3a1a08" stroke-width="2.5" opacity="0.5"/>
+  <path d="M370 520 Q420 540 470 520" fill="none" stroke="#3a1a08" stroke-width="2.5" opacity="0.5"/>
+  <!-- 球员 2形 -->
+  <circle cx="400" cy="420" r="20" fill="#F0C8A0"/>
+  <rect x="390" y="440" width="20" height="30" rx="5" fill="#4a80c0" opacity="0.7"/>
+  <rect x="388" y="470" width="24" height="8" rx="3" fill="#4a80c0" opacity="0.5"/>
+  <!-- 投篮手臂 -->
+  <line x1="410" y1="430" x2="440" y2="400" stroke="#F0C8A0" stroke-width="8" stroke-linecap="round"/>
+  <!-- 球的轨迹虚线 -->
+  <path d="M450 480 Q520 400 690 430" fill="none" stroke="white" stroke-width="2" stroke-dasharray="6,6" opacity="0.2"/>
+</svg>

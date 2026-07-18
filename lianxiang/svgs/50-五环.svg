@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFF8F0"/><stop offset="100%" stop-color="#F5EDE0"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#4A3728" font-family="sans-serif">50=五环</text>
+  <text x="512" y="165" text-anchor="middle" font-size="30" fill="#8B7355" font-family="sans-serif">5像环环弯弯扣，0是圆环紧紧连</text>
+  <!-- 五环奥运风格 -->
+  <circle cx="280" cy="550" r="55" fill="none" stroke="#2196F3" stroke-width="14"/>
+  <circle cx="400" cy="550" r="55" fill="none" stroke="#F44336" stroke-width="14"/>
+  <circle cx="520" cy="550" r="55" fill="none" stroke="#4CAF50" stroke-width="14"/>
+  <circle cx="340" cy="610" r="55" fill="none" stroke="#FFC107" stroke-width="14"/>
+  <circle cx="460" cy="610" r="55" fill="none" stroke="#37474F" stroke-width="14"/>
+  <!-- 环环相扣标记 -->
+  <circle cx="340" cy="610" r="55" fill="none" stroke="#FFC107" stroke-width="2" opacity="0.3"/>
+  <circle cx="400" cy="550" r="55" fill="none" stroke="#F44336" stroke-width="2" opacity="0.3"/>
+  <!-- 装饰光环 -->
+  <circle cx="400" cy="580" r="120" fill="none" stroke="#FFD54F" stroke-width="2" opacity="0.15"/>
+</svg>

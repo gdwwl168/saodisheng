@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs><radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#2a1a10"/><stop offset="100%" stop-color="#120a04"/></radialGradient></defs>
+  <rect width="1024" height="1024" rx="32" fill="url(#bg)"/>
+  <text x="512" y="115" text-anchor="middle" font-size="64" font-weight="bold" fill="#E8D5B7" font-family="sans-serif">42=柿饼</text>
+  <text x="512" y="170" text-anchor="middle" font-size="28" fill="#A09080" font-family="sans-serif">4个柿饼圆圆晒，2只叠起甜蜜蜜</text>
+  <!-- 竹匾 -->
+  <ellipse cx="512" cy="580" rx="200" ry="50" fill="#D0A860"/>
+  <ellipse cx="512" cy="575" rx="190" ry="42" fill="#E0B870" opacity="0.5"/>
+  <!-- 编织纹 -->
+  <g stroke="#B89030" stroke-width="0.8" opacity="0.2">
+    <line x1="340" y1="570" x2="684" y2="570"/>
+    <line x1="350" y1="580" x2="674" y2="580"/>
+    <line x1="370" y1="590" x2="654" y2="590"/>
+    <line x1="420" y1="600" x2="604" y2="600"/>
+  </g>
+  <!-- 柿饼1 4个圆 -->
+  <circle cx="380" cy="530" r="35" fill="#F08840"/>
+  <circle cx="380" cy="525" r="28" fill="#F8A060" opacity="0.6"/>
+  <circle cx="380" cy="520" r="4" fill="#5a2a10"/>
+  <!-- 柿饼2 -->
+  <circle cx="500" cy="520" r="38" fill="#F08840"/>
+  <circle cx="500" cy="515" r="30" fill="#F8A060" opacity="0.6"/>
+  <circle cx="500" cy="510" r="4.5" fill="#5a2a10"/>
+  <!-- 柿饼3 -->
+  <circle cx="620" cy="530" r="35" fill="#F08840"/>
+  <circle cx="620" cy="525" r="28" fill="#F8A060" opacity="0.6"/>
+  <circle cx="620" cy="520" r="4" fill="#5a2a10"/>
+  <!-- 柿饼4 叠在上面 -->
+  <circle cx="450" cy="480" r="32" fill="#F8A060"/>
+  <circle cx="450" cy="476" r="25" fill="#FAC080" opacity="0.5"/>
+  <circle cx="450" cy="472" r="3.5" fill="#5a2a10"/>
+  <!-- 柿霜 白粉 -->
+  <circle cx="370" cy="540" r="15" fill="white" opacity="0.08"/>
+  <circle cx="490" cy="530" r="16" fill="white" opacity="0.08"/>
+  <circle cx="610" cy="540" r="15" fill="white" opacity="0.08"/>
+  <circle cx="442" cy="488" r="14" fill="white" opacity="0.1"/>
+</svg>

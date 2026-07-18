@@ -1,0 +1,2849 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="12345.png">
+<link rel="icon" href="12345.png" type="image/png">
+<title>外研英语 · 八年级同步</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --text: #3d3226;
+  --accent: #2b6cb0;
+  --gold: #c9a96e;
+  --card-bg: #faf7f2;
+  --sidebar-bg: #e8eef6;
+  --border: #c5d0e0;
+  --success: #6b8e5a;
+  --danger: #b85450;
+  --highlight: #d6e4f5;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --tag-up: #1a56db;
+  --tag-down: #0d9488;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a2e;
+  --text: #d4c5a9;
+  --accent: #63b3ed;
+  --gold: #c9a96e;
+  --card-bg: #252540;
+  --sidebar-bg: #1f1f35;
+  --border: #3a3a55;
+  --highlight: #2a3550;
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sidebar {
+  width: 320px;
+  min-width: 320px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s, background 0.3s;
+  z-index: 10;
+}
+
+.sidebar-header {
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.sidebar-header img {
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  display: block;
+  margin-left: auto; margin-right: auto;
+}
+
+.sidebar-header h1 {
+  font-size: 1.35em;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.sidebar-header .subtitle {
+  font-size: 0.72em;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+.sidebar-controls {
+  padding: 10px 12px;
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.sidebar-controls select,
+.sidebar-controls input {
+  flex: 1;
+  min-width: 70px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.78em;
+}
+
+.book-filters {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.book-filters button {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 0.75em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.book-filters button.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.chapter-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.chapter-list::-webkit-scrollbar { width: 4px; }
+.chapter-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 2px;
+  gap: 10px;
+}
+
+.chapter-item:hover { background: var(--highlight); }
+.chapter-item.active { background: var(--accent); color: #fff; }
+.chapter-item.active .ch-num,
+.chapter-item.active .ch-preview,
+.chapter-item.active .ch-tag { color: #fff; opacity: 1; }
+.chapter-item.active .ch-tag {
+  background: rgba(255,255,255,0.22);
+}
+
+.ch-num {
+  font-size: 1.4em;
+  min-width: 32px;
+  text-align: center;
+}
+
+.ch-info { flex: 1; min-width: 0; }
+.ch-title-sm {
+  font-size: 0.88em;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ch-preview {
+  font-size: 0.72em;
+  opacity: 0.55;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.ch-tag {
+  font-size: 0.62em;
+  padding: 2px 7px;
+  border-radius: 10px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.ch-tag.up { background: rgba(26,86,219,0.12); color: var(--tag-up); }
+.ch-tag.down { background: rgba(13,148,136,0.12); color: var(--tag-down); }
+[data-theme="dark"] .ch-tag.up { background: rgba(99,179,237,0.18); color: #90cdf4; }
+[data-theme="dark"] .ch-tag.down { background: rgba(45,212,191,0.15); color: #5eead4; }
+
+.ch-badge {
+  font-size: 0.55em;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: rgba(107,142,90,0.5);
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+}
+.ch-badge.weak { background: rgba(184,84,80,0.55); }
+.ch-badge.mid { background: transparent; color: rgba(180,160,130,0.5); padding: 0; }
+
+.progress-wrap {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.78em;
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 6px 0;
+  flex: 1;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.progress-ring {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 6px;
+  flex-wrap: wrap;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.topbar button, .topbar .mode-btn {
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-bg);
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.76em;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.topbar button:hover, .topbar .mode-btn:hover { background: var(--highlight); }
+.topbar button.active, .topbar .mode-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.topbar .icon-btn {
+  width: 34px; height: 34px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-size: 1em;
+}
+
+.topbar a {
+  text-decoration: none;
+  font-size: 1.05em;
+  opacity: 0.85;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 36px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.18em; /* 导航栏下方正文整体放大 */
+}
+
+.content::-webkit-scrollbar { width: 4px; }
+.content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.chapter-container { max-width: 780px; width: 100%; }
+.chapter-container.wide { max-width: 980px; }
+
+.chapter-header {
+  text-align: center;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(180,160,130,0.25);
+}
+
+.chapter-header .ch-title {
+  font-size: 1.85em;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.chapter-header .ch-subtitle {
+  font-size: 1em;
+  opacity: 0.55;
+  margin-top: 8px;
+}
+
+.chapter-header .ch-emoji {
+  font-size: 3em;
+  margin-top: 12px;
+  line-height: 1.2;
+}
+
+.meta-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.meta-pill {
+  font-size: 0.72em;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: var(--highlight);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.section-title {
+  font-size: 1.05em;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 22px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Word cards */
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.word-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--shadow);
+}
+
+.word-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.word-card .en {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.word-card .phon {
+  font-size: 0.88em;
+  opacity: 0.55;
+  margin: 4px 0;
+  font-family: "Segoe UI", Georgia, serif;
+}
+
+.word-card .zh {
+  font-size: 0.98em;
+  opacity: 0.85;
+}
+
+.word-card .pos {
+  font-size: 0.68em;
+  color: var(--gold);
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.speak-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.95em;
+  opacity: 0.7;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.speak-btn:hover { opacity: 1; }
+
+.section-speak {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.15em;
+  opacity: 0.9;
+  padding: 2px 6px;
+  line-height: 1;
+  vertical-align: middle;
+  font-family: inherit;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+}
+.section-speak:hover { opacity: 1; transform: scale(1.1); }
+
+/* Phrase / sentence list */
+.phrase-list, .sentence-list { display: flex; flex-direction: column; gap: 8px; }
+
+.phrase-item, .sentence-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  transition: border-color 0.2s;
+}
+
+.phrase-item:hover, .sentence-item:hover { border-color: var(--accent); }
+
+.phrase-item .en, .sentence-item .en {
+  font-weight: 600;
+  color: var(--accent);
+  flex: 1;
+  line-height: 1.5;
+}
+
+.phrase-item .zh, .sentence-item .zh {
+  font-size: 0.88em;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.grammar-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+
+.grammar-box h4 {
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-size: 1.05em;
+}
+
+.grammar-box ul {
+  padding-left: 18px;
+  line-height: 1.8;
+  font-size: 1em;
+}
+
+.grammar-box li { margin-bottom: 2px; }
+.grammar-box code {
+  background: var(--highlight);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.92em;
+  color: var(--accent);
+}
+
+.tip-box {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--gold);
+  background: var(--card-bg);
+  border-radius: 0 10px 10px 0;
+  font-size: 0.88em;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+/* Cloze */
+.cloze-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  line-height: 2;
+  font-size: 1.12em;
+}
+
+.cloze-blank {
+  display: inline-block;
+  min-width: 4em;
+  border-bottom: 2px solid var(--accent);
+  margin: 0 4px;
+  text-align: center;
+  cursor: pointer;
+  color: transparent;
+  user-select: none;
+  padding: 0 4px;
+  transition: all 0.2s;
+}
+
+.cloze-blank.revealed { color: var(--accent); border-bottom-color: transparent; font-weight: 600; }
+.cloze-blank.correct { color: var(--success); border-bottom-color: var(--success); }
+.cloze-blank.wrong { color: var(--danger); border-bottom-color: var(--danger); }
+
+/* Recite */
+.recite-prompt {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.recite-prompt .prompt-main {
+  font-size: 1.55em;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 8px 0;
+}
+
+.recite-prompt .prompt-sub {
+  font-size: 0.95em;
+  opacity: 0.55;
+}
+
+.recite-area {
+  width: 100%;
+  min-height: 80px;
+  padding: 14px 16px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: var(--card-bg);
+  font-family: inherit;
+  font-size: 1.15em;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+}
+
+.recite-area:focus { border-color: var(--accent); }
+
+.action-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.action-row button {
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-bg);
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85em;
+}
+
+.action-row button.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.compare-result {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  line-height: 1.8;
+}
+
+.compare-result .match { color: var(--success); font-weight: 600; }
+.compare-result .mismatch { color: var(--danger); text-decoration: underline; }
+
+/* Flashcard grid: 3 square cards per row */
+.flashcard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.flashcard {
+  perspective: 1000px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+
+.flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  pointer-events: none; /* 点击穿透到卡片本体，避免 3D 层拦截 */
+}
+
+.flashcard-back {
+  transform: rotateY(180deg);
+  background: var(--card-bg);
+  padding: 12px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.flashcard:hover .flashcard-front,
+.flashcard:hover .flashcard-back {
+  border-color: var(--accent);
+}
+
+/* 反面：无分线，居中叠放 中文 / 音标 / 词性 */
+.flashcard-back .fc-zh {
+  font-size: clamp(0.95em, 1.8vw, 1.2em);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.flashcard-back .fc-phon {
+  font-size: clamp(0.72em, 1.3vw, 0.9em);
+  opacity: 0.65;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.flashcard-back .fc-pos {
+  font-size: clamp(0.8em, 1.4vw, 0.95em);
+  color: var(--gold);
+  font-weight: 600;
+  line-height: 1.3;
+  opacity: 0.9;
+}
+
+.fc-word {
+  font-size: clamp(0.95em, 1.8vw, 1.2em);
+  font-weight: 700;
+  color: var(--accent);
+  margin: 4px 0;
+  word-break: break-word;
+  line-height: 1.25;
+}
+
+.fc-phon {
+  font-size: clamp(0.7em, 1.3vw, 0.88em);
+  opacity: 0.75;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.fc-zh {
+  font-size: clamp(0.9em, 1.7vw, 1.15em);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.fc-pos {
+  font-size: clamp(0.85em, 1.5vw, 1.05em);
+  color: var(--gold);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.fc-hint {
+  font-size: 0.72em;
+  opacity: 0.45;
+  margin-top: 6px;
+}
+
+@media (max-width: 640px) {
+  .flashcard-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .flashcard-front { padding: 8px; }
+  .fc-word { font-size: 0.9em; }
+  .fc-zh { font-size: 0.9em; }
+  .fc-phon { font-size: 0.72em; }
+  .fc-pos { font-size: 0.8em; }
+  .fc-hint { display: none; }
+}
+
+/* Quiz / pattern highlight */
+.pattern-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+}
+
+.pattern-card .pat-en {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.pattern-card .pat-zh { font-size: 0.98em; opacity: 0.7; margin-bottom: 10px; }
+.pattern-card .pat-ex {
+  font-size: 1em;
+  padding: 8px 12px;
+  background: var(--highlight);
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+.stats-bar {
+  display: flex;
+  gap: 16px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 0.78em;
+  opacity: 0.75;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 10px; left: 10px;
+  z-index: 50;
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.88em;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  z-index: 100;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.guide-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.guide-overlay.show { display: flex; }
+
+.guide-panel {
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 14px;
+  max-width: 520px;
+  width: 100%;
+  padding: 24px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.guide-panel h3 { color: var(--accent); margin-bottom: 12px; }
+.guide-panel h4 {
+  color: var(--accent);
+  font-size: 0.92em;
+  margin: 14px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.guide-panel p, .guide-panel li { font-size: 0.88em; line-height: 1.7; margin-bottom: 6px; }
+.guide-panel ul { padding-left: 18px; margin-bottom: 4px; }
+.guide-panel kbd {
+  display: inline-block;
+  padding: 1px 7px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-family: Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--highlight);
+  font-weight: 700;
+}
+.guide-panel button {
+  margin-top: 14px;
+  padding: 8px 20px;
+  border-radius: 18px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.nav-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+  gap: 10px;
+}
+
+.nav-footer button {
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card-bg);
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.88em;
+}
+
+.nav-footer button:hover { background: var(--highlight); }
+
+@media (max-width: 800px) {
+  .menu-toggle { display: flex; align-items: center; justify-content: center; }
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    transform: translateX(-100%);
+    z-index: 100;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .content { padding: 20px 16px; }
+  .chapter-header .ch-title { font-size: 1.35em; }
+  .word-grid { grid-template-columns: 1fr 1fr; }
+
+  /* 顶栏固定一行，左右滑动 */
+  .topbar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    flex-shrink: 0;
+    gap: 6px;
+    /* 给左上角 ☰ 目录按钮留空，避免挡住「单词」 */
+    padding: 8px 10px 8px 54px;
+  }
+  .topbar .topbar-break { display: none !important; }
+  .topbar button,
+  .topbar .mode-btn,
+  .topbar .icon-btn,
+  .topbar a {
+    flex-shrink: 0;
+  }
+  .topbar button,
+  .topbar .mode-btn {
+    padding: 6px 10px;
+    font-size: 0.72em;
+  }
+}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()" title="目录">☰</button>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="12345.png" alt="logo">
+    <h1>外研英语</h1>
+    <div class="subtitle">八年级 · 外研版</div>
+  </div>
+  <div class="sidebar-controls">
+    <select id="sortSelect" onchange="renderChapterList()">
+      <option value="num">按单元顺序</option>
+      <option value="progress">按掌握度</option>
+      <option value="weak">薄弱优先</option>
+    </select>
+    <input type="search" id="searchInput" placeholder="搜索单词/单元…" oninput="renderChapterList()">
+  </div>
+  <div class="book-filters">
+    <button class="active" data-book="all" onclick="setBookFilter('all')">全部</button>
+    <button data-book="上册" onclick="setBookFilter('上册')">八上</button>
+    <button data-book="下册" onclick="setBookFilter('下册')">八下</button>
+  </div>
+  <div class="chapter-list" id="chapterList"></div>
+  <div class="progress-wrap">
+    <div class="progress-ring">
+      <span>总进度</span>
+      <div class="progress-bar"><div class="progress-bar-fill" id="totalProgressBar" style="width:0%"></div></div>
+      <span id="totalProgressText">0%</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar" id="topbar">
+    <button class="mode-btn active" data-mode="browse" onclick="switchMode('browse')">📖 单词</button>
+    <button class="mode-btn" data-mode="phrase" onclick="switchMode('phrase')">💬 短语</button>
+    <button class="mode-btn" data-mode="pattern" onclick="switchMode('pattern')">🔍 句型</button>
+    <button class="mode-btn" data-mode="grammar" onclick="switchMode('grammar')">📘 语法</button>
+    <button class="mode-btn" data-mode="cloze" onclick="switchMode('cloze')">✏️ 填空</button>
+    <button class="mode-btn" data-mode="recite" onclick="switchMode('recite')" id="reciteBtn">🗣️ 默写 L1</button>
+    <button class="mode-btn" data-mode="flashcard" onclick="switchMode('flashcard')">🃏 闪卡</button>
+    <button class="icon-btn" onclick="toggleTheme()" title="切换主题">🌓</button>
+    <button class="icon-btn" onclick="toggleGuide()" title="使用说明">?</button>
+    <span class="topbar-break" style="flex-basis:100%;height:2px;"></span>
+    <a href="english.html" title="七年级英语">7️⃣</a>
+    <a href="english-8.html" title="八年级英语">8️⃣</a>
+    <a href="english-9.html" title="九年级英语">9️⃣</a>
+    <a href="index.html" title="首页">🏠</a>
+  </div>
+
+  <div class="content" id="content"></div>
+  <div class="stats-bar" id="statsBar"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="guide-overlay" id="guideOverlay" onclick="if(event.target===this)toggleGuide()">
+  <div class="guide-panel">
+    <h3>外研英语 · 规则说明</h3>
+    <p>内容依据 <strong>外研版八年级</strong> 教材，按模块（Module）学习单词、短语、句型与语法。</p>
+
+    <h4>⭐ 练习次数（按单元计组）</h4>
+    <ul>
+      <li>底部「练 N <strong>组</strong>」按<strong>单元整组</strong>计数，<strong>不按单词数</strong>累加</li>
+      <li>默写：整组词全部做完 → <strong>+1 组</strong></li>
+      <li>填空：点「完成练习」→ <strong>+1 组</strong></li>
+      <li>闪卡「全部掌握」/ 顶栏「标记掌握」→ <strong>+1 组</strong></li>
+      <li>单个词答对 / 答错 → <strong>不计数</strong></li>
+    </ul>
+
+    <h4>📖 学习模式</h4>
+    <ul>
+      <li><strong>单词</strong>：核心词汇，点击卡片听发音</li>
+      <li><strong>短语 / 句型 / 语法</strong>：同步巩固；短语、例句可点击朗读</li>
+      <li><strong>填空</strong>：点下划线揭示答案，完成后记 1 组</li>
+      <li><strong>默写 L1</strong>：看中文 → 写英文</li>
+      <li><strong>默写 L2</strong>：看英文 → 写<strong>简单中文</strong>（短释义即可，不必全抄长定义）</li>
+      <li><strong>默写 L3</strong>：听发音写英文（进入自动放音，可再听）</li>
+      <li><strong>闪卡</strong>：每行 3 张正方形；点击发音并翻转；反面为 中文 / 音标 / 词性</li>
+    </ul>
+
+    <h4>⌨️ 快捷键</h4>
+    <ul>
+      <li><kbd>H</kbd> 回首页</li>
+      <li><kbd>Enter</kbd> 默写：检查答案</li>
+      <li><kbd>空格</kbd>（输入框为空时）跳过本题</li>
+      <li><kbd>?</kbd> 看答案</li>
+    </ul>
+
+    <h4>🃏 闪卡操作</h4>
+    <ul>
+      <li>点卡片：发音 + 翻转</li>
+      <li>全部正面 / 全部反面 / 全部掌握</li>
+    </ul>
+
+    <p style="opacity:0.7;font-size:0.82em;margin-top:10px;">进度保存在本机浏览器。点右上角 <strong>?</strong> 可随时查看本说明。教材版权归外研社，本页为学习辅助。</p>
+    <button type="button" onclick="toggleGuide()">知道了</button>
+  </div>
+</div>
+
+<script>
+// ===== 外研版 2024 七年级 单元数据 =====
+const UNITS = [
+  {
+    id: "m1", book: "上册", code: "Module 1", title: "How to learn English", titleZh: "如何学英语",
+    emoji: "📘",
+    words: [
+      { en: "pair", phon: "/peə/", zh: "一对", pos: "n." },
+      { en: "correct", phon: "/kəˈrekt/", zh: "改正", pos: "v./adj." },
+      { en: "spelling", phon: "/ˈspelɪŋ/", zh: "拼写", pos: "n." },
+      { en: "practise", phon: "/ˈpræktɪs/", zh: "练习", pos: "v." },
+      { en: "match", phon: "/mætʃ/", zh: "匹配", pos: "v." },
+      { en: "complete", phon: "/kəmˈpliːt/", zh: "完成", pos: "v." },
+      { en: "sentence", phon: "/ˈsentəns/", zh: "句子", pos: "n." },
+      { en: "dictionary", phon: "/ˈdɪkʃənri/", zh: "词典", pos: "n." },
+      { en: "grammar", phon: "/ˈɡræmə/", zh: "语法", pos: "n." },
+      { en: "look up", phon: "", zh: "查阅", pos: "phr." },
+      { en: "mistake", phon: "/mɪˈsteɪk/", zh: "错误", pos: "n." },
+      { en: "make a mistake", phon: "", zh: "犯错误", pos: "phr." },
+      { en: "advice", phon: "/ədˈvaɪs/", zh: "建议", pos: "n." },
+      { en: "should", phon: "/ʃʊd/", zh: "应该", pos: "v." },
+      { en: "write down", phon: "", zh: "写下", pos: "phr." },
+      { en: "pronounce", phon: "/prəˈnaʊns/", zh: "发音", pos: "v." },
+      { en: "aloud", phon: "/əˈlaʊd/", zh: "大声地", pos: "adv." },
+      { en: "pronunciation", phon: "/prəˌnʌnsiˈeɪʃn/", zh: "发音", pos: "n." },
+      { en: "agree with", phon: "", zh: "同意", pos: "phr." },
+      { en: "improve", phon: "/ɪmˈpruːv/", zh: "提高", pos: "v." },
+      { en: "advise", phon: "/ədˈvaɪz/", zh: "建议", pos: "v." },
+      { en: "suggest", phon: "/səˈdʒest/", zh: "建议", pos: "v." },
+      { en: "conversation", phon: "/ˌkɒnvəˈseɪʃn/", zh: "对话", pos: "n." },
+      { en: "vocabulary", phon: "/vəˈkæbjələri/", zh: "词汇", pos: "n." }
+    ],
+    phrases: [
+      { en: "look up", zh: "查阅" },
+      { en: "make a mistake", zh: "犯错误" },
+      { en: "write down", zh: "写下" },
+      { en: "agree with sb.", zh: "同意某人" },
+      { en: "ask for advice", zh: "征求建议" }
+    ],
+    patterns: [
+      { en: "You should …", zh: "你应该…", ex: "You should look up new words in a dictionary." },
+      { en: "Why not …?", zh: "为什么不…？", ex: "Why not practise speaking English every day?" },
+      { en: "advise sb. to do", zh: "建议某人做", ex: "I advise you to read aloud." }
+    ],
+    sentences: [
+      { en: "How can I improve my English?", zh: "我怎样才能提高英语？" },
+      { en: "Please write down the new words.", zh: "请把生词写下来。" },
+      { en: "I agree with your advice.", zh: "我同意你的建议。" }
+    ],
+    grammar: [
+      { title: "提建议", points: [
+        "should / Why not…? / What about…?",
+        "advise sb. to do; suggest doing",
+        "look up the word in a dictionary"
+      ] }
+    ],
+    tip: "外研版八上 Module 1：英语学习方法与建议。"
+  },
+  {
+    id: "m2", book: "上册", code: "Module 2", title: "My home town and my country", titleZh: "我的家乡与祖国",
+    emoji: "🏙️",
+    words: [
+      { en: "hill", phon: "/hɪl/", zh: "小山", pos: "n." },
+      { en: "population", phon: "/ˌpɒpjuˈleɪʃn/", zh: "人口", pos: "n." },
+      { en: "wide", phon: "/waɪd/", zh: "宽的", pos: "adj." },
+      { en: "million", phon: "/ˈmɪljən/", zh: "百万", pos: "num." },
+      { en: "pretty", phon: "/ˈprɪti/", zh: "漂亮的", pos: "adj." },
+      { en: "pretty good", phon: "", zh: "相当好", pos: "phr." },
+      { en: "than", phon: "/ðæn/", zh: "比", pos: "prep." },
+      { en: "north", phon: "/nɔːθ/", zh: "北方", pos: "n." },
+      { en: "south", phon: "/saʊθ/", zh: "南方", pos: "n." },
+      { en: "west", phon: "/west/", zh: "西方", pos: "n." },
+      { en: "home town", phon: "", zh: "家乡", pos: "n." },
+      { en: "especially", phon: "/ɪˈspeʃəli/", zh: "尤其", pos: "adv." },
+      { en: "be famous for", phon: "", zh: "因…著名", pos: "phr." },
+      { en: "university", phon: "/ˌjuːnɪˈvɜːsəti/", zh: "大学", pos: "n." },
+      { en: "island", phon: "/ˈaɪlənd/", zh: "岛", pos: "n." },
+      { en: "area", phon: "/ˈeəriə/", zh: "地区", pos: "n." },
+      { en: "low", phon: "/ləʊ/", zh: "低的", pos: "adj." },
+      { en: "mountain", phon: "/ˈmaʊntən/", zh: "山", pos: "n." },
+      { en: "countryside", phon: "/ˈkʌntrisaɪd/", zh: "乡村", pos: "n." },
+      { en: "umbrella", phon: "/ʌmˈbrelə/", zh: "伞", pos: "n." }
+    ],
+    phrases: [
+      { en: "be famous for", zh: "因…闻名" },
+      { en: "home town", zh: "家乡" },
+      { en: "pretty good", zh: "相当好" },
+      { en: "in the north of", zh: "在…北部" },
+      { en: "larger than", zh: "比…大" }
+    ],
+    patterns: [
+      { en: "A is … than B", zh: "A 比 B…", ex: "Shanghai is bigger than my home town." },
+      { en: "be famous for", zh: "因…著名", ex: "Hangzhou is famous for the West Lake." },
+      { en: "in the + 方位 + of", zh: "在…的某方位", ex: "Harbin is in the north of China." }
+    ],
+    sentences: [
+      { en: "My home town is pretty good.", zh: "我的家乡相当不错。" },
+      { en: "Beijing has a large population.", zh: "北京人口众多。" },
+      { en: "China is famous for its long history.", zh: "中国以悠久历史闻名。" }
+    ],
+    grammar: [
+      { title: "形容词比较级", points: [
+        "big → bigger; large → larger; famous → more famous",
+        "A is <code>bigger than</code> B",
+        "pretty good = quite good"
+      ] }
+    ],
+    tip: "外研版八上 Module 2：家乡、国家与比较级。"
+  },
+  {
+    id: "m3", book: "上册", code: "Module 3", title: "Sports", titleZh: "体育运动",
+    emoji: "⚽",
+    words: [
+      { en: "baseball", phon: "/ˈbeɪsbɔːl/", zh: "棒球", pos: "n." },
+      { en: "volleyball", phon: "/ˈvɒlibɔːl/", zh: "排球", pos: "n." },
+      { en: "boring", phon: "/ˈbɔːrɪŋ/", zh: "无聊的", pos: "adj." },
+      { en: "exciting", phon: "/ɪkˈsaɪtɪŋ/", zh: "令人兴奋的", pos: "adj." },
+      { en: "relaxing", phon: "/rɪˈlæksɪŋ/", zh: "放松的", pos: "adj." },
+      { en: "score", phon: "/skɔː/", zh: "得分", pos: "n./v." },
+      { en: "already", phon: "/ɔːlˈredi/", zh: "已经", pos: "adv." },
+      { en: "matter", phon: "/ˈmætə/", zh: "要紧/问题", pos: "v./n." },
+      { en: "What's the matter?", phon: "", zh: "怎么了？", pos: "phr." },
+      { en: "hurt", phon: "/hɜːt/", zh: "受伤", pos: "v." },
+      { en: "stadium", phon: "/ˈsteɪdiəm/", zh: "体育场", pos: "n." },
+      { en: "plenty of", phon: "", zh: "许多", pos: "phr." },
+      { en: "beat", phon: "/biːt/", zh: "打败", pos: "v." },
+      { en: "careless", phon: "/ˈkeələs/", zh: "粗心的", pos: "adj." },
+      { en: "cheer … on", phon: "", zh: "为…加油", pos: "phr." },
+      { en: "coach", phon: "/kəʊtʃ/", zh: "教练", pos: "n." },
+      { en: "against", phon: "/əˈɡenst/", zh: "对阵", pos: "prep." },
+      { en: "train", phon: "/treɪn/", zh: "训练", pos: "v." },
+      { en: "practice", phon: "/ˈpræktɪs/", zh: "练习", pos: "n." },
+      { en: "warm-up", phon: "/ˈwɔːm ʌp/", zh: "热身", pos: "n." },
+      { en: "better", phon: "/ˈbetə/", zh: "更好", pos: "adj." },
+      { en: "chance", phon: "/tʃɑːns/", zh: "机会", pos: "n." },
+      { en: "confident", phon: "/ˈkɒnfɪdənt/", zh: "自信的", pos: "adj." },
+      { en: "pass", phon: "/pɑːs/", zh: "传球", pos: "v." }
+    ],
+    phrases: [
+      { en: "What's the matter?", zh: "怎么了？" },
+      { en: "plenty of", zh: "许多" },
+      { en: "cheer … on", zh: "为…加油" },
+      { en: "play against", zh: "对阵" },
+      { en: "warm up", zh: "热身" }
+    ],
+    patterns: [
+      { en: "I prefer … to …", zh: "比起…更喜欢…", ex: "I prefer baseball to volleyball." },
+      { en: "What's the matter?", zh: "怎么了？", ex: "What's the matter with your leg?" },
+      { en: "beat sb.", zh: "打败某人", ex: "Our team beat them 2–1." }
+    ],
+    sentences: [
+      { en: "Sports make me strong and confident.", zh: "运动让我强壮又自信。" },
+      { en: "What's the matter? Did you get hurt?", zh: "怎么了？你受伤了吗？" },
+      { en: "We need plenty of practice.", zh: "我们需要大量练习。" }
+    ],
+    grammar: [
+      { title: "比较级 / 对阵表达", points: [
+        "more exciting / more relaxing",
+        "play against another team",
+        "beat ≠ win（beat 后接对手；win 后接比赛）"
+      ] }
+    ],
+    tip: "外研版八上 Module 3：运动项目、比赛与伤病。"
+  },
+  {
+    id: "m4", book: "上册", code: "Module 4", title: "Planes, ships and trains", titleZh: "飞机轮船与火车",
+    emoji: "✈️",
+    words: [
+      { en: "road", phon: "/rəʊd/", zh: "路", pos: "n." },
+      { en: "accident", phon: "/ˈæksɪdənt/", zh: "事故", pos: "n." },
+      { en: "except", phon: "/ɪkˈsept/", zh: "除了", pos: "prep." },
+      { en: "choice", phon: "/tʃɔɪs/", zh: "选择", pos: "n." },
+      { en: "far", phon: "/fɑː/", zh: "远", pos: "adj." },
+      { en: "far from", phon: "", zh: "远离", pos: "phr." },
+      { en: "close", phon: "/kləʊs/", zh: "近的", pos: "adj." },
+      { en: "crowded", phon: "/ˈkraʊdɪd/", zh: "拥挤的", pos: "adj." },
+      { en: "all the time", phon: "", zh: "一直", pos: "phr." },
+      { en: "journey", phon: "/ˈdʒɜːni/", zh: "旅程", pos: "n." },
+      { en: "book", phon: "/bʊk/", zh: "预订", pos: "v." },
+      { en: "park", phon: "/pɑːk/", zh: "停车", pos: "v." },
+      { en: "outside", phon: "/ˌaʊtˈsaɪd/", zh: "在外面", pos: "adv." },
+      { en: "however", phon: "/haʊˈevə/", zh: "然而", pos: "adv." },
+      { en: "cost", phon: "/kɒst/", zh: "花费", pos: "v./n." },
+      { en: "by plane", phon: "", zh: "乘飞机", pos: "phr." },
+      { en: "by ship", phon: "", zh: "乘船", pos: "phr." },
+      { en: "by train", phon: "", zh: "乘火车", pos: "phr." },
+      { en: "take", phon: "/teɪk/", zh: "花费时间", pos: "v." },
+      { en: "comfortable", phon: "/ˈkʌmftəbl/", zh: "舒适的", pos: "adj." }
+    ],
+    phrases: [
+      { en: "far from", zh: "远离" },
+      { en: "all the time", zh: "一直" },
+      { en: "by plane / train / ship", zh: "乘飞机/火车/船" },
+      { en: "book a ticket", zh: "订票" },
+      { en: "except for", zh: "除了" }
+    ],
+    patterns: [
+      { en: "It takes … to …", zh: "做…花费…", ex: "It takes two hours to get there by train." },
+      { en: "A is farther than B", zh: "A 比 B 更远", ex: "The airport is farther than the station." },
+      { en: "The best way is to …", zh: "最好的方式是…", ex: "The best way is to go by plane." }
+    ],
+    sentences: [
+      { en: "Going by train is more comfortable.", zh: "坐火车更舒适。" },
+      { en: "The bus is crowded all the time.", zh: "公交车总是很挤。" },
+      { en: "How much does the ticket cost?", zh: "票价多少？" }
+    ],
+    grammar: [
+      { title: "交通比较", points: [
+        "far → farther / further",
+        "It takes + 时间 + to do",
+        "by + 交通工具（by bus/train/plane）"
+      ] }
+    ],
+    tip: "外研版八上 Module 4：出行方式比较。"
+  },
+  {
+    id: "m5", book: "上册", code: "Module 5", title: "Lao She Teahouse", titleZh: "老舍茶馆",
+    emoji: "🍵",
+    words: [
+      { en: "actress", phon: "/ˈæktrəs/", zh: "女演员", pos: "n." },
+      { en: "teahouse", phon: "/ˈtiːhaʊs/", zh: "茶馆", pos: "n." },
+      { en: "offer", phon: "/ˈɒfə/", zh: "提供", pos: "v." },
+      { en: "end", phon: "/end/", zh: "结束", pos: "n./v." },
+      { en: "in the end", phon: "", zh: "最后", pos: "phr." },
+      { en: "no idea", phon: "", zh: "不知道", pos: "phr." },
+      { en: "act", phon: "/ækt/", zh: "一幕", pos: "n." },
+      { en: "show", phon: "/ʃəʊ/", zh: "演出", pos: "n." },
+      { en: "common", phon: "/ˈkɒmən/", zh: "普通的", pos: "adj." },
+      { en: "describe", phon: "/dɪˈskraɪb/", zh: "描述", pos: "v." },
+      { en: "society", phon: "/səˈsaɪəti/", zh: "社会", pos: "n." },
+      { en: "college", phon: "/ˈkɒlɪdʒ/", zh: "大学", pos: "n." },
+      { en: "novel", phon: "/ˈnɒvl/", zh: "小说", pos: "n." },
+      { en: "if", phon: "/ɪf/", zh: "如果", pos: "conj." },
+      { en: "magic", phon: "/ˈmædʒɪk/", zh: "魔法", pos: "n." },
+      { en: "agree to", phon: "", zh: "同意做", pos: "phr." },
+      { en: "decide to", phon: "", zh: "决定", pos: "phr." },
+      { en: "want to", phon: "", zh: "想要", pos: "phr." },
+      { en: "hope to", phon: "", zh: "希望", pos: "phr." },
+      { en: "plan to", phon: "", zh: "计划", pos: "phr." }
+    ],
+    phrases: [
+      { en: "in the end", zh: "最后" },
+      { en: "no idea", zh: "不知道" },
+      { en: "offer to do", zh: "主动提出做" },
+      { en: "decide to do", zh: "决定做" },
+      { en: "teahouse", zh: "茶馆" }
+    ],
+    patterns: [
+      { en: "want / hope / decide / plan to do", zh: "想要/希望/决定/计划做", ex: "We decided to watch the show." },
+      { en: "offer to do", zh: "主动提出做", ex: "She offered to take us to the teahouse." },
+      { en: "in the end", zh: "最后", ex: "In the end, we all loved the play." }
+    ],
+    sentences: [
+      { en: "Lao She is a great Chinese writer.", zh: "老舍是伟大的中国作家。" },
+      { en: "We decided to go to the teahouse.", zh: "我们决定去茶馆。" },
+      { en: "In the end, the show was wonderful.", zh: "最后，演出非常精彩。" }
+    ],
+    grammar: [
+      { title: "动词 + to do", points: [
+        "want / hope / decide / plan / offer to do",
+        "agree to do sth.",
+        "in the end = finally"
+      ] }
+    ],
+    tip: "外研版八上 Module 5：老舍茶馆与不定式。"
+  },
+  {
+    id: "m6", book: "上册", code: "Module 6", title: "Animals in danger", titleZh: "濒危动物",
+    emoji: "🐼",
+    words: [
+      { en: "snake", phon: "/sneɪk/", zh: "蛇", pos: "n." },
+      { en: "neck", phon: "/nek/", zh: "脖子", pos: "n." },
+      { en: "danger", phon: "/ˈdeɪndʒə/", zh: "危险", pos: "n." },
+      { en: "in danger", phon: "", zh: "处于危险", pos: "phr." },
+      { en: "at last", phon: "", zh: "终于", pos: "phr." },
+      { en: "interested", phon: "/ˈɪntrəstɪd/", zh: "感兴趣的", pos: "adj." },
+      { en: "allow", phon: "/əˈlaʊ/", zh: "允许", pos: "v." },
+      { en: "think of", phon: "", zh: "想起/认为", pos: "phr." },
+      { en: "protect", phon: "/prəˈtekt/", zh: "保护", pos: "v." },
+      { en: "wild", phon: "/waɪld/", zh: "野生的", pos: "adj." },
+      { en: "take away", phon: "", zh: "拿走", pos: "phr." },
+      { en: "enough", phon: "/ɪˈnʌf/", zh: "足够", pos: "adj." },
+      { en: "peace", phon: "/piːs/", zh: "和平", pos: "n." },
+      { en: "in peace", phon: "", zh: "平静地", pos: "phr." },
+      { en: "look after", phon: "", zh: "照料", pos: "phr." },
+      { en: "raise", phon: "/reɪz/", zh: "筹集/饲养", pos: "v." },
+      { en: "research", phon: "/rɪˈsɜːtʃ/", zh: "研究", pos: "n." },
+      { en: "situation", phon: "/ˌsɪtʃuˈeɪʃn/", zh: "情况", pos: "n." },
+      { en: "scientist", phon: "/ˈsaɪəntɪst/", zh: "科学家", pos: "n." },
+      { en: "in order to", phon: "", zh: "为了", pos: "phr." },
+      { en: "government", phon: "/ˈɡʌvənmənt/", zh: "政府", pos: "n." },
+      { en: "set up", phon: "", zh: "建立", pos: "phr." },
+      { en: "nature park", phon: "", zh: "自然公园", pos: "n." },
+      { en: "symbol", phon: "/ˈsɪmbl/", zh: "象征", pos: "n." }
+    ],
+    phrases: [
+      { en: "in danger", zh: "处于危险" },
+      { en: "look after", zh: "照料" },
+      { en: "in order to", zh: "为了" },
+      { en: "set up", zh: "建立" },
+      { en: "be interested in", zh: "对…感兴趣" }
+    ],
+    patterns: [
+      { en: "in order to do", zh: "为了做…", ex: "We protect pandas in order to save them." },
+      { en: "allow sb. to do", zh: "允许某人做", ex: "The park allows people to visit." },
+      { en: "be in danger", zh: "处于危险中", ex: "Many animals are in danger." }
+    ],
+    sentences: [
+      { en: "Many wild animals are in danger.", zh: "许多野生动物处于危险中。" },
+      { en: "We must protect them in order to save nature.", zh: "为了拯救自然我们必须保护它们。" },
+      { en: "Scientists set up nature parks.", zh: "科学家建立了自然公园。" }
+    ],
+    grammar: [
+      { title: "不定式作目的状语", points: [
+        "in order to do / to do",
+        "allow sb. to do",
+        "be interested in doing"
+      ] }
+    ],
+    tip: "外研版八上 Module 6：濒危动物与保护。"
+  },
+  {
+    id: "m7", book: "上册", code: "Module 7", title: "A famous story", titleZh: "一个著名故事",
+    emoji: "🐇",
+    words: [
+      { en: "fall", phon: "/fɔːl/", zh: "落下", pos: "v." },
+      { en: "follow", phon: "/ˈfɒləʊ/", zh: "跟随", pos: "v." },
+      { en: "hole", phon: "/həʊl/", zh: "洞", pos: "n." },
+      { en: "rabbit", phon: "/ˈræbɪt/", zh: "兔子", pos: "n." },
+      { en: "ground", phon: "/ɡraʊnd/", zh: "地面", pos: "n." },
+      { en: "tea party", phon: "", zh: "茶会", pos: "n." },
+      { en: "twice", phon: "/twaɪs/", zh: "两次", pos: "adv." },
+      { en: "once or twice", phon: "", zh: "一两次", pos: "phr." },
+      { en: "suddenly", phon: "/ˈsʌdənli/", zh: "突然", pos: "adv." },
+      { en: "pocket", phon: "/ˈpɒkɪt/", zh: "口袋", pos: "n." },
+      { en: "field", phon: "/fiːld/", zh: "田野", pos: "n." },
+      { en: "think about", phon: "", zh: "考虑", pos: "phr." },
+      { en: "deep", phon: "/diːp/", zh: "深的", pos: "adj." },
+      { en: "while", phon: "/waɪl/", zh: "当…时", pos: "conj." },
+      { en: "land", phon: "/lænd/", zh: "着陆", pos: "v." },
+      { en: "dry", phon: "/draɪ/", zh: "干的", pos: "adj." },
+      { en: "run after", phon: "", zh: "追赶", pos: "phr." },
+      { en: "go down", phon: "", zh: "下去", pos: "phr." },
+      { en: "have a tea party", phon: "", zh: "举行茶会", pos: "phr." },
+      { en: "fall down", phon: "", zh: "倒下", pos: "phr." }
+    ],
+    phrases: [
+      { en: "once or twice", zh: "一两次" },
+      { en: "think about", zh: "考虑" },
+      { en: "fall down", zh: "倒下/落下" },
+      { en: "run after", zh: "追赶" },
+      { en: "tea party", zh: "茶会" }
+    ],
+    patterns: [
+      { en: "past continuous", zh: "过去进行时", ex: "She was sitting by the river." },
+      { en: "while / when", zh: "当…时", ex: "While she was reading, a rabbit ran by." },
+      { en: "suddenly", zh: "突然", ex: "Suddenly she fell down the hole." }
+    ],
+    sentences: [
+      { en: "Alice was sitting by the river with her sister.", zh: "爱丽丝正和姐姐坐在河边。" },
+      { en: "Suddenly a white rabbit ran past.", zh: "突然一只白兔跑过。" },
+      { en: "She followed the rabbit down the hole.", zh: "她跟着兔子下了洞。" }
+    ],
+    grammar: [
+      { title: "过去进行时", points: [
+        "was / were + doing",
+        "while 引导的同时发生动作",
+        "She <code>was reading</code> when the rabbit appeared."
+      ] }
+    ],
+    tip: "外研版八上 Module 7：爱丽丝故事与过去进行时。"
+  },
+  {
+    id: "m8", book: "上册", code: "Module 8", title: "Accidents", titleZh: "事故",
+    emoji: "⚠️",
+    words: [
+      { en: "pale", phon: "/peɪl/", zh: "苍白的", pos: "adj." },
+      { en: "appear", phon: "/əˈpɪə/", zh: "出现", pos: "v." },
+      { en: "corner", phon: "/ˈkɔːnə/", zh: "拐角", pos: "n." },
+      { en: "hit", phon: "/hɪt/", zh: "碰撞", pos: "v." },
+      { en: "glad", phon: "/ɡlæd/", zh: "高兴的", pos: "adj." },
+      { en: "in time", phon: "", zh: "及时", pos: "phr." },
+      { en: "fall off", phon: "", zh: "跌落", pos: "phr." },
+      { en: "risk", phon: "/rɪsk/", zh: "风险", pos: "n." },
+      { en: "attention", phon: "/əˈtenʃn/", zh: "注意", pos: "n." },
+      { en: "pay attention", phon: "", zh: "注意", pos: "phr." },
+      { en: "side by side", phon: "", zh: "并排", pos: "phr." },
+      { en: "bite", phon: "/baɪt/", zh: "咬", pos: "v." },
+      { en: "climb", phon: "/klaɪm/", zh: "爬", pos: "v." },
+      { en: "hide", phon: "/haɪd/", zh: "躲藏", pos: "v." },
+      { en: "throw", phon: "/θrəʊ/", zh: "扔", pos: "v." },
+      { en: "pain", phon: "/peɪn/", zh: "疼痛", pos: "n." },
+      { en: "worse", phon: "/wɜːs/", zh: "更糟", pos: "adj." },
+      { en: "medicine", phon: "/ˈmedsn/", zh: "药", pos: "n." },
+      { en: "accident", phon: "/ˈæksɪdənt/", zh: "事故", pos: "n." },
+      { en: "careful", phon: "/ˈkeəfl/", zh: "小心的", pos: "adj." }
+    ],
+    phrases: [
+      { en: "in time", zh: "及时" },
+      { en: "fall off", zh: "跌落" },
+      { en: "pay attention", zh: "注意" },
+      { en: "side by side", zh: "并排" },
+      { en: "have an accident", zh: "出事故" }
+    ],
+    patterns: [
+      { en: "past continuous for background", zh: "过去进行表背景", ex: "I was walking when a car appeared." },
+      { en: "pay attention to", zh: "注意", ex: "Pay attention to the traffic." },
+      { en: "in time", zh: "及时", ex: "The doctor arrived in time." }
+    ],
+    sentences: [
+      { en: "He was riding when the accident happened.", zh: "事故发生时他正在骑车。" },
+      { en: "Please pay attention on the road.", zh: "请在路上注意安全。" },
+      { en: "She fell off her bike and felt pain.", zh: "她从自行车上摔下感到疼痛。" }
+    ],
+    grammar: [
+      { title: "过去进行时叙述事故", points: [
+        "was/were doing when …",
+        "in time / on time 区别",
+        "fall off / fall down"
+      ] }
+    ],
+    tip: "外研版八上 Module 8：事故与安全。"
+  },
+  {
+    id: "m9", book: "上册", code: "Module 9", title: "Population", titleZh: "人口",
+    emoji: "👥",
+    words: [
+      { en: "noise", phon: "/nɔɪz/", zh: "噪音", pos: "n." },
+      { en: "prepare", phon: "/prɪˈpeə/", zh: "准备", pos: "v." },
+      { en: "report", phon: "/rɪˈpɔːt/", zh: "报告", pos: "n./v." },
+      { en: "billion", phon: "/ˈbɪljən/", zh: "十亿", pos: "num." },
+      { en: "huge", phon: "/hjuːdʒ/", zh: "巨大的", pos: "adj." },
+      { en: "increase", phon: "/ɪnˈkriːs/", zh: "增长", pos: "v./n." },
+      { en: "hang on", phon: "", zh: "稍等", pos: "phr." },
+      { en: "cause", phon: "/kɔːz/", zh: "引起", pos: "v." },
+      { en: "problem", phon: "/ˈprɒbləm/", zh: "问题", pos: "n." },
+      { en: "birth", phon: "/bɜːθ/", zh: "出生", pos: "n." },
+      { en: "flat", phon: "/flæt/", zh: "公寓", pos: "n." },
+      { en: "rubbish", phon: "/ˈrʌbɪʃ/", zh: "垃圾", pos: "n." },
+      { en: "quiet", phon: "/ˈkwaɪət/", zh: "安静的", pos: "adj." },
+      { en: "local", phon: "/ˈləʊkl/", zh: "当地的", pos: "adj." },
+      { en: "close down", phon: "", zh: "关闭", pos: "phr." },
+      { en: "pollution", phon: "/pəˈluːʃn/", zh: "污染", pos: "n." },
+      { en: "solve", phon: "/sɒlv/", zh: "解决", pos: "v." },
+      { en: "public", phon: "/ˈpʌblɪk/", zh: "公共的", pos: "adj." },
+      { en: "service", phon: "/ˈsɜːvɪs/", zh: "服务", pos: "n." },
+      { en: "pupil", phon: "/ˈpjuːpl/", zh: "小学生", pos: "n." },
+      { en: "reduce", phon: "/rɪˈdjuːs/", zh: "减少", pos: "v." },
+      { en: "create", phon: "/kriˈeɪt/", zh: "创造", pos: "v." }
+    ],
+    phrases: [
+      { en: "hang on", zh: "稍等" },
+      { en: "close down", zh: "关闭" },
+      { en: "birth rate", zh: "出生率" },
+      { en: "solve problems", zh: "解决问题" },
+      { en: "increase / reduce", zh: "增加/减少" }
+    ],
+    patterns: [
+      { en: "too many / too much", zh: "太多", ex: "There are too many people in big cities." },
+      { en: "increase / reduce", zh: "增加/减少", ex: "We should reduce pollution." },
+      { en: "It causes …", zh: "它导致…", ex: "Traffic causes noise and pollution." }
+    ],
+    sentences: [
+      { en: "The world population is still increasing.", zh: "世界人口仍在增长。" },
+      { en: "Huge cities face many problems.", zh: "大城市面临许多问题。" },
+      { en: "We must reduce rubbish and pollution.", zh: "我们必须减少垃圾和污染。" }
+    ],
+    grammar: [
+      { title: "大数字与人口问题", points: [
+        "million / billion",
+        "increase / reduce / cause",
+        "too many + 可数；too much + 不可数"
+      ] }
+    ],
+    tip: "外研版八上 Module 9：人口与城市问题。"
+  },
+  {
+    id: "m10", book: "上册", code: "Module 10", title: "The weather", titleZh: "天气",
+    emoji: "🌤️",
+    words: [
+      { en: "cloud", phon: "/klaʊd/", zh: "云", pos: "n." },
+      { en: "shower", phon: "/ˈʃaʊə/", zh: "阵雨", pos: "n." },
+      { en: "snow", phon: "/snəʊ/", zh: "雪", pos: "n./v." },
+      { en: "storm", phon: "/stɔːm/", zh: "暴风雨", pos: "n." },
+      { en: "cloudy", phon: "/ˈklaʊdi/", zh: "多云的", pos: "adj." },
+      { en: "rainy", phon: "/ˈreɪni/", zh: "多雨的", pos: "adj." },
+      { en: "snowy", phon: "/ˈsnəʊi/", zh: "下雪的", pos: "adj." },
+      { en: "sunny", phon: "/ˈsʌni/", zh: "晴朗的", pos: "adj." },
+      { en: "windy", phon: "/ˈwɪndi/", zh: "有风的", pos: "adj." },
+      { en: "temperature", phon: "/ˈtemprətʃə/", zh: "温度", pos: "n." },
+      { en: "degree", phon: "/dɪˈɡriː/", zh: "度", pos: "n." },
+      { en: "minus", phon: "/ˈmaɪnəs/", zh: "零下", pos: "adj." },
+      { en: "although", phon: "/ɔːlˈðəʊ/", zh: "虽然", pos: "conj." },
+      { en: "wet", phon: "/wet/", zh: "湿的", pos: "adj." },
+      { en: "neither", phon: "/ˈnaɪðə/", zh: "两者都不", pos: "pron." },
+      { en: "terrible", phon: "/ˈterəbl/", zh: "糟糕的", pos: "adj." },
+      { en: "probably", phon: "/ˈprɒbəbli/", zh: "可能", pos: "adv." },
+      { en: "come on", phon: "", zh: "加油/快点", pos: "phr." },
+      { en: "from time to time", phon: "", zh: "有时", pos: "phr." },
+      { en: "might", phon: "/maɪt/", zh: "可能", pos: "v." },
+      { en: "thick", phon: "/θɪk/", zh: "厚的", pos: "adj." },
+      { en: "ice", phon: "/aɪs/", zh: "冰", pos: "n." }
+    ],
+    phrases: [
+      { en: "from time to time", zh: "有时" },
+      { en: "come on", zh: "加油" },
+      { en: "minus five degrees", zh: "零下五度" },
+      { en: "although", zh: "虽然" },
+      { en: "It might …", zh: "可能…" }
+    ],
+    patterns: [
+      { en: "What is the weather like?", zh: "天气怎么样？", ex: "It's sunny but windy." },
+      { en: "It might …", zh: "可能…", ex: "It might rain later." },
+      { en: "although", zh: "虽然", ex: "Although it is cold, I like winter." }
+    ],
+    sentences: [
+      { en: "What's the weather like today?", zh: "今天天气怎么样？" },
+      { en: "It is cloudy and the temperature is low.", zh: "多云，气温很低。" },
+      { en: "It might snow tomorrow.", zh: "明天可能下雪。" }
+    ],
+    grammar: [
+      { title: "天气与 might", points: [
+        "sunny / rainy / windy / cloudy / snowy",
+        "might = 可能",
+        "although 引导让步状语从句"
+      ] }
+    ],
+    tip: "外研版八上 Module 10：天气描述与预测。"
+  },
+  {
+    id: "m11", book: "上册", code: "Module 11", title: "Way of life", titleZh: "生活方式",
+    emoji: "🥢",
+    words: [
+      { en: "cap", phon: "/kæp/", zh: "帽子", pos: "n." },
+      { en: "chess", phon: "/tʃes/", zh: "国际象棋", pos: "n." },
+      { en: "chopstick", phon: "/ˈtʃɒpstɪk/", zh: "筷子", pos: "n." },
+      { en: "gift", phon: "/ɡɪft/", zh: "礼物", pos: "n." },
+      { en: "surprise", phon: "/səˈpraɪz/", zh: "惊喜", pos: "n." },
+      { en: "immediately", phon: "/ɪˈmiːdiətli/", zh: "立刻", pos: "adv." },
+      { en: "difference", phon: "/ˈdɪfrəns/", zh: "差别", pos: "n." },
+      { en: "accept", phon: "/əkˈsept/", zh: "接受", pos: "v." },
+      { en: "tradition", phon: "/trəˈdɪʃn/", zh: "传统", pos: "n." },
+      { en: "for example", phon: "", zh: "例如", pos: "phr." },
+      { en: "must", phon: "/mʌst/", zh: "必须", pos: "v." },
+      { en: "serious", phon: "/ˈsɪəriəs/", zh: "严肃的", pos: "adj." },
+      { en: "taste", phon: "/teɪst/", zh: "尝起来", pos: "v." },
+      { en: "experience", phon: "/ɪkˈspɪəriəns/", zh: "经历", pos: "n." },
+      { en: "for the first time", phon: "", zh: "第一次", pos: "phr." },
+      { en: "sandwich", phon: "/ˈsænwɪdʒ/", zh: "三明治", pos: "n." },
+      { en: "fish and chips", phon: "", zh: "炸鱼薯条", pos: "n." },
+      { en: "gentleman", phon: "/ˈdʒentlmən/", zh: "绅士", pos: "n." },
+      { en: "video game", phon: "", zh: "电子游戏", pos: "n." },
+      { en: "a chess set", phon: "", zh: "一副象棋", pos: "n." }
+    ],
+    phrases: [
+      { en: "for example", zh: "例如" },
+      { en: "for the first time", zh: "第一次" },
+      { en: "must / must not", zh: "必须/禁止" },
+      { en: "way of life", zh: "生活方式" },
+      { en: "fish and chips", zh: "炸鱼薯条" }
+    ],
+    patterns: [
+      { en: "must / mustn’t", zh: "必须/不许", ex: "You must not open the gift immediately." },
+      { en: "for the first time", zh: "第一次", ex: "I tried chopsticks for the first time." },
+      { en: "for example", zh: "例如", ex: "For example, we use chopsticks in China." }
+    ],
+    sentences: [
+      { en: "Different countries have different ways of life.", zh: "不同国家有不同生活方式。" },
+      { en: "You must be careful with traditions.", zh: "你必须注意传统习俗。" },
+      { en: "Fish and chips is popular in Britain.", zh: "炸鱼薯条在英国很受欢迎。" }
+    ],
+    grammar: [
+      { title: "情态动词 must", points: [
+        "must = 必须；mustn’t = 禁止",
+        "You must wait.",
+        "for example 举例"
+      ] }
+    ],
+    tip: "外研版八上 Module 11：文化习俗与 must。"
+  },
+  {
+    id: "m12", book: "上册", code: "Module 12", title: "Help", titleZh: "帮助",
+    emoji: "🆘",
+    words: [
+      { en: "broken", phon: "/ˈbrəʊkən/", zh: "破损的", pos: "adj." },
+      { en: "glass", phon: "/ɡlɑːs/", zh: "玻璃", pos: "n." },
+      { en: "stairs", phon: "/steəz/", zh: "楼梯", pos: "n." },
+      { en: "first aid", phon: "", zh: "急救", pos: "n." },
+      { en: "medical", phon: "/ˈmedɪkl/", zh: "医疗的", pos: "adj." },
+      { en: "imagine", phon: "/ɪˈmædʒɪn/", zh: "想象", pos: "v." },
+      { en: "bottom", phon: "/ˈbɒtəm/", zh: "底部", pos: "n." },
+      { en: "trouble", phon: "/ˈtrʌbl/", zh: "麻烦", pos: "n." },
+      { en: "lift up", phon: "", zh: "抬起", pos: "phr." },
+      { en: "harmful", phon: "/ˈhɑːmfl/", zh: "有害的", pos: "adj." },
+      { en: "drop", phon: "/drɒp/", zh: "掉落", pos: "v." },
+      { en: "make sure", phon: "", zh: "确保", pos: "phr." },
+      { en: "cover", phon: "/ˈkʌvə/", zh: "覆盖", pos: "v." },
+      { en: "earthquake", phon: "/ˈɜːθkweɪk/", zh: "地震", pos: "n." },
+      { en: "warn", phon: "/wɔːn/", zh: "警告", pos: "v." },
+      { en: "inside", phon: "/ˌɪnˈsaɪd/", zh: "在里面", pos: "adv." },
+      { en: "under", phon: "/ˈʌndə/", zh: "在下面", pos: "prep." },
+      { en: "keep clear of", phon: "", zh: "远离", pos: "phr." },
+      { en: "calm", phon: "/kɑːm/", zh: "冷静的", pos: "adj." },
+      { en: "brave", phon: "/breɪv/", zh: "勇敢的", pos: "adj." },
+      { en: "helpful", phon: "/ˈhelpfl/", zh: "有帮助的", pos: "adj." },
+      { en: "power", phon: "/ˈpaʊə/", zh: "电力", pos: "n." }
+    ],
+    phrases: [
+      { en: "first aid", zh: "急救" },
+      { en: "make sure", zh: "确保" },
+      { en: "keep clear of", zh: "远离" },
+      { en: "What's wrong with…?", zh: "…怎么了？" },
+      { en: "at the bottom of", zh: "在…底部" }
+    ],
+    patterns: [
+      { en: "must / can for advice", zh: "建议", ex: "You must stay calm in an earthquake." },
+      { en: "make sure that…", zh: "确保…", ex: "Make sure the door is closed." },
+      { en: "What's wrong with…?", zh: "…怎么了？", ex: "What's wrong with your hand?" }
+    ],
+    sentences: [
+      { en: "Stay calm and be brave in trouble.", zh: "遇到麻烦时保持冷静、勇敢。" },
+      { en: "First aid can save lives.", zh: "急救可以挽救生命。" },
+      { en: "Keep clear of broken glass.", zh: "远离碎玻璃。" }
+    ],
+    grammar: [
+      { title: "祈使句与安全建议", points: [
+        "Stay calm. / Don’t run.",
+        "must / mustn’t for rules",
+        "make sure + 从句/名词"
+      ] }
+    ],
+    tip: "外研版八上 Module 12：急救、地震与互助。"
+  },
+  {
+    id: "d1", book: "下册", code: "Module 1", title: "Feelings and impressions", titleZh: "感觉与印象",
+    emoji: "👃",
+    words: [
+      { en: "smell", phon: "/smel/", zh: "闻起来", pos: "v." },
+      { en: "soft", phon: "/sɒft/", zh: "柔软的", pos: "adj." },
+      { en: "sour", phon: "/ˈsaʊə/", zh: "酸的", pos: "adj." },
+      { en: "feel", phon: "/fiːl/", zh: "感觉", pos: "v." },
+      { en: "look", phon: "/lʊk/", zh: "看起来", pos: "v." },
+      { en: "sound", phon: "/saʊnd/", zh: "听起来", pos: "v." },
+      { en: "taste", phon: "/teɪst/", zh: "尝起来", pos: "v." },
+      { en: "fresh", phon: "/freʃ/", zh: "新鲜的", pos: "adj." },
+      { en: "lovely", phon: "/ˈlʌvli/", zh: "可爱的", pos: "adj." },
+      { en: "pretty", phon: "/ˈprɪti/", zh: "漂亮的", pos: "adj." },
+      { en: "noisy", phon: "/ˈnɔɪzi/", zh: "吵闹的", pos: "adj." },
+      { en: "quiet", phon: "/ˈkwaɪət/", zh: "安静的", pos: "adj." },
+      { en: "proud", phon: "/praʊd/", zh: "自豪的", pos: "adj." },
+      { en: "angry", phon: "/ˈæŋɡri/", zh: "生气的", pos: "adj." },
+      { en: "nervous", phon: "/ˈnɜːvəs/", zh: "紧张的", pos: "adj." },
+      { en: "relaxed", phon: "/rɪˈlækst/", zh: "放松的", pos: "adj." }
+    ],
+    phrases: [
+      { en: "smell", zh: "闻起来" },
+      { en: "soft", zh: "柔软的" },
+      { en: "sour", zh: "酸的" },
+      { en: "feel", zh: "感觉" },
+      { en: "look", zh: "看起来" }
+    ],
+    patterns: [
+      { en: "Use: smell", zh: "闻起来", ex: "Remember: smell — 闻起来." }
+    ],
+    sentences: [
+      { en: "I can use the word 'smell'.", zh: "我会用单词“闻起来”。" },
+      { en: "I can use the word 'soft'.", zh: "我会用单词“柔软的”。" },
+      { en: "I can use the word 'sour'.", zh: "我会用单词“酸的”。" }
+    ],
+    grammar: [
+      { title: "本模块重点", points: [
+        "外研版八下 Module 1：感官动词 feel/look/sound/smell/taste。"
+      ] }
+    ],
+    tip: "外研版八下 Module 1：感官动词 feel/look/sound/smell/taste。"
+  },
+  {
+    id: "d2", book: "下册", code: "Module 2", title: "Experiences", titleZh: "经历",
+    emoji: "🧳",
+    words: [
+      { en: "ever", phon: "/ˈevə/", zh: "曾经", pos: "adv." },
+      { en: "enter", phon: "/ˈentə/", zh: "进入", pos: "v." },
+      { en: "win", phon: "/wɪn/", zh: "赢", pos: "v." },
+      { en: "prize", phon: "/praɪz/", zh: "奖品", pos: "n." },
+      { en: "dream", phon: "/driːm/", zh: "梦想", pos: "n." },
+      { en: "abroad", phon: "/əˈbrɔːd/", zh: "在国外", pos: "adv." },
+      { en: "fantastic", phon: "/fænˈtæstɪk/", zh: "极好的", pos: "adj." },
+      { en: "interested", phon: "/ˈɪntrəstɪd/", zh: "感兴趣的", pos: "adj." },
+      { en: "move", phon: "/muːv/", zh: "搬家", pos: "v." },
+      { en: "send", phon: "/send/", zh: "发送", pos: "v." },
+      { en: "invite", phon: "/ɪnˈvaɪt/", zh: "邀请", pos: "v." },
+      { en: "enjoy oneself", phon: "", zh: "玩得开心", pos: "phr." }
+    ],
+    phrases: [
+      { en: "ever", zh: "曾经" },
+      { en: "enter", zh: "进入" },
+      { en: "win", zh: "赢" },
+      { en: "prize", zh: "奖品" },
+      { en: "dream", zh: "梦想" }
+    ],
+    patterns: [
+      { en: "Use: ever", zh: "曾经", ex: "Remember: ever — 曾经." }
+    ],
+    sentences: [
+      { en: "I can use the word 'ever'.", zh: "我会用单词“曾经”。" },
+      { en: "I can use the word 'enter'.", zh: "我会用单词“进入”。" },
+      { en: "I can use the word 'win'.", zh: "我会用单词“赢”。" }
+    ],
+    grammar: [
+      { title: "本模块重点", points: [
+        "外研版八下 Module 2：现在完成时 have/has + 过去分词。"
+      ] }
+    ],
+    tip: "外研版八下 Module 2：现在完成时 have/has + 过去分词。"
+  },
+  {
+    id: "d3", book: "下册", code: "Module 3", title: "Journey to space", titleZh: "太空之旅",
+    emoji: "🚀",
+    words: [
+      { en: "earth", phon: "/ɜːθ/", zh: "地球", pos: "n." },
+      { en: "moon", phon: "/muːn/", zh: "月球", pos: "n." },
+      { en: "news", phon: "/njuːz/", zh: "新闻", pos: "n." },
+      { en: "latest", phon: "/ˈleɪtɪst/", zh: "最新的", pos: "adj." },
+      { en: "planet", phon: "/ˈplænɪt/", zh: "行星", pos: "n." },
+      { en: "reach", phon: "/riːtʃ/", zh: "到达", pos: "v." },
+      { en: "spacecraft", phon: "/ˈspeɪskrɑːft/", zh: "宇宙飞船", pos: "n." },
+      { en: "discover", phon: "/dɪˈskʌvə/", zh: "发现", pos: "v." },
+      { en: "yet", phon: "/jet/", zh: "还/已经", pos: "adv." },
+      { en: "just", phon: "/dʒʌst/", zh: "刚刚", pos: "adv." },
+      { en: "already", phon: "/ɔːlˈredi/", zh: "已经", pos: "adv." },
+      { en: "project", phon: "/ˈprɒdʒekt/", zh: "项目", pos: "n." }
+    ],
+    phrases: [
+      { en: "earth", zh: "地球" },
+      { en: "moon", zh: "月球" },
+      { en: "news", zh: "新闻" },
+      { en: "latest", zh: "最新的" },
+      { en: "planet", zh: "行星" }
+    ],
+    patterns: [
+      { en: "Use: earth", zh: "地球", ex: "Remember: earth — 地球." }
+    ],
+    sentences: [
+      { en: "I can use the word 'earth'.", zh: "我会用单词“地球”。" },
+      { en: "I can use the word 'moon'.", zh: "我会用单词“月球”。" },
+      { en: "I can use the word 'news'.", zh: "我会用单词“新闻”。" }
+    ],
+    grammar: [
+      { title: "本模块重点", points: [
+        "外研版八下 Module 3：现在完成时 already/yet/just。"
+      ] }
+    ],
+    tip: "外研版八下 Module 3：现在完成时 already/yet/just。"
+  },
+  {
+    id: "d4", book: "下册", code: "Module 4", title: "Seeing the doctor", titleZh: "看病",
+    emoji: "🏥",
+    words: [
+      { en: "cold", phon: "/kəʊld/", zh: "感冒", pos: "n." },
+      { en: "fever", phon: "/ˈfiːvə/", zh: "发烧", pos: "n." },
+      { en: "cough", phon: "/kɒf/", zh: "咳嗽", pos: "n./v." },
+      { en: "headache", phon: "/ˈhedeɪk/", zh: "头痛", pos: "n." },
+      { en: "stomach ache", phon: "", zh: "胃痛", pos: "n." },
+      { en: "temperature", phon: "/ˈtemprətʃə/", zh: "体温", pos: "n." },
+      { en: "medicine", phon: "/ˈmedsn/", zh: "药", pos: "n." },
+      { en: "awful", phon: "/ˈɔːfl/", zh: "糟糕的", pos: "adj." },
+      { en: "serious", phon: "/ˈsɪəriəs/", zh: "严重的", pos: "adj." },
+      { en: "health", phon: "/helθ/", zh: "健康", pos: "n." },
+      { en: "exercise", phon: "/ˈeksəsaɪz/", zh: "锻炼", pos: "n./v." },
+      { en: "active", phon: "/ˈæktɪv/", zh: "积极的", pos: "adj." }
+    ],
+    phrases: [
+      { en: "cold", zh: "感冒" },
+      { en: "fever", zh: "发烧" },
+      { en: "cough", zh: "咳嗽" },
+      { en: "headache", zh: "头痛" },
+      { en: "stomach ache", zh: "胃痛" }
+    ],
+    patterns: [
+      { en: "Use: cold", zh: "感冒", ex: "Remember: cold — 感冒." }
+    ],
+    sentences: [
+      { en: "I can use the word 'cold'.", zh: "我会用单词“感冒”。" },
+      { en: "I can use the word 'fever'.", zh: "我会用单词“发烧”。" },
+      { en: "I can use the word 'cough'.", zh: "我会用单词“咳嗽”。" }
+    ],
+    grammar: [
+      { title: "本模块重点", points: [
+        "外研版八下 Module 4：看病用语与情态动词。"
+      ] }
+    ],
+    tip: "外研版八下 Module 4：看病用语与情态动词。"
+  },
+  {
+    id: "d5", book: "下册", code: "Module 5", title: "Cartoons", titleZh: "卡通",
+    emoji: "🎬",
+    words: [
+      { en: "handsome", phon: "/ˈhænsəm/", zh: "英俊的", pos: "adj." },
+      { en: "smart", phon: "/smɑːt/", zh: "聪明的", pos: "adj." },
+      { en: "funny", phon: "/ˈfʌni/", zh: "有趣的", pos: "adj." },
+      { en: "cartoon", phon: "/kɑːˈtuːn/", zh: "卡通", pos: "n." },
+      { en: "ugly", phon: "/ˈʌɡli/", zh: "丑陋的", pos: "adj." },
+      { en: "fight", phon: "/faɪt/", zh: "打斗", pos: "v./n." },
+      { en: "hero", phon: "/ˈhɪərəʊ/", zh: "英雄", pos: "n." },
+      { en: "experience", phon: "/ɪkˈspɪəriəns/", zh: "经历", pos: "n." },
+      { en: "private", phon: "/ˈpraɪvət/", zh: "私人的", pos: "adj." },
+      { en: "own", phon: "/əʊn/", zh: "自己的", pos: "adj." },
+      { en: "satisfy", phon: "/ˈsætɪsfaɪ/", zh: "使满意", pos: "v." },
+      { en: "invent", phon: "/ɪnˈvent/", zh: "发明", pos: "v." }
+    ],
+    phrases: [
+      { en: "handsome", zh: "英俊的" },
+      { en: "smart", zh: "聪明的" },
+      { en: "funny", zh: "有趣的" },
+      { en: "cartoon", zh: "卡通" },
+      { en: "ugly", zh: "丑陋的" }
+    ],
+    patterns: [
+      { en: "Use: handsome", zh: "英俊的", ex: "Remember: handsome — 英俊的." }
+    ],
+    sentences: [
+      { en: "I can use the word 'handsome'.", zh: "我会用单词“英俊的”。" },
+      { en: "I can use the word 'smart'.", zh: "我会用单词“聪明的”。" },
+      { en: "I can use the word 'funny'.", zh: "我会用单词“有趣的”。" }
+    ],
+    grammar: [
+      { title: "本模块重点", points: [
+        "外研版八下 Module 5：卡通人物与 since/for。"
+      ] }
+    ],
+    tip: "外研版八下 Module 5：卡通人物与 since/for。"
+  },
+  {
+    id: "d6", book: "下册", code: "Module 6", title: "Hobbies", titleZh: "爱好",
+    emoji: "🎯",
+    words: [
+      { en: "hobby", phon: "/ˈhɒbi/", zh: "爱好", pos: "n." },
+      { en: "collect", phon: "/kəˈlekt/", zh: "收集", pos: "v." },
+      { en: "stamp", phon: "/stæmp/", zh: "邮票", pos: "n." },
+      { en: "fan", phon: "/fæn/", zh: "迷", pos: "n." },
+      { en: "tidy", phon: "/ˈtaɪdi/", zh: "整齐的", pos: "adj." },
+      { en: "valuable", phon: "/ˈvæljuəbl/", zh: "有价值的", pos: "adj." },
+      { en: "as a result", phon: "", zh: "结果", pos: "phr." },
+      { en: "develop", phon: "/dɪˈveləp/", zh: "发展", pos: "v." },
+      { en: "skill", phon: "/skɪl/", zh: "技能", pos: "n." },
+      { en: "activity", phon: "/ækˈtɪvəti/", zh: "活动", pos: "n." },
+      { en: "interest", phon: "/ˈɪntrəst/", zh: "兴趣", pos: "n." },
+      { en: "enjoy", phon: "/ɪnˈdʒɔɪ/", zh: "享受", pos: "v." }
+    ],
+    phrases: [
+      { en: "hobby", zh: "爱好" },
+      { en: "collect", zh: "收集" },
+      { en: "stamp", zh: "邮票" },
+      { en: "fan", zh: "迷" },
+      { en: "tidy", zh: "整齐的" }
+    ],
+    patterns: [
+      { en: "Use: hobby", zh: "爱好", ex: "Remember: hobby — 爱好." }
+    ],
+    sentences: [
+      { en: "I can use the word 'hobby'.", zh: "我会用单词“爱好”。" },
+      { en: "I can use the word 'collect'.", zh: "我会用单词“收集”。" },
+      { en: "I can use the word 'stamp'.", zh: "我会用单词“邮票”。" }
+    ],
+    grammar: [
+      { title: "本模块重点", points: [
+        "外研版八下 Module 6：爱好与 as a result。"
+      ] }
+    ],
+    tip: "外研版八下 Module 6：爱好与 as a result。"
+  }
+];
+
+// ===== 状态 =====
+let currentIndex = 0;
+let currentMode = 'browse';
+let reciteLevel = 1;
+let bookFilter = 'all';
+let progress = {};
+let flashIndex = 0;
+let flashFlipped = false;
+let reciteQueue = [];
+let recitePos = 0;
+// 默写按「整组单元」计一次，不按单词数
+let reciteSession = { correct: 0, wrong: 0, skipped: 0, recorded: false };
+
+const STORAGE_KEY = 'english_fltrp_g8_progress';
+const STORAGE_UNIT = 'english_fltrp_g8_unit';
+const STORAGE_MODE = 'english_fltrp_g8_mode';
+const STORAGE_THEME = 'english_fltrp_g8_theme';
+const STORAGE_RL = 'english_fltrp_g8_rl';
+
+function loadProgress() {
+  try {
+    progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  } catch (e) { progress = {}; }
+}
+function saveProgress() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+function getUnitProgress(id) {
+  return progress[id] || { level: 0, count: 0 };
+}
+/**
+ * 单元进度
+ * @param {string} id 单元 id
+ * @param {number} quality 1弱 2中 3好 4掌握
+ * @param {{asSession?: boolean}} opts asSession=true 时才 +1 练习组数（按单元整组，不按单词）
+ */
+function updateUnitProgress(id, quality, opts) {
+  const asSession = !!(opts && opts.asSession);
+  const p = getUnitProgress(id);
+  if (asSession) {
+    p.count = (p.count || 0) + 1;
+  }
+  if (quality >= 3) p.level = Math.min(4, Math.max(p.level || 0, quality));
+  else if (quality === 1) p.level = Math.max(0, (p.level || 0) - 1);
+  else p.level = Math.max(p.level || 0, 2);
+  progress[id] = p;
+  saveProgress();
+  renderChapterList();
+  updateStatsBar();
+}
+
+function resetReciteSession() {
+  reciteSession = { correct: 0, wrong: 0, skipped: 0, recorded: false };
+}
+
+/** 默写整组跑完后记 1 次单元练习 */
+function finishReciteSessionIfDone() {
+  if (!reciteQueue.length || recitePos < reciteQueue.length) return;
+  if (reciteSession.recorded) return;
+  reciteSession.recorded = true;
+  const { correct, wrong, skipped } = reciteSession;
+  let q = 3;
+  if (wrong === 0 && skipped === 0 && correct > 0) q = 4;
+  else if (correct === 0 && (wrong > 0 || skipped > 0)) q = 1;
+  else if (wrong > correct) q = 2;
+  updateUnitProgress(unit().id, q, { asSession: true });
+  showToast(`本单元默写完成 · 记 1 组（对${correct}/跳${skipped}）`);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+let _speakTimer = null;
+let _voicesReady = false;
+let _speakAllTimer = null;
+let _speakAllActive = false;
+
+function ensureVoices() {
+  if (!window.speechSynthesis) return [];
+  const voices = window.speechSynthesis.getVoices() || [];
+  if (voices.length) _voicesReady = true;
+  return voices;
+}
+
+if (typeof window !== 'undefined' && window.speechSynthesis) {
+  ensureVoices();
+  window.speechSynthesis.onvoiceschanged = ensureVoices;
+}
+
+function pickEnglishVoice() {
+  const voices = ensureVoices();
+  return voices.find(v => /^en(-|_)/i.test(v.lang) && /US|UK|GB|English/i.test(v.name + v.lang))
+    || voices.find(v => /^en/i.test(v.lang))
+    || null;
+}
+
+function makeUtterance(text) {
+  const u = new SpeechSynthesisUtterance(String(text));
+  u.lang = 'en-US';
+  u.rate = 0.9;
+  u.pitch = 1;
+  u.volume = 1;
+  const en = pickEnglishVoice();
+  if (en) u.voice = en;
+  return u;
+}
+
+function stopAllSpeech() {
+  _speakAllActive = false;
+  clearTimeout(_speakTimer);
+  clearTimeout(_speakAllTimer);
+  try {
+    window.speechSynthesis && window.speechSynthesis.cancel();
+  } catch (e) {}
+}
+
+function speak(text) {
+  const t = String(text || '').trim();
+  if (!t) return;
+  if (!window.speechSynthesis) {
+    showToast('当前浏览器不支持朗读');
+    return;
+  }
+  try {
+    // 打断「全部朗读」队列
+    _speakAllActive = false;
+    clearTimeout(_speakAllTimer);
+    // Chrome：cancel 后立刻 speak 常会静音，需短暂延迟
+    window.speechSynthesis.cancel();
+    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+    clearTimeout(_speakTimer);
+    _speakTimer = setTimeout(() => {
+      try {
+        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+        const u = makeUtterance(t);
+        u.onerror = () => showToast('朗读失败，请检查系统语音');
+        window.speechSynthesis.speak(u);
+      } catch (e) {
+        showToast('朗读失败');
+      }
+    }, 80);
+  } catch (e) {
+    showToast('朗读失败');
+  }
+}
+
+/** 顺序朗读本单元全部核心单词（一次入队，兼容 Chrome） */
+function speakAllWords(ev) {
+  if (ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+  }
+  const list = (unit()?.words || []).map(w => (w.en || '').trim()).filter(Boolean);
+  if (!list.length) {
+    showToast('本单元暂无单词');
+    return;
+  }
+  if (!window.speechSynthesis) {
+    showToast('当前浏览器不支持朗读');
+    return;
+  }
+
+  // 先停掉当前朗读
+  stopAllSpeech();
+  _speakAllActive = true;
+  showToast(`开始朗读 ${list.length} 个单词…`);
+
+  // 预热语音列表（部分浏览器首次为空）
+  ensureVoices();
+
+  // Chrome：cancel 后需延迟再 speak；整表一次入队比 onend 串联更稳
+  _speakAllTimer = setTimeout(() => {
+    if (!_speakAllActive) return;
+    try {
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      // 再保险：部分环境 cancel 后 speaking 标志未清
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
+    } catch (e) {}
+
+    _speakAllTimer = setTimeout(() => {
+      if (!_speakAllActive) return;
+      try {
+        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+        list.forEach((text, idx) => {
+          const u = makeUtterance(text);
+          // 词与词之间略停顿：在文本后加短停（部分引擎支持）
+          // 用 rate 统一；onend 仅用于最后收尾提示
+          if (idx === list.length - 1) {
+            u.onend = () => {
+              if (_speakAllActive) {
+                _speakAllActive = false;
+                showToast('本单元单词朗读完成');
+              }
+            };
+          }
+          u.onerror = () => { /* 跳过单个失败，继续队列 */ };
+          window.speechSynthesis.speak(u);
+        });
+        // 若队列没挂上（Chrome 偶发），回退为逐个 speak
+        setTimeout(() => {
+          if (_speakAllActive && !window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+            speakAllWordsFallback(list);
+          }
+        }, 400);
+      } catch (e) {
+        speakAllWordsFallback(list);
+      }
+    }, 120);
+  }, 100);
+}
+
+/** 回退：逐词朗读（onend + 超时双保险） */
+function speakAllWordsFallback(list) {
+  let i = 0;
+  _speakAllActive = true;
+  const play = () => {
+    if (!_speakAllActive) return;
+    if (i >= list.length) {
+      _speakAllActive = false;
+      showToast('本单元单词朗读完成');
+      return;
+    }
+    try {
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      const text = list[i++];
+      const u = makeUtterance(text);
+      let done = false;
+      const goNext = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(safety);
+        setTimeout(play, 250);
+      };
+      const safety = setTimeout(goNext, Math.max(1800, text.length * 350));
+      u.onend = goNext;
+      u.onerror = goNext;
+      window.speechSynthesis.speak(u);
+    } catch (e) {
+      setTimeout(play, 200);
+    }
+  };
+  setTimeout(play, 80);
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem(STORAGE_THEME, next);
+}
+
+function toggleGuide() {
+  document.getElementById('guideOverlay').classList.toggle('show');
+}
+
+function setBookFilter(book) {
+  bookFilter = book;
+  document.querySelectorAll('.book-filters button').forEach(b => {
+    b.classList.toggle('active', b.dataset.book === book);
+  });
+  renderChapterList();
+}
+
+function filteredUnits() {
+  const q = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+  let list = UNITS.map((u, i) => ({ ...u, _i: i }));
+  if (bookFilter !== 'all') list = list.filter(u => u.book === bookFilter);
+  if (q) {
+    list = list.filter(u => {
+      const hay = [u.title, u.titleZh, u.code, u.book, ...u.words.map(w => w.en + ' ' + w.zh)].join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+  }
+  const sort = document.getElementById('sortSelect')?.value || 'num';
+  if (sort === 'progress') {
+    list.sort((a, b) => (getUnitProgress(b.id).level || 0) - (getUnitProgress(a.id).level || 0));
+  } else if (sort === 'weak') {
+    list.sort((a, b) => (getUnitProgress(a.id).level || 0) - (getUnitProgress(b.id).level || 0));
+  }
+  return list;
+}
+
+function renderChapterList() {
+  const list = filteredUnits();
+  const el = document.getElementById('chapterList');
+  el.innerHTML = list.map(u => {
+    const p = getUnitProgress(u.id);
+    let badge = '';
+    if (p.level >= 4) badge = '<span class="ch-badge">✓</span>';
+    else if (p.level >= 2) badge = '<span class="ch-badge mid">·</span>';
+    else if (p.count > 0) badge = '<span class="ch-badge weak">!</span>';
+    const active = u._i === currentIndex ? ' active' : '';
+    const tagClass = u.book === '上册' ? 'up' : 'down';
+    return `<div class="chapter-item${active}" onclick="navigateTo(${u._i})">
+      <span class="ch-num">${u.emoji}</span>
+      <div class="ch-info">
+        <div class="ch-title-sm">${u.code} ${u.title}</div>
+        <div class="ch-preview">${u.titleZh} · ${u.words.length}词</div>
+      </div>
+      <span class="ch-tag ${tagClass}">${u.book === '上册' ? '八上' : '八下'}</span>
+      ${badge}
+    </div>`;
+  }).join('') || '<div style="padding:16px;opacity:0.5;text-align:center;font-size:0.85em;">无匹配单元</div>';
+
+  const mastered = UNITS.filter(u => getUnitProgress(u.id).level >= 4).length;
+  const pct = Math.round((mastered / UNITS.length) * 100);
+  document.getElementById('totalProgressBar').style.width = pct + '%';
+  document.getElementById('totalProgressText').textContent = pct + '%';
+}
+
+function navigateTo(i) {
+  if (i < 0 || i >= UNITS.length) return;
+  currentIndex = i;
+  flashIndex = 0;
+  flashFlipped = false;
+  try { localStorage.setItem(STORAGE_UNIT, UNITS[i].id); } catch (e) {}
+  renderChapterList();
+  renderContent();
+  if (window.innerWidth <= 800) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+function switchMode(mode) {
+  if (mode === 'recite') {
+    if (currentMode === 'recite') {
+      reciteLevel = reciteLevel >= 3 ? 1 : reciteLevel + 1;
+    }
+    const labels = { 1: '默写 L1', 2: '默写 L2', 3: '默写 L3' };
+    document.getElementById('reciteBtn').textContent = '🗣️ ' + labels[reciteLevel];
+    currentMode = 'recite';
+    buildReciteQueue();
+  } else {
+    currentMode = mode;
+  }
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.mode-btn[data-mode="${mode === 'recite' ? 'recite' : currentMode}"]`)?.classList.add('active');
+  if (mode === 'recite') document.querySelector('.mode-btn[data-mode="recite"]')?.classList.add('active');
+  try {
+    localStorage.setItem(STORAGE_MODE, currentMode);
+    localStorage.setItem(STORAGE_RL, String(reciteLevel));
+  } catch (e) {}
+  flashIndex = 0;
+  flashFlipped = false;
+  renderContent();
+}
+
+function unit() { return UNITS[currentIndex]; }
+
+function renderContent() {
+  const u = unit();
+  const c = document.getElementById('content');
+  let html = `<div class="chapter-container${currentMode === 'flashcard' ? ' wide' : ''}">
+    <div class="chapter-header">
+      <div class="ch-title">${u.code} · ${u.title}</div>
+      <div class="ch-subtitle">${u.titleZh}</div>
+      <div class="ch-emoji">${u.emoji}</div>
+      <div class="meta-row">
+        <span class="meta-pill">${u.book}</span>
+        <span class="meta-pill">${u.words.length} 单词</span>
+        <span class="meta-pill">${u.phrases.length} 短语</span>
+        <span class="meta-pill">外研版 · 八年级</span>
+      </div>
+    </div>`;
+
+  switch (currentMode) {
+    case 'browse': html += renderBrowse(u); break;
+    case 'phrase': html += renderPhrases(u); break;
+    case 'pattern': html += renderPatterns(u); break;
+    case 'grammar': html += renderGrammar(u); break;
+    case 'cloze': html += renderCloze(u); break;
+    case 'recite': html += renderRecite(u); break;
+    case 'flashcard': html += renderFlashcard(u); break;
+  }
+
+  html += `<div class="nav-footer">
+    <button onclick="navigateTo(${currentIndex - 1})" ${currentIndex <= 0 ? 'disabled style="opacity:0.4"' : ''}>◀ 上一单元</button>
+    <button onclick="markMastered()" class="primary" style="background:var(--accent);color:#fff;border-color:var(--accent);">标记掌握</button>
+    <button onclick="navigateTo(${currentIndex + 1})" ${currentIndex >= UNITS.length - 1 ? 'disabled style="opacity:0.4"' : ''}>下一单元 ▶</button>
+  </div></div>`;
+
+  c.innerHTML = html;
+  updateStatsBar();
+  if (currentMode === 'recite') {
+    focusReciteInput();
+    // L3：进入题目时自动播放单词发音
+    if (reciteLevel === 3 && reciteQueue.length && recitePos < reciteQueue.length) {
+      const w = reciteQueue[recitePos];
+      if (w?.en) {
+        // 稍延迟，避免与上一次 cancel/DOM 更新打架
+        setTimeout(() => speak(w.en), 120);
+      }
+    }
+  }
+}
+
+function replayReciteAudio() {
+  if (currentMode !== 'recite' || reciteLevel !== 3) return;
+  const w = reciteQueue[recitePos];
+  if (w?.en) speak(w.en);
+}
+
+function renderBrowse(u) {
+  let html = `<div class="section-title">📚 核心单词 <button type="button" class="section-speak" onclick="speakAllWords(event)" title="朗读本单元全部单词">🔊</button></div><div class="word-grid">`;
+  u.words.forEach((w, i) => {
+    html += `<div class="word-card" onclick="speakWord(${i})" title="点击朗读">
+      <div class="en">${esc(w.en)} <span class="pos">${esc(w.pos || '')}</span></div>
+      ${w.phon ? `<div class="phon">${esc(w.phon)}</div>` : ''}
+      <div class="zh">${esc(w.zh)}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  html += `<div class="section-title">📝 精选例句</div><div class="sentence-list">`;
+  u.sentences.forEach((s, i) => {
+    html += `<div class="sentence-item" onclick="speakSentence(${i})" style="cursor:pointer;">
+      <button type="button" class="speak-btn" onclick="event.stopPropagation();speakSentence(${i})" title="朗读">🔊</button>
+      <div style="flex:1">
+        <div class="en">${esc(s.en)}</div>
+        <div class="zh">${esc(s.zh)}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  if (u.tip) html += `<div class="tip-box">💡 ${esc(u.tip)}</div>`;
+  return html;
+}
+
+function renderPhrases(u) {
+  let html = `<div class="section-title">💬 重点短语 <span style="font-weight:400;opacity:0.55;font-size:0.85em;">点击朗读</span></div><div class="phrase-list">`;
+  u.phrases.forEach((p, i) => {
+    html += `<div class="phrase-item" onclick="speakPhrase(${i})" style="cursor:pointer;">
+      <button type="button" class="speak-btn" onclick="event.stopPropagation();speakPhrase(${i})" title="朗读">🔊</button>
+      <div style="flex:1">
+        <div class="en">${esc(p.en)}</div>
+        <div class="zh">${esc(p.zh)}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  html += `<div class="section-title">📝 相关例句</div><div class="sentence-list">`;
+  u.sentences.forEach((s, i) => {
+    html += `<div class="sentence-item" onclick="speakSentence(${i})" style="cursor:pointer;">
+      <button type="button" class="speak-btn" onclick="event.stopPropagation();speakSentence(${i})" title="朗读">🔊</button>
+      <div style="flex:1">
+        <div class="en">${esc(s.en)}</div>
+        <div class="zh">${esc(s.zh)}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function speakPhrase(i) {
+  const p = unit()?.phrases?.[i];
+  if (p?.en) speak(p.en);
+}
+
+function speakSentence(i) {
+  const s = unit()?.sentences?.[i];
+  if (s?.en) speak(s.en);
+}
+
+function renderPatterns(u) {
+  let html = `<div class="section-title">🔍 核心句型</div>`;
+  u.patterns.forEach(p => {
+    html += `<div class="pattern-card">
+      <div class="pat-en">${esc(p.en)}</div>
+      <div class="pat-zh">${esc(p.zh)}</div>
+      <div class="pat-ex">例：${esc(p.ex)}</div>
+    </div>`;
+  });
+  return html;
+}
+
+function renderGrammar(u) {
+  let html = `<div class="section-title">📘 语法要点</div>`;
+  u.grammar.forEach(g => {
+    html += `<div class="grammar-box"><h4>${esc(g.title)}</h4><ul>`;
+    g.points.forEach(pt => { html += `<li>${pt}</li>`; });
+    html += `</ul></div>`;
+  });
+  if (u.tip) html += `<div class="tip-box">💡 ${esc(u.tip)}</div>`;
+  return html;
+}
+
+function renderCloze(u) {
+  // Build cloze from first 2 sentences + a few phrases
+  const items = [];
+  u.sentences.forEach(s => {
+    const words = s.en.replace(/[.,!?]/g, '').split(/\s+/).filter(w => w.length > 3);
+    if (words.length) {
+      const target = words[Math.floor(words.length / 2)] || words[0];
+      items.push({ full: s.en, blank: target, zh: s.zh });
+    }
+  });
+  u.phrases.slice(0, 3).forEach(p => {
+    const parts = p.en.split(/\s+/);
+    if (parts.length >= 2) {
+      const target = parts[parts.length - 1].replace(/[.,!?]/g, '');
+      items.push({ full: p.en, blank: target, zh: p.zh });
+    }
+  });
+
+  let html = `<div class="section-title">✏️ 填空练习 <span style="font-weight:400;opacity:0.6;font-size:0.85em;">点击下划线显示答案</span></div>`;
+  html += `<div class="cloze-box">`;
+  items.forEach((it, idx) => {
+    const re = new RegExp(escapeReg(it.blank), 'i');
+    const shown = it.full.replace(re, `<span class="cloze-blank" data-ans="${esc(it.blank)}" onclick="revealBlank(this)">____</span>`);
+    html += `<div style="margin-bottom:14px;">
+      <div>${idx + 1}. ${shown}</div>
+      <div style="font-size:0.82em;opacity:0.55;margin-top:2px;">${esc(it.zh)}</div>
+    </div>`;
+  });
+  html += `</div>
+  <div class="action-row">
+    <button onclick="document.querySelectorAll('.cloze-blank').forEach(b=>revealBlank(b,true))">显示全部</button>
+    <button onclick="renderContent()">重置</button>
+    <button class="primary" onclick="updateUnitProgress(unit().id,3,{asSession:true});showToast('已记录本单元练习 1 组 ✓')">完成练习</button>
+  </div>`;
+  return html;
+}
+
+function revealBlank(el, force) {
+  if (el.classList.contains('revealed') && !force) {
+    el.classList.remove('revealed');
+    el.textContent = '____';
+    return;
+  }
+  el.classList.add('revealed');
+  el.textContent = el.dataset.ans;
+}
+
+function buildReciteQueue() {
+  const u = unit();
+  reciteQueue = u.words.map((w, i) => ({ type: 'word', ...w, i }));
+  // shuffle lightly
+  for (let i = reciteQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [reciteQueue[i], reciteQueue[j]] = [reciteQueue[j], reciteQueue[i]];
+  }
+  recitePos = 0;
+  resetReciteSession();
+}
+
+function renderRecite(u) {
+  if (!reciteQueue.length) buildReciteQueue();
+  if (recitePos >= reciteQueue.length) {
+    // 整组默写结束：按单元记 1 次（不按单词数）
+    finishReciteSessionIfDone();
+    return `<div class="recite-prompt">
+      <div class="prompt-sub">本单元默写完成 · 记 1 组</div>
+      <div class="prompt-main">🎉 Well done!</div>
+      <div class="prompt-sub">对 ${reciteSession.correct} · 跳过 ${reciteSession.skipped}</div>
+      <div class="action-row">
+        <button class="primary" onclick="buildReciteQueue();renderContent();">再练一轮</button>
+        <button onclick="switchMode('browse')">返回单词</button>
+      </div>
+    </div>`;
+  }
+  const item = reciteQueue[recitePos];
+  const levelTips = {
+    1: '看中文，写出英文',
+    2: '看英文，写出中文',
+    3: '听发音，写出英文'
+  };
+  let promptMain = '', promptSub = '';
+  if (reciteLevel === 1) {
+    // L1 提示也用简短中文，便于对译
+    promptMain = simpleZh(item.zh);
+    promptSub = (item.pos || '') + ' · 写出英文';
+  } else if (reciteLevel === 2) {
+    promptMain = item.en;
+    promptSub = (item.phon || '') + ' · 写出简单中文';
+  } else {
+    // L3：不显示英文单词，自动放音（只保留一处重听按钮）
+    promptMain = '听音写词';
+    promptSub = simpleZh(item.zh) + (item.pos ? ' · ' + item.pos : '');
+  }
+
+  return `<div class="recite-prompt">
+    <div class="prompt-sub">L${reciteLevel} · ${levelTips[reciteLevel]} · ${recitePos + 1}/${reciteQueue.length}</div>
+    <div class="prompt-main">${esc(promptMain)}</div>
+    <div class="prompt-sub">${esc(promptSub)}</div>
+    ${reciteLevel === 3 ? `<button type="button" class="speak-btn" style="font-size:1.25em;margin-top:8px;" onclick="replayReciteAudio()">🔊 再听一遍</button>` : ''}
+  </div>
+  <input class="recite-area" id="reciteInput" placeholder="在此输入答案…（Enter 检查 · 空格 跳过 · ? 看答案）" autofocus autocomplete="off" onkeydown="onReciteKeydown(event)" style="min-height:48px;">
+  <div class="action-row">
+    <button type="button" class="primary" onclick="checkRecite()">检查</button>
+    <button type="button" onclick="showReciteAnswer()">看答案</button>
+    <button type="button" onclick="skipRecite()">跳过</button>
+  </div>
+  <div id="reciteResult"></div>`;
+}
+
+function onReciteKeydown(event) {
+  // Enter：检查；空格（空输入）：跳过；?：看答案
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    checkRecite();
+    return;
+  }
+  if (event.key === '?' || (event.key === '/' && event.shiftKey) || event.code === 'Slash' && event.shiftKey) {
+    event.preventDefault();
+    showReciteAnswer();
+    return;
+  }
+  // 部分键盘 ? 在 Shift+/，未拦截到时 key 可能为 '/'
+  if (event.key === '/' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+    const el = event.target;
+    if (!(el?.value || '').trim()) {
+      event.preventDefault();
+      showReciteAnswer();
+      return;
+    }
+  }
+  if (event.key === ' ' || event.code === 'Space' || event.key === 'Spacebar') {
+    const el = event.target;
+    const val = (el?.value || '');
+    // 仅当输入框为空（或只有空格）时，空格键跳过，避免干扰正常输入
+    if (!val.trim()) {
+      event.preventDefault();
+      skipRecite();
+    }
+  }
+}
+
+function focusReciteInput(opts) {
+  const selectAll = !!(opts && opts.selectAll);
+  const clear = !!(opts && opts.clear);
+  // 等 DOM 更新后再聚焦（检查按钮/重绘后）
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      const el = document.getElementById('reciteInput');
+      if (!el) return;
+      if (clear) el.value = '';
+      el.focus();
+      if (selectAll && el.value) {
+        el.select();
+      } else {
+        try {
+          const len = el.value.length;
+          el.setSelectionRange(len, len);
+        } catch (e) {}
+      }
+    }, 0);
+  });
+}
+
+function checkRecite() {
+  const item = reciteQueue[recitePos];
+  const inputEl = document.getElementById('reciteInput');
+  const input = (inputEl?.value || '').trim();
+  const result = document.getElementById('reciteResult');
+  if (!input) {
+    showToast('请先输入答案');
+    focusReciteInput();
+    return;
+  }
+
+  let ok = false;
+  let answer = '';
+  if (reciteLevel === 1 || reciteLevel === 3) {
+    answer = item.en;
+    ok = normalizeEn(input) === normalizeEn(item.en);
+  } else {
+    // L2：接受简短中文义项
+    answer = simpleZh(item.zh);
+    ok = matchZhAnswer(input, item.zh);
+  }
+
+  if (ok) {
+    const showZh = reciteLevel === 2 ? simpleZh(item.zh) : item.zh;
+    result.innerHTML = `<div class="compare-result"><span class="match">✓ 正确！</span> ${esc(item.en)} — ${esc(showZh)}</div>`;
+    reciteSession.correct += 1;
+    setTimeout(() => {
+      recitePos++;
+      renderContent();
+      focusReciteInput({ clear: true });
+    }, 700);
+  } else {
+    result.innerHTML = `<div class="compare-result"><span class="mismatch">✗ 再试试</span><br>你的答案：${esc(input)}<br>参考：<strong>${esc(answer)}</strong></div>`;
+    reciteSession.wrong += 1;
+    // 答错：不记单元次数；光标回输入框并全选
+    focusReciteInput({ selectAll: true });
+  }
+}
+
+function showReciteAnswer() {
+  const item = reciteQueue[recitePos];
+  const result = document.getElementById('reciteResult');
+  if (reciteLevel === 2) {
+    // L2 只给最简单的中文参考
+    const simple = simpleZh(item.zh);
+    const alts = zhAnswerList(item.zh).filter(a => a !== simple).slice(0, 3);
+    const altText = alts.length ? `<br><span style="opacity:0.65;font-size:0.9em;">也可：${esc(alts.join(' / '))}</span>` : '';
+    result.innerHTML = `<div class="compare-result">答案：<strong>${esc(simple)}</strong>${altText}</div>`;
+  } else {
+    result.innerHTML = `<div class="compare-result">答案：<strong>${esc(item.en)}</strong> — ${esc(simpleZh(item.zh))} ${item.phon ? '(' + esc(item.phon) + ')' : ''}</div>`;
+  }
+  focusReciteInput({ selectAll: true });
+}
+
+function skipRecite() {
+  reciteSession.skipped += 1;
+  recitePos++;
+  renderContent();
+  focusReciteInput({ clear: true });
+}
+
+function normalizeEn(s) {
+  return s.toLowerCase().replace(/[.,!?'"]/g, '').replace(/\s+/g, ' ').trim();
+}
+
+function normalizeZh(s) {
+  return String(s || '')
+    .replace(/\s+/g, '')
+    .replace(/[，。、；：！？·\.\(\)（）\[\]【】"'“”‘’]/g, '')
+    .toLowerCase();
+}
+
+/** 把释义拆成若干可接受的简短答案 */
+function zhAnswerList(zh) {
+  const raw = String(zh || '').trim();
+  if (!raw) return [];
+  const parts = raw
+    .split(/[；;、\/｜|]/)
+    .map(s => s.trim())
+    .filter(Boolean);
+  const list = [];
+  for (const p of parts) {
+    // 去掉括号补充：计划（名词）→ 计划
+    const noParen = p.replace(/[（(][^）)]*[）)]/g, '').trim();
+    if (noParen) list.push(noParen);
+    list.push(p);
+    // 「父亲或母亲」→ 也接受「父母」「父亲」「母亲」
+    if (/或/.test(noParen)) {
+      noParen.split('或').forEach(x => {
+        const t = x.trim();
+        if (t) list.push(t);
+      });
+    }
+    // 「对…感兴趣」类：取核心两字以上片段
+    const core = noParen.replace(/[…\.]/g, '').replace(/^(对|把|被|在|与|和|向)/, '');
+    if (core && core.length >= 2 && core !== noParen) list.push(core);
+  }
+  // 去重，短的优先（默写 L2 倾向简单答案）
+  const seen = new Set();
+  const uniq = [];
+  for (const a of list.sort((a, b) => a.length - b.length)) {
+    const k = normalizeZh(a);
+    if (!k || seen.has(k)) continue;
+    seen.add(k);
+    uniq.push(a);
+  }
+  return uniq;
+}
+
+/** L2 展示用：取最短、最简单的一个释义 */
+function simpleZh(zh) {
+  const list = zhAnswerList(zh);
+  if (!list.length) return String(zh || '');
+  // 优先 2–6 字的简短义
+  const preferred = list.find(a => a.length >= 1 && a.length <= 6) || list[0];
+  return preferred;
+}
+
+/** L2：用户中文是否匹配任一简短/完整释义 */
+function matchZhAnswer(input, zh) {
+  const inn = normalizeZh(input);
+  if (!inn) return false;
+  const answers = zhAnswerList(zh);
+  for (const a of answers) {
+    const an = normalizeZh(a);
+    if (!an) continue;
+    if (inn === an) return true;
+    // 用户写得更短但命中答案核心
+    if (an.length >= 2 && (an.includes(inn) || inn.includes(an))) {
+      // 至少 1 个汉字，且不要过宽（单字仅当答案本身单字）
+      if (inn.length >= 2 || an.length === 1) return true;
+    }
+  }
+  // 完整原句宽松包含
+  const full = normalizeZh(zh);
+  if (full && (full.includes(inn) || inn.includes(full)) && inn.length >= 2) return true;
+  return false;
+}
+
+function renderFlashcard(u) {
+  let html = `<div class="section-title">🃏 单词闪卡 · ${u.words.length} 张 <span style="font-weight:400;opacity:0.6;">每行 3 张 · 点击发音并翻转</span></div>
+  <div class="flashcard-grid">`;
+  u.words.forEach((w, i) => {
+    html += `<div class="flashcard" id="flashcard-${i}" data-word-i="${i}" onclick="onFlashcardClick(${i}, event)">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <div class="fc-word">${esc(w.en)}</div>
+          ${w.phon ? `<div class="fc-phon">${esc(w.phon)}</div>` : ''}
+        </div>
+        <div class="flashcard-back">
+          <div class="fc-zh">${esc(w.zh || '—')}</div>
+          ${w.phon ? `<div class="fc-phon">${esc(w.phon)}</div>` : ''}
+          ${w.pos ? `<div class="fc-pos">${esc(w.pos)}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  });
+  html += `</div>
+  <div class="action-row">
+    <button type="button" onclick="flipAllCards(false)">全部正面</button>
+    <button type="button" onclick="flipAllCards(true)">全部反面</button>
+    <button type="button" class="primary" onclick="updateUnitProgress(unit().id,4,{asSession:true});showToast('本单元闪卡已记 1 组 · 掌握 ✓')">全部掌握</button>
+  </div>`;
+  return html;
+}
+
+function speakWordAt(i) {
+  const w = unit()?.words?.[i];
+  if (w?.en) speak(w.en);
+}
+
+function onFlashcardClick(i, e) {
+  speakWordAt(i);
+  flipCard(i);
+}
+
+function flipCard(i) {
+  document.getElementById('flashcard-' + i)?.classList.toggle('flipped');
+}
+
+function flipAllCards(open) {
+  document.querySelectorAll('.flashcard').forEach(el => {
+    el.classList.toggle('flipped', !!open);
+  });
+}
+
+function markMastered() {
+  updateUnitProgress(unit().id, 4, { asSession: true });
+  showToast('本单元已记 1 组 · 标记掌握 ✓');
+}
+
+function speakWord(i) {
+  const w = unit().words[i];
+  if (w) speak(w.en);
+}
+
+function updateStatsBar() {
+  const u = unit();
+  const p = getUnitProgress(u.id);
+  const levels = ['未学', '待加强', '了解', '熟悉', '掌握'];
+  document.getElementById('statsBar').innerHTML = `
+    <span>📍 ${u.book} ${u.code}</span>
+    <span>📚 ${u.words.length} 词 · ${u.phrases.length} 短语</span>
+    <span>⭐ ${levels[p.level || 0]}（练 ${p.count || 0} 组）</span>
+    <span>🎯 ${currentModeLabel()}</span>
+  `;
+}
+
+function currentModeLabel() {
+  const map = {
+    browse: '单词', phrase: '短语', pattern: '句型', grammar: '语法',
+    cloze: '填空', recite: '默写 L' + reciteLevel, flashcard: '闪卡'
+  };
+  return map[currentMode] || currentMode;
+}
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function escapeReg(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// ===== 键盘快捷键 =====
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+  if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === 'h' || e.key === 'H') {
+    e.preventDefault();
+    location.href = 'index.html';
+  }
+});
+
+// ===== Init =====
+function init() {
+  loadProgress();
+  try {
+    const theme = localStorage.getItem(STORAGE_THEME) || 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    const savedId = localStorage.getItem(STORAGE_UNIT);
+    if (savedId) {
+      const idx = UNITS.findIndex(u => u.id === savedId);
+      if (idx >= 0) currentIndex = idx;
+    }
+    const m = localStorage.getItem(STORAGE_MODE);
+    if (m) currentMode = m;
+    const rl = parseInt(localStorage.getItem(STORAGE_RL) || '1', 10);
+    if (rl >= 1 && rl <= 3) reciteLevel = rl;
+  } catch (e) {}
+
+  // set active mode button
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === (currentMode === 'recite' ? 'recite' : currentMode) ||
+      (currentMode === 'recite' && b.dataset.mode === 'recite'));
+  });
+  if (currentMode === 'recite') {
+    document.getElementById('reciteBtn').textContent = '🗣️ 默写 L' + reciteLevel;
+  }
+
+  renderChapterList();
+  renderContent();
+}
+
+init();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>
