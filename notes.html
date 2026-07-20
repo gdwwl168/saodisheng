@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="cangjingge-theme">
+<meta name="cjg-theme-light" content="dark">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="扫地僧 · 划线与想法 — 微信读书笔记">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="划线与想法">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<title>划线与想法 · 扫地僧</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --text: #3d3226;
+  --text-muted: rgba(61,50,38,0.55);
+  --accent: #8b4513;
+  --gold: #c9a96e;
+  --card-bg: #faf7f2;
+  --border: #d4c5a9;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --input-bg: #fff;
+  --chip-active: #8b4513;
+  --chip-active-text: #faf7f2;
+  --quote-bg: rgba(139,69,19,0.07);
+  --idea-bg: rgba(201,169,110,0.14);
+  --reader-bg: #f7f2ea;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --read-size: 17px;
+  --read-lh: 1.9;
+}
+[data-theme="dark"] {
+  --bg: #1a1a2e;
+  --text: #e4d8c0;
+  --text-muted: rgba(228,216,192,0.55);
+  --accent: #c9a96e;
+  --gold: #c9a96e;
+  --card-bg: #252540;
+  --border: #3a3a55;
+  --shadow: 0 2px 16px rgba(0,0,0,0.3);
+  --input-bg: #1f1f35;
+  --chip-active: #c9a96e;
+  --chip-active-text: #1a1a2e;
+  --quote-bg: rgba(201,169,110,0.1);
+  --idea-bg: rgba(201,169,110,0.14);
+  --reader-bg: #1c1c30;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  transition: background 0.25s, color 0.25s;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; color: inherit; }
+
+/* —— List shell —— */
+.page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 16px 14px calc(28px + var(--safe-bottom));
+}
+body.reading .page { display: none; }
+
+.header { text-align: center; padding: 14px 8px 6px; }
+.header .eyebrow {
+  font-size: 0.75em; letter-spacing: 0.28em; color: var(--text-muted); margin-bottom: 8px;
+}
+.header h1 {
+  font-size: 1.7em; color: var(--accent); letter-spacing: 0.16em; font-weight: 700;
+}
+.header .sub {
+  margin-top: 8px; font-size: 0.88em; color: var(--text-muted); line-height: 1.55;
+}
+.nav-links {
+  display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap;
+}
+.nav-links a {
+  font-size: 0.8em; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--card-bg); color: var(--text-muted);
+}
+.nav-links a.here {
+  color: var(--chip-active-text); background: var(--chip-active); border-color: var(--chip-active);
+}
+.stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 12px;
+}
+.stat {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 10px 6px; text-align: center; box-shadow: var(--shadow);
+}
+.stat .num {
+  font-size: 1.15em; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums;
+}
+.stat .label { margin-top: 3px; font-size: 0.72em; color: var(--text-muted); }
+
+.toolbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  padding: 8px 0 6px; margin: 0 -2px;
+}
+.search-wrap { position: relative; }
+.search-wrap input {
+  width: 100%; border: 1px solid var(--border); background: var(--input-bg); color: var(--text);
+  border-radius: 12px; padding: 11px 72px 11px 14px; font-size: 16px; outline: none; font-family: inherit;
+}
+.search-wrap input::placeholder { color: var(--text-muted); }
+.search-wrap .count {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 0.75em; color: var(--text-muted); pointer-events: none; font-variant-numeric: tabular-nums;
+}
+.chips {
+  display: flex; gap: 8px; overflow-x: auto; padding: 8px 2px 2px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto; border: 1px solid var(--border); background: var(--card-bg); color: var(--text);
+  border-radius: 999px; padding: 7px 12px; font-size: 0.8em; white-space: nowrap;
+  cursor: pointer; background-clip: padding-box;
+}
+.chip.active {
+  background: var(--chip-active); color: var(--chip-active-text); border-color: var(--chip-active);
+}
+
+.book-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.book {
+  display: flex; gap: 12px; align-items: stretch;
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+  padding: 12px; box-shadow: var(--shadow); cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.15s;
+  -webkit-user-select: none; user-select: none;
+}
+.book:active { transform: scale(0.985); border-color: var(--gold); }
+.book .cover {
+  width: 52px; height: 70px; border-radius: 6px; object-fit: cover; background: var(--border);
+  flex: 0 0 auto;
+}
+.book .cover-fallback {
+  width: 52px; height: 70px; border-radius: 6px; background: var(--border);
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+  font-size: 0.68em; color: var(--text-muted); text-align: center; padding: 4px;
+}
+.book .info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.book .title {
+  font-size: 0.98em; font-weight: 700; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.book .author {
+  font-size: 0.78em; color: var(--text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.book .meta-row {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; font-size: 0.72em; color: var(--gold);
+}
+.book .preview {
+  margin-top: 4px; font-size: 0.78em; color: var(--text-muted); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.book .chev {
+  align-self: center; color: var(--text-muted); font-size: 1.1em; opacity: 0.7; padding-left: 2px;
+}
+mark.hit {
+  background: color-mix(in srgb, var(--gold) 45%, transparent);
+  color: inherit; border-radius: 2px; padding: 0 1px;
+}
+
+.empty {
+  text-align: center; padding: 48px 16px; color: var(--text-muted); line-height: 1.7;
+}
+.footer {
+  margin-top: 28px; text-align: center; font-size: 0.78em; color: var(--text-muted); letter-spacing: 0.12em;
+}
+.back { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 0.88em; }
+.home-btn {
+  position: fixed; top: calc(10px + var(--safe-top)); left: 12px; z-index: 50;
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--card-bg); box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: center; font-size: 1.15em; line-height: 1;
+}
+.home-btn:active { transform: scale(0.95); }
+body.reading .home-btn { display: none; }
+
+/* —— Reader view —— */
+.reader {
+  display: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--reader-bg);
+}
+body.reading .reader { display: block; }
+
+.reader-bar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: 8px;
+  padding: calc(8px + var(--safe-top)) 10px 8px;
+  background: color-mix(in srgb, var(--reader-bg) 92%, transparent);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.reader-bar .icon-btn {
+  flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--card-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.05em; cursor: pointer;
+}
+.reader-bar .icon-btn:active { transform: scale(0.95); }
+.reader-bar .rtitle {
+  flex: 1; min-width: 0; text-align: center;
+}
+.reader-bar .rtitle .t {
+  font-size: 0.92em; font-weight: 700; color: var(--accent);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.reader-bar .rtitle .a {
+  font-size: 0.72em; color: var(--text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;
+}
+.reader-bar .size-ctrl {
+  flex: 0 0 auto; display: flex; gap: 4px;
+}
+.reader-bar .size-ctrl button {
+  width: 36px; height: 36px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--card-bg);
+  font-size: 0.85em; cursor: pointer; font-weight: 700;
+}
+
+.reader-meta {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  padding: 12px 16px 4px; font-size: 0.75em; color: var(--gold);
+}
+.reader-tabs {
+  display: flex; gap: 8px; justify-content: center; padding: 8px 12px 4px;
+}
+.reader-tabs .chip { min-width: 72px; text-align: center; }
+
+.reader-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 8px 16px calc(40px + var(--safe-bottom));
+  font-size: var(--read-size);
+  line-height: var(--read-lh);
+}
+
+.chapter-block { margin-top: 22px; }
+.chapter-block:first-child { margin-top: 10px; }
+.chapter-title {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; color: var(--accent); font-size: 0.82em;
+  letter-spacing: 0.08em; font-weight: 700;
+}
+.chapter-title::before,
+.chapter-title::after {
+  content: ""; flex: 1; height: 1px; background: var(--border); opacity: 0.8;
+}
+
+.note {
+  margin-bottom: 14px;
+  border-radius: 12px;
+  padding: 14px 14px 12px;
+  position: relative;
+}
+.note.hl {
+  background: var(--quote-bg);
+  border-left: 3px solid var(--accent);
+}
+.note.idea {
+  background: var(--idea-bg);
+  border-left: 3px solid var(--gold);
+}
+.note .kind {
+  font-size: 0.68em; letter-spacing: 0.12em; color: var(--text-muted);
+  margin-bottom: 6px; font-weight: 700;
+}
+.note .txt {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 1em;
+  line-height: inherit;
+  letter-spacing: 0.02em;
+}
+.note .abs {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--border);
+  color: var(--text-muted);
+  font-size: 0.92em;
+  font-style: italic;
+  line-height: 1.75;
+}
+.note .src {
+  margin-top: 8px;
+  font-size: 0.72em;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+.note .copy {
+  border: none; background: transparent; color: var(--accent);
+  font-size: 0.85em; cursor: pointer; padding: 4px 0; opacity: 0.85;
+}
+.note .copy:active { opacity: 1; }
+
+.reader-empty {
+  text-align: center; padding: 48px 16px; color: var(--text-muted); line-height: 1.7;
+}
+.reader-actions {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  margin-top: 20px; padding-top: 8px;
+}
+.reader-actions a, .reader-actions button {
+  font-size: 0.82em; color: var(--accent); border: 1px solid var(--border);
+  border-radius: 999px; padding: 8px 14px; background: var(--card-bg); cursor: pointer;
+}
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(28px + var(--safe-bottom));
+  transform: translateX(-50%) translateY(12px);
+  background: rgba(30,28,40,0.92); color: #f5e6c8;
+  padding: 8px 14px; border-radius: 999px; font-size: 0.82em;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+  z-index: 80; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (min-width: 560px) {
+  .home-btn { top: calc(16px + var(--safe-top)); left: 18px; }
+  .header h1 { font-size: 2em; }
+  .page { padding: 24px 20px 40px; }
+  .reader-content { padding-left: 28px; padding-right: 28px; }
+  .book .preview { -webkit-line-clamp: 1; }
+}
+@media (min-width: 820px) {
+  .reader-content { --read-size: 18px; }
+}
+</style>
+</head>
+<body>
+<a class="home-btn" href="index.html" title="回首页 (H)" aria-label="回首页">🏠</a>
+
+<div class="page" id="list-page">
+  <header class="header">
+    <div class="eyebrow">微信读书 · 笔记导出</div>
+    <h1>划线与想法</h1>
+    <p class="sub">
+      <span id="gen-at"></span>
+      · 有笔记的书 <strong id="book-count">0</strong> 本
+    </p>
+    <div class="nav-links">
+      <a href="reading.html">在读</a>
+      <a href="readed.html">已读完</a>
+      <a href="unread.html">未读</a>
+      <a class="here" href="notes.html">划线</a>
+    </div>
+  </header>
+
+  <section class="stats" aria-label="统计">
+    <div class="stat"><div class="num" id="stat-books">0</div><div class="label">有笔记的书</div></div>
+    <div class="stat"><div class="num" id="stat-hl">0</div><div class="label">划线</div></div>
+    <div class="stat"><div class="num" id="stat-idea">0</div><div class="label">想法</div></div>
+  </section>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input id="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="搜索书名 / 作者 / 划线 / 想法" aria-label="搜索">
+      <span class="count" id="shown-count"></span>
+    </div>
+    <div class="chips" id="mode-chips">
+      <button type="button" class="chip active" data-mode="all">全部</button>
+      <button type="button" class="chip" data-mode="hl">有划线</button>
+      <button type="button" class="chip" data-mode="idea">有想法</button>
+    </div>
+  </div>
+
+  <main class="book-list" id="list" aria-live="polite"></main>
+  <div class="empty" id="empty" hidden>没有匹配内容，换个关键词试试。</div>
+
+  <footer class="footer">
+    <div>扫地僧 · 藏经阁</div>
+    <a class="back" href="index.html">← 返回首页</a>
+  </footer>
+</div>
+
+<!-- Immersive reader -->
+<div class="reader" id="reader" hidden>
+  <div class="reader-bar">
+    <button type="button" class="icon-btn" id="btn-back" title="返回列表 (Esc)" aria-label="返回列表">←</button>
+    <div class="rtitle">
+      <div class="t" id="r-title"></div>
+      <div class="a" id="r-author"></div>
+    </div>
+    <div class="size-ctrl" aria-label="字号">
+      <button type="button" id="btn-size-down" title="缩小字号">A−</button>
+      <button type="button" id="btn-size-up" title="放大字号">A+</button>
+    </div>
+  </div>
+  <div class="reader-meta" id="r-meta"></div>
+  <div class="reader-tabs chips" id="r-tabs">
+    <button type="button" class="chip active" data-rtab="all">全部</button>
+    <button type="button" class="chip" data-rtab="hl">划线</button>
+    <button type="button" class="chip" data-rtab="idea">想法</button>
+  </div>
+  <div class="reader-content" id="r-content"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="notes-data.js"></script>
+<script>
+(function () {
+  const NOTES = window.NOTES || [];
+  const META = window.NOTES_META || {};
+  const byId = new Map(NOTES.map(function (b) { return [String(b.id), b]; }));
+
+  const listEl = document.getElementById('list');
+  const emptyEl = document.getElementById('empty');
+  const qInput = document.getElementById('q');
+  const shownCount = document.getElementById('shown-count');
+  const reader = document.getElementById('reader');
+  const rTitle = document.getElementById('r-title');
+  const rAuthor = document.getElementById('r-author');
+  const rMeta = document.getElementById('r-meta');
+  const rContent = document.getElementById('r-content');
+  const toastEl = document.getElementById('toast');
+
+  var mode = 'all';
+  var query = '';
+  var currentBook = null;
+  var readerTab = 'all';
+  var readSize = Number(localStorage.getItem('notes-read-size') || 17);
+  readSize = Math.min(24, Math.max(14, readSize));
+  applyReadSize();
+
+  if (META.generatedAt) {
+    document.getElementById('gen-at').textContent = '更新于 ' + META.generatedAt;
+  }
+  if (META.bookCount != null) {
+    document.getElementById('book-count').textContent = META.bookCount;
+    document.getElementById('stat-books').textContent = META.bookCount;
+  }
+  if (META.highlightCount != null) document.getElementById('stat-hl').textContent = META.highlightCount;
+  if (META.ideaCount != null) document.getElementById('stat-idea').textContent = META.ideaCount;
+
+  document.getElementById('mode-chips').addEventListener('click', function (e) {
+    var btn = e.target.closest('.chip');
+    if (!btn) return;
+    mode = btn.getAttribute('data-mode') || 'all';
+    document.querySelectorAll('#mode-chips .chip').forEach(function (c) {
+      c.classList.toggle('active', c === btn);
+    });
+    renderList();
+  });
+
+  document.getElementById('r-tabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.chip');
+    if (!btn || !currentBook) return;
+    readerTab = btn.getAttribute('data-rtab') || 'all';
+    document.querySelectorAll('#r-tabs .chip').forEach(function (c) {
+      c.classList.toggle('active', c === btn);
+    });
+    renderReaderBody();
+  });
+
+  document.getElementById('btn-back').addEventListener('click', closeReader);
+  document.getElementById('btn-size-up').addEventListener('click', function () {
+    readSize = Math.min(24, readSize + 1);
+    applyReadSize(true);
+  });
+  document.getElementById('btn-size-down').addEventListener('click', function () {
+    readSize = Math.max(14, readSize - 1);
+    applyReadSize(true);
+  });
+
+  function applyReadSize(persist) {
+    document.documentElement.style.setProperty('--read-size', readSize + 'px');
+    if (persist) localStorage.setItem('notes-read-size', String(readSize));
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function highlightHtml(text) {
+    var safe = escapeHtml(text);
+    if (!query) return safe;
+    var q = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (!q) return safe;
+    try {
+      return safe.replace(new RegExp('(' + q + ')', 'ig'), '<mark class="hit">$1</mark>');
+    } catch (e) {
+      return safe;
+    }
+  }
+
+  function bookHay(b) {
+    var parts = [b.title, b.author];
+    (b.highlights || []).forEach(function (h) { parts.push(h.text, h.chapter); });
+    (b.ideas || []).forEach(function (i) { parts.push(i.content, i.abstract, i.chapter); });
+    return parts.join(' ').toLowerCase();
+  }
+
+  function matches(b) {
+    if (mode === 'hl' && !(b.hlCount > 0)) return false;
+    if (mode === 'idea' && !(b.ideaCount > 0)) return false;
+    if (!query) return true;
+    return bookHay(b).indexOf(query) !== -1;
+  }
+
+  function firstPreview(b) {
+    if (mode !== 'idea' && b.highlights && b.highlights.length) return b.highlights[0].text || '';
+    if (b.ideas && b.ideas.length) {
+      return b.ideas[0].content || b.ideas[0].abstract || '';
+    }
+    if (b.highlights && b.highlights.length) return b.highlights[0].text || '';
+    return '';
+  }
+
+  function coverHtml(b) {
+    if (b.cover) {
+      return '<img class="cover" loading="lazy" decoding="async" alt="" src="' +
+        escapeHtml(b.cover) +
+        '" onerror="this.outerHTML=\'<div class=cover-fallback>书</div>\'">';
+    }
+    return '<div class="cover-fallback">书</div>';
+  }
+
+  function renderList() {
+    var books = NOTES.filter(matches);
+    shownCount.textContent = books.length + '/' + NOTES.length;
+    listEl.innerHTML = '';
+    if (!books.length) {
+      emptyEl.hidden = false;
+      return;
+    }
+    emptyEl.hidden = true;
+    var frag = document.createDocumentFragment();
+    books.forEach(function (b) {
+      var card = document.createElement('article');
+      card.className = 'book';
+      card.setAttribute('role', 'button');
+      card.tabIndex = 0;
+      card.dataset.id = b.id;
+      var preview = firstPreview(b);
+      card.innerHTML =
+        coverHtml(b) +
+        '<div class="info">' +
+          '<div class="title">' + highlightHtml(b.title) + '</div>' +
+          '<div class="author">' + escapeHtml(b.author) + '</div>' +
+          '<div class="meta-row">' +
+            (b.hlCount ? ('<span>划线 ' + b.hlCount + '</span>') : '') +
+            (b.ideaCount ? ('<span>想法 ' + b.ideaCount + '</span>') : '') +
+            (b.progress != null ? ('<span>进度 ' + b.progress + '%</span>') : '') +
+          '</div>' +
+          (preview ? ('<div class="preview">' + highlightHtml(preview) + '</div>') : '') +
+        '</div>' +
+        '<div class="chev" aria-hidden="true">›</div>';
+      card.addEventListener('click', function () { openReader(b.id); });
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openReader(b.id);
+        }
+      });
+      frag.appendChild(card);
+    });
+    listEl.appendChild(frag);
+  }
+
+  function openReader(id) {
+    var b = byId.get(String(id));
+    if (!b) return;
+    currentBook = b;
+    readerTab = mode === 'idea' ? 'idea' : (mode === 'hl' ? 'hl' : 'all');
+    document.querySelectorAll('#r-tabs .chip').forEach(function (c) {
+      c.classList.toggle('active', c.getAttribute('data-rtab') === readerTab);
+    });
+    rTitle.textContent = b.title || '';
+    rAuthor.textContent = b.author || '';
+    rMeta.innerHTML =
+      (b.hlCount ? ('<span>划线 ' + b.hlCount + '</span>') : '') +
+      (b.ideaCount ? ('<span>想法 ' + b.ideaCount + '</span>') : '') +
+      (b.progress != null ? ('<span>进度 ' + b.progress + '%</span>') : '');
+    renderReaderBody();
+    document.body.classList.add('reading');
+    reader.hidden = false;
+    window.scrollTo(0, 0);
+    try { history.pushState({ notesReader: true, id: b.id }, '', '#book=' + encodeURIComponent(b.id)); }
+    catch (e) {}
+  }
+
+  function closeReader() {
+    document.body.classList.remove('reading');
+    reader.hidden = true;
+    currentBook = null;
+    if (location.hash.indexOf('book=') !== -1) {
+      try { history.pushState(null, '', location.pathname + location.search); }
+      catch (e) { location.hash = ''; }
+    }
+  }
+
+  function groupByChapter(items, kind) {
+    var map = new Map();
+    (items || []).forEach(function (it) {
+      var ch = (it.chapter || '').trim() || '未标注章节';
+      if (!map.has(ch)) map.set(ch, []);
+      map.get(ch).push({ kind: kind, item: it });
+    });
+    return map;
+  }
+
+  function mergeChapterMaps(maps) {
+    var order = [];
+    var merged = new Map();
+    maps.forEach(function (m) {
+      m.forEach(function (arr, ch) {
+        if (!merged.has(ch)) {
+          merged.set(ch, []);
+          order.push(ch);
+        }
+        Array.prototype.push.apply(merged.get(ch), arr);
+      });
+    });
+    // Keep first-seen chapter order; put 未标注章节 at end
+    order.sort(function (a, b) {
+      if (a === '未标注章节') return 1;
+      if (b === '未标注章节') return -1;
+      return 0;
+    });
+    return { order: order, merged: merged };
+  }
+
+  function renderReaderBody() {
+    if (!currentBook) return;
+    var b = currentBook;
+    var hls = b.highlights || [];
+    var ideas = b.ideas || [];
+    if (query) {
+      var q = query;
+      hls = hls.filter(function (h) {
+        return ((h.text || '') + ' ' + (h.chapter || '')).toLowerCase().indexOf(q) !== -1;
+      });
+      ideas = ideas.filter(function (i) {
+        return ((i.content || '') + ' ' + (i.abstract || '') + ' ' + (i.chapter || '')).toLowerCase().indexOf(q) !== -1;
+      });
+    }
+    if (readerTab === 'hl') ideas = [];
+    if (readerTab === 'idea') hls = [];
+
+    if (!hls.length && !ideas.length) {
+      rContent.innerHTML = '<div class="reader-empty">这一分类下没有内容</div>';
+      return;
+    }
+
+    var grouped = mergeChapterMaps([
+      groupByChapter(hls, 'hl'),
+      groupByChapter(ideas, 'idea')
+    ]);
+
+    var html = '';
+    grouped.order.forEach(function (ch) {
+      var arr = grouped.merged.get(ch) || [];
+      html += '<section class="chapter-block">';
+      html += '<h3 class="chapter-title"><span>' + escapeHtml(ch) + '</span></h3>';
+      arr.forEach(function (entry) {
+        var it = entry.item;
+        if (entry.kind === 'hl') {
+          html += '<article class="note hl">';
+          html += '<div class="kind">划线</div>';
+          html += '<div class="txt">' + highlightHtml(it.text || '') + '</div>';
+          html += '<div class="src"><span>' + escapeHtml(it.date || '') + '</span>';
+          html += '<button type="button" class="copy" data-copy="' + encodeURIComponent(it.text || '') + '">复制</button></div>';
+          html += '</article>';
+        } else {
+          html += '<article class="note idea">';
+          html += '<div class="kind">想法</div>';
+          if (it.abstract) {
+            html += '<div class="abs">「' + highlightHtml(it.abstract) + '」</div>';
+          }
+          if (it.content) {
+            html += '<div class="txt">' + highlightHtml(it.content) + '</div>';
+          }
+          var copyPayload = [it.abstract, it.content].filter(Boolean).join('\n');
+          html += '<div class="src"><span>' + escapeHtml(it.date || '') + '</span>';
+          html += '<button type="button" class="copy" data-copy="' + encodeURIComponent(copyPayload) + '">复制</button></div>';
+          html += '</article>';
+        }
+      });
+      html += '</section>';
+    });
+
+    html += '<div class="reader-actions">';
+    if (b.link) {
+      html += '<a href="' + escapeHtml(b.link) + '" target="_blank" rel="noopener noreferrer">打开微信读书</a>';
+    }
+    html += '<button type="button" id="btn-copy-all">复制本页全部</button>';
+    html += '<button type="button" id="btn-back-bottom">返回列表</button>';
+    html += '</div>';
+
+    rContent.innerHTML = html;
+
+    rContent.querySelectorAll('.copy').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var raw = btn.getAttribute('data-copy') || '';
+        try { copyText(decodeURIComponent(raw)); }
+        catch (err) { copyText(raw); }
+      });
+    });
+    var copyAll = document.getElementById('btn-copy-all');
+    if (copyAll) {
+      copyAll.addEventListener('click', function () {
+        var chunks = [];
+        chunks.push('《' + (b.title || '') + '》' + (b.author ? ' · ' + b.author : ''));
+        grouped.order.forEach(function (ch) {
+          chunks.push('\n【' + ch + '】');
+          (grouped.merged.get(ch) || []).forEach(function (entry) {
+            var it = entry.item;
+            if (entry.kind === 'hl') {
+              chunks.push('> ' + (it.text || ''));
+            } else {
+              if (it.abstract) chunks.push('原文：' + it.abstract);
+              if (it.content) chunks.push('想法：' + it.content);
+            }
+          });
+        });
+        copyText(chunks.join('\n'));
+      });
+    }
+    var backBottom = document.getElementById('btn-back-bottom');
+    if (backBottom) backBottom.addEventListener('click', closeReader);
+  }
+
+  function copyText(text) {
+    if (!text) return;
+    function ok() { showToast('已复制'); }
+    function fail() { showToast('复制失败'); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok).catch(function () {
+        legacyCopy(text) ? ok() : fail();
+      });
+    } else {
+      legacyCopy(text) ? ok() : fail();
+    }
+  }
+
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  var toastTimer = null;
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1400);
+  }
+
+  var t = null;
+  qInput.addEventListener('input', function () {
+    clearTimeout(t);
+    t = setTimeout(function () {
+      query = qInput.value.trim().toLowerCase();
+      renderList();
+      if (currentBook) renderReaderBody();
+    }, 120);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    var tag = (e.target && e.target.tagName || '').toLowerCase();
+    var typing = tag === 'input' || tag === 'textarea' || (e.target && e.target.isContentEditable);
+    if ((e.key === 'Escape' || e.key === 'Esc') && currentBook) {
+      e.preventDefault();
+      closeReader();
+      return;
+    }
+    if (typing) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === 'h' || e.key === 'H') {
+      e.preventDefault();
+      location.href = 'index.html';
+      return;
+    }
+    if ((e.key === '=' || e.key === '+') && currentBook) {
+      e.preventDefault();
+      readSize = Math.min(24, readSize + 1);
+      applyReadSize(true);
+    }
+    if ((e.key === '-' || e.key === '_') && currentBook) {
+      e.preventDefault();
+      readSize = Math.max(14, readSize - 1);
+      applyReadSize(true);
+    }
+  });
+
+  window.addEventListener('popstate', function () {
+    if (currentBook) closeReader();
+  });
+
+  // deep link #book=id
+  function tryOpenFromHash() {
+    var m = location.hash.match(/book=([^&]+)/);
+    if (!m) return;
+    try { openReader(decodeURIComponent(m[1])); } catch (e) {}
+  }
+
+  renderList();
+  tryOpenFromHash();
+})();
+</script>
+</body>
+</html>
