@@ -454,22 +454,34 @@ body {
   font-size: 0.7em; opacity: 0.5;
 }
 
-/* Annotation card */
+/* Annotation card（注释页：赏析/背景字号加大） */
 .annotation-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 22px 26px;
   margin-bottom: 16px;
-  line-height: 1.9; font-size: 0.95em;
+  line-height: 1.9;
+  font-size: 1.9em; /* 原约 0.95em，约加大一倍 */
 }
 .annotation-card .ann-label {
-  font-size: 0.75em; font-weight: 700;
+  font-size: 0.85em; /* 相对卡片已放大的基数 */
+  font-weight: 700;
   color: var(--accent);
   letter-spacing: 2px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
-.annotation-card .ann-body { color: var(--text); }
+.annotation-card .ann-body {
+  color: var(--text);
+  font-size: 1em;
+  line-height: 1.85;
+}
+
+/* 注释页正文：相对常用字号约一半 */
+.work-text.annotate-main-text {
+  text-align: left;
+  opacity: 0.92;
+}
 
 /* Stats bar */
 .stats-bar {

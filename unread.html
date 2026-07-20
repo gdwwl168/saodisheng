@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="cangjingge-theme">
+<meta name="cjg-theme-light" content="dark">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="扫地僧 · 未读书单 — 微信读书尚未开读">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="未读书单">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<title>未读书单 · 扫地僧</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --text: #3d3226;
+  --text-muted: rgba(61,50,38,0.55);
+  --accent: #8b4513;
+  --gold: #c9a96e;
+  --card-bg: #faf7f2;
+  --border: #d4c5a9;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --tag-bg: #ede4d3;
+  --input-bg: #fff;
+  --chip-active: #8b4513;
+  --chip-active-text: #faf7f2;
+  --cover-bg: #e8dfd0;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a2e;
+  --text: #d4c5a9;
+  --text-muted: rgba(212,197,169,0.55);
+  --accent: #c9a96e;
+  --gold: #c9a96e;
+  --card-bg: #252540;
+  --border: #3a3a55;
+  --shadow: 0 2px 16px rgba(0,0,0,0.3);
+  --tag-bg: #2a2a40;
+  --input-bg: #1f1f35;
+  --chip-active: #c9a96e;
+  --chip-active-text: #1a1a2e;
+  --cover-bg: #2a2a40;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Microsoft YaHei", serif;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.3s, color 0.3s;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px 14px calc(28px + var(--safe-bottom));
+}
+
+.header {
+  text-align: center;
+  padding: 18px 8px 8px;
+}
+
+.header .eyebrow {
+  font-size: 0.78em;
+  letter-spacing: 0.28em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.header h1 {
+  font-size: 1.85em;
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  font-weight: 700;
+}
+
+.header .sub {
+  margin-top: 10px;
+  font-size: 0.92em;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.nav-links a {
+  font-size: 0.82em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+.nav-links a.here {
+  color: var(--chip-active-text);
+  background: var(--chip-active);
+  border-color: var(--chip-active);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 18px 0 14px;
+}
+
+.stat {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.stat .num {
+  font-size: 1.35em;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat .label {
+  margin-top: 4px;
+  font-size: 0.75em;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 10px 0 8px;
+  margin: 0 -2px;
+}
+
+.search-wrap {
+  position: relative;
+}
+
+.search-wrap input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 12px 40px 12px 14px;
+  font-size: 16px;
+  outline: none;
+  font-family: inherit;
+}
+
+.search-wrap input::placeholder { color: var(--text-muted); }
+
+.search-wrap .count {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.78em;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 2px 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 0.82em;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.chip.active {
+  background: var(--chip-active);
+  color: var(--chip-active-text);
+  border-color: var(--chip-active);
+}
+
+.years {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.years::-webkit-scrollbar { display: none; }
+
+.year-btn {
+  flex: 0 0 auto;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.82em;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  border-bottom: 2px solid transparent;
+}
+.year-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 10px;
+  margin-top: 14px;
+}
+
+@media (min-width: 560px) {
+  .grid { grid-template-columns: repeat(4, 1fr); gap: 16px 12px; }
+}
+@media (min-width: 820px) {
+  .grid { grid-template-columns: repeat(5, 1fr); }
+  .page { padding: 28px 20px 40px; }
+  .header h1 { font-size: 2.2em; }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-width: 0;
+}
+.card:active { transform: scale(0.98); }
+
+.cover {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--cover-bg);
+  overflow: hidden;
+}
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cover .fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  text-align: center;
+  font-size: 0.78em;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+.cover .badge {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  background: rgba(0,0,0,0.55);
+  color: #f5e6c8;
+  font-size: 0.68em;
+  padding: 2px 6px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.meta {
+  padding: 8px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 72px;
+}
+.meta .title {
+  font-size: 0.86em;
+  line-height: 1.35;
+  font-weight: 700;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.meta .author {
+  font-size: 0.72em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.meta .date {
+  font-size: 0.68em;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.footer {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 0.78em;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+}
+
+.back {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--accent);
+  font-size: 0.88em;
+  letter-spacing: 0.08em;
+}
+
+.home-btn {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 50;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--accent);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15em;
+  line-height: 1;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.home-btn:active { transform: scale(0.95); }
+@media (min-width: 560px) {
+  .home-btn { top: 18px; left: 18px; }
+}
+</style>
+</head>
+<body>
+<a class="home-btn" href="index.html" title="回首页 (H)" aria-label="回首页">🏠</a>
+<div class="page">
+  <header class="header">
+    <div class="eyebrow">微信读书 · 尚未开读</div>
+    <h1>未读书单</h1>
+    <p class="sub">共 <strong id="total-num">215</strong> 本 · 书架上还没读过 · 按书籍更新时间倒序</p>
+    <div class="nav-links">
+      <a href="reading.html">在读</a>
+      <a href="readed.html">已读完</a>
+      <a class="here" href="unread.html">未读</a>
+    </div>
+  </header>
+
+  <section class="stats" aria-label="统计">
+    <div class="stat"><div class="num" id="stat-total">215</div><div class="label">未读</div></div>
+    <div class="stat"><div class="num" id="stat-cats">—</div><div class="label">分类</div></div>
+    <div class="stat"><div class="num" id="stat-years">—</div><div class="label">更新年份</div></div>
+  </section>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input id="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="搜索书名 / 作者 / 分类" aria-label="搜索">
+      <span class="count" id="shown-count"></span>
+    </div>
+    <div class="chips" id="cat-chips" role="tablist" aria-label="分类筛选"></div>
+    <div class="years" id="year-chips" role="tablist" aria-label="年份筛选"></div>
+  </div>
+
+  <main class="grid" id="grid" aria-live="polite"></main>
+  <div class="empty" id="empty" hidden>没有匹配的书，换个关键词试试。</div>
+
+  <footer class="footer">
+    <div>扫地僧 · 藏经阁</div>
+    <a class="back" href="index.html">← 返回首页</a>
+  </footer>
+</div>
+
+<script>
+const BOOKS = [{"id": "24020241", "title": "佛陀传：全世界影响力最大的佛陀传记", "author": "[法]一行禅师", "cover": "https://cdn.weread.qq.com/weread/cover/39/YueWen_24020241/t6_YueWen_24020241.jpg", "category": "哲学宗教-宗教", "catMain": "哲学宗教", "date": "2026-07-09", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=67532750716e85116752328", "secret": 0}, {"id": "36941059", "title": "文化伟人代表作图释书系：工具论", "author": "[古希腊]亚里士多德", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/59/36941059/t6_36941059.jpg", "category": "哲学宗教-逻辑学", "catMain": "哲学宗教", "date": "2026-06-22", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=0ce324407233ad030ce6828", "secret": 0}, {"id": "810506", "title": "牛棚杂忆", "author": "季羡林", "cover": "https://cdn.weread.qq.com/weread/cover/72/yuewen_810506/t6_yuewen_8105061720689580.jpg", "category": "文学-散文杂著", "catMain": "文学", "date": "2026-06-08", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=90e324305c5e0a90ee8b49e", "secret": 0}, {"id": "26767631", "title": "夜色温柔（读客三个圈经典文库）", "author": "菲茨杰拉德", "cover": "https://cdn.weread.qq.com/weread/cover/60/YueWen_26767631/t6_YueWen_26767631.jpg", "category": "精品小说-社会小说", "catMain": "精品小说", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=635325907198710f635ac23", "secret": 0}, {"id": "916782", "title": "王羲之行书", "author": "张恒国", "cover": "https://cdn.weread.qq.com/weread/cover/35/YueWen_916782/t6_YueWen_916782.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=938323e05dfd2e938d9d89d", "secret": 0}, {"id": "916771", "title": "欧阳询楷书", "author": "张恒国", "cover": "https://cdn.weread.qq.com/weread/cover/3/YueWen_916771/t6_YueWen_916771.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=abf329205dfd23abf0fea67", "secret": 0}, {"id": "30067269", "title": "大话西方艺术史", "author": "意公子", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/269/30067269/t6_30067269.jpg", "category": "艺术-理论", "catMain": "艺术", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=5cd3213071caca455cde1e6", "secret": 0}, {"id": "26001269", "title": "战争与和平（全4册|读客三个圈经典文库）", "author": "列夫·托尔斯泰", "cover": "https://cdn.weread.qq.com/weread/cover/84/YueWen_26001269/t6_YueWen_26001269.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=9dc321b0718cbf759dc79a5", "secret": 0}, {"id": "812680", "title": "潜规则：中国历史中的真实游戏", "author": "吴思", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/680/812680/t6_812680.jpg", "category": "历史-中国古代", "catMain": "历史", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=03b32a705c668803be75fde", "secret": 0}, {"id": "914786", "title": "华杉讲透《孟子》", "author": "华杉", "cover": "https://cdn.weread.qq.com/weread/cover/57/YueWen_914786/t6_YueWen_914786.jpg", "category": "哲学宗教-东方哲学", "catMain": "哲学宗教", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=eef32d105df562eefdb9390", "secret": 0}, {"id": "750528", "title": "永恒的终结", "author": "艾萨克·阿西莫夫", "cover": "https://cdn.weread.qq.com/weread/cover/49/YueWen_750528/t6_YueWen_750528.jpg", "category": "精品小说-科幻小说", "catMain": "精品小说", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=f6432a905b73c0f64797a8d", "secret": 0}, {"id": "25794247", "title": "你也能写一手好的毛笔字：楷书", "author": "高育娟", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/247/25794247/t6_25794247.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2026-04-21", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=47c32600718996c747cf2e8", "secret": 0}, {"id": "26318970", "title": "追忆似水年华（全集）", "author": "[法]普鲁斯特", "cover": "https://cdn.weread.qq.com/weread/cover/52/YueWen_26318970/t6_YueWen_26318970.jpg", "category": "精品小说-社会小说", "catMain": "精品小说", "date": "2026-04-17", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=24a320007191987a24a4603", "secret": 0}, {"id": "841896", "title": "静静的顿河（全集）", "author": "[苏联]米哈依尔·肖洛霍夫", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/896/841896/t6_841896.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2026-02-02", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=95032d505cd8a8950fb6077", "secret": 0}, {"id": "794622", "title": "云林石谱", "author": "[宋]杜绾", "cover": "https://cdn.weread.qq.com/weread/cover/88/yuewen_794622/t6_yuewen_7946221679655338.jpg", "category": "历史-历史典籍", "catMain": "历史", "date": "2026-01-12", "year": 2026, "link": "https://weread.qq.com/book-detail?type=1&v=b1332e405c1ffeb13f56430", "secret": 0}, {"id": "26541476", "title": "吸引力法则：让你成就财富、成功与健康的秘密法则（全新升级版）", "author": "华莱士·D.沃特尔斯", "cover": "https://cdn.weread.qq.com/weread/cover/53/YueWen_26541476/t6_YueWen_26541476.jpg", "category": "心理-积极心理学", "catMain": "心理", "date": "2025-12-15", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=f27321807194fda4f278211", "secret": 0}, {"id": "26956552", "title": "商界局外人", "author": "威廉·桑代克", "cover": "https://cdn.weread.qq.com/weread/cover/72/YueWen_26956552/t6_YueWen_26956552.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2025-12-08", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=4ca32160719b53084ca47ae", "secret": 0}, {"id": "823419", "title": "双脑记：认知神经科学之父加扎尼加自传", "author": "迈克尔·加扎尼加", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/419/823419/t6_823419.jpg", "category": "心理-心理学研究", "catMain": "心理", "date": "2025-12-08", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=97032a305c907b970bc6185", "secret": 0}, {"id": "823439", "title": "让孩子远离焦虑：帮助孩子摆脱不安、害怕与恐惧的心理课", "author": "塔玛·琼斯基", "cover": "https://cdn.weread.qq.com/weread/cover/65/YueWen_823439/t6_YueWen_823439.jpg", "category": "心理-发展心理学", "catMain": "心理", "date": "2025-12-08", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=eb6320805c908feb6967aa4", "secret": 0}, {"id": "23691331", "title": "笛卡尔的错误：情绪、推理和大脑", "author": "安东尼奥·达马西奥", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/331/23691331/t6_23691331.jpg", "category": "心理-心理学研究", "catMain": "心理", "date": "2025-12-08", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=04c320807169804304c879d", "secret": 0}, {"id": "23691378", "title": "爸爸军团", "author": "布鲁斯·费勒", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/378/23691378/t6_23691378.jpg", "category": "教育学习-教材", "catMain": "教育学习", "date": "2025-12-08", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=5623260071698072562a6a8", "secret": 0}, {"id": "695128", "title": "医生的精进：从仁心仁术到追求卓越", "author": "阿图·葛文德", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/128/695128/t6_695128.jpg", "category": "社会文化-社科", "catMain": "社会文化", "date": "2025-12-08", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=bd2326d05a9b58bd22fc3e3", "secret": 0}, {"id": "622117", "title": "全新思维：决胜未来的6大能力", "author": "平克", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/117/622117/t6_622117.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2025-12-08", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=10832100597e25108e641e4", "secret": 0}, {"id": "26454342", "title": "证券分析：投资者的圣经", "author": "[美]本杰明·格雷厄姆 [美]戴维·多德", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/342/26454342/t6_26454342.jpg", "category": "经济理财-理财", "catMain": "经济理财", "date": "2025-12-08", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=52032b107193a9465202478", "secret": 0}, {"id": "842305", "title": "奥德赛（第一至六卷）", "author": "[古希腊]荷马 罗念生 王焕生", "cover": "https://cdn.weread.qq.com/weread/cover/58/YueWen_842305/t6_YueWen_842305.jpg", "category": "文学-现代诗歌", "catMain": "文学", "date": "2025-11-28", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=56232dc05cda415628c06a2", "secret": 0}, {"id": "29348579", "title": "市场的逻辑（第三版）", "author": "张维迎", "cover": "https://cdn.weread.qq.com/weread/cover/95/YueWen_29348579/t6_YueWen_29348579.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2025-11-04", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=08432be071bfd2e3084060c", "secret": 0}, {"id": "852156", "title": "出梁庄记", "author": "梁鸿", "cover": "https://cdn.weread.qq.com/weread/cover/65/YueWen_852156/t6_YueWen_852156.jpg", "category": "社会文化-社科", "catMain": "社会文化", "date": "2025-11-04", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=9fb326405d00bc9fbcf4c30", "secret": 0}, {"id": "857737", "title": "尘土", "author": "贾行家", "cover": "https://cdn.weread.qq.com/weread/cover/25/YueWen_857737/t6_YueWen_857737.jpg", "category": "文学-散文杂著", "catMain": "文学", "date": "2025-11-04", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=936327d05d16899364c7fbb", "secret": 0}, {"id": "25291560", "title": "荒原狼（译文经典）", "author": "[德]赫尔曼·黑塞", "cover": "https://cdn.weread.qq.com/weread/cover/36/YueWen_25291560/t6_YueWen_25291560.jpg", "category": "精品小说-社会小说", "catMain": "精品小说", "date": "2025-10-15", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=e6c328207181eb28e6cdb43", "secret": 0}, {"id": "22739886", "title": "百年战争简史", "author": "德斯蒙德·苏厄德", "cover": "https://cdn.weread.qq.com/weread/cover/9/YueWen_22739886/t6_YueWen_22739886.jpg", "category": "历史-世界史", "catMain": "历史", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=c1a32030715afbaec1a3675", "secret": 0}, {"id": "22739874", "title": "现代世界史（插图第10版）（套装共2册）", "author": "R.R.帕尔默 乔·科尔顿 劳埃德·克莱默", "cover": "https://cdn.weread.qq.com/weread/cover/76/YueWen_22739874/t6_YueWen_22739874.jpg", "category": "历史-世界史", "catMain": "历史", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=363328c0715afba2363ecf9", "secret": 0}, {"id": "909882", "title": "微习惯：简单到不可能失败的自我管理法则", "author": "斯蒂芬·盖斯", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/882/909882/t6_909882.jpg", "category": "个人成长-人生哲学", "catMain": "个人成长", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=495326205de23a49561a05d", "secret": 0}, {"id": "3300068584", "title": "失落的卫星 : 深入中亚大陆的旅程", "author": "刘子超", "cover": "https://cdn.weread.qq.com/weread/cover/46/cpplatform_ct2vwjvzpckgxe2gul5r5w/t6_cpplatform_ct2vwjvzpckgxe2gul5r5w1692772753.jpg", "category": "精品小说-纪实小说", "catMain": "精品小说", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=40532350813ab814ag014f54", "secret": 0}, {"id": "25566716", "title": "尼采的锤子：哲学大师的25种思维工具", "author": "尼古拉斯·费恩", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/716/25566716/t6_25566716.jpg", "category": "哲学宗教-逻辑学", "catMain": "哲学宗教", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=ba4323e071861dfcba4453a", "secret": 0}, {"id": "24281357", "title": "《颜勤礼碑》书法导学", "author": "郝玉书", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/357/24281357/t6_24281357.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=79f320807172810d79f521b", "secret": 0}, {"id": "831442", "title": "梦的解析", "author": "弗洛伊德", "cover": "https://cdn.weread.qq.com/weread/cover/28/YueWen_831442/t6_YueWen_831442.jpg", "category": "心理-心理学研究", "catMain": "心理", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=0e932e505cafd20e9c71607", "secret": 0}, {"id": "310963", "title": "一个陌生女人的来信", "author": "茨威格", "cover": "https://cdn.weread.qq.com/weread/cover/28/YueWen_310963/t6_YueWen_310963.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=3d33279054beb33d356dc2a", "secret": 0}, {"id": "846506", "title": "牛津通识读本：海德格尔（中文版）", "author": "迈克尔·英伍德", "cover": "https://cdn.weread.qq.com/weread/cover/45/YueWen_846506/t6_YueWen_846506.jpg", "category": "哲学宗教-西方哲学", "catMain": "哲学宗教", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=44a320e05ceaaa44a25e4bb", "secret": 0}, {"id": "42547238", "title": "元宇宙大投资", "author": "焦娟 易欢欢 毛永丰", "cover": "https://cdn.weread.qq.com/weread/cover/65/YueWen_42547238/t6_YueWen_42547238.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=0f732570728938260f7cbcf", "secret": 0}, {"id": "42547234", "title": "元宇宙", "author": "赵国栋 易欢欢 徐远重", "cover": "https://cdn.weread.qq.com/weread/cover/61/YueWen_42547234/t6_YueWen_42547234.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=72532ac0728938227253e82", "secret": 0}, {"id": "700810", "title": "共情时代", "author": "弗兰斯·德瓦尔", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/810/700810/t6_700810.jpg", "category": "社会文化-社科", "catMain": "社会文化", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=3d232fc05ab18a3d20f8f3b", "secret": 0}, {"id": "846538", "title": "牛津通识读本：量子理论（中文版）", "author": "约翰·波尔金霍恩", "cover": "https://cdn.weread.qq.com/weread/cover/40/YueWen_846538/t6_YueWen_846538.jpg", "category": "科学技术-自然科学", "catMain": "科学技术", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=c2a320a05ceacac2ad54ea6", "secret": 0}, {"id": "846530", "title": "牛津通识读本：佛学概论（中文版）", "author": "关大眠", "cover": "https://cdn.weread.qq.com/weread/cover/32/YueWen_846530/t6_YueWen_846530.jpg", "category": "哲学宗教-宗教", "catMain": "哲学宗教", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=31732c805ceac2317f425aa", "secret": 0}, {"id": "846513", "title": "牛津通识读本：康德（中文版）", "author": "罗杰·斯克鲁顿", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/513/846513/t6_846513.jpg", "category": "哲学宗教-西方哲学", "catMain": "哲学宗教", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=18432b405ceab1184470485", "secret": 0}, {"id": "846509", "title": "牛津通识读本：数学（中文版）", "author": "蒂莫西·高尔斯", "cover": "https://cdn.weread.qq.com/weread/cover/48/YueWen_846509/t6_YueWen_846509.jpg", "category": "科学技术-自然科学", "catMain": "科学技术", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=10d32ae05ceaad10d6cb087", "secret": 0}, {"id": "846508", "title": "牛津通识读本：文学理论入门（中文版）", "author": "乔纳森·卡勒", "cover": "https://cdn.weread.qq.com/weread/cover/47/YueWen_846508/t6_YueWen_846508.jpg", "category": "文学-文学鉴赏", "catMain": "文学", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=d66326105ceaacd66de76db", "secret": 0}, {"id": "39937938", "title": "牛津通识读本：免疫系统（中文版）", "author": "保罗·克莱纳曼", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/938/39937938/t6_39937938.jpg", "category": "医学健康-医学", "catMain": "医学健康", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=0fe32a70726167920fe9fdc", "secret": 0}, {"id": "922397", "title": "企业生命周期", "author": "伊查克·爱迪思", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/397/922397/t6_922397.jpg", "category": "经济理财-商业", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=b00326805e131db00ea9625", "secret": 0}, {"id": "26923521", "title": "中国政治哲学史（三卷本）（国家出版基金项目；政治哲学史）", "author": "彭永捷 干春松 梁涛", "cover": "https://cdn.weread.qq.com/weread/cover/42/YueWen_26923521/t6_YueWen_26923521.jpg", "category": "政治军事-政治", "catMain": "政治军事", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=aca32a20719ad201aca50c8", "secret": 0}, {"id": "31361462", "title": "认知：人行为背后的思维与智能", "author": "赫伯特·西蒙", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/462/31361462/t6_31361462.jpg", "category": "心理-心理学应用", "catMain": "心理", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=3c932ec071de89b63c9cf3c", "secret": 0}, {"id": "23875144", "title": "中国青铜器（中文版）", "author": "李松", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/144/23875144/t6_23875144.jpg", "category": "社会文化-文化", "catMain": "社会文化", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=c7b327f0716c4e48c7bff73", "secret": 0}, {"id": "25735924", "title": "张迁碑（中华碑帖精粹）", "author": "中华书局编辑部", "cover": "https://cdn.weread.qq.com/weread/cover/81/YueWen_25735924/t6_YueWen_25735924.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=dbe326b07188b2f4dbe561b", "secret": 0}, {"id": "25735910", "title": "王羲之兰亭序四种", "author": "中华书局编辑部", "cover": "https://cdn.weread.qq.com/weread/cover/46/YueWen_25735910/t6_YueWen_25735910.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=b66324907188b2e6b662093", "secret": 0}, {"id": "857079", "title": "论语别裁（全集）", "author": "南怀瑾", "cover": "https://cdn.weread.qq.com/weread/cover/24/YueWen_857079/t6_YueWen_857079.jpg", "category": "哲学宗教-东方哲学", "catMain": "哲学宗教", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=2a932d005d13f72a9b860d1", "secret": 0}, {"id": "3300019014", "title": "活法", "author": "稻盛和夫", "cover": "https://cdn.weread.qq.com/weread/cover/14/3300019014/t6_3300019014.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=1fb32560813ab6dedg014d47", "secret": 0}, {"id": "907771", "title": "黑客与画家（10万册纪念版）", "author": "保罗·格雷厄姆", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/771/907771/t6_907771.jpg", "category": "文学-散文杂著", "catMain": "文学", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=5b9328f05dd9fb5b922d1eb", "secret": 0}, {"id": "36687601", "title": "高效休息法：世界精英这样放松大脑（实操练习版）", "author": "久贺谷亮", "cover": "https://cdn.weread.qq.com/weread/cover/77/YueWen_36687601/t6_YueWen_36687601.jpg", "category": "个人成长-情绪心灵", "catMain": "个人成长", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=a0532580722fcef1a0518a1", "secret": 0}, {"id": "26211962", "title": "推荐系统实践", "author": "项亮", "cover": "https://cdn.weread.qq.com/weread/cover/99/YueWen_26211962/t6_YueWen_26211962.jpg", "category": "计算机-计算机综合", "catMain": "计算机", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=7f432720718ff67a7f40827", "secret": 0}, {"id": "25916160", "title": "无穷的开始：世界进步的本源（第2版）", "author": "戴维·多伊奇", "cover": "https://cdn.weread.qq.com/weread/cover/84/YueWen_25916160/t6_YueWen_25916160.jpg", "category": "科学技术-科学科普", "catMain": "科学技术", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=61932a00718b73006196a3b", "secret": 0}, {"id": "3300020681", "title": "反本能：如何对抗你的习以为常", "author": "卫蓝　著", "cover": "https://cdn.weread.qq.com/weread/cover/81/3300020681/t6_3300020681.jpg", "category": "个人成长-认知思维", "catMain": "个人成长", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=47432da0813ab6e94g0110d3", "secret": 0}, {"id": "847310", "title": "大明王朝1566（全集）", "author": "刘和平", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/310/847310/t6_847310.jpg", "category": "历史-历史小说", "catMain": "历史", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=31732f305cedce317fc3b6a", "secret": 0}, {"id": "597522", "title": "西洋", "author": "刘慈欣", "cover": "https://cdn.weread.qq.com/weread/cover/26/yuewen_597522/t6_yuewen_5975221716963907.jpg", "category": "精品小说-科幻小说", "catMain": "精品小说", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=ea732a80591e12ea7c67c6a", "secret": 0}, {"id": "847812", "title": "循序渐进学Docker", "author": "李金榜 尹烨 刘天斯 陈纯", "cover": "https://cdn.weread.qq.com/weread/cover/46/YueWen_847812/t6_YueWen_847812.jpg", "category": "计算机-计算机综合", "catMain": "计算机", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=28032ce05cefc4280ea63b7", "secret": 0}, {"id": "40796707", "title": "诠释人性：如何用自然科学理解生命、爱与关系", "author": "卡米拉·庞", "cover": "https://cdn.weread.qq.com/weread/cover/38/YueWen_40796707/t6_YueWen_40796707.jpg", "category": "心理-认知与行为", "catMain": "心理", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=15032640726e82231506aaf", "secret": 0}, {"id": "739001", "title": "告别演讲恐惧", "author": "张萌 胡欣 王子璇", "cover": "https://cdn.weread.qq.com/weread/cover/0/YueWen_739001/t6_YueWen_739001.jpg", "category": "个人成长-沟通表达", "catMain": "个人成长", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=709321305b46b9709b0d1d5", "secret": 0}, {"id": "602706", "title": "定位：有史以来对美国营销影响最大的观念", "author": "特劳特", "cover": "https://cdn.weread.qq.com/weread/cover/45/YueWen_602706/t6_YueWen_602706.jpg", "category": "经济理财-商业", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=e6d32090593252e6dab9ab2", "secret": 0}, {"id": "602931", "title": "垂直攀登：稻盛和夫的生命智慧与经营哲学", "author": "王育琨", "cover": "https://cdn.weread.qq.com/weread/cover/55/YueWen_602931/t6_YueWen_602931.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=38e3253059333338e10e46f", "secret": 0}, {"id": "602347", "title": "元认知：改变大脑的顽固思维", "author": "大卫·迪绍夫", "cover": "https://cdn.weread.qq.com/weread/cover/26/YueWen_602347/t6_YueWen_602347.jpg", "category": "哲学宗教-思维科学", "catMain": "哲学宗教", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=0ab32dd05930eb0abc42b01", "secret": 0}, {"id": "912071", "title": "吃掉那只青蛙：博恩·崔西的高效时间管理法则", "author": "[美]博恩·崔西", "cover": "https://cdn.weread.qq.com/weread/cover/48/yuewen_912071/t6_yuewen_9120711721641800.jpg", "category": "个人成长-人在职场", "catMain": "个人成长", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=bac328305deac7bac483585", "secret": 0}, {"id": "34339993", "title": "浪潮之巅——IT创新的战略价值", "author": "克鲁斯林", "cover": "https://cdn.weread.qq.com/weread/cover/3/yuewen_34339993/t6_yuewen_343399931695023744.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=00832910720bfc990088a79", "secret": 0}, {"id": "820124", "title": "身体从未忘记：心理创伤疗愈中的大脑、心智和身体", "author": "范德考克", "cover": "https://cdn.weread.qq.com/weread/cover/73/YueWen_820124/t6_YueWen_820124.jpg", "category": "心理-心理学应用", "catMain": "心理", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=54432bd05c839c54462def6", "secret": 0}, {"id": "31144130", "title": "人人可懂的量子计算", "author": "克里斯·伯恩哈特", "cover": "https://cdn.weread.qq.com/weread/cover/31/YueWen_31144130/t6_YueWen_31144130.jpg", "category": "科学技术-科学科普", "catMain": "科学技术", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=3df32ce071db38c23dfcd3d", "secret": 0}, {"id": "32536497", "title": "小众经济：选择性消费时代的增长对策", "author": "[日]大前研一 BBT大学综合研究所", "cover": "https://cdn.weread.qq.com/weread/cover/77/yuewen_32536497/t6_yuewen_325364971735114801.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=79b329b071f077b179b58a8", "secret": 0}, {"id": "25941912", "title": "超实用儿童心理学：孩子心理和行为背后的真相", "author": "托德老师", "cover": "https://cdn.weread.qq.com/weread/cover/79/YueWen_25941912/t6_YueWen_25941912.jpg", "category": "心理-发展心理学", "catMain": "心理", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=36f32b50718bd79836f3919", "secret": 0}, {"id": "26677470", "title": "积极养育：不焦虑、不愤怒、不沮丧的安心教养术", "author": "[美]杰弗里·伯恩斯坦", "cover": "https://cdn.weread.qq.com/weread/cover/67/yuewen_26677470/t6_yuewen_266774701737448503.jpg", "category": "教育学习-育儿", "catMain": "教育学习", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=19132b30719710de19155fd", "secret": 0}, {"id": "31144126", "title": "大脑是台时光机", "author": "迪恩·博南诺", "cover": "https://cdn.weread.qq.com/weread/cover/6/YueWen_31144126/t6_YueWen_31144126.jpg", "category": "心理-心理学应用", "catMain": "心理", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=60332fe071db38be603e698", "secret": 0}, {"id": "24059443", "title": "低欲望社会：人口老龄化的经济危机与破解之道", "author": "大前研一", "cover": "https://cdn.weread.qq.com/weread/cover/69/yuewen_24059443/t6_yuewen_240594431695623715.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=313322a0716f1e33313022b", "secret": 0}, {"id": "32436156", "title": "宇宙观：一场跨越时空的宇宙探秘之旅", "author": "尼古拉斯·米", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/156/32436156/t6_32436156.jpg", "category": "科学技术-科学科普", "catMain": "科学技术", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=1b932c6071eeefbc1b9c135", "secret": 0}, {"id": "27369021", "title": "速效学习辅导法：60招化解父母焦虑", "author": "斋藤孝", "cover": "https://cdn.weread.qq.com/weread/cover/34/YueWen_27369021/t6_YueWen_27369021.jpg", "category": "教育学习-教育", "catMain": "教育学习", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=7c63204071a19e3d7c6f792", "secret": 0}, {"id": "23839274", "title": "叛逆不是孩子的错：不打、不骂、不动气的温暖教养术（原书第2版）", "author": "杰弗里·伯恩斯坦", "cover": "https://cdn.weread.qq.com/weread/cover/34/YueWen_23839274/t6_YueWen_23839274.jpg", "category": "心理-发展心理学", "catMain": "心理", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=3d732540716bc22a3d792d6", "secret": 0}, {"id": "27651687", "title": "全球人口下降，我们的世界还会好么？（空荡荡的地球+低欲望社会）（全2册）", "author": "达雷尔·布里克 约翰·伊比特森 大前研一", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/687/27651687/t6_27651687.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2025-10-11", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=f4c32ad071a5ee67f4c7c14", "secret": 0}, {"id": "41742918", "title": "武经总要", "author": "官修", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/918/41742918/t6_41742918.jpg", "category": "历史-历史典籍", "catMain": "历史", "date": "2025-10-10", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=6a032a30727cf2466a00e0a", "secret": 0}, {"id": "32282916", "title": "想象的共同体（增订版）", "author": "本尼迪克特·安德森", "cover": "https://cdn.weread.qq.com/weread/cover/41/YueWen_32282916/t6_YueWen_32282916.jpg", "category": "社会文化-社科", "catMain": "社会文化", "date": "2025-09-30", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=f7c3273071ec9924f7c8f9e", "secret": 0}, {"id": "33614980", "title": "中国货币史（校订版）", "author": "彭信威", "cover": "https://cdn.weread.qq.com/weread/cover/72/YueWen_33614980/t6_YueWen_33614980.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2025-09-30", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=db132be07200ec84db127bc", "secret": 0}, {"id": "35239358", "title": "了不起的盖茨比（人文社外国文学名著经典·网格本）", "author": "菲茨杰拉德", "cover": "https://cdn.weread.qq.com/weread/cover/96/YueWen_35239358/t6_YueWen_35239358.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2025-09-26", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=3e432cf07219b5be3e41cce", "secret": 0}, {"id": "567360", "title": "灿烂千阳", "author": "卡勒德·胡赛尼", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/360/567360/t6_567360.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2025-09-01", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=8e4325c058a8408e4894ef4", "secret": 0}, {"id": "41816107", "title": "汉书（谦德国学文库）", "author": "[汉]班固", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/107/41816107/t6_41816107.jpg", "category": "历史-历史读物", "catMain": "历史", "date": "2025-08-15", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=a6632e00727e102ba662b36", "secret": 0}, {"id": "36682143", "title": "怎样临帖（翰墨大家系列）", "author": "邓散木", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/143/36682143/t6_36682143.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2025-04-22", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=c0132e30722fb99fc0115d2", "secret": 0}, {"id": "29793610", "title": "人间词话", "author": "[清]王国维 黄霖等导读", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/610/29793610/t6_29793610.jpg", "category": "文学-文学鉴赏", "catMain": "文学", "date": "2025-03-19", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=4e43250071c69d4a4e4f426", "secret": 0}, {"id": "912834", "title": "前世今生2：总有奇迹降临", "author": "[美]布莱恩·魏斯 [美]艾米·魏斯", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/834/912834/t6_912834.jpg", "category": "哲学宗教-哲学读物", "catMain": "哲学宗教", "date": "2025-03-10", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=0be321e05dedc20be2d34f3", "secret": 0}, {"id": "30839623", "title": "庄子讲读", "author": "方勇", "cover": "https://cdn.weread.qq.com/weread/cover/14/YueWen_30839623/t6_YueWen_30839623.jpg", "category": "文学-文学鉴赏", "catMain": "文学", "date": "2025-02-18", "year": 2025, "link": "https://weread.qq.com/book-detail?type=1&v=df33238071d69347df3b6cb", "secret": 0}, {"id": "184062", "title": "人口原理", "author": "马尔萨斯", "cover": "https://cdn.weread.qq.com/weread/cover/67/YueWen_184062/t6_YueWen_184062.jpg", "category": "社会文化-社科", "catMain": "社会文化", "date": "2024-11-29", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=4193205052cefe4191f9fb4", "secret": 0}, {"id": "32282893", "title": "人的境况", "author": "汉娜·阿伦特", "cover": "https://cdn.weread.qq.com/weread/cover/25/YueWen_32282893/t6_YueWen_32282893.jpg", "category": "哲学宗教-哲学著作", "catMain": "哲学宗教", "date": "2024-06-28", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=07332af071ec990d07362cb", "secret": 0}, {"id": "22927441", "title": "医院管理学案例与实训教程", "author": "张萌 汪胜主编", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/441/22927441/t6_22927441.jpg", "category": "教育学习-教材", "catMain": "教育学习", "date": "2024-06-26", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=acc320b0715dd851acc475b", "secret": 0}, {"id": "910669", "title": "幸福之路", "author": "[英]罗素", "cover": "https://cdn.weread.qq.com/weread/cover/73/YueWen_910669/t6_YueWen_910669.jpg", "category": "哲学宗教-哲学著作", "catMain": "哲学宗教", "date": "2024-06-04", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=e1b32ad05de54de1bcb2dab", "secret": 0}, {"id": "40792938", "title": "杂阿含经", "author": "求那跋陀罗", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/938/40792938/t6_40792938.jpg", "category": "哲学宗教-宗教", "catMain": "哲学宗教", "date": "2024-06-04", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=90f32ae0726e736a90f0c1f", "secret": 0}, {"id": "932127", "title": "忏悔录（译文名著精选）", "author": "[法]卢梭", "cover": "https://cdn.weread.qq.com/weread/cover/66/YueWen_932127/t6_YueWen_932127.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2024-06-04", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=4a8323f05e391f4a8b0e3f1", "secret": 0}, {"id": "845307", "title": "一个孤独漫步者的遐想（果麦经典）", "author": "[法]卢梭", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/307/845307/t6_845307.jpg", "category": "文学-散文杂著", "catMain": "文学", "date": "2024-06-04", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=ba2320105ce5fbba28c9c30", "secret": 0}, {"id": "846172", "title": "社会契约论（果麦经典）", "author": "[法]卢梭", "cover": "https://cdn.weread.qq.com/weread/cover/14/YueWen_846172/t6_YueWen_846172.jpg", "category": "哲学宗教-西方哲学", "catMain": "哲学宗教", "date": "2024-06-04", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=64e327f05ce95c64e54ba39", "secret": 0}, {"id": "920620", "title": "易中天带你读懂中国系列：品人录", "author": "易中天", "cover": "https://cdn.weread.qq.com/weread/cover/97/yuewen_920620/t6_yuewen_9206201717049411.jpg", "category": "人物传记-传记综合", "catMain": "人物传记", "date": "2024-05-30", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=92532e705e0c2c925b4bddb", "secret": 0}, {"id": "921609", "title": "人类的故事（果麦经典）", "author": "房龙", "cover": "https://cdn.weread.qq.com/weread/cover/99/YueWen_921609/t6_YueWen_921609.jpg", "category": "历史-世界史", "catMain": "历史", "date": "2024-05-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=9df321805e10099df08fa46", "secret": 0}, {"id": "921611", "title": "夜色温柔（果麦经典）", "author": "菲茨杰拉德", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/611/921611/t6_921611.jpg", "category": "精品小说-社会小说", "catMain": "精品小说", "date": "2024-05-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=c49326705e100bc49024503", "secret": 0}, {"id": "856632", "title": "那些忧伤的年轻人（果麦经典）", "author": "菲茨杰拉德", "cover": "https://cdn.weread.qq.com/weread/cover/68/YueWen_856632/t6_YueWen_856632.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2024-05-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=277328005d123827750a2ab", "secret": 0}, {"id": "31681513", "title": "人间温柔", "author": "毕淑敏 张炜 范小青", "cover": "https://cdn.weread.qq.com/weread/cover/86/yuewen_31681513/t6_yuewen_316815131709711100.jpg", "category": "文学-散文杂著", "catMain": "文学", "date": "2024-05-11", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=78d3241071e36be978dce76", "secret": 0}, {"id": "31702237", "title": "中国人史纲", "author": "柏杨", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/237/31702237/t6_31702237.jpg", "category": "历史-中国古代", "catMain": "历史", "date": "2024-04-26", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=229326f071e3bcdd229c12c", "secret": 0}, {"id": "25568728", "title": "书店", "author": "[英]佩内洛普·菲茨杰拉德", "cover": "https://cdn.weread.qq.com/weread/cover/25/YueWen_25568728/t6_YueWen_25568728.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2024-04-22", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=30332ea0718625d8303d989", "secret": 0}, {"id": "27477737", "title": "MEMO2018：《三联生活周刊》的观察与态度", "author": "《三联生活周刊》编辑部", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/737/27477737/t6_27477737.jpg", "category": "社会文化-社科", "catMain": "社会文化", "date": "2024-04-03", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=cf932e8071a346e9cf9cbf0", "secret": 0}, {"id": "840991", "title": "黄河青山：黄仁宇回忆录（精装版）", "author": "黄仁宇", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/991/840991/t6_840991.jpg", "category": "人物传记-传记综合", "catMain": "人物传记", "date": "2024-04-03", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=cd132ba05cd51fcd162857a", "secret": 0}, {"id": "824591", "title": "仁者的微笑：《论语》解密", "author": "蔡志忠", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/591/824591/t6_824591.jpg", "category": "哲学宗教-东方哲学", "catMain": "哲学宗教", "date": "2024-04-02", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=794320005c950f7944bd5e8", "secret": 0}, {"id": "824592", "title": "自然箫声的微笑：《庄子》解密", "author": "蔡志忠", "cover": "https://cdn.weread.qq.com/weread/cover/96/YueWen_824592/t6_YueWen_824592.jpg", "category": "哲学宗教-东方哲学", "catMain": "哲学宗教", "date": "2024-04-02", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=046323705c9510046d2b81a", "secret": 0}, {"id": "837380", "title": "开悟者的微笑：禅解密", "author": "蔡志忠", "cover": "https://cdn.weread.qq.com/weread/cover/35/YueWen_837380/t6_YueWen_837380.jpg", "category": "哲学宗教-宗教", "catMain": "哲学宗教", "date": "2024-04-02", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=928323405cc704928abd262", "secret": 0}, {"id": "25812841", "title": "思考的技术", "author": "大前研一", "cover": "https://cdn.weread.qq.com/weread/cover/99/YueWen_25812841/t6_YueWen_25812841.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2024-04-02", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=546326c07189df695466b16", "secret": 0}, {"id": "846562", "title": "超译尼采：从尊敬一事无成的自己开始", "author": "尼采", "cover": "https://cdn.weread.qq.com/weread/cover/27/YueWen_846562/t6_YueWen_846562.jpg", "category": "哲学宗教-哲学读物", "catMain": "哲学宗教", "date": "2024-04-02", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=f51327305ceae2f51d27e27", "secret": 0}, {"id": "25848832", "title": "从受欢迎到被需要：高情商决定你的社交价值", "author": "张萌", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/832/25848832/t6_25848832.jpg", "category": "个人成长-情绪心灵", "catMain": "个人成长", "date": "2024-03-28", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=7e732060718a6c007e7c081", "secret": 0}, {"id": "25890834", "title": "看日本：直击日本现状（套装共4册）", "author": "傅高义 大前研一 三浦展", "cover": "https://cdn.weread.qq.com/weread/cover/61/YueWen_25890834/t6_YueWen_25890834.jpg", "category": "社会文化-社科", "catMain": "社会文化", "date": "2024-03-27", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=081322e0718b1012081530a", "secret": 0}, {"id": "25291572", "title": "人间天堂（菲茨杰拉德文集2016）", "author": "菲茨杰拉德", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/572/25291572/t6_25291572.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2024-03-27", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=5a5328107181eb345a5d076", "secret": 0}, {"id": "25291570", "title": "爵士时代的故事（菲茨杰拉德文集2016）", "author": "菲茨杰拉德", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/570/25291570/t6_25291570.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2024-03-27", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=ebb32bf07181eb32ebb526d", "secret": 0}, {"id": "24147398", "title": "再会，谢谢所有的鱼", "author": "道格拉斯·亚当斯", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/398/24147398/t6_24147398.jpg", "category": "精品小说-科幻小说", "catMain": "精品小说", "date": "2024-03-27", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=6c932220717075c66c92b2a", "secret": 0}, {"id": "637323", "title": "眨眼之间", "author": "[加]马尔科姆·格拉德威尔", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/323/637323/t6_637323.jpg", "category": "哲学宗教-思维科学", "catMain": "哲学宗教", "date": "2024-03-25", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=f1d3256059b98bf1d81589f", "secret": 0}, {"id": "37670600", "title": "落字成暖，一生念安", "author": "季羡林", "cover": "https://cdn.weread.qq.com/weread/cover/55/YueWen_37670600/t6_YueWen_37670600.jpg", "category": "文学-经典作品", "catMain": "文学", "date": "2024-03-22", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=63d32980723ecec863d8a7d", "secret": 0}, {"id": "26551267", "title": "童年的秘密", "author": "蒙台梭利", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/267/26551267/t6_26551267.jpg", "category": "教育学习-育儿", "catMain": "教育学习", "date": "2024-02-22", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=1be32e50719523e31bef162", "secret": 0}, {"id": "22717304", "title": "城市的胜利", "author": "爱德华·格莱泽", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/304/22717304/t6_22717304.jpg", "category": "社会文化-社科", "catMain": "社会文化", "date": "2024-02-22", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=6ad32ec0715aa3786ada8bb", "secret": 0}, {"id": "24051294", "title": "书法的故事", "author": "任平", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/294/24051294/t6_24051294.jpg", "category": "社会文化-文化", "catMain": "社会文化", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=9b332000716efe5e9b3c580", "secret": 0}, {"id": "36721749", "title": "徐文兵、梁冬对话《黄帝内经·灵枢·通天》", "author": "徐文兵 梁冬", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/749/36721749/t6_36721749.jpg", "category": "医学健康-健康", "catMain": "医学健康", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=68e320d07230545568e1023", "secret": 0}, {"id": "834768", "title": "八万四千问", "author": "宗萨蒋扬钦哲仁波切", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/768/834768/t6_834768.jpg", "category": "哲学宗教-宗教", "catMain": "哲学宗教", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=5a4328305cbcd05a49b15f6", "secret": 0}, {"id": "22973576", "title": "游子吟", "author": "“中国唱诗班”系列动画团队著绘 果麦改编", "cover": "https://cdn.weread.qq.com/weread/cover/7/YueWen_22973576/t6_YueWen_22973576.jpg", "category": "文学-古代诗词", "catMain": "文学", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=e21323c0715e8c88e21ebcb", "secret": 0}, {"id": "215954", "title": "三十六大", "author": "冯唐", "cover": "https://cdn.weread.qq.com/weread/cover/66/YueWen_215954/t6_YueWen_215954.jpg", "category": "文学-散文杂著", "catMain": "文学", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=e6e32920534b92e6e3baf43", "secret": 0}, {"id": "857351", "title": "杰克韦尔奇套装：赢＋赢的答案＋商业的本质（中信管理经典必读）", "author": "苏茜·韦尔奇 杰克·韦尔奇", "cover": "https://cdn.weread.qq.com/weread/cover/37/YueWen_857351/t6_YueWen_857351.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=175323c05d1507175547a0d", "secret": 0}, {"id": "857335", "title": "影响未来的新科技新产业", "author": "中国社会科学院工业经济研究所未来产业研究组", "cover": "https://cdn.weread.qq.com/weread/cover/79/YueWen_857335/t6_YueWen_857335.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=29b32a205d14f729b77f118", "secret": 0}, {"id": "42867302", "title": "论中国经济的发展", "author": "林毅夫 王勇 赵秋运", "cover": "https://cdn.weread.qq.com/weread/cover/30/YueWen_42867302/t6_YueWen_42867302.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=41032a10728e1a664103396", "secret": 0}, {"id": "838899", "title": "中国崛起不可承受之错", "author": "郑永年 杨丽君", "cover": "https://cdn.weread.qq.com/weread/cover/71/YueWen_838899/t6_YueWen_838899.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=41a329505cccf341aeeb3a1", "secret": 0}, {"id": "822675", "title": "扎克伯格的商业秘密：社交的本质", "author": "兰迪·扎克伯格", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/675/822675/t6_822675.jpg", "category": "经济理财-商业", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=e8a325405c8d93e8a6d06f2", "secret": 0}, {"id": "853601", "title": "知识大融通", "author": "爱德华·威尔逊", "cover": "https://cdn.weread.qq.com/weread/cover/1/YueWen_853601/t6_YueWen_853601.jpg", "category": "科学技术-科学科普", "catMain": "科学技术", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=6ee321905d06616eeccb65d", "secret": 0}, {"id": "31296269", "title": "生命密码2：人人都关心的基因科普", "author": "尹烨", "cover": "https://cdn.weread.qq.com/weread/cover/20/YueWen_31296269/t6_YueWen_31296269.jpg", "category": "科学技术-自然科学", "catMain": "科学技术", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=42432e9071dd8b0d42415ac", "secret": 0}, {"id": "831254", "title": "毕淑敏专集：提醒幸福（美冠纯美阅读书系·中国卷）", "author": "毕淑敏", "cover": "https://cdn.weread.qq.com/weread/cover/39/YueWen_831254/t6_YueWen_831254.jpg", "category": "个人成长-情绪心灵", "catMain": "个人成长", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=80a32c205caf1680ab6b1f3", "secret": 0}, {"id": "33808603", "title": "高效人生，让你的时间更有价值（套装共5册）", "author": "张萌 王潇等", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/603/33808603/t6_33808603.jpg", "category": "个人成长-人生哲学", "catMain": "个人成长", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=009329f07203e0db0099ce8", "secret": 0}, {"id": "635809", "title": "道路与梦想：我与万科（1983-1999）", "author": "王石", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/809/635809/t6_635809.jpg", "category": "经济理财-商业", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=21a3213059b3a121a40114e", "secret": 0}, {"id": "621671", "title": "向前一步", "author": "谢丽尔·桑德伯格", "cover": "https://cdn.weread.qq.com/weread/cover/47/YueWen_621671/t6_YueWen_621671.jpg", "category": "人物传记-女性人物", "catMain": "人物传记", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=cf232c50597c67cf2a90ba3", "secret": 0}, {"id": "573974", "title": "黑天鹅：如何应对不可预知的未来", "author": "纳西姆·尼古拉斯·塔勒布", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/974/573974/t6_573974.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=61732a2058c216617936f61", "secret": 0}, {"id": "37084862", "title": "技术4.0", "author": "大前研一", "cover": "https://cdn.weread.qq.com/weread/cover/28/YueWen_37084862/t6_YueWen_37084862.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=5c332d907235debe5c3f29d", "secret": 0}, {"id": "621664", "title": "追求卓越", "author": "[美]彼得斯 [英]沃特曼", "cover": "https://cdn.weread.qq.com/weread/cover/19/YueWen_621664/t6_YueWen_621664.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=40132f40597c604010f5b5c", "secret": 0}, {"id": "26720003", "title": "以奋斗者为本", "author": "黄卫伟等", "cover": "https://cdn.weread.qq.com/weread/cover/30/YueWen_26720003/t6_YueWen_26720003.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=951324307197b7039519d48", "secret": 0}, {"id": "24987089", "title": "欧洲之门：乌克兰2000年史", "author": "浦洛基", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/89/24987089/t6_24987089.jpg", "category": "历史-世界史", "catMain": "历史", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=0ba32270717d45d10bacf13", "secret": 0}, {"id": "30205385", "title": "剧变：人类社会与国家危机的转折点", "author": "贾雷德·戴蒙德", "cover": "https://cdn.weread.qq.com/weread/cover/18/YueWen_30205385/t6_YueWen_30205385.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=8df32cf071cce5c98df488a", "secret": 0}, {"id": "192168", "title": "新卖桔者言", "author": "张五常", "cover": "https://cdn.weread.qq.com/weread/cover/73/YueWen_192168/t6_YueWen_192168.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=87132c2052eea88715a0832", "secret": 0}, {"id": "23665500", "title": "生命密码：你的第一本基因科普书", "author": "尹烨", "cover": "https://cdn.weread.qq.com/weread/cover/21/YueWen_23665500/t6_YueWen_23665500.jpg", "category": "科学技术-自然科学", "catMain": "科学技术", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=c9232e2071691b5cc92daca", "secret": 0}, {"id": "25731000", "title": "书法：不为人知的修身世界", "author": "施锡斌", "cover": "https://cdn.weread.qq.com/weread/cover/2/YueWen_25731000/t6_YueWen_25731000.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=70c321d071889fb870cdd9d", "secret": 0}, {"id": "26552202", "title": "给年轻科学家的信", "author": "爱德华·威尔逊", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/202/26552202/t6_26552202.jpg", "category": "科学技术-自然科学", "catMain": "科学技术", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=0b0322607195278a0b0fdeb", "secret": 0}, {"id": "23784684", "title": "大脑帝国", "author": "卡娅·努尔英恩", "cover": "https://cdn.weread.qq.com/weread/cover/24/YueWen_23784684/t6_YueWen_23784684.jpg", "category": "医学健康-医学", "catMain": "医学健康", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=d6532480716aececd6550d8", "secret": 0}, {"id": "25455701", "title": "财富与贫困：国民财富的创造和企业家精神", "author": "乔治·吉尔德", "cover": "https://cdn.weread.qq.com/weread/cover/75/YueWen_25455701/t6_YueWen_25455701.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=4cc321f071846c554cc0903", "secret": 0}, {"id": "25369587", "title": "勇气", "author": "萨莉·克劳切克", "cover": "https://cdn.weread.qq.com/weread/cover/5/YueWen_25369587/t6_YueWen_25369587.jpg", "category": "心理-认知与行为", "catMain": "心理", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=78c3226071831bf378cff0e", "secret": 0}, {"id": "25995811", "title": "弹性", "author": "列纳德·蒙洛迪诺", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/811/25995811/t6_25995811.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=ead32b40718caa23eadedc6", "secret": 0}, {"id": "24276056", "title": "智能商业", "author": "曾鸣", "cover": "https://cdn.weread.qq.com/weread/cover/30/YueWen_24276056/t6_YueWen_24276056.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=551323f071726c58551fe37", "secret": 0}, {"id": "855113", "title": "论美国的民主（全集）", "author": "[法]托克维尔", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/113/855113/t6_855113.jpg", "category": "政治军事-政治", "catMain": "政治军事", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=976322a05d0c4997622069e", "secret": 0}, {"id": "30419565", "title": "IoT变现", "author": "大前研一", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/565/30419565/t6_30419565.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=34632ea071d02a6d346bef1", "secret": 0}, {"id": "41577319", "title": "再教育社会：培养“百岁人生时代”的赚钱力", "author": "大前研一", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/319/41577319/t6_41577319.jpg", "category": "教育学习-教育", "catMain": "教育学习", "date": "2024-02-21", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=eda322a0727a6b67edae364", "secret": 0}, {"id": "151278", "title": "政府论", "author": "[英]约翰·洛克", "cover": "https://cdn.weread.qq.com/weread/cover/90/YueWen_151278/t6_YueWen_151278.jpg", "category": "政治军事-政治", "catMain": "政治军事", "date": "2024-01-12", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=92c32840524eee92cb1bd36", "secret": 0}, {"id": "637252", "title": "一篇读罢头飞雪，重读马克思", "author": "韩毓海", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/252/637252/t6_637252.jpg", "category": "政治军事-政治", "catMain": "政治军事", "date": "2024-01-05", "year": 2024, "link": "https://weread.qq.com/book-detail?type=1&v=912321c059b9449122efd85", "secret": 0}, {"id": "24147390", "title": "银河系搭车客指南（五部曲套装）", "author": "道格拉斯·亚当斯", "cover": "https://cdn.weread.qq.com/weread/cover/72/YueWen_24147390/t6_YueWen_24147390.jpg", "category": "精品小说-科幻小说", "catMain": "精品小说", "date": "2023-12-27", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=3b432af0717075be3b46928", "secret": 0}, {"id": "3300006123", "title": "我真的很棒", "author": "丛非从", "cover": "https://cdn.weread.qq.com/weread/cover/43/cpPlatform_3300006123/t6_cpPlatform_3300006123.jpg", "category": "心理-心理学应用", "catMain": "心理", "date": "2023-12-14", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=b7d320c0813ab68e4g013688", "secret": 0}, {"id": "929197", "title": "一个女人一生中的二十四小时", "author": "茨威格", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/197/929197/t6_929197.jpg", "category": "精品小说-女性小说", "catMain": "精品小说", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=a5f329505e2dada5f2f5c3b", "secret": 0}, {"id": "357703", "title": "你的生命有什么可能", "author": "古典", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/703/357703/t6_357703.jpg", "category": "个人成长-人生哲学", "catMain": "个人成长", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=78e324d055754778e407b6f", "secret": 0}, {"id": "33058067", "title": "苏东坡传：几时归去 作个闲人（定制版）", "author": "白落梅", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/67/33058067/t6_33058067.jpg", "category": "人物传记-文学家", "catMain": "人物传记", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=5b732f6071f86d135b7d5f8", "secret": 0}, {"id": "41975832", "title": "眉山金融论剑", "author": "陈平", "cover": "https://cdn.weread.qq.com/weread/cover/65/YueWen_41975832/t6_YueWen_41975832.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=7913240072808018791ca9b", "secret": 0}, {"id": "22595724", "title": "加速：从拖延到高效，过三倍速度人生", "author": "张萌", "cover": "https://cdn.weread.qq.com/weread/cover/48/YueWen_22595724/t6_YueWen_22595724.jpg", "category": "个人成长-情绪心灵", "catMain": "个人成长", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=05e323607158c88c05e4127", "secret": 0}, {"id": "37698324", "title": "引爆视频号：打造个体经济时代的核心能力", "author": "张萌", "cover": "https://cdn.weread.qq.com/weread/cover/8/YueWen_37698324/t6_YueWen_37698324.jpg", "category": "经济理财-商业", "catMain": "经济理财", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=59f32310723f3b1459f5d61", "secret": 0}, {"id": "24275737", "title": "解读中国经济(增订版)", "author": "林毅夫", "cover": "https://cdn.weread.qq.com/weread/cover/5/YueWen_24275737/t6_YueWen_24275737.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=864328d071726b198645310", "secret": 0}, {"id": "26832334", "title": "书法基础教程(第二版)", "author": "张学鹏", "cover": "https://cdn.weread.qq.com/weread/cover/97/YueWen_26832334/t6_YueWen_26832334.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=6a732c5071996dce6a765e0", "secret": 0}, {"id": "651358", "title": "中国哲学简史", "author": "冯友兰", "cover": "https://cdn.weread.qq.com/weread/cover/24/YueWen_651358/t6_YueWen_651358.jpg", "category": "哲学宗教-东方哲学", "catMain": "哲学宗教", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=9f832d8059f05e9f8657f05", "secret": 0}, {"id": "24273059", "title": "进化论与伦理学(全译本)(附《天演论》)", "author": "赫胥黎", "cover": "https://cdn.weread.qq.com/weread/cover/60/YueWen_24273059/t6_YueWen_24273059.jpg", "category": "科学技术-自然科学", "catMain": "科学技术", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=26d327f0717260a326d9d11", "secret": 0}, {"id": "24273744", "title": "翰墨风神：中国书法的意蕴", "author": "岳师伦", "cover": "https://cdn.weread.qq.com/weread/cover/51/YueWen_24273744/t6_YueWen_24273744.jpg", "category": "艺术-书法", "catMain": "艺术", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=1aa320b0717263501aae40e", "secret": 0}, {"id": "24273057", "title": "人类在自然界的位置(全译本)", "author": "赫胥黎", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/57/24273057/t6_24273057.jpg", "category": "科学技术-自然科学", "catMain": "科学技术", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=d9e32710717260a1d9ee7d9", "secret": 0}, {"id": "24273306", "title": "收入是一连串事件（图文全版）", "author": "周其仁", "cover": "https://cdn.weread.qq.com/weread/cover/85/YueWen_24273306/t6_YueWen_24273306.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2023-08-30", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=bae327307172619abae4a59", "secret": 0}, {"id": "3300006540", "title": "季羡林读书与做人（立身以立学为先，立学以读书为本）", "author": "季羡林", "cover": "https://cdn.weread.qq.com/weread/cover/46/cpPlatform_3300006540/t6_cpPlatform_3300006540.jpg", "category": "文学-经典作品", "catMain": "文学", "date": "2023-08-22", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=90632830813ab690eg010de3", "secret": 0}, {"id": "37699715", "title": "费雪论成长股获利", "author": "菲利普·A.费雪", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/715/37699715/t6_37699715.jpg", "category": "经济理财-理财", "catMain": "经济理财", "date": "2023-07-28", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=4b732330723f40834b75205", "secret": 0}, {"id": "794479", "title": "岳游纪行录", "author": "湛若水", "cover": "https://cdn.weread.qq.com/weread/cover/28/yuewen_794479/t6_yuewen_7944791679655016.jpg", "category": "历史-历史典籍", "catMain": "历史", "date": "2023-03-24", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=872323a05c1f6f8729ab653", "secret": 0}, {"id": "793687", "title": "樵语", "author": "湛若水", "cover": "https://cdn.weread.qq.com/weread/cover/88/yuewen_793687/t6_yuewen_7936871679653932.jpg", "category": "历史-历史典籍", "catMain": "历史", "date": "2023-03-24", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=ec8325205c1c57ec8c73304", "secret": 0}, {"id": "33847612", "title": "职场晋升宝典（套装6册）", "author": "李柘远 冯仑 张萌等", "cover": "https://cdn.weread.qq.com/weread/cover/56/yuewen_33847612/t6_yuewen_338476121678700087.jpg", "category": "个人成长-人在职场", "catMain": "个人成长", "date": "2023-03-16", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=a8e328c07204793ca8e75d1", "secret": 0}, {"id": "750385", "title": "茶谱", "author": "朱权", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/385/750385/t6_750385.jpg", "category": "历史-历史典籍", "catMain": "历史", "date": "2023-01-17", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=30f32de05b733130fad466e", "secret": 0}, {"id": "758989", "title": "甘泉先生续编大全", "author": "湛若水", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/989/758989/t6_758989.jpg", "category": "历史-历史典籍", "catMain": "历史", "date": "2023-01-17", "year": 2023, "link": "https://weread.qq.com/book-detail?type=1&v=99c32fc05b94cd99c833d9b", "secret": 0}, {"id": "33889091", "title": "笛卡尔哲学原理（汉译世界学术名著丛书）", "author": "斯宾诺莎", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/91/33889091/t6_33889091.jpg", "category": "哲学宗教-哲学读物", "catMain": "哲学宗教", "date": "2022-12-19", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=f5e32bd072051b43f5ec5ea", "secret": 0}, {"id": "33091717", "title": "人生算法：已被证实的使个人和团队变得更好的15个套路", "author": "托德·戴维斯", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/717/33091717/t6_33091717.jpg", "category": "个人成长-人在职场", "catMain": "个人成长", "date": "2022-12-19", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=324321a071f8f0853244ada", "secret": 0}, {"id": "33091602", "title": "行为金融学：洞察非理性投资心理和市场", "author": "詹姆斯·蒙蒂尔", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/602/33091602/t6_33091602.jpg", "category": "经济理财-理财", "catMain": "经济理财", "date": "2022-12-19", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=09132e6071f8f01209174d7", "secret": 0}, {"id": "3300015029", "title": "元宇宙指南（施展推荐！虚拟世界的新机遇）", "author": "崔亨旭", "cover": "https://cdn.weread.qq.com/weread/cover/29/3300015029/t6_3300015029.jpg", "category": "科学技术-科学科普", "catMain": "科学技术", "date": "2022-12-05", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=56c326d0813ab6c5eg01959c", "secret": 0}, {"id": "581967", "title": "白宫智囊的读心术", "author": "杰勒德·尼尔伦伯格 亨利·卡莱罗 加布里埃尔·格雷森", "cover": "https://cdn.weread.qq.com/weread/cover/96/YueWen_581967/t6_YueWen_581967.jpg", "category": "个人成长-沟通表达", "catMain": "个人成长", "date": "2022-11-17", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=54b3212058e14f54b046929", "secret": 0}, {"id": "773814", "title": "幸福工作", "author": "刘丰", "cover": "https://cdn.weread.qq.com/weread/cover/12/YueWen_773814/t6_YueWen_773814.jpg", "category": "个人成长-人在职场", "catMain": "个人成长", "date": "2022-11-17", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=c02327005bceb6c0290ae8c", "secret": 0}, {"id": "23721298", "title": "直面人生的困惑", "author": "郭继承", "cover": "https://cdn.weread.qq.com/weread/cover/64/YueWen_23721298/t6_YueWen_23721298.jpg", "category": "个人成长-人生哲学", "catMain": "个人成长", "date": "2022-11-17", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=a9a321607169f552a9a3862", "secret": 0}, {"id": "807034", "title": "季羡林谈人生（精装珍藏版）", "author": "季羡林", "cover": "https://cdn.weread.qq.com/weread/cover/38/YueWen_807034/t6_YueWen_807034.jpg", "category": "文学-散文杂著", "catMain": "文学", "date": "2022-11-17", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=d11320c05c507ad11a5c5d1", "secret": 0}, {"id": "317632", "title": "本杰明·巴顿奇事（菲茨杰拉德中短篇小说选）", "author": "菲茨杰拉德", "cover": "https://cdn.weread.qq.com/weread/cover/88/YueWen_317632/t6_YueWen_317632.jpg", "category": "文学-经典作品", "catMain": "文学", "date": "2022-11-17", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=3a03222054d8c03a03c0e55", "secret": 0}, {"id": "651368", "title": "解读中国经济", "author": "林毅夫", "cover": "https://cdn.weread.qq.com/weread/cover/55/YueWen_651368/t6_YueWen_651368.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2022-11-17", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=62a326b059f06862a5201ac", "secret": 0}, {"id": "29975621", "title": "淡水鱼类营养需求与饲料配制技术", "author": "张家国主编", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/621/29975621/t6_29975621.jpg", "category": "科学技术-农林牧业", "catMain": "科学技术", "date": "2022-09-21", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=53f3203071c9644553f758e", "secret": 0}, {"id": "26711906", "title": "看见，不一样的故宫（精装版）", "author": "苏唐诗", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/906/26711906/t6_26711906.jpg", "category": "艺术-摄影", "catMain": "艺术", "date": "2022-07-30", "year": 2022, "link": "https://weread.qq.com/book-detail?type=1&v=182323f0719797621829f6f", "secret": 0}, {"id": "814401", "title": "东周列国志：中国古典白话短篇小说的巅峰", "author": "[明]冯梦龙", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/401/814401/t6_814401.jpg", "category": "文学-古典文学", "catMain": "文学", "date": "2021-04-20", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=0c232f505c6d410c2aab874", "secret": 0}, {"id": "28347178", "title": "胡竹峰作品：茶书", "author": "胡竹峰", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/178/28347178/t6_28347178.jpg", "category": "文学-散文杂著", "catMain": "文学", "date": "2021-04-16", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=82832ea071b08b2a82870df", "secret": 0}, {"id": "22662180", "title": "麦肯锡现代经营战略", "author": "大前研一等", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/180/22662180/t6_22662180.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2021-04-13", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=4cc320907159cc244cc3aac", "secret": 0}, {"id": "22662174", "title": "麦肯锡成熟期差异化战略", "author": "大前研一 若松茂美", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/174/22662174/t6_22662174.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2021-04-13", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=d14323c07159cc1ed14dca2", "secret": 0}, {"id": "22662176", "title": "麦肯锡成熟期成长战略", "author": "大前研一等", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/176/22662176/t6_22662176.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2021-04-13", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=1c4325e07159cc201c4f15b", "secret": 0}, {"id": "22662172", "title": "麦肯锡变革期体制转换战略", "author": "大前研一等", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/172/22662172/t6_22662172.jpg", "category": "经济理财-管理", "catMain": "经济理财", "date": "2021-04-13", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=fa7321007159cc1cfa7765d", "secret": 0}, {"id": "22401832", "title": "伊凡·伊里奇之死", "author": "列夫·托尔斯泰", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/832/22401832/t6_22401832.jpg", "category": "文学-外国文学", "catMain": "文学", "date": "2021-04-12", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=567327107155d3285673b26", "secret": 0}, {"id": "706016", "title": "蒙特梭利：儿童感官系统训练", "author": "王楠楠", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/16/706016/t6_706016.jpg", "category": "教育学习-育儿", "catMain": "教育学习", "date": "2021-04-11", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=d1832af05ac5e0d184b18f9", "secret": 0}, {"id": "706013", "title": "蒙特梭利：儿童语言能力训练", "author": "王楠楠", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/13/706013/t6_706013.jpg", "category": "教育学习-育儿", "catMain": "教育学习", "date": "2021-04-11", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=cc532b305ac5ddcc50b805e", "secret": 0}, {"id": "706015", "title": "蒙特梭利：儿童日常生活训练", "author": "王楠楠", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/15/706015/t6_706015.jpg", "category": "教育学习-育儿", "catMain": "教育学习", "date": "2021-04-11", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=7aa32bb05ac5df7aa293e46", "secret": 0}, {"id": "25823458", "title": "花草标本科学（图解自然科普）", "author": "周宝良", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/458/25823458/t6_25823458.jpg", "category": "教育学习-教材", "catMain": "教育学习", "date": "2021-03-15", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=b2732d90718a08e2b275785", "secret": 0}, {"id": "3001005980", "title": "100小时逻辑思考课：如何成为一个会解决问题的人", "author": "[日]大前研一", "cover": "https://cdn.weread.qq.com/outpic/980/3001005980.jpg", "category": "未分类", "catMain": "未分类", "date": "2021-01-21", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=364325c0811e32bf6g010b69", "secret": 0}, {"id": "3001099081", "title": "重读毛泽东 从1893到1949", "author": "韩毓海", "cover": "https://cdn.weread.qq.com/outpic/81/3001099081.jpg", "category": "未分类", "catMain": "未分类", "date": "2021-01-21", "year": 2021, "link": "https://weread.qq.com/book-detail?type=1&v=a5532920811e35054g011a25", "secret": 0}, {"id": "3000027734", "title": "大资金潮", "author": "大前研一", "cover": "https://cdn.weread.qq.com/outpic/734/3000027734.jpg", "category": "未分类", "catMain": "未分类", "date": "2020-10-30", "year": 2020, "link": "https://weread.qq.com/book-detail?type=1&v=ac632700811e1add5g014610", "secret": 0}, {"id": "25631162", "title": "我不想活得这么累", "author": "岸见一郎", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/162/25631162/t6_25631162.jpg", "category": "个人成长-人生哲学", "catMain": "个人成长", "date": "2020-02-14", "year": 2020, "link": "https://weread.qq.com/book-detail?type=1&v=eec32930718719baeecf642", "secret": 0}, {"id": "798503", "title": "九型人格：发现最好的自己", "author": "王沥川", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/503/798503/t6_798503.jpg", "category": "个人成长-认知思维", "catMain": "个人成长", "date": "2020-02-14", "year": 2020, "link": "https://weread.qq.com/book-detail?type=1&v=ac2320305c2f27ac2f5446f", "secret": 0}, {"id": "23769213", "title": "王阳明大传：知行合一的心学智慧（全集）", "author": "冈田武彦", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/213/23769213/t6_23769213.jpg", "category": "哲学宗教-东方哲学", "catMain": "哲学宗教", "date": "2020-02-14", "year": 2020, "link": "https://weread.qq.com/book-detail?type=1&v=95e32760716ab07d95ea065", "secret": 0}, {"id": "23445034", "title": "行行重行行", "author": "季栋梁", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/34/23445034/t6_23445034.jpg", "category": "文学-经典作品", "catMain": "文学", "date": "2020-02-14", "year": 2020, "link": "https://weread.qq.com/book-detail?type=1&v=c7932c807165be2ac7992e2", "secret": 0}, {"id": "830435", "title": "中国意象：竹书与汉简", "author": "周语", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/435/830435/t6_830435.jpg", "category": "文学-现代诗歌", "catMain": "文学", "date": "2020-02-14", "year": 2020, "link": "https://weread.qq.com/book-detail?type=1&v=3dc321f05cabe33dc1d06d2", "secret": 0}, {"id": "14602905", "title": "涅槃经", "author": "梦远山", "cover": "https://wfqqreader-1252317822.image.myqcloud.com/cover/905/14602905/t6_14602905.jpg", "category": "男生小说-仙侠武侠", "catMain": "男生小说", "date": "2017-01-08", "year": 2017, "link": "https://weread.qq.com/book-detail?type=1&v=edd32d206ded299eddc92a8", "secret": 0}, {"id": "192219", "title": "中国的经济制度", "author": "张五常", "cover": "https://cdn.weread.qq.com/weread/cover/16/yuewen_192219/t6_yuewen_1922191703679190.jpg", "category": "经济理财-财经", "catMain": "经济理财", "date": "2013-08-31", "year": 2013, "link": "https://weread.qq.com/book-detail?type=1&v=17d3274052eedb17dbde24d", "secret": 0}, {"id": "189541", "title": "荣辱二十年：我的股市人生", "author": "阚治东", "cover": "https://cdn.weread.qq.com/weread/cover/0/yuewen_189541/t6_yuewen_1895411703679817.jpg", "category": "经济理财-理财", "catMain": "经济理财", "date": "2013-08-31", "year": 2013, "link": "https://weread.qq.com/book-detail?type=1&v=2cb3243052e4652cbcf5921", "secret": 0}, {"id": "3002111535", "title": "西藏生死书", "author": "索甲仁波切", "cover": "https://cdn.weread.qq.com/outpic/535/3002111535.jpg", "category": "哲学宗教-宗教", "catMain": "哲学宗教", "date": "", "year": 0, "link": "https://weread.qq.com/book-detail?type=1&v=fcf32bd0811e4dbd1g015e03", "secret": 0}];
+
+(function () {
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  const qInput = document.getElementById('q');
+  const catChips = document.getElementById('cat-chips');
+  const yearChips = document.getElementById('year-chips');
+  const shownCount = document.getElementById('shown-count');
+
+  let activeCat = '全部';
+  let activeYear = '全部';
+  let query = '';
+
+  const cats = new Map();
+  const years = new Set();
+  BOOKS.forEach(b => {
+    cats.set(b.catMain, (cats.get(b.catMain) || 0) + 1);
+    if (b.year) years.add(b.year);
+  });
+  document.getElementById('stat-cats').textContent = String(cats.size);
+  document.getElementById('stat-years').textContent = String(years.size);
+
+  const catList = [...cats.entries()].sort((a, b) => b[1] - a[1]);
+  function makeChip(parent, label, count, isActive, onClick) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip' + (isActive ? ' active' : '');
+    btn.textContent = count != null ? (label + ' ' + count) : label;
+    btn.addEventListener('click', onClick);
+    parent.appendChild(btn);
+    return btn;
+  }
+
+  function renderCatChips() {
+    catChips.innerHTML = '';
+    makeChip(catChips, '全部', BOOKS.length, activeCat === '全部', () => {
+      activeCat = '全部';
+      renderCatChips();
+      render();
+    });
+    catList.forEach(([name, count]) => {
+      makeChip(catChips, name, count, activeCat === name, () => {
+        activeCat = name;
+        renderCatChips();
+        render();
+      });
+    });
+  }
+
+  function renderYearChips() {
+    yearChips.innerHTML = '';
+    const ys = [...years].sort((a, b) => b - a);
+    const allBtn = document.createElement('button');
+    allBtn.type = 'button';
+    allBtn.className = 'year-btn' + (activeYear === '全部' ? ' active' : '');
+    allBtn.textContent = '全部年份';
+    allBtn.addEventListener('click', () => { activeYear = '全部'; renderYearChips(); render(); });
+    yearChips.appendChild(allBtn);
+    ys.forEach(y => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'year-btn' + (activeYear === y ? ' active' : '');
+      btn.textContent = String(y);
+      btn.addEventListener('click', () => { activeYear = y; renderYearChips(); render(); });
+      yearChips.appendChild(btn);
+    });
+  }
+
+  function matches(b) {
+    if (activeCat !== '全部' && b.catMain !== activeCat) return false;
+    if (activeYear !== '全部' && b.year !== activeYear) return false;
+    if (!query) return true;
+    const hay = (b.title + ' ' + b.author + ' ' + b.category).toLowerCase();
+    return hay.includes(query);
+  }
+
+  function coverHtml(b) {
+    const safeTitle = escapeHtml(b.title);
+    if (!b.cover) {
+      return '<div class="fallback">' + safeTitle + '</div>';
+    }
+    return '<img loading="lazy" decoding="async" alt="' + safeTitle + '" src="' + escapeAttr(b.cover) + '" onerror="this.style.display=\'none\';this.nextElementSibling.hidden=false"><div class="fallback" hidden>' + safeTitle + '</div>';
+  }
+
+  function render() {
+    const list = BOOKS.filter(matches);
+    shownCount.textContent = list.length + '/' + BOOKS.length;
+    grid.innerHTML = '';
+    if (!list.length) {
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    const frag = document.createDocumentFragment();
+    list.forEach(b => {
+      const a = document.createElement(b.link ? 'a' : 'div');
+      a.className = 'card';
+      if (b.link) {
+        a.href = b.link;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+      }
+      a.innerHTML =
+        '<div class="cover">' +
+          coverHtml(b) +
+          (b.catMain ? '<span class="badge">' + escapeHtml(b.catMain) + '</span>' : '') +
+        '</div>' +
+        '<div class="meta">' +
+          '<div class="title">' + escapeHtml(b.title) + '</div>' +
+          '<div class="author">' + escapeHtml(b.author) + '</div>' +
+          '<div class="date">' + (b.date ? ('更新 ' + b.date) : '尚未开读') + '</div>' +
+        '</div>';
+      frag.appendChild(a);
+    });
+    grid.appendChild(frag);
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  function escapeAttr(s) {
+    return escapeHtml(s).replace(/'/g, '&#39;');
+  }
+
+  let t = null;
+  qInput.addEventListener('input', () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      query = qInput.value.trim().toLowerCase();
+      render();
+    }, 120);
+  });
+
+  renderCatChips();
+  renderYearChips();
+  render();
+})();
+
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'h' && e.key !== 'H') return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  var tag = (e.target && e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || (e.target && e.target.isContentEditable)) return;
+  e.preventDefault();
+  location.href = 'index.html';
+});
+</script>
+</body>
+</html>

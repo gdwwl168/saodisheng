@@ -275,7 +275,7 @@ function renderContent() {
         <div class="ann-label">📜 创作背景</div>
         <div class="ann-body">${w.background || '暂无记载'}</div>
       </div>`;
-      html += `<div class="work-text" style="font-size:${fontSize}px">`;
+      html += `<div class="work-text annotate-main-text" style="font-size:${Math.max(12, Math.round(fontSize / 2))}px">`;
       lines.forEach(line => {
         html += `<span class="verse">${line || '&nbsp;'}</span>`;
       });

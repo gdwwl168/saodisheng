@@ -259,11 +259,8 @@ function renderContent() {
       break;
 
     case 'annotate':
-      html += '<div class="annotation-card">' +
-        '<div class="ann-label">📜 背景</div>' +
-        '<div class="ann-body">' + (w.background || '暂无') + '</div>' +
-        '</div>';
-      html += '<div class="work-text" style="font-size:' + fontSize + 'px">';
+      // 顺序：正文 → 赏析 → 背景（背景放到最下面）
+      html += '<div class="work-text annotate-main-text" style="font-size:' + Math.max(12, Math.round(fontSize / 2)) + 'px">';
       lines.forEach(line => {
         html += '<span class="verse">' + (line || '&nbsp;') + '</span>';
       });
@@ -271,6 +268,10 @@ function renderContent() {
       html += '<div class="annotation-card">' +
         '<div class="ann-label">💡 赏析</div>' +
         '<div class="ann-body">' + (w.annotation || '暂无') + '</div>' +
+        '</div>';
+      html += '<div class="annotation-card">' +
+        '<div class="ann-label">📜 背景</div>' +
+        '<div class="ann-body">' + (w.background || '暂无') + '</div>' +
         '</div>';
       break;
 
