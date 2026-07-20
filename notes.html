@@ -328,6 +328,78 @@ body.reading .reader { display: block; }
   border-radius: 999px; padding: 8px 14px; background: var(--card-bg); cursor: pointer;
 }
 
+/* 社区：热门划线 / 高赞点评 */
+.social-block {
+  margin: 6px 0 18px;
+  padding: 0 0 4px;
+}
+.social-block .section-label {
+  margin: 14px 0 10px;
+  font-size: 0.78em;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 700;
+}
+.social-card {
+  border-radius: 12px;
+  padding: 14px 14px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+}
+.social-card.hot {
+  border-left: 3px solid #e07a3d;
+  background: color-mix(in srgb, #e07a3d 8%, var(--card-bg));
+}
+.social-card.praise {
+  border-left: 3px solid var(--gold);
+  background: color-mix(in srgb, var(--gold) 10%, var(--card-bg));
+}
+.social-card .kind {
+  font-size: 0.68em;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.social-card .txt {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: inherit;
+  letter-spacing: 0.02em;
+}
+.social-card .txt.clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.social-card .txt.clamp.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+.social-card .meta {
+  margin-top: 8px;
+  font-size: 0.72em;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.social-card .meta .likes { color: var(--gold); font-weight: 700; }
+.social-card .more {
+  margin-top: 6px;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.78em;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
 .toast {
   position: fixed; left: 50%; bottom: calc(28px + var(--safe-bottom));
   transform: translateX(-50%) translateY(12px);
@@ -412,8 +484,9 @@ body.reading .reader { display: block; }
   <div class="reader-meta" id="r-meta"></div>
   <div class="reader-tabs chips" id="r-tabs">
     <button type="button" class="chip active" data-rtab="all">全部</button>
-    <button type="button" class="chip" data-rtab="hl">划线</button>
-    <button type="button" class="chip" data-rtab="idea">想法</button>
+    <button type="button" class="chip" data-rtab="hl">扫地僧划线</button>
+    <button type="button" class="chip" data-rtab="idea">扫地僧想法</button>
+    <button type="button" class="chip" data-rtab="social">社区精选</button>
   </div>
   <div class="reader-content" id="r-content"></div>
 </div>
@@ -421,10 +494,12 @@ body.reading .reader { display: block; }
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="notes-data.js"></script>
+<script src="notes-social.js"></script>
 <script>
 (function () {
   const NOTES = window.NOTES || [];
   const META = window.NOTES_META || {};
+  const SOCIAL = window.NOTES_SOCIAL || {};
   const byId = new Map(NOTES.map(function (b) { return [String(b.id), b]; }));
 
   const listEl = document.getElementById('list');
@@ -568,6 +643,13 @@ body.reading .reader { display: block; }
           '<div class="meta-row">' +
             (b.hlCount ? ('<span>划线 ' + b.hlCount + '</span>') : '') +
             (b.ideaCount ? ('<span>想法 ' + b.ideaCount + '</span>') : '') +
+            (function () {
+              var s = SOCIAL[String(b.id)] || {};
+              var bits = [];
+              if (s.hot) bits.push('<span>热门</span>');
+              if (s.review) bits.push('<span>高赞</span>');
+              return bits.join('');
+            })() +
             (b.progress != null ? ('<span>进度 ' + b.progress + '%</span>') : '') +
           '</div>' +
           (preview ? ('<div class="preview">' + highlightHtml(preview) + '</div>') : '') +
@@ -648,6 +730,78 @@ body.reading .reader { display: block; }
     return { order: order, merged: merged };
   }
 
+  function starText(star) {
+    var n = Math.max(0, Math.min(5, Math.round((Number(star) || 0) / 20)));
+    if (!n) return '';
+    return '⭐'.repeat(n);
+  }
+
+  function renderSocialHtml(bookId, forceShow) {
+    var soc = SOCIAL[String(bookId)] || {};
+    var hot = soc.hot;
+    var rev = soc.review;
+    if (!hot && !rev) {
+      return forceShow
+        ? '<div class="reader-empty">暂无热门划线或高赞点评</div>'
+        : '';
+    }
+    var html = '<div class="social-block">';
+    if (hot && hot.text) {
+      html += '<div class="section-label">🔥 热门划线</div>';
+      html += '<article class="social-card hot">';
+      html += '<div class="kind">全书热门 · 1 条</div>';
+      html += '<div class="txt">' + highlightHtml(hot.text) + '</div>';
+      html += '<div class="meta">';
+      if (hot.chapter) html += '<span>' + escapeHtml(hot.chapter) + '</span>';
+      if (hot.count) html += '<span class="likes">' + hot.count + ' 人划线</span>';
+      html += '<button type="button" class="copy" data-copy="' + encodeURIComponent(hot.text) + '">复制</button>';
+      html += '</div></article>';
+    }
+    if (rev && rev.content) {
+      html += '<div class="section-label">👍 高赞点评</div>';
+      html += '<article class="social-card praise">';
+      html += '<div class="kind">推荐榜高赞 · 1 条</div>';
+      html += '<div class="txt clamp" data-clamp="1">' + highlightHtml(rev.content) + '</div>';
+      html += '<button type="button" class="more" hidden>展开全文</button>';
+      html += '<div class="meta">';
+      if (rev.author) html += '<span>' + escapeHtml(rev.author) + '</span>';
+      if (rev.star) html += '<span>' + starText(rev.star) + '</span>';
+      if (rev.likes) html += '<span class="likes">赞 ' + rev.likes + '</span>';
+      if (rev.comments) html += '<span>评 ' + rev.comments + '</span>';
+      if (rev.date) html += '<span>' + escapeHtml(rev.date) + '</span>';
+      html += '<button type="button" class="copy" data-copy="' + encodeURIComponent(rev.content) + '">复制</button>';
+      html += '</div></article>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function bindSocialUi(root) {
+    root.querySelectorAll('.social-card .txt.clamp').forEach(function (el) {
+      // show expand if truncated
+      requestAnimationFrame(function () {
+        if (el.scrollHeight > el.clientHeight + 4) {
+          var more = el.parentElement.querySelector('.more');
+          if (more) {
+            more.hidden = false;
+            more.addEventListener('click', function () {
+              var open = el.classList.toggle('expanded');
+              more.textContent = open ? '收起' : '展开全文';
+            });
+          }
+        }
+      });
+    });
+    root.querySelectorAll('.copy').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var raw = btn.getAttribute('data-copy') || '';
+        try { copyText(decodeURIComponent(raw)); }
+        catch (err) { copyText(raw); }
+      });
+    });
+  }
+
   function renderReaderBody() {
     if (!currentBook) return;
     var b = currentBook;
@@ -662,10 +816,26 @@ body.reading .reader { display: block; }
         return ((i.content || '') + ' ' + (i.abstract || '') + ' ' + (i.chapter || '')).toLowerCase().indexOf(q) !== -1;
       });
     }
+
+    // 社区精选：仅热门划线 + 高赞点评
+    if (readerTab === 'social') {
+      rContent.innerHTML = renderSocialHtml(b.id, true) +
+        '<div class="reader-actions">' +
+          (b.link ? ('<a href="' + escapeHtml(b.link) + '" target="_blank" rel="noopener noreferrer">打开微信读书</a>') : '') +
+          '<button type="button" id="btn-back-bottom">返回列表</button>' +
+        '</div>';
+      bindSocialUi(rContent);
+      var backOnly = document.getElementById('btn-back-bottom');
+      if (backOnly) backOnly.addEventListener('click', closeReader);
+      return;
+    }
+
     if (readerTab === 'hl') ideas = [];
     if (readerTab === 'idea') hls = [];
 
-    if (!hls.length && !ideas.length) {
+    var socialHtml = (readerTab === 'all') ? renderSocialHtml(b.id, false) : '';
+
+    if (!hls.length && !ideas.length && !socialHtml) {
       rContent.innerHTML = '<div class="reader-empty">这一分类下没有内容</div>';
       return;
     }
@@ -675,7 +845,10 @@ body.reading .reader { display: block; }
       groupByChapter(ideas, 'idea')
     ]);
 
-    var html = '';
+    var html = socialHtml;
+    if (!hls.length && !ideas.length) {
+      html += '<div class="reader-empty">暂无扫地僧划线或想法</div>';
+    }
     grouped.order.forEach(function (ch) {
       var arr = grouped.merged.get(ch) || [];
       html += '<section class="chapter-block">';
@@ -684,14 +857,14 @@ body.reading .reader { display: block; }
         var it = entry.item;
         if (entry.kind === 'hl') {
           html += '<article class="note hl">';
-          html += '<div class="kind">划线</div>';
+          html += '<div class="kind">扫地僧划线</div>';
           html += '<div class="txt">' + highlightHtml(it.text || '') + '</div>';
           html += '<div class="src"><span>' + escapeHtml(it.date || '') + '</span>';
           html += '<button type="button" class="copy" data-copy="' + encodeURIComponent(it.text || '') + '">复制</button></div>';
           html += '</article>';
         } else {
           html += '<article class="note idea">';
-          html += '<div class="kind">想法</div>';
+          html += '<div class="kind">扫地僧想法</div>';
           if (it.abstract) {
             html += '<div class="abs">「' + highlightHtml(it.abstract) + '」</div>';
           }
@@ -716,15 +889,8 @@ body.reading .reader { display: block; }
     html += '</div>';
 
     rContent.innerHTML = html;
+    bindSocialUi(rContent);
 
-    rContent.querySelectorAll('.copy').forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var raw = btn.getAttribute('data-copy') || '';
-        try { copyText(decodeURIComponent(raw)); }
-        catch (err) { copyText(raw); }
-      });
-    });
     var copyAll = document.getElementById('btn-copy-all');
     if (copyAll) {
       copyAll.addEventListener('click', function () {
