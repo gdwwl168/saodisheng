@@ -7,15 +7,15 @@
 <script src="theme-boot.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
 <meta name="theme-color" content="#1a1a2e">
-<meta name="description" content="扫地僧 · TED 演讲标题库 — 点标题复制，点搜索直达">
+<meta name="description" content="扫地僧 · 万维钢·现代思维工具100讲 — 点标题复制，点搜索直达">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="TED标题">
+<meta name="apple-mobile-web-app-title" content="思维工具">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
-<title>TED 演讲 · 扫地僧</title>
+<title>思维工具100讲 · 扫地僧</title>
 <style>
 :root {
   --bg: #f5f0e8;
@@ -218,21 +218,21 @@ mark.hit {
 
 <div class="page">
   <header class="header">
-    <div class="eyebrow">SAODI · TED</div>
-    <h1>TED 演讲</h1>
-    <p class="sub">点标题复制「TED + 标题」· 右侧🔍搜索<br>1–100 配 emoji + 联想词</p>
+    <div class="eyebrow">SAODI · WWG</div>
+    <h1>思维工具100讲</h1>
+    <p class="sub">点标题复制「万维钢 现代思维工具 + 标题」· 右侧🔍<br>按模块筛选 · 数字桩记忆</p>
     <nav class="nav-links" aria-label="阅读导航">
       <a href="index.html">🏠 首页</a>
       <a href="saodi-do.html">文章库</a>
       <a href="notes.html">划线</a>
-      <a href="ted.html" class="here">TED</a>
-      <a href="wwg.html">思维工具</a>
+      <a href="ted.html">TED</a>
+      <a href="wwg.html" class="here">思维工具</a>
     </nav>
   </header>
 
   <div class="stats">
-    <div class="stat"><div class="num" id="statCount">0</div><div class="label">则标题</div></div>
-    <div class="stat"><div class="num" id="statTags">0</div><div class="label">个分类</div></div>
+    <div class="stat"><div class="num" id="statCount">0</div><div class="label">讲次</div></div>
+    <div class="stat"><div class="num" id="statTags">0</div><div class="label">个模块</div></div>
   </div>
 
   <div class="toolbar">
@@ -245,22 +245,22 @@ mark.hit {
 
   <div class="talk-list" id="talkList"></div>
   <div class="empty" id="emptyState" hidden>没有匹配的标题</div>
-  <p class="footer">扫地僧 · TED 标题库</p>
+  <p class="footer">扫地僧 · 万维钢·现代思维工具100讲</p>
 </div>
 
 <div class="toast" id="toast" role="status"></div>
 
 <script src="hints-map.js"></script>
-<script src="ted-data.js"></script>
+<script src="wwg-data.js"></script>
 <script>
 (function () {
-  var data = window.TED_TALKS || { TALKS: [] };
+  var data = window.WWG_TALKS || { TALKS: [] };
   var talks = (data.TALKS || []).slice().sort(function (a, b) {
     return (a.no || 0) - (b.no || 0);
   });
   var activeTag = '全部';
   var query = '';
-  var TAG_ORDER = ['心理', '成长', '健康', '睡眠', '学习', '工作', '关系', '科技', '演讲', '灵感'];
+  var TAG_ORDER = ['发刊词', '基本世界观', '成长战略', '决策判断', '学习教育', '赚钱逻辑', '参与者', '领导者', '演化者', '尾声'];
 
   var $list = document.getElementById('talkList');
   var $empty = document.getElementById('emptyState');
@@ -369,13 +369,13 @@ mark.hit {
       var tags = (a.tags || []).map(function (t) {
         return '<span class="tag">' + escapeHtml(t) + '</span>';
       }).join('');
-      var copyText = 'TED ' + a.title;
-      var searchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent('TED ' + a.title);
+      var copyText = '万维钢 现代思维工具 ' + a.title;
+      var searchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent('万维钢 现代思维工具 ' + a.title);
       return (
         '<article class="card-item" data-id="' + escapeHtml(a.id) + '">' +
           (pile.label ? '<div class="pile">' + highlight(pile.label, q) + '</div>' : '') +
           '<div class="title-row">' +
-            '<button type="button" class="title-btn" data-copy="' + escapeHtml(copyText) + '" title="点击复制：TED + 标题">' +
+            '<button type="button" class="title-btn" data-copy="' + escapeHtml(copyText) + '" title="点击复制：万维钢 现代思维工具 + 标题">' +
               highlight(a.title, q) +
             '</button>' +
             '<a class="search-btn" href="' + escapeHtml(searchUrl) + '" target="_blank" rel="noopener" title="搜索此演讲" aria-label="搜索">' +
