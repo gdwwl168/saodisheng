@@ -38,3 +38,5 @@
 舆论：众人的议论；舆情：百姓心声；舆人：百姓、车夫
 4. 动词：抬、扛、承载
 百人舆瓢而上：上百
+
+工具	markitdown（Python 包，非桌面应用）：PDF/Word/PPT 等转 Markdown。命令：python -m markitdown 文件路径   或  python -m markitdown 文件 -o 输出.md

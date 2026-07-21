@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="cangjingge-theme">
+<meta name="cjg-theme-light" content="dark">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="扫地僧 · TED 演讲标题库 — 点标题复制，点搜索直达">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TED标题">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<title>TED 演讲 · 扫地僧</title>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --text: #3d3226;
+  --text-muted: rgba(61,50,38,0.55);
+  --accent: #8b4513;
+  --gold: #c9a96e;
+  --card-bg: #faf7f2;
+  --border: #d4c5a9;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --input-bg: #fff;
+  --chip-active: #8b4513;
+  --chip-active-text: #faf7f2;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+[data-theme="dark"] {
+  --bg: #1a1a2e;
+  --text: #e4d8c0;
+  --text-muted: rgba(228,216,192,0.55);
+  --accent: #c9a96e;
+  --gold: #c9a96e;
+  --card-bg: #252540;
+  --border: #3a3a55;
+  --shadow: 0 2px 16px rgba(0,0,0,0.3);
+  --input-bg: #1f1f35;
+  --chip-active: #c9a96e;
+  --chip-active-text: #1a1a2e;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  transition: background 0.25s, color 0.25s;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; color: inherit; cursor: pointer; }
+
+.page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 16px 14px calc(28px + var(--safe-bottom));
+}
+
+.header { text-align: center; padding: 14px 8px 6px; }
+.header .eyebrow {
+  font-size: 0.75em; letter-spacing: 0.28em; color: var(--text-muted); margin-bottom: 8px;
+}
+.header h1 {
+  font-size: 1.7em; color: var(--accent); letter-spacing: 0.16em; font-weight: 700;
+}
+.header .sub {
+  margin-top: 8px; font-size: 0.88em; color: var(--text-muted); line-height: 1.55;
+}
+.nav-links {
+  display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap;
+}
+.nav-links a {
+  font-size: 0.8em; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--card-bg); color: var(--text-muted);
+}
+.nav-links a.here {
+  color: var(--chip-active-text); background: var(--chip-active); border-color: var(--chip-active);
+}
+
+.stats {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 14px 0 12px;
+}
+.stat {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 10px 6px; text-align: center; box-shadow: var(--shadow);
+}
+.stat .num {
+  font-size: 1.15em; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums;
+}
+.stat .label { margin-top: 3px; font-size: 0.72em; color: var(--text-muted); }
+
+.toolbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  padding: 8px 0 6px; margin: 0 -2px;
+}
+.search-wrap { position: relative; }
+.search-wrap input {
+  width: 100%; border: 1px solid var(--border); background: var(--input-bg); color: var(--text);
+  border-radius: 12px; padding: 11px 72px 11px 14px; font-size: 16px; outline: none; font-family: inherit;
+}
+.search-wrap input::placeholder { color: var(--text-muted); }
+.search-wrap .count {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 0.75em; color: var(--text-muted); pointer-events: none; font-variant-numeric: tabular-nums;
+}
+.chips {
+  display: flex; gap: 8px; overflow-x: auto; padding: 8px 2px 2px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto; border: 1px solid var(--border); background: var(--card-bg); color: var(--text);
+  border-radius: 999px; padding: 7px 12px; font-size: 0.8em; white-space: nowrap;
+}
+.chip.active {
+  background: var(--chip-active); color: var(--chip-active-text); border-color: var(--chip-active);
+}
+
+.talk-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.card-item {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+  padding: 12px 12px 10px; box-shadow: var(--shadow);
+}
+.card-item .pile {
+  font-size: 0.78em; color: var(--gold); letter-spacing: 0.02em;
+  font-weight: 600; line-height: 1.35; margin-bottom: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-item .title-row {
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.card-item .title-btn {
+  flex: 1; min-width: 0;
+  text-align: left;
+  background: transparent; border: none;
+  font-size: 1.02em; font-weight: 700; line-height: 1.45; color: var(--text);
+  padding: 2px 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.card-item .title-btn:active { color: var(--accent); }
+.card-item .search-btn {
+  flex: 0 0 auto;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--gold) 12%, var(--card-bg));
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.95em;
+  margin-top: 0;
+}
+.card-item .search-btn:active {
+  border-color: var(--gold);
+  transform: scale(0.95);
+}
+.card-item .tags {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+}
+.card-item .tag {
+  font-size: 0.72em; padding: 3px 8px; border-radius: 999px;
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+  color: var(--accent); border: 1px solid color-mix(in srgb, var(--gold) 35%, var(--border));
+}
+
+.empty {
+  text-align: center; padding: 48px 16px; color: var(--text-muted); line-height: 1.7;
+}
+.footer {
+  margin-top: 28px; text-align: center; font-size: 0.78em; color: var(--text-muted); letter-spacing: 0.12em;
+}
+.home-btn, .theme-toggle {
+  position: fixed; z-index: 50;
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--card-bg); box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: center; font-size: 1.15em; line-height: 1;
+}
+.home-btn { top: calc(10px + var(--safe-top)); left: 12px; }
+.theme-toggle { top: calc(10px + var(--safe-top)); right: 12px; }
+.home-btn:active, .theme-toggle:active { transform: scale(0.95); }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(28px + var(--safe-bottom));
+  transform: translateX(-50%) translateY(16px);
+  background: var(--accent); color: #faf7f2;
+  padding: 10px 18px; border-radius: 999px;
+  font-size: 0.86em; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s; z-index: 100;
+  max-width: 88vw;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+[data-theme="dark"] .toast { color: #1a1a2e; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+mark.hit {
+  background: color-mix(in srgb, var(--gold) 45%, transparent);
+  color: inherit; border-radius: 2px; padding: 0 1px;
+}
+
+@media (max-width: 420px) {
+  .header h1 { font-size: 1.45em; }
+}
+</style>
+</head>
+<body>
+<a class="home-btn" href="index.html" title="回首页 (H)" aria-label="回首页">🏠</a>
+<button class="theme-toggle" id="themeBtn" title="切换主题" type="button">🌓</button>
+
+<div class="page">
+  <header class="header">
+    <div class="eyebrow">SAODI · TED</div>
+    <h1>TED 演讲</h1>
+    <p class="sub">点标题复制「TED + 标题」· 右侧🔍搜索<br>1–100 配 emoji + 联想词</p>
+    <nav class="nav-links" aria-label="阅读导航">
+      <a href="index.html">🏠 首页</a>
+      <a href="saodi-do.html">文章库</a>
+      <a href="notes.html">划线</a>
+      <a href="ted.html" class="here">TED</a>
+    </nav>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="num" id="statCount">0</div><div class="label">则标题</div></div>
+    <div class="stat"><div class="num" id="statTags">0</div><div class="label">个分类</div></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input id="searchInput" type="search" placeholder="搜索标题 / 联想词 / 分类" enterkeyhint="search" autocomplete="off">
+      <span class="count" id="resultCount">0</span>
+    </div>
+    <div class="chips" id="tagChips" aria-label="分类筛选"></div>
+  </div>
+
+  <div class="talk-list" id="talkList"></div>
+  <div class="empty" id="emptyState" hidden>没有匹配的标题</div>
+  <p class="footer">扫地僧 · TED 标题库</p>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="hints-map.js"></script>
+<script src="ted-data.js"></script>
+<script>
+(function () {
+  var data = window.TED_TALKS || { TALKS: [] };
+  var talks = (data.TALKS || []).slice().sort(function (a, b) {
+    return (a.no || 0) - (b.no || 0);
+  });
+  var activeTag = '全部';
+  var query = '';
+  var TAG_ORDER = ['心理', '成长', '健康', '睡眠', '学习', '工作', '关系', '科技', '演讲', '灵感'];
+
+  var $list = document.getElementById('talkList');
+  var $empty = document.getElementById('emptyState');
+  var $search = document.getElementById('searchInput');
+  var $resultCount = document.getElementById('resultCount');
+  var $chips = document.getElementById('tagChips');
+  var $toast = document.getElementById('toast');
+
+  function toast(msg) {
+    $toast.textContent = msg;
+    $toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { $toast.classList.remove('show'); }, 1600);
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function highlight(text, q) {
+    var s = escapeHtml(text);
+    if (!q) return s;
+    var re;
+    try { re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'); }
+    catch (e) { return s; }
+    return s.replace(re, '<mark class="hit">$1</mark>');
+  }
+
+  function pileFor(a) {
+    var n = a.no || 0;
+    if (!n) return { n: 0, emoji: '', hint: '', label: '' };
+    if (n <= 100) {
+      var emoji = (typeof hintEmoji !== 'undefined' && hintEmoji[n]) || '';
+      var hint = (typeof hintsMap !== 'undefined' && hintsMap[n]) || '';
+      var label = (emoji ? emoji + ' ' : '') + n + (hint ? ' · ' + hint : '');
+      return { n: n, emoji: emoji, hint: hint, label: label };
+    }
+    return { n: n, emoji: '', hint: '', label: String(n) };
+  }
+
+  function tagCounts() {
+    var map = {};
+    talks.forEach(function (a) {
+      (a.tags || []).forEach(function (t) { map[t] = (map[t] || 0) + 1; });
+    });
+    return map;
+  }
+
+  function allTags() {
+    var map = tagCounts();
+    return Object.keys(map).sort(function (a, b) {
+      var ia = TAG_ORDER.indexOf(a);
+      var ib = TAG_ORDER.indexOf(b);
+      if (ia === -1) ia = 999;
+      if (ib === -1) ib = 999;
+      if (ia !== ib) return ia - ib;
+      return (map[b] || 0) - (map[a] || 0);
+    });
+  }
+
+  function filtered() {
+    var q = query.trim().toLowerCase();
+    return talks.filter(function (a) {
+      if (activeTag !== '全部' && !(a.tags || []).includes(activeTag)) return false;
+      if (!q) return true;
+      var p = pileFor(a);
+      var blob = [a.title, a.summary, (a.tags || []).join(' '), p.label, p.hint, String(p.n)]
+        .join('\n').toLowerCase();
+      return blob.indexOf(q) !== -1;
+    });
+  }
+
+  function renderStats() {
+    document.getElementById('statCount').textContent = String(talks.length);
+    document.getElementById('statTags').textContent = String(allTags().length);
+  }
+
+  function renderChips() {
+    var counts = tagCounts();
+    var tags = allTags();
+    var html = '<button type="button" class="' +
+      (activeTag === '全部' ? 'chip active' : 'chip') +
+      '" data-tag="全部">全部 ' + talks.length + '</button>';
+    html += tags.map(function (t) {
+      var cls = t === activeTag ? 'chip active' : 'chip';
+      return '<button type="button" class="' + cls + '" data-tag="' + escapeHtml(t) + '">' +
+        escapeHtml(t) + ' ' + (counts[t] || 0) + '</button>';
+    }).join('');
+    $chips.innerHTML = html;
+  }
+
+  function renderList() {
+    var list = filtered();
+    var q = query.trim();
+    $resultCount.textContent = String(list.length);
+    if (!list.length) {
+      $list.innerHTML = '';
+      $empty.hidden = false;
+      return;
+    }
+    $empty.hidden = true;
+    $list.innerHTML = list.map(function (a) {
+      var pile = pileFor(a);
+      var tags = (a.tags || []).map(function (t) {
+        return '<span class="tag">' + escapeHtml(t) + '</span>';
+      }).join('');
+      var copyText = 'TED ' + a.title;
+      var searchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent('TED ' + a.title);
+      return (
+        '<article class="card-item" data-id="' + escapeHtml(a.id) + '">' +
+          (pile.label ? '<div class="pile">' + highlight(pile.label, q) + '</div>' : '') +
+          '<div class="title-row">' +
+            '<button type="button" class="title-btn" data-copy="' + escapeHtml(copyText) + '" title="点击复制：TED + 标题">' +
+              highlight(a.title, q) +
+            '</button>' +
+            '<a class="search-btn" href="' + escapeHtml(searchUrl) + '" target="_blank" rel="noopener" title="搜索此演讲" aria-label="搜索">' +
+              '🔍' +
+            '</a>' +
+          '</div>' +
+          (tags ? '<div class="tags">' + tags + '</div>' : '') +
+        '</article>'
+      );
+    }).join('');
+  }
+
+  async function copyText(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      toast('已复制：' + text);
+    } catch (e) {
+      toast('复制失败，请长按选择');
+    }
+  }
+
+  $chips.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-tag]');
+    if (!btn) return;
+    activeTag = btn.getAttribute('data-tag');
+    renderChips();
+    renderList();
+  });
+
+  $list.addEventListener('click', function (e) {
+    var search = e.target.closest('.search-btn');
+    if (search) return; // 让链接自己打开
+    var titleBtn = e.target.closest('.title-btn');
+    if (!titleBtn) return;
+    var text = titleBtn.getAttribute('data-copy') || '';
+    if (text) copyText(text);
+  });
+
+  $search.addEventListener('input', function () {
+    query = $search.value || '';
+    renderList();
+  });
+
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var root = document.documentElement;
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try {
+      var key = document.querySelector('meta[name="cjg-theme-key"]');
+      localStorage.setItem(key ? key.content : 'cangjingge-theme', next);
+    } catch (e) {}
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target && /input|textarea|select/i.test(e.target.tagName)) return;
+    if (e.key === 'h' || e.key === 'H') location.href = 'index.html';
+  });
+
+  renderStats();
+  renderChips();
+  renderList();
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>

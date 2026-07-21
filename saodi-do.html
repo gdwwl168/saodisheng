@@ -142,6 +142,11 @@ body.reading .page { display: none; }
   -webkit-user-select: none; user-select: none;
 }
 .card-item:active { transform: scale(0.985); border-color: var(--gold); }
+.card-item .pile {
+  font-size: 0.78em; color: var(--gold); letter-spacing: 0.02em;
+  font-weight: 600; line-height: 1.35; margin-bottom: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .card-item .title {
   font-size: 1.02em; font-weight: 700; line-height: 1.4; color: var(--text);
 }
@@ -210,8 +215,15 @@ body.reading .reader { display: block; }
   display: flex; align-items: center; justify-content: center;
   font-size: 1.05em;
 }
+.reader-bar .bar-main {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px;
+}
+.reader-bar .bar-pile {
+  font-size: 0.72em; color: var(--gold); font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .reader-bar .bar-title {
-  flex: 1; min-width: 0; font-size: 0.86em; font-weight: 700;
+  font-size: 0.86em; font-weight: 700;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .reader-bar .bar-actions {
@@ -227,6 +239,10 @@ body.reading .reader { display: block; }
   max-width: 720px;
   margin: 0 auto;
   padding: 18px 16px calc(48px + var(--safe-bottom));
+}
+.reader-body .doc-pile {
+  font-size: 0.9em; color: var(--gold); font-weight: 600;
+  letter-spacing: 0.02em; margin-bottom: 8px;
 }
 .reader-body .doc-title {
   font-size: 1.35em; font-weight: 700; line-height: 1.4; letter-spacing: 0.02em;
@@ -263,11 +279,50 @@ body.reading .reader { display: block; }
   color: var(--text);
   font-size: 0.94em;
 }
-#articleContent ol {
+#articleContent ol, #articleContent ul {
   margin: 0.4em 0 1em 1.2em;
   padding: 0;
 }
-#articleContent ol li { margin: 0.35em 0; }
+#articleContent ol li, #articleContent ul li { margin: 0.35em 0; }
+
+/* 上一章 / 下一章 */
+.chapter-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.chapter-nav .nav-card {
+  display: flex; flex-direction: column; gap: 4px;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 12px 12px 11px;
+  box-shadow: var(--shadow);
+  min-height: 64px;
+  -webkit-tap-highlight-color: transparent;
+}
+.chapter-nav .nav-card:active { border-color: var(--gold); transform: scale(0.985); }
+.chapter-nav .nav-card[disabled] {
+  opacity: 0.38; pointer-events: none; box-shadow: none;
+}
+.chapter-nav .nav-card.next { text-align: right; }
+.chapter-nav .nav-dir {
+  font-size: 0.72em; color: var(--text-muted); letter-spacing: 0.06em;
+}
+.chapter-nav .nav-card.next .nav-dir { text-align: right; }
+.chapter-nav .nav-name {
+  font-size: 0.86em; font-weight: 700; line-height: 1.35; color: var(--text);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.chapter-nav .nav-pile {
+  font-size: 0.72em; color: var(--gold); font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.chapter-nav .nav-card.next .nav-pile { text-align: right; }
 
 .toast {
   position: fixed; left: 50%; bottom: calc(28px + var(--safe-bottom));
@@ -299,12 +354,13 @@ mark.hit {
   <header class="header">
     <div class="eyebrow">SAODI · DO</div>
     <h1>文章库</h1>
-    <p class="sub">读后感 · 随笔 · 扩写<br>基于划线慢慢积累，一篇篇加进来</p>
+    <p class="sub">读后感 · 随笔 · 扩写<br>序号与「划线与想法」同号同书 · emoji + 联想词</p>
     <nav class="nav-links" aria-label="阅读导航">
       <a href="index.html">🏠 首页</a>
       <a href="notes.html">划线与想法</a>
       <a href="saodi-read.html">助手</a>
       <a href="saodi-do.html" class="here">文章</a>
+      <a href="ted.html">TED</a>
     </nav>
   </header>
 
@@ -315,7 +371,7 @@ mark.hit {
 
   <div class="toolbar">
     <div class="search-wrap">
-      <input id="searchInput" type="search" placeholder="搜索标题 / 标签 / 摘要 / 正文" enterkeyhint="search" autocomplete="off">
+      <input id="searchInput" type="search" placeholder="搜索标题 / 联想词 / 标签 / 摘要 / 正文" enterkeyhint="search" autocomplete="off">
       <span class="count" id="resultCount">0</span>
     </div>
     <div class="chips" id="tagChips" aria-label="标签筛选"></div>
@@ -329,7 +385,10 @@ mark.hit {
 <div class="reader" id="reader" aria-hidden="true">
   <div class="reader-bar">
     <button type="button" class="icon-btn" id="backBtn" title="返回列表" aria-label="返回">←</button>
-    <div class="bar-title" id="barTitle">文章</div>
+    <div class="bar-main">
+      <div class="bar-pile" id="barPile" hidden></div>
+      <div class="bar-title" id="barTitle">文章</div>
+    </div>
     <div class="bar-actions">
       <button type="button" class="text-btn" id="sizeDown" title="缩小字号">A−</button>
       <button type="button" class="text-btn" id="sizeUp" title="放大字号">A+</button>
@@ -337,20 +396,55 @@ mark.hit {
     </div>
   </div>
   <article class="reader-body" id="readerBody">
+    <div class="doc-pile" id="docPile" hidden></div>
     <h1 class="doc-title" id="docTitle"></h1>
     <div class="doc-meta" id="docMeta"></div>
     <div id="articleContent"></div>
+    <nav class="chapter-nav" id="chapterNav" aria-label="章节切换">
+      <button type="button" class="nav-card prev" id="prevChapter" title="上一章 (←)">
+        <span class="nav-dir">← 上一章</span>
+        <span class="nav-pile" id="prevPile"></span>
+        <span class="nav-name" id="prevName">—</span>
+      </button>
+      <button type="button" class="nav-card next" id="nextChapter" title="下一章 (→)">
+        <span class="nav-dir">下一章 →</span>
+        <span class="nav-pile" id="nextPile"></span>
+        <span class="nav-name" id="nextName">—</span>
+      </button>
+    </nav>
   </article>
 </div>
 
 <div class="toast" id="toast" role="status"></div>
 
+<script src="hints-map.js"></script>
 <script src="saodi-do-data.js"></script>
 <script>
 (function () {
   var data = window.SAODI_DO || { ARTICLES: [] };
+  // 默认按 no 升序（与 notes 有划线书序对齐）；无 no 的排后面，再按日期新→旧
   var articles = (data.ARTICLES || []).slice().sort(function (a, b) {
+    var na = (a.no != null && a.no > 0) ? a.no : 99999;
+    var nb = (b.no != null && b.no > 0) ? b.no : 99999;
+    if (na !== nb) return na - nb;
     return (b.date || '').localeCompare(a.date || '');
+  });
+  // 稳定序号：优先用数据里的 no（= 划线库书序）；否则按当前列表补号
+  var articleNo = new Map();
+  var used = {};
+  articles.forEach(function (a) {
+    if (a.no != null && a.no > 0) {
+      articleNo.set(String(a.id), a.no);
+      used[a.no] = true;
+    }
+  });
+  var auto = 1;
+  articles.forEach(function (a) {
+    if (articleNo.has(String(a.id))) return;
+    while (used[auto]) auto++;
+    articleNo.set(String(a.id), auto);
+    used[auto] = true;
+    auto++;
   });
   var activeTag = '全部';
   var query = '';
@@ -365,9 +459,17 @@ mark.hit {
   var $toast = document.getElementById('toast');
   var $reader = document.getElementById('reader');
   var $articleContent = document.getElementById('articleContent');
+  var $docPile = document.getElementById('docPile');
   var $docTitle = document.getElementById('docTitle');
   var $docMeta = document.getElementById('docMeta');
+  var $barPile = document.getElementById('barPile');
   var $barTitle = document.getElementById('barTitle');
+  var $prevChapter = document.getElementById('prevChapter');
+  var $nextChapter = document.getElementById('nextChapter');
+  var $prevPile = document.getElementById('prevPile');
+  var $nextPile = document.getElementById('nextPile');
+  var $prevName = document.getElementById('prevName');
+  var $nextName = document.getElementById('nextName');
 
   function toast(msg) {
     $toast.textContent = msg;
@@ -391,12 +493,48 @@ mark.hit {
     return s.replace(re, '<mark class="hit">$1</mark>');
   }
 
-  function allTags() {
-    var set = {};
+  function pileFor(a) {
+    var n = articleNo.get(String(a.id)) || 0;
+    if (!n) return { n: 0, emoji: '', hint: '', label: '' };
+    if (n <= 100) {
+      var emoji = (typeof hintEmoji !== 'undefined' && hintEmoji[n]) || '';
+      var hint = (typeof hintsMap !== 'undefined' && hintsMap[n]) || '';
+      var label = (emoji ? emoji + ' ' : '') + n + (hint ? ' · ' + hint : '');
+      return { n: n, emoji: emoji, hint: hint, label: label };
+    }
+    return { n: n, emoji: '', hint: '', label: String(n) };
+  }
+
+  // 主分类展示序（与数据标签对齐）；「读后感」不进筛选芯片
+  var TAG_ORDER = [
+    '历史', '心理', '财经', '科学', '文学', '商业', '健康',
+    '哲学', '教育', '社会', '人物', '技术', '成长'
+  ];
+  var TAG_HIDE = { '读后感': true };
+
+  function tagCounts() {
+    var map = {};
     articles.forEach(function (a) {
-      (a.tags || []).forEach(function (t) { set[t] = true; });
+      (a.tags || []).forEach(function (t) {
+        if (TAG_HIDE[t]) return;
+        map[t] = (map[t] || 0) + 1;
+      });
     });
-    return Object.keys(set).sort();
+    return map;
+  }
+
+  function allTags() {
+    var map = tagCounts();
+    var keys = Object.keys(map);
+    keys.sort(function (a, b) {
+      var ia = TAG_ORDER.indexOf(a);
+      var ib = TAG_ORDER.indexOf(b);
+      if (ia === -1) ia = 999;
+      if (ib === -1) ib = 999;
+      if (ia !== ib) return ia - ib;
+      return (map[b] || 0) - (map[a] || 0);
+    });
+    return keys;
   }
 
   function filtered() {
@@ -404,8 +542,10 @@ mark.hit {
     return articles.filter(function (a) {
       if (activeTag !== '全部' && !(a.tags || []).includes(activeTag)) return false;
       if (!q) return true;
+      var p = pileFor(a);
       var blob = [
         a.title, a.subtitle, a.summary, a.source, a.meta, (a.tags || []).join(' '),
+        p.label, p.hint, String(p.n),
         stripHtml(a.bodyHtml || '')
       ].join('\n').toLowerCase();
       return blob.indexOf(q) !== -1;
@@ -424,15 +564,23 @@ mark.hit {
   }
 
   function renderChips() {
-    var tags = ['全部'].concat(allTags());
-    $chips.innerHTML = tags.map(function (t) {
+    var counts = tagCounts();
+    var tags = allTags();
+    var html = '<button type="button" class="' +
+      (activeTag === '全部' ? 'chip active' : 'chip') +
+      '" data-tag="全部">全部 ' + articles.length + '</button>';
+    html += tags.map(function (t) {
       var cls = t === activeTag ? 'chip active' : 'chip';
-      return '<button type="button" class="' + cls + '" data-tag="' + escapeHtml(t) + '">' + escapeHtml(t) + '</button>';
+      var n = counts[t] || 0;
+      return '<button type="button" class="' + cls + '" data-tag="' + escapeHtml(t) + '">' +
+        escapeHtml(t) + ' ' + n + '</button>';
     }).join('');
+    $chips.innerHTML = html;
   }
 
   function renderList() {
     var list = filtered();
+    var q = query.trim();
     $resultCount.textContent = String(list.length);
     if (!list.length) {
       $list.innerHTML = '';
@@ -441,30 +589,108 @@ mark.hit {
     }
     $empty.hidden = true;
     $list.innerHTML = list.map(function (a) {
+      var pile = pileFor(a);
       var tags = (a.tags || []).map(function (t) {
         return '<span class="tag">' + escapeHtml(t) + '</span>';
       }).join('');
       return (
         '<article class="card-item" data-id="' + escapeHtml(a.id) + '" role="button" tabindex="0">' +
           '<span class="chev">›</span>' +
-          '<div class="title">' + highlight(a.title, query.trim()) + '</div>' +
+          (pile.label ? '<div class="pile">' + highlight(pile.label, q) + '</div>' : '') +
+          '<div class="title">' + highlight(a.title, q) + '</div>' +
           '<div class="meta-row">' +
             '<span>' + escapeHtml(a.date || '') + '</span>' +
             (a.source ? '<span>' + escapeHtml(a.source) + '</span>' : '') +
           '</div>' +
           (tags ? '<div class="tags">' + tags + '</div>' : '') +
-          (a.summary ? '<div class="summary">' + highlight(a.summary, query.trim()) + '</div>' : '') +
+          (a.summary ? '<div class="summary">' + highlight(a.summary, q) + '</div>' : '') +
         '</article>'
       );
     }).join('');
+  }
+
+  function articleIndex(id) {
+    for (var i = 0; i < articles.length; i++) {
+      if (articles[i].id === id) return i;
+    }
+    return -1;
+  }
+
+  function shortNavTitle(a) {
+    if (!a) return '—';
+    var t = a.title || '';
+    // 《书名》读后感… → 书名
+    var m = t.match(/《([^》]+)》/);
+    if (m) return m[1];
+    return t;
+  }
+
+  function updateChapterNav(a) {
+    var idx = articleIndex(a.id);
+    var prev = idx > 0 ? articles[idx - 1] : null;
+    var next = idx >= 0 && idx < articles.length - 1 ? articles[idx + 1] : null;
+
+    if (prev) {
+      var pp = pileFor(prev);
+      $prevChapter.disabled = false;
+      $prevChapter.setAttribute('data-id', prev.id);
+      $prevPile.textContent = pp.label || (prev.no != null ? String(prev.no) : '');
+      $prevName.textContent = shortNavTitle(prev);
+      $prevChapter.title = '上一章：' + (prev.title || '') + ' (←)';
+    } else {
+      $prevChapter.disabled = true;
+      $prevChapter.removeAttribute('data-id');
+      $prevPile.textContent = '';
+      $prevName.textContent = '已是第一章';
+      $prevChapter.title = '已是第一章';
+    }
+
+    if (next) {
+      var np = pileFor(next);
+      $nextChapter.disabled = false;
+      $nextChapter.setAttribute('data-id', next.id);
+      $nextPile.textContent = np.label || (next.no != null ? String(next.no) : '');
+      $nextName.textContent = shortNavTitle(next);
+      $nextChapter.title = '下一章：' + (next.title || '') + ' (→)';
+    } else {
+      $nextChapter.disabled = true;
+      $nextChapter.removeAttribute('data-id');
+      $nextPile.textContent = '';
+      $nextName.textContent = '已是最后一章';
+      $nextChapter.title = '已是最后一章';
+    }
+  }
+
+  function goChapter(delta) {
+    if (!current) return;
+    var idx = articleIndex(current.id);
+    if (idx < 0) return;
+    var target = articles[idx + delta];
+    if (!target) {
+      toast(delta < 0 ? '已是第一章' : '已是最后一章');
+      return;
+    }
+    openArticle(target.id);
   }
 
   function openArticle(id, pushHash) {
     var a = articles.find(function (x) { return x.id === id; });
     if (!a) return;
     current = a;
+    var pile = pileFor(a);
     document.body.classList.add('reading');
     $reader.setAttribute('aria-hidden', 'false');
+    if (pile.label) {
+      $docPile.textContent = pile.label;
+      $docPile.hidden = false;
+      $barPile.textContent = pile.label;
+      $barPile.hidden = false;
+    } else {
+      $docPile.textContent = '';
+      $docPile.hidden = true;
+      $barPile.textContent = '';
+      $barPile.hidden = true;
+    }
     $docTitle.textContent = a.title;
     $barTitle.textContent = a.title;
     var metaParts = [];
@@ -478,6 +704,7 @@ mark.hit {
       metaParts.join(' · ') +
       (tagsHtml ? '<div class="doc-tags">' + tagsHtml + '</div>' : '');
     $articleContent.innerHTML = a.bodyHtml || '';
+    updateChapterNav(a);
     window.scrollTo(0, 0);
     if (pushHash !== false) {
       if (location.hash !== '#' + a.id) {
@@ -496,8 +723,10 @@ mark.hit {
   }
 
   function buildCopyHtml(a) {
+    var pile = pileFor(a);
     return (
       '<div style="font-family:PingFang SC,Microsoft YaHei,sans-serif;font-size:17px;line-height:1.85;color:#222;">' +
+      (pile.label ? '<p style="font-size:14px;color:#8b6914;font-weight:600;margin:0 0 6px;">' + escapeHtml(pile.label) + '</p>' : '') +
       '<h1 style="font-size:22px;font-weight:700;line-height:1.4;">' + escapeHtml(a.title) + '</h1>' +
       '<p style="font-size:13px;color:#666;line-height:1.6;">' +
         escapeHtml([a.date, a.source, a.meta].filter(Boolean).join(' · ')) +
@@ -509,13 +738,19 @@ mark.hit {
 
   function buildCopyText(a) {
     var plain = stripHtml(a.bodyHtml || '');
+    var pile = pileFor(a);
     return [
+      pile.label || '',
       a.title,
       '',
       [a.date, a.source, a.meta].filter(Boolean).join(' · '),
       '',
       plain
-    ].join('\n');
+    ].filter(function (line, i, arr) {
+      // 去掉开头空的 pile 行，但保留正文里的空行结构
+      if (i === 0 && !line) return false;
+      return true;
+    }).join('\n');
   }
 
   async function copyArticle() {
@@ -597,6 +832,14 @@ mark.hit {
   document.getElementById('backBtn').addEventListener('click', function () {
     closeArticle();
   });
+  $prevChapter.addEventListener('click', function () {
+    var id = $prevChapter.getAttribute('data-id');
+    if (id) openArticle(id);
+  });
+  $nextChapter.addEventListener('click', function () {
+    var id = $nextChapter.getAttribute('data-id');
+    if (id) openArticle(id);
+  });
   document.getElementById('copyBtn').addEventListener('click', copyArticle);
   document.getElementById('sizeUp').addEventListener('click', function () {
     var cur = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--read-size'), 10) || 17;
@@ -622,6 +865,18 @@ mark.hit {
     if (e.key === 'Escape' && document.body.classList.contains('reading')) {
       closeArticle();
       return;
+    }
+    if (document.body.classList.contains('reading')) {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goChapter(-1);
+        return;
+      }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goChapter(1);
+        return;
+      }
     }
     if ((e.key === 'h' || e.key === 'H') && !document.body.classList.contains('reading')) {
       location.href = 'index.html';

@@ -155,6 +155,11 @@ body.reading .page { display: none; }
   font-size: 0.68em; color: var(--text-muted); text-align: center; padding: 4px;
 }
 .book .info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.book .pile {
+  font-size: 0.78em; color: var(--gold); letter-spacing: 0.02em;
+  font-weight: 600; line-height: 1.35;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .book .title {
   font-size: 0.98em; font-weight: 700; line-height: 1.35;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
@@ -228,6 +233,11 @@ body.reading .reader { display: block; }
 .reader-bar .rtitle .a {
   font-size: 0.72em; color: var(--text-muted);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;
+}
+.reader-bar .rtitle .p {
+  font-size: 0.7em; color: var(--gold);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: 1px;
 }
 .reader-bar .size-ctrl {
   flex: 0 0 auto; display: flex; gap: 4px;
@@ -310,11 +320,16 @@ body.reading .reader { display: block; }
   gap: 10px;
   align-items: center;
 }
-.note .copy {
+.note .copy,
+.social-card .copy {
   border: none; background: transparent; color: var(--accent);
   font-size: 0.85em; cursor: pointer; padding: 4px 0; opacity: 0.85;
+  font-family: inherit; line-height: 1.2;
+  /* 去掉系统默认白底按钮外观 */
+  -webkit-appearance: none; appearance: none;
 }
-.note .copy:active { opacity: 1; }
+.note .copy:active,
+.social-card .copy:active { opacity: 1; }
 
 .reader-empty {
   text-align: center; padding: 48px 16px; color: var(--text-muted); line-height: 1.7;
@@ -475,6 +490,7 @@ body.reading .reader { display: block; }
   <div class="reader-bar">
     <button type="button" class="icon-btn" id="btn-back" title="返回列表 (Esc)" aria-label="返回列表">←</button>
     <div class="rtitle">
+      <div class="p" id="r-pile"></div>
       <div class="t" id="r-title"></div>
       <div class="a" id="r-author"></div>
     </div>
@@ -495,6 +511,7 @@ body.reading .reader { display: block; }
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="hints-map.js"></script>
 <script src="notes-data.js"></script>
 <script src="notes-social.js"></script>
 <script>
@@ -503,12 +520,16 @@ body.reading .reader { display: block; }
   const META = window.NOTES_META || {};
   const SOCIAL = window.NOTES_SOCIAL || {};
   const byId = new Map(NOTES.map(function (b) { return [String(b.id), b]; }));
+  // 稳定序号：按导出列表顺序 1..N（1–100 配 emoji+联想词）
+  const bookNo = new Map();
+  NOTES.forEach(function (b, i) { bookNo.set(String(b.id), i + 1); });
 
   const listEl = document.getElementById('list');
   const emptyEl = document.getElementById('empty');
   const qInput = document.getElementById('q');
   const shownCount = document.getElementById('shown-count');
   const reader = document.getElementById('reader');
+  const rPile = document.getElementById('r-pile');
   const rTitle = document.getElementById('r-title');
   const rAuthor = document.getElementById('r-author');
   const rMeta = document.getElementById('r-meta');
@@ -588,8 +609,21 @@ body.reading .reader { display: block; }
     }
   }
 
+  function pileFor(b) {
+    var n = bookNo.get(String(b.id)) || 0;
+    if (!n) return { n: 0, emoji: '', hint: '', label: '' };
+    if (n <= 100) {
+      var emoji = (typeof hintEmoji !== 'undefined' && hintEmoji[n]) || '';
+      var hint = (typeof hintsMap !== 'undefined' && hintsMap[n]) || '';
+      var label = (emoji ? emoji + ' ' : '') + n + (hint ? ' · ' + hint : '');
+      return { n: n, emoji: emoji, hint: hint, label: label };
+    }
+    return { n: n, emoji: '', hint: '', label: String(n) };
+  }
+
   function bookHay(b) {
-    var parts = [b.title, b.author];
+    var p = pileFor(b);
+    var parts = [b.title, b.author, p.label, p.hint, String(p.n)];
     (b.highlights || []).forEach(function (h) { parts.push(h.text, h.chapter); });
     (b.ideas || []).forEach(function (i) { parts.push(i.content, i.abstract, i.chapter); });
     return parts.join(' ').toLowerCase();
@@ -637,9 +671,11 @@ body.reading .reader { display: block; }
       card.tabIndex = 0;
       card.dataset.id = b.id;
       var preview = firstPreview(b);
+      var pile = pileFor(b);
       card.innerHTML =
         coverHtml(b) +
         '<div class="info">' +
+          (pile.label ? ('<div class="pile">' + highlightHtml(pile.label) + '</div>') : '') +
           '<div class="title">' + highlightHtml(b.title) + '</div>' +
           '<div class="author">' + escapeHtml(b.author) + '</div>' +
           '<div class="meta-row">' +
@@ -677,6 +713,11 @@ body.reading .reader { display: block; }
     document.querySelectorAll('#r-tabs .chip').forEach(function (c) {
       c.classList.toggle('active', c.getAttribute('data-rtab') === readerTab);
     });
+    var pile = pileFor(b);
+    if (rPile) {
+      rPile.textContent = pile.label || '';
+      rPile.hidden = !pile.label;
+    }
     rTitle.textContent = b.title || '';
     rAuthor.textContent = b.author || '';
     rMeta.innerHTML =
