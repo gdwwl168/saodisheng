@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="cjg-theme-key" content="cangjingge-theme">
+<meta name="cjg-theme-light" content="dark">
+<script src="theme-boot.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="纳瓦尔视角 · AI Skill — 特定知识 × 杠杆 × 复利，财富与幸福的理性哲学">
+<meta name="apple-mobile-web-app-title" content="纳瓦尔视角">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<title>纳瓦尔视角 · naval-perspective</title>
+<style>
+:root {
+  --bg: #f5f0e8; --text: #3d3226; --text-muted: rgba(61,50,38,0.55);
+  --accent: #8b4513; --gold: #c9a96e; --card-bg: #faf7f2;
+  --border: #d4c5a9; --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --chip-bg: #ede4d3; --code-bg: rgba(139,69,19,0.08);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+[data-theme="dark"] {
+  --bg: #1a1a2e; --text: #e4d8c0; --text-muted: rgba(228,216,192,0.55);
+  --accent: #c9a96e; --gold: #c9a96e; --card-bg: #252540;
+  --border: #3a3a55; --shadow: 0 2px 16px rgba(0,0,0,0.3);
+  --chip-bg: #2a2a40; --code-bg: rgba(201,169,110,0.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Microsoft YaHei", serif; transition: background 0.25s, color 0.25s; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font-family: inherit; color: inherit; cursor: pointer; }
+.theme-toggle { position: fixed; top: 16px; right: 16px; z-index: 50; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--card-bg); font-size: 1.15em; display: flex; align-items: center; justify-content: center; }
+.page { max-width: 760px; margin: 0 auto; padding: 20px 16px calc(40px + var(--safe-bottom)); }
+.header { text-align: center; padding: 18px 8px 8px; }
+.header .eyebrow { font-size: 0.75em; letter-spacing: 0.28em; color: var(--text-muted); margin-bottom: 8px; }
+.header h1 { font-size: 1.75em; color: var(--accent); letter-spacing: 0.12em; font-weight: 700; }
+.header .sub { margin-top: 10px; font-size: 0.92em; color: var(--text-muted); line-height: 1.65; }
+.nav-links { display: flex; justify-content: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.nav-links a { font-size: 0.8em; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-muted); text-decoration: none; }
+.nav-links a:hover { color: var(--accent); border-color: var(--accent); text-decoration: none; }
+.nav-links a.here { color: #faf7f2; background: var(--accent); border-color: var(--accent); }
+[data-theme="dark"] .nav-links a.here { color: #1a1a2e; }
+.section { margin-top: 22px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 18px 16px 16px; box-shadow: var(--shadow); }
+.section h2 { font-size: 1.05em; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 10px; }
+.section p, .section li { font-size: 0.92em; line-height: 1.7; color: var(--text); }
+.section p + p { margin-top: 8px; }
+.section ul, .section ol { padding-left: 1.25em; margin-top: 6px; }
+.section li { margin: 4px 0; }
+.muted { color: var(--text-muted); font-size: 0.86em; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .header h1 { font-size: 1.4em; } }
+.cap { border: 1px solid var(--border); border-radius: 12px; padding: 12px 12px 10px; background: color-mix(in srgb, var(--bg) 55%, var(--card-bg)); }
+.cap .icon { font-size: 1.25em; display: block; margin-bottom: 4px; }
+.cap h3 { font-size: 0.92em; margin-bottom: 4px; color: var(--accent); }
+.cap p { font-size: 0.82em; color: var(--text-muted); line-height: 1.55; margin: 0; }
+.prompt { margin-top: 10px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg); }
+.prompt .bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--card-bg) 80%, transparent); }
+.prompt .bar span { font-size: 0.78em; color: var(--text-muted); letter-spacing: 0.04em; }
+.prompt .bar button { border: 1px solid var(--border); background: var(--card-bg); border-radius: 8px; padding: 4px 10px; font-size: 0.78em; }
+.prompt .bar button:hover { border-color: var(--accent); color: var(--accent); }
+.prompt pre { margin: 0; padding: 12px 14px; white-space: pre-wrap; word-break: break-word; font-family: "Cascadia Code", "Consolas", "SF Mono", monospace; font-size: 0.84em; line-height: 1.6; background: var(--code-bg); }
+code { font-family: "Cascadia Code", "Consolas", monospace; font-size: 0.88em; background: var(--code-bg); padding: 1px 6px; border-radius: 5px; }
+.foot { text-align: center; margin-top: 28px; font-size: 0.78em; color: var(--text-muted); letter-spacing: 0.08em; }
+.toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); background: var(--accent); color: #faf7f2; padding: 10px 18px; border-radius: 999px; font-size: 0.86em; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 100; }
+[data-theme="dark"] .toast { color: #1a1a2e; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeBtn" title="切换主题" type="button">🌓</button>
+
+<div class="page">
+  <header class="header">
+    <div class="eyebrow">NAVAL · PERSPECTIVE</div>
+    <h1>🚀 纳瓦尔视角</h1>
+    <p class="sub">用纳瓦尔的财富与幸福哲学——特定知识 × 杠杆 × 复利、<br>逃离竞争、做你自己。<br><span class="muted">技能名 <code>/naval-perspective</code> · 随仓库开放</span></p>
+    <nav class="nav-links">
+      <a href="index.html">🏠 首页</a>
+      <a href="laozi-perspective.html">老子</a>
+      <a href="sushi-perspective.html">苏轼</a>
+      <a href="naval-perspective.html" class="here">纳瓦尔</a>
+      <a href="charlie-munger-perspective.html">芒格</a>
+    </nav>
+  </header>
+
+  <section class="section">
+    <h2>七个心智模型</h2>
+    <div class="grid">
+      <div class="cap"><span class="icon">🎯</span><h3>特定知识</h3><p>无法培训获得的知识——"什么事对你像玩耍，对别人像工作？"</p></div>
+      <div class="cap"><span class="icon">🔧</span><h3>杠杆</h3><p>财富不是卖时间——劳动力、资本、代码和媒体，放大你的判断力。</p></div>
+      <div class="cap"><span class="icon">📈</span><h3>复利思维</h3><p>玩长期游戏——财富、知识、关系、声誉都有复利。</p></div>
+      <div class="cap"><span class="icon">📝</span><h3>欲望即合约</h3><p>欲望是你和宇宙签的合约——你会一直不快乐，直到得到它。</p></div>
+      <div class="cap"><span class="icon">😌</span><h3>幸福是缺省状态</h3><p>幸福不是得到什么之后——是停止渴望之后的自然状态。</p></div>
+      <div class="cap"><span class="icon">🏃</span><h3>逃离竞争</h3><p>做你自己——当你在做只有你能做的事，竞争就消失了。</p></div>
+      <div class="cap"><span class="icon">🧭</span><h3>判断力是终极技能</h3><p>杠杆无限大的时代，判断力才是最稀缺的资源。</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>怎么用</h2>
+    <p>在支持 Skill 的 AI 中打开藏经阁项目，直接用自然语言对话即可，不需要 <code>/</code> 前缀。</p>
+    <p class="muted" style="margin-top:8px;">Skill 路径：<code>naval-perspective/SKILL.md</code> · 查看：<a href="naval-perspective/SKILL.md">完整 SKILL.md</a></p>
+  </section>
+
+  <section class="section">
+    <h2>一键安装到 Claude Code</h2>
+    <p>在终端运行以下命令即可：</p>
+    <div class="prompt" data-prompt="npx skills add gdwwl168/naval-perspective">
+      <div class="bar"><span>安装命令</span><button type="button" data-copy>复制</button></div>
+      <pre>npx skills add gdwwl168/naval-perspective</pre>
+    </div>
+    <p class="muted" style="margin-top:8px;">也支持 OpenClaw 等其他工具，将 SKILL.md 放到 <code>workspace/naval-perspective/</code> 下即可。</p>
+  </section>
+
+  <section class="section">
+    <h2>可复制话术</h2>
+    <div class="prompt" data-prompt="我在考虑职业转型，帮我用纳瓦尔的'特定知识'框架分析一下我该往哪个方向走">
+      <div class="bar"><span>职业方向</span><button type="button" data-copy>复制</button></div>
+      <pre>我在考虑职业转型，帮我用纳瓦尔的"特定知识"框架分析一下我该往哪个方向走</pre>
+    </div>
+    <div class="prompt" data-prompt="我现在主要靠卖时间赚钱，怎么找到我的杠杆？用纳瓦尔的框架分析">
+      <div class="bar"><span>寻找杠杆</span><button type="button" data-copy>复制</button></div>
+      <pre>我现在主要靠卖时间赚钱，怎么找到我的杠杆？用纳瓦尔的框架分析</pre>
+    </div>
+    <div class="prompt" data-prompt="我总是觉得不满足、不快乐。用纳瓦尔的'欲望即合约'帮我看看">
+      <div class="bar"><span>幸福感</span><button type="button" data-copy>复制</button></div>
+      <pre>我总是觉得不满足、不快乐。用纳瓦尔的"欲望即合约"帮我看看</pre>
+    </div>
+    <div class="prompt" data-prompt="用纳瓦尔的复利思维帮我评估：我现在做的事情，十年后会复利吗？">
+      <div class="bar"><span>复利评估</span><button type="button" data-copy>复制</button></div>
+      <pre>用纳瓦尔的复利思维帮我评估：我现在做的事情，十年后会复利吗？</pre>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>适合什么场景</h2>
+    <ul>
+      <li>财富决策——需要判断杠杆和复利</li>
+      <li>职业选择——需要找到特定知识方向</li>
+      <li>投资判断——需要长期主义和第一性原理</li>
+      <li>幸福困惑——需要重新审视欲望机制</li>
+    </ul>
+    <p class="muted" style="margin-top:6px;">不适合生存压力下的紧急决策——纳瓦尔的建议假设基本需求已被满足。</p>
+  </section>
+
+  <p class="foot">扫地僧 · 藏经阁 · naval-perspective</p>
+</div>
+
+<div class="toast" id="toast" role="status">已复制</div>
+
+<script>
+(function () {
+  var themeBtn = document.getElementById('themeBtn');
+  if (themeBtn && typeof window.toggleTheme === 'function') {
+    themeBtn.onclick = function () { window.toggleTheme(); };
+  } else if (themeBtn) {
+    themeBtn.onclick = function () {
+      var html = document.documentElement;
+      var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      try { localStorage.setItem('cangjingge-theme', next); } catch (e) {}
+    };
+  }
+  var toast = document.getElementById('toast'), toastTimer;
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg || '已复制';
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1400);
+  }
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve) {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); resolve(); } catch (e) { resolve(); }
+      document.body.removeChild(ta);
+    });
+  }
+  document.querySelectorAll('.prompt').forEach(function (box) {
+    var btn = box.querySelector('[data-copy]');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      copyText(box.getAttribute('data-prompt') || '').then(function () { showToast('已复制话术'); });
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    if (e.key === 'h' || e.key === 'H') location.href = 'index.html';
+  });
+})();
+</script>
+<script src="pwa-register.js" defer></script>
+</body>
+</html>
