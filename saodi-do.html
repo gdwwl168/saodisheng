@@ -284,6 +284,22 @@ body.reading .reader { display: block; }
   padding: 0;
 }
 #articleContent ol li, #articleContent ul li { margin: 0.35em 0; }
+#articleContent table {
+  width: 100%; border-collapse: collapse; margin: 1em 0;
+  font-size: 0.9em;
+}
+#articleContent th {
+  border: 1px solid var(--border); padding: 8px 6px;
+  background: var(--quote-bg); color: var(--accent); font-weight: 700;
+  text-align: center;
+}
+#articleContent td {
+  border: 1px solid var(--border); padding: 7px 6px;
+  text-align: center; color: var(--text);
+}
+#articleContent th:first-child, #articleContent td:first-child {
+  text-align: left; font-weight: 600; color: var(--text-muted);
+}
 
 /* 上一章 / 下一章 */
 .chapter-nav {
