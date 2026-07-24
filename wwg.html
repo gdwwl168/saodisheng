@@ -353,7 +353,7 @@ mark.hit {
   <header class="header">
     <div class="eyebrow">SAODI · WWG</div>
     <h1>思维工具100讲</h1>
-    <p class="sub">点标题复制「万维钢 现代思维工具 + 标题」· 右侧🔍<br><button class="outline-btn" id="outlineOpen" type="button">📋 课程大纲</button></p>
+    <p class="sub">点标题复制「万维钢 现代思维工具 + 标题」· 右侧🔍<br><button class="outline-btn" id="outlineOpen" type="button">📋 课程大纲</button> <a class="outline-btn" href="https://c6.y.qq.com/base/fcgi-bin/u?__=N5kLMIc7HUc2" target="_blank" rel="noopener" style="text-decoration:none">🎵 QQ听音频课</a></p>
     <nav class="nav-links" aria-label="阅读导航">
       <a href="index.html">🏠 首页</a>
       <a href="saodi-do.html">文章库</a>
@@ -777,6 +777,10 @@ mark.hit {
     if (e.key === 'Escape') {
       if ($sOverlay.classList.contains('show')) { closeSearch(); return; }
       if ($overlay.classList.contains('show')) closeOutline();
+    }
+    if ($sOverlay.classList.contains('show')) {
+      if (e.key === 'ArrowLeft') { navTo(-1); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { navTo(1); e.preventDefault(); }
     }
   });
 
