@@ -322,16 +322,23 @@ mark.hit {
 }
 .search-iframe.on { display: block; }
 .search-content {
-  display: none; padding: 16px 20px 24px; line-height: 1.9;
+  display: none; padding: 20px 24px 28px; line-height: 2; font-size: 1.02em;
 }
 .search-content.on { display: block; }
-.search-content h3 { font-size: 1em; color: var(--accent); margin: 18px 0 8px; }
-.search-content p { margin: 8px 0; }
-.search-content strong { color: var(--text); }
-.search-content table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.88em; }
-.search-content th, .search-content td { border: 1px solid var(--border); padding: 6px 8px; text-align: center; }
+.search-content h3 { font-size: 1.12em; color: var(--accent); margin: 22px 0 10px; }
+.search-content p { margin: 10px 0; font-size: 1em; }
+.search-content strong { color: var(--text); font-size: 1.02em; }
+.search-content table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.92em; }
+.search-content th, .search-content td { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
 .search-content th { background: var(--quote-bg, color-mix(in srgb, var(--gold) 15%, transparent)); color: var(--accent); font-weight: 700; }
 .search-content td:first-child, .search-content th:first-child { text-align: left; }
+.search-nav { display: flex; gap: 8px; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border); }
+.search-nav button {
+  flex: 1; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--card-bg); color: var(--accent); font-family: inherit; font-size: 0.88em; cursor: pointer;
+}
+.search-nav button:active { background: var(--accent); color: var(--chip-active-text); }
+.search-nav button:disabled { opacity: 0.35; pointer-events: none; }
 
 @media (max-width: 420px) {
   .header h1 { font-size: 1.45em; }
@@ -386,6 +393,10 @@ mark.hit {
     <div class="search-body" id="searchBody">
       <iframe class="search-iframe" id="searchFrame" title="搜索结果" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
       <div class="search-content" id="searchContent"></div>
+      <div class="search-nav" id="searchNav" style="display:none">
+        <button id="navPrev" type="button">← 上一讲</button>
+        <button id="navNext" type="button">下一讲 →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -594,36 +605,63 @@ mark.hit {
   var $sFrame = document.getElementById('searchFrame');
   var $sContent = document.getElementById('searchContent');
   var $sTitle = document.getElementById('searchTitle');
+  var $searchNav = document.getElementById('searchNav');
   // Build content lookup
   var contentMap = {};
-  talks.forEach(function (a) { if (a.content) contentMap[a.id] = a; });
+  var contentMapById = {};
+  talks.forEach(function (a) { if (a.content) { contentMap[a.id] = a; contentMapById['no' + a.no] = a; } });
+
+  var currentTalkNo = 0;
 
   function openSearch(q) {
-    // Try to find by search query matching title
     var found = null;
     var searchTitle = q.replace('万维钢 现代思维工具 ', '');
     for (var id in contentMap) {
       if (contentMap[id].title === searchTitle) { found = contentMap[id]; break; }
     }
     if (found) {
-      $sTitle.textContent = found.title;
+      currentTalkNo = found.no || 0;
+      $sTitle.textContent = '第' + found.no + '讲 ' + found.title;
       $sContent.innerHTML = found.content;
       $sContent.classList.add('on');
       $sFrame.classList.remove('on');
+      updateNav();
     } else {
+      currentTalkNo = 0;
       $sTitle.textContent = '🔍 ' + q;
       $sContent.classList.remove('on');
       $sFrame.classList.add('on');
       $sFrame.src = 'https://www.bing.com/search?q=' + encodeURIComponent(q);
+      $searchNav.style.display = 'none';
     }
     $sOverlay.classList.add('show');
   }
+
+  function updateNav() {
+    if (!currentTalkNo) { $searchNav.style.display = 'none'; return; }
+    $searchNav.style.display = 'flex';
+    var prev = contentMapById['no' + (currentTalkNo - 1)];
+    var next = contentMapById['no' + (currentTalkNo + 1)];
+    document.getElementById('navPrev').disabled = !prev;
+    document.getElementById('navNext').disabled = !next;
+  }
+
+  function navTo(delta) {
+    var target = contentMapById['no' + (currentTalkNo + delta)];
+    if (target) { openSearch('万维钢 现代思维工具 ' + target.title); }
+  }
+
+  document.getElementById('navPrev').addEventListener('click', function () { navTo(-1); });
+  document.getElementById('navNext').addEventListener('click', function () { navTo(1); });
+
   function closeSearch() {
     $sOverlay.classList.remove('show');
     $sFrame.src = '';
     $sContent.innerHTML = '';
     $sContent.classList.remove('on');
     $sFrame.classList.remove('on');
+    $searchNav.style.display = 'none';
+    currentTalkNo = 0;
   }
 
   document.getElementById('searchClose').addEventListener('click', closeSearch);
