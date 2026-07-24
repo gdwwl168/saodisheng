@@ -172,6 +172,18 @@ button { font-family: inherit; color: inherit; cursor: pointer; }
   background: color-mix(in srgb, var(--gold) 18%, transparent);
   color: var(--accent); border: 1px solid color-mix(in srgb, var(--gold) 35%, var(--border));
 }
+.book-row {
+  margin-top: 7px; padding-top: 7px;
+  border-top: 1px dashed color-mix(in srgb, var(--border) 60%, transparent);
+}
+.book-link {
+  font-size: 0.82em; color: var(--accent);
+  display: inline-flex; align-items: center; gap: 4px;
+  border-radius: 6px; padding: 3px 6px;
+  background: color-mix(in srgb, var(--gold) 8%, transparent);
+  text-decoration: none;
+}
+.book-link:hover, .book-link:active { background: color-mix(in srgb, var(--gold) 18%, transparent); }
 
 .empty {
   text-align: center; padding: 48px 16px; color: var(--text-muted); line-height: 1.7;
@@ -207,6 +219,120 @@ mark.hit {
   color: inherit; border-radius: 2px; padding: 0 1px;
 }
 
+/* 大纲弹窗 */
+.overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.overlay.show { opacity: 1; pointer-events: auto; }
+.overlay-box {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+  width: 100%; max-width: 640px; max-height: 80vh;
+  display: flex; flex-direction: column; box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+.overlay-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.overlay-head h2 { font-size: 1.1em; color: var(--accent); margin: 0; }
+.overlay-close {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--input-bg);
+  font-size: 1.2em; display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+}
+.overlay-close:active { background: var(--accent); color: #fff; }
+.overlay-body {
+  flex: 1; overflow-y: auto; padding: 8px 12px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+.ol-module {
+  margin-bottom: 2px;
+}
+.ol-module-btn {
+  width: 100%; text-align: left; background: transparent; border: none;
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 8px; font-family: inherit; font-size: 0.92em; font-weight: 700;
+  color: var(--accent); border-radius: 10px; cursor: pointer;
+}
+.ol-module-btn:active { background: color-mix(in srgb, var(--gold) 15%, transparent); }
+.ol-module-btn .arr {
+  font-size: 0.7em; transition: transform 0.2s; color: var(--text-muted);
+  flex-shrink: 0;
+}
+.ol-module.open .arr { transform: rotate(90deg); }
+.ol-list {
+  display: none; padding: 0 0 4px 16px;
+}
+.ol-module.open .ol-list { display: block; }
+.ol-item {
+  display: flex; align-items: baseline; gap: 4px;
+  padding: 5px 6px; font-size: 0.84em; border-radius: 6px;
+  cursor: pointer; color: var(--text);
+}
+.ol-item:hover, .ol-item:active { background: color-mix(in srgb, var(--gold) 8%, transparent); }
+.ol-item.hl { background: color-mix(in srgb, var(--gold) 25%, transparent); border-left: 3px solid var(--accent); font-weight: 600; }
+.ol-item .no { color: var(--text-muted); font-size: 0.85em; flex-shrink: 0; min-width: 22px; }
+.outline-btn {
+  font-size: 0.88em; padding: 6px 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--card-bg); color: var(--accent);
+  font-family: inherit; cursor: pointer;
+}
+.outline-btn:active { background: var(--accent); color: var(--chip-active-text); }
+
+/* 搜索弹窗 */
+.search-overlay {
+  position: fixed; inset: 0; z-index: 210;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.search-overlay.show { opacity: 1; pointer-events: auto; }
+.search-box {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+  width: 100%; max-width: 800px; height: 85vh;
+  display: flex; flex-direction: column; box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+.search-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; gap: 10px;
+}
+.search-head h3 {
+  font-size: 0.95em; color: var(--text); margin: 0; flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.search-close {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--input-bg);
+  font-size: 1.2em; display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); cursor: pointer; flex-shrink: 0;
+}
+.search-close:active { background: var(--accent); color: #fff; }
+.search-body {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+.search-iframe {
+  border: none; position: absolute; inset: 0; width: 100%; height: 100%; background: #fff; display: none;
+}
+.search-iframe.on { display: block; }
+.search-content {
+  display: none; padding: 16px 20px 24px; line-height: 1.9;
+}
+.search-content.on { display: block; }
+.search-content h3 { font-size: 1em; color: var(--accent); margin: 18px 0 8px; }
+.search-content p { margin: 8px 0; }
+.search-content strong { color: var(--text); }
+.search-content table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.88em; }
+.search-content th, .search-content td { border: 1px solid var(--border); padding: 6px 8px; text-align: center; }
+.search-content th { background: var(--quote-bg, color-mix(in srgb, var(--gold) 15%, transparent)); color: var(--accent); font-weight: 700; }
+.search-content td:first-child, .search-content th:first-child { text-align: left; }
+
 @media (max-width: 420px) {
   .header h1 { font-size: 1.45em; }
 }
@@ -220,7 +346,7 @@ mark.hit {
   <header class="header">
     <div class="eyebrow">SAODI · WWG</div>
     <h1>思维工具100讲</h1>
-    <p class="sub">点标题复制「万维钢 现代思维工具 + 标题」· 右侧🔍<br>按模块筛选 · 数字桩记忆</p>
+    <p class="sub">点标题复制「万维钢 现代思维工具 + 标题」· 右侧🔍<br><button class="outline-btn" id="outlineOpen" type="button">📋 课程大纲</button></p>
     <nav class="nav-links" aria-label="阅读导航">
       <a href="index.html">🏠 首页</a>
       <a href="saodi-do.html">文章库</a>
@@ -249,6 +375,31 @@ mark.hit {
 </div>
 
 <div class="toast" id="toast" role="status"></div>
+
+<!-- 搜索/内容弹窗 -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-box">
+    <div class="search-head">
+      <h3 id="searchTitle">搜索中…</h3>
+      <button class="search-close" id="searchClose" type="button">✕</button>
+    </div>
+    <div class="search-body" id="searchBody">
+      <iframe class="search-iframe" id="searchFrame" title="搜索结果" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+      <div class="search-content" id="searchContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 大纲弹窗 -->
+<div class="overlay" id="outlineOverlay">
+  <div class="overlay-box">
+    <div class="overlay-head">
+      <h2>📋 现代思维工具100讲 · 大纲</h2>
+      <button class="overlay-close" id="outlineClose" type="button">✕</button>
+    </div>
+    <div class="overlay-body" id="outlineBody"></div>
+  </div>
+</div>
 
 <script src="hints-map.js"></script>
 <script src="wwg-data.js"></script>
@@ -366,11 +517,14 @@ mark.hit {
     $empty.hidden = true;
     $list.innerHTML = list.map(function (a) {
       var pile = pileFor(a);
-      var tags = (a.tags || []).map(function (t) {
-        return '<span class="tag">' + escapeHtml(t) + '</span>';
-      }).join('');
+      var booksHtml = '';
+      if (a.books && a.books.length) {
+        booksHtml = '<div class="book-row">' + a.books.map(function (b) {
+          var url = 'https://weread.qq.com/web/shelf';
+          return '<a class="book-link" href="' + url + '" target="_blank" rel="noopener" data-book="' + escapeHtml(b.title) + '" title="打开微信读书 · 书名已复制">📖 ' + escapeHtml(b.title) + (b.author ? ' · ' + escapeHtml(b.author) : '') + '</a>';
+        }).join('') + '</div>';
+      }
       var copyText = '万维钢 现代思维工具 ' + a.title;
-      var searchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent('万维钢 现代思维工具 ' + a.title);
       return (
         '<article class="card-item" data-id="' + escapeHtml(a.id) + '">' +
           (pile.label ? '<div class="pile">' + highlight(pile.label, q) + '</div>' : '') +
@@ -378,11 +532,11 @@ mark.hit {
             '<button type="button" class="title-btn" data-copy="' + escapeHtml(copyText) + '" title="点击复制：万维钢 现代思维工具 + 标题">' +
               highlight(a.title, q) +
             '</button>' +
-            '<a class="search-btn" href="' + escapeHtml(searchUrl) + '" target="_blank" rel="noopener" title="搜索此演讲" aria-label="搜索">' +
+            '<button type="button" class="search-btn" data-search="' + escapeHtml('万维钢 现代思维工具 ' + a.title) + '" title="弹窗搜索" aria-label="搜索">' +
               '🔍' +
-            '</a>' +
+            '</button>' +
           '</div>' +
-          (tags ? '<div class="tags">' + tags + '</div>' : '') +
+          booksHtml +
         '</article>'
       );
     }).join('');
@@ -417,12 +571,64 @@ mark.hit {
   });
 
   $list.addEventListener('click', function (e) {
+    var book = e.target.closest('.book-link');
+    if (book) {
+      var title = book.getAttribute('data-book') || '';
+      if (title) copyText(title);
+      return;
+    }
     var search = e.target.closest('.search-btn');
-    if (search) return; // 让链接自己打开
+    if (search) {
+      var q = search.getAttribute('data-search') || '';
+      if (q) window.open('https://cn.bing.com/search?q=' + encodeURIComponent(q), '_blank');
+      return;
+    }
     var titleBtn = e.target.closest('.title-btn');
     if (!titleBtn) return;
     var text = titleBtn.getAttribute('data-copy') || '';
-    if (text) copyText(text);
+    if (text) { copyText(text); openSearch(text); }
+  });
+
+  /* ---- 搜索/内容弹窗 ---- */
+  var $sOverlay = document.getElementById('searchOverlay');
+  var $sFrame = document.getElementById('searchFrame');
+  var $sContent = document.getElementById('searchContent');
+  var $sTitle = document.getElementById('searchTitle');
+  // Build content lookup
+  var contentMap = {};
+  talks.forEach(function (a) { if (a.content) contentMap[a.id] = a; });
+
+  function openSearch(q) {
+    // Try to find by search query matching title
+    var found = null;
+    var searchTitle = q.replace('万维钢 现代思维工具 ', '');
+    for (var id in contentMap) {
+      if (contentMap[id].title === searchTitle) { found = contentMap[id]; break; }
+    }
+    if (found) {
+      $sTitle.textContent = found.title;
+      $sContent.innerHTML = found.content;
+      $sContent.classList.add('on');
+      $sFrame.classList.remove('on');
+    } else {
+      $sTitle.textContent = '🔍 ' + q;
+      $sContent.classList.remove('on');
+      $sFrame.classList.add('on');
+      $sFrame.src = 'https://www.bing.com/search?q=' + encodeURIComponent(q);
+    }
+    $sOverlay.classList.add('show');
+  }
+  function closeSearch() {
+    $sOverlay.classList.remove('show');
+    $sFrame.src = '';
+    $sContent.innerHTML = '';
+    $sContent.classList.remove('on');
+    $sFrame.classList.remove('on');
+  }
+
+  document.getElementById('searchClose').addEventListener('click', closeSearch);
+  $sOverlay.addEventListener('click', function (e) {
+    if (e.target === $sOverlay) closeSearch();
   });
 
   $search.addEventListener('input', function () {
@@ -445,6 +651,98 @@ mark.hit {
     if (e.key === 'h' || e.key === 'H') location.href = 'index.html';
   });
 
+  /* ---- 大纲弹窗 ---- */
+  var $overlay = document.getElementById('outlineOverlay');
+  var $olBody = document.getElementById('outlineBody');
+  var MODULE_ORDER = ['发刊词','基本世界观','成长战略','决策判断','学习教育','赚钱逻辑','参与者','领导者','演化者','尾声'];
+
+  function renderOutline() {
+    var grouped = {};
+    talks.forEach(function (a) {
+      var m = a.module || '其他';
+      if (!grouped[m]) grouped[m] = [];
+      grouped[m].push(a);
+    });
+    var html = '';
+    MODULE_ORDER.forEach(function (m) {
+      if (!grouped[m]) return;
+      var items = grouped[m];
+      html += '<div class="ol-module open"><button type="button" class="ol-module-btn">' +
+        '<span class="arr">▶</span> ' + escapeHtml(m) + ' · ' + items.length + ' 讲' +
+        '</button><div class="ol-list">';
+      items.forEach(function (a) {
+        var no = a.no || '';
+        html += '<div class="ol-item" data-copy="' + escapeHtml('万维钢 现代思维工具 ' + a.title) + '">' +
+          '<span class="no">' + no + '</span>' + escapeHtml(a.title) + '</div>';
+      });
+      html += '</div></div>';
+    });
+    // 其他模块
+    Object.keys(grouped).forEach(function (m) {
+      if (MODULE_ORDER.indexOf(m) >= 0) return;
+      var items = grouped[m];
+      html += '<div class="ol-module"><button type="button" class="ol-module-btn">' +
+        '<span class="arr">▶</span> ' + escapeHtml(m) + ' · ' + items.length + ' 讲' +
+        '</button><div class="ol-list">';
+      items.forEach(function (a) {
+        html += '<div class="ol-item" data-copy="' + escapeHtml('万维钢 现代思维工具 ' + a.title) + '">' +
+          '<span class="no">' + (a.no||'') + '</span>' + escapeHtml(a.title) + '</div>';
+      });
+      html += '</div></div>';
+    });
+    $olBody.innerHTML = html;
+  }
+
+  // Toggle module expand
+  $olBody.addEventListener('click', function (e) {
+    var btn = e.target.closest('.ol-module-btn');
+    if (btn) { btn.parentElement.classList.toggle('open'); return; }
+    var item = e.target.closest('.ol-item');
+    if (item) {
+      var txt = item.getAttribute('data-copy') || '';
+      if (txt) { copyText(txt); openSearch(txt); }
+      return;
+    }
+  });
+
+  function openOutline(q) {
+    $overlay.classList.add('show');
+    // 展开所有模块
+    var mods = $olBody.querySelectorAll('.ol-module');
+    mods.forEach(function (m) { m.classList.add('open'); });
+    // 移除旧高亮
+    $olBody.querySelectorAll('.ol-item.hl').forEach(function (el) { el.classList.remove('hl'); });
+    if (q) {
+      // 高亮匹配项
+      var items = $olBody.querySelectorAll('.ol-item');
+      var found = null;
+      items.forEach(function (el) {
+        var txt = el.getAttribute('data-copy') || '';
+        if (txt.indexOf(q.replace('万维钢 现代思维工具 ', '')) >= 0) {
+          el.classList.add('hl');
+          if (!found) found = el;
+        }
+      });
+      if (found) {
+        setTimeout(function () { found.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 100);
+      }
+    }
+  }
+  function closeOutline() { $overlay.classList.remove('show'); }
+
+  document.getElementById('outlineOpen').addEventListener('click', function () { openOutline(); });
+  document.getElementById('outlineClose').addEventListener('click', closeOutline);
+  $overlay.addEventListener('click', function (e) {
+    if (e.target === $overlay) closeOutline();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if ($sOverlay.classList.contains('show')) { closeSearch(); return; }
+      if ($overlay.classList.contains('show')) closeOutline();
+    }
+  });
+
+  renderOutline();
   renderStats();
   renderChips();
   renderList();
